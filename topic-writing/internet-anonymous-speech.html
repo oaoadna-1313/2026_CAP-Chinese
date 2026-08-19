@@ -1,0 +1,876 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 隱形的面具：我對「網路匿名發言」的觀察與想法 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FDFBF7',      /* 溫暖紙張白 */
+                        ink: '#2C3E50',        /* 深藍灰 */
+                        primary: '#4A90E2',    /* 沉穩藍 */
+                        secondary: '#50E3C2',  /* 療癒綠 */
+                        tertiary: '#F5A623',   /* 溫暖橘 */
+                        highlight: '#E8F4FA',  /* 亮藍底色 */
+                        danger: '#E74C3C',     /* 警示紅 */
+                        teacher: '#34495E',    /* 教師區預設底色 */
+                        'teacher-light': '#465C73' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FDFBF7;
+            color: #2C3E50;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #E8F4FA;
+        }
+        .tab-btn.active {
+            background-color: #2C3E50 !important;
+            color: #FDFBF7 !important;
+            border-left: 4px solid #4A90E2;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #4A90E2; }
+            50%, 100% { background-color: rgba(74, 144, 226, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #4A90E2; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+    <!-- 學思軒標準頂部導覽列 -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/80 shadow-xs px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-2 md:gap-3 group no-underline" style="text-decoration:none;">
+                <img src="../icon/seal-red.png" alt="學思軒" class="w-8 h-8 rounded-md shadow-xs group-hover:rotate-6 transition-transform">
+                <span class="font-bold text-gray-800 text-sm md:text-base hidden sm:inline group-hover:text-indigo-600 transition-colors">學思軒・作文教學資源網站</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 text-xs md:text-sm font-semibold transition-all shadow-xs" style="text-decoration:none;">
+                    <span>🏠</span> <span>返回寫作總部</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <header class="bg-highlight/50 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">🎭 隱形的面具 ⌨️</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-primary">我對「網路匿名發言」的觀察與想法</span><br>寫作指南</h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                「在這個網路時代，匿名宛如一張隱形的面具。它或許讓人勇敢說出真心話，卻也可能讓人失去分寸、肆意攻擊。」<br>
+                跟著下方的互動步驟，學習如何將生活中的見聞與深刻的說理結合，寫出一篇兼具畫面感與思想深度的滿分夾敘夾議好文！
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📝</span> 第一步：從「空泛」到「深刻」的擴寫術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫議論抒情文最怕淪為「無聊的說教」。透過互動式的「句子長大術」，觀察我們如何將一句平淡的結論，透過加入<b>「具體畫面」</b>、<b>「感官譬喻」</b>與<b>「內心反思」</b>，擴充成一段引人共鳴、深具說服力的段落。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            網路上很多人會匿名罵人，我覺得這樣很不好。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">21 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「具體情境」</button>
+                    </div>
+
+                    <div class="bg-highlight/50 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium">💡 <strong>教師引導語：</strong>「不要只告訴讀者『很不好』，試著把你觀察到的『場景』與『受害者的反應』具體寫出來，讓讀者感受到事情的嚴重性！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與深度成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「夾敘夾議」的骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    面對探討社會現象的題目，本區塊採用<b>「問津趕行程」</b>的五段落組織架構，帶你從「破題引發共鳴」一路寫到「生活見聞」、「反思探討」與「自我期許」。點擊左側標籤，探索各段落的寫作任務。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【問】問題意識</h3>
+                            <p class="text-tertiary mt-1 font-medium" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">從網路時代的背景切入，點出「匿名」這個現象的普遍性與它的「雙面刃」特質（能帶來自由，也可能帶來傷害）。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>對你而言，網路匿名像什麼？（面具、保護傘、隱形斗篷、利刃...）</li>
+                                <li>匿名如何改變了我們平常說話的樣子？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「譬喻法」將抽象的匿名機制具象化，並運用「對比修辭」凸顯其一體兩面。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「身處數位時代，『匿名』宛如一張隱形的面具，賦予了人們暢所欲言的自由，卻也悄悄解開了道德的枷鎖……」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-primary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    你的舉例夠具體嗎？說理會不會太像在說教？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會給你優化建議，讓你的文字兼具感性與理性！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/80 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">我之前在網路上看到有人匿名攻擊同學，同學很難過。我覺得匿名雖然可以保護隱私，但也常常被拿來當作傷人的武器。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">我覺得匿名很好，因為這樣我才敢在網路上問一些不敢當面問老師的問題。如果不匿名，我就不敢發言了。</button>
+                </div>
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述或想法，例如你觀察到的某次網路匿名霸凌事件，或是你對這件事的看法..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="強化情境畫面感 (引導我使用五感摹寫與細節描述，把匿名發言的場景或當事人受傷的反應寫得更具體生動)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🎬 強化情境畫面感</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化正反論述 (不要只寫缺點，引導我分析匿名『保護隱私』與『逃避責任』的雙面性，讓論點更全面客觀)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">⚖️ 深化正反論述</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="提升反思深度 (引導我探討匿名現象背後的人性，或是教我如何在結尾提出具建設性的價值觀與自我期許)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🧠 提升反思深度</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center gap-2 transform hover:-translate-y-1">
+                        <span class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-white rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-100 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">AI 教練正在仔細閱讀並準備專屬回饋，請稍候...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8">
+                    <div class="flex items-center justify-between mb-3 border-l-4 border-primary pl-2">
+                        <h3 class="font-bold text-lg text-ink">💡 教練的回饋與示範：</h3>
+                    </div>
+                    
+                    <div id="ai-output" class="bg-white border border-gray-200 rounded-lg p-5 text-ink leading-relaxed ai-content mb-3 shadow-sm">
+                        <!-- AI Response goes here -->
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button id="btn-copy-ai" class="text-sm bg-highlight hover:bg-primary hover:text-white text-ink px-4 py-2 rounded-lg font-bold transition flex items-center gap-2 border border-highlight shadow-sm">
+                            <span>📋 複製示範</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p>抱歉，教練目前遇到連線問題，請確認您的 Google Apps Script 部署或稍後再試一次！</p>
+                </div>
+                
+                <!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-primary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照五段式結構，慢慢拼成一篇完整的 900 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 900 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-primary/30">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-paper">1. 避免「空泛說教」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：通篇都在講大道理「匿名很壞、我們不應該罵人」，缺乏說服力。<br>
+                            <span class="text-secondary font-bold">引導：請學生務必在第二或第三段寫出「自己真實經歷或看過的網路事件」，有具體的受害者故事，後面的說理才有重量。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">⚖️</span>
+                            <h4 class="text-lg font-bold text-paper">2. 避免「非黑即白」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：只看到匿名的缺點，認為應該全面禁止，忽略了題幹中提及的「勇於表達真實想法」。<br>
+                            <span class="text-secondary font-bold">引導：提醒學生思考「雙面性」。匿名對弱勢群體、求助者來說是一個安全的「樹洞」。能同時寫出優缺點，文章層次才會高。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">💎</span>
+                            <h4 class="text-lg font-bold text-paper">3. 結尾缺乏「自我期許」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：結尾只停留在「網路很可怕，大家要小心」。<br>
+                            <span class="text-secondary font-bold">引導：在文章最後，引導學生提出解決之道與價值觀。例如：「無論是否實名，我們都應當成為自己言論的主人。」展現成熟的網路素養。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的切入角度如何運用「夾敘夾議」的結構營造張力與深度。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：聚焦負面傷害 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-negative', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🗡️</span> 聚焦【負面傷害】：鍵盤後的隱形利刃</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20 font-bold">885 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-negative" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>身處數位時代，「匿名」宛如一張隱形的面具。它賦予了人們在網路世界中暢所欲言的自由，卻也悄悄解開了現實社會中道德與責任的枷鎖。當真實的身分被隱藏，我們看見的，往往不再是理性的交流，而是人性底層毫無掩飾的惡意。</p>
+                            <p>還記得八年級的校慶前夕，學校的匿名臉書社團出現了一篇針對班上女同學的貼文。發文者用極其尖酸刻薄的字眼，嘲笑她的身材與穿著，甚至捏造了許多不堪入目的謠言。不到半天，貼文下方湧入了上百則留言，那些平時在走廊上見面會微笑點頭的同學們，此刻全化身為沒有面目的判官，跟著起鬨、謾罵。隔天，那位女同學紅著眼眶，請了長假。我看著螢幕上那些冰冷且殘酷的文字，心中感到一陣不寒而慄。這些躲在「匿名」背後的發言者，就像躲在暗處的狙擊手，肆意扣下扳機，卻不必為受害者的流血負責。</p>
+                            <p>這件事讓我深刻體悟到，匿名發言雖然讓人卸下了偽裝，卻也剝奪了言語的「重量」。在現實生活中，我們說話前會顧及對方的感受、在意自己的形象；然而在匿名平臺上，身分的隱蔽性讓人產生了「不用承擔後果」的錯覺。於是，人們變得口無遮攔，用詞沒有分寸，甚至將攻擊他人當作發洩自身壓力的管道。這種因匿名而滋生的網路霸凌，其殺傷力遠比現實中的肢體暴力更加深遠，因為那些烙印在網路上的文字，永遠無法真正被抹去。</p>
+                            <p>難道匿名就只有壞處嗎？或許對某些不敢聲張的受害者而言，匿名是他們唯一的求救管道。但不可否認的是，當前許多社群平臺上的匿名機制，早已淪為情緒宣洩的垃圾場。面對這樣的亂象，要求全面實名制固然能遏止歪風，但更根本的解方，在於培養我們自身的「網路素養」。我們必須認知到，螢幕的另一端，是一個個有血有肉、會受傷的真實生命。</p>
+                            <p>網路匿名是一把鋒利的雙面刃。即使名字被隱去，頭像換成了預設的圖案，我們在鍵盤上敲打出的每一個字，依然映照著我們真實的人格。期許我們都能在戴上這張隱形面具時，依然保有心中的那把尺，不讓自由成為傷害他人的武器，做一個為自己言論負責的數位公民。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-primary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】破題點出「匿名是隱形的面具」，解開了道德枷鎖，引發後續探討。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】具體敘述「校慶前夕的匿名霸凌事件」，營造強烈的視覺與心理衝擊（暗處的狙擊手）。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【反思探討】分析匿名讓人變殘忍的原因：剝奪了言語的重量、產生「不用承擔後果」的錯覺。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【轉折應對】略微提及匿名的好處（求救管道），但迅速拉回主軸，提出解方在於培養「網路素養」。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【總結體悟】昇華主題：打出的字映照真實人格，呼籲做個為言論負責的公民。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：聚焦正面價值 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-positive', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🕯️</span> 聚焦【正面價值】：黑暗中的溫暖樹洞</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/10 text-secondary px-3 py-1 rounded-full border border-secondary/20 font-bold">892 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-positive" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在資訊爆炸的網路汪洋中，實名制彷彿是一盞強光，將每個人的一言一行都攤在陽光下檢視。然而，陽光再烈，也總有照不到的幽暗角落。對許多人而言，「網路匿名」並非作惡的保護傘，而是一個能夠接住脆弱靈魂的溫暖樹洞。</p>
+                            <p>國三那年的模擬考，我的成績遭遇了前所未有的滑鐵盧。面對父母的殷切期盼與老師的關心，我感到無比窒息，卻又不敢向身邊任何人傾訴，深怕破壞了自己一直以來「好學生」的堅強形象。某個失眠的深夜，我偶然點進了一個匿名學生論壇。在那裡，沒有人認識我，沒有人知道我是哪所國中的學生。我鼓起勇氣，用一個虛擬的代號，發布了一篇名為「覺得自己快撐不下去」的文章，將積壓已久的焦慮與自我懷疑全盤托出。</p>
+                            <p>發出文章後，我原本以為會石沉大海，甚至做好被嘲笑的準備。沒想到，隔天早上我收到了十幾則長篇回覆。有的陌生人分享了自己曾經落榜卻又重新站起來的經歷；有的人溫柔地告訴我：「允許自己偶爾失敗，你已經做得很好了。」看著那些素未謀面的文字，我的眼淚奪眶而出。是「匿名」這層安全的屏障，讓我放下了所有的防備與包袱，勇敢表達出最真實、最脆弱的自己；也是因為匿名，那些充滿善意的陌生人，能拋開成見，給予我最純粹的安慰。那一次，網路匿名拯救了一個瀕臨崩潰的國中生。</p>
+                            <p>誠然，社會上不乏因匿名而引發的網路霸凌與惡意謾罵。許多人認為，一旦隱去姓名，人們就會失去拿捏用詞分寸的底線。但我認為，這不代表我們必須全盤否定匿名的價值。對於那些承受著社會壓力、家庭創傷，或是少數群體而言，實名發言的代價太過沉重。如果全面推行實名制，我們或許減少了一些酸言酸語，卻也可能同時扼殺了那些在絕望中微弱的求救聲。</p>
+                            <p>網路匿名發言，就像是一座沒有門禁的虛擬城市。有人在暗巷裡塗鴉破壞，卻也有人在深夜裡點亮一盞路燈。我們不該因為害怕黑暗而炸毀整座城市。面對匿名的世界，我們該學會的不是逃避或封殺，而是培養同理心，用善意去回應那些隱藏在無名面具下的真實求救。因為有時候，一個匿名的擁抱，就足以撐起一個人的一生。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-secondary/20">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】反向破題，點出強光下的陰影，強調匿名是接住脆弱靈魂的「溫暖樹洞」。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】敘述自己遭遇挫折，不敢向身邊人說，卻透過匿名論壇尋求解脫的真實經驗。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【反思探討】分析匿名的好處：放下防備、獲得陌生人純粹的安慰。深刻描寫情緒的釋放。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【轉折應對】承認匿名有霸凌的缺點，但論述「不能因噎廢食」，強調其對弱勢者的保護作用。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【總結體悟】用「虛擬城市」作結。呼籲不該封殺，而是用同理心在匿名世界散播善意。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：雙面刃與客觀論述 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-balance', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">⚖️</span> 聚焦【雙面刃與自律】：隱形面具下的真實考驗</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/10 text-tertiary px-3 py-1 rounded-full border border-tertiary/20 font-bold">920 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-balance" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在社群媒體蓬勃發展的今日，「匿名發文」已成為現代人抒發情緒、表達意見的重要管道。近期，知名平臺宣布將全面採用「實名驗證制度」，立刻在網路上掀起軒然大波。正反兩方的激辯，不禁讓我重新省思：當網路脫下了身分的約束，我們迎來的究竟是言論的自由，還是人性的失控？</p>
+                            <p>在我的觀察中，網路匿名發言確實帶來了顯而易見的變化。最明顯的，是言語邊界的模糊與失控。我曾在某些匿名板上，看見學生針對老師的教學方式進行非理性的謾罵，甚至演變成對其外貌的人身攻擊。在沒有名字的保護傘下，發言者不必擔憂社會觀感與人際壓力，原本可能只是微小的抱怨，往往會被放大、扭曲，最終成為傷人的利刃。這種「因為不知我是誰，所以我可以為所欲為」的心態，讓網路世界充斥著暴戾之氣，也讓無辜的受害者承受著難以磨滅的心理創傷。</p>
+                            <p>然而，若就此將匿名發言定罪，似乎又過於武斷。我也曾見過，許多因為家暴、霸凌或心理疾病而痛苦不堪的人，在現實中求助無門，卻在匿名社群中找到了傾訴的出口。匿名機制為他們卸下了「被貼標籤」的恐懼，讓他們得以勇敢發聲，進而獲得其他網友的支持與專業機構的介入。在這個層面上，匿名發言不再是武器，而是一面堅實的盾牌，保護了社會角落中微弱的求生微光。</p>
+                            <p>因此，我認為網路匿名發言的影響，本質上是一把鋒利的雙面刃。問題的癥結不在於「是否匿名」，而在於「發言者的素養」。實名制或許能利用外在的約束力，嚇阻不負責任的謾罵，但它無法真正改變人心；唯有當我們學會「慎獨」——即使在沒有人認識自己的虛擬空間中，依然能約束自己的言行，拿捏發言的分寸，網路環境才能真正獲得淨化。</p>
+                            <p>面對網路匿名的時代，我們都在學習如何與這張隱形的面具共處。當我們敲下鍵盤時，不妨在按下送出鍵前停頓三秒，問問自己：這句話若必須署名，我還會說出口嗎？無論平臺的制度如何改變，我們都應當時刻提醒自己：名字可以隱去，但言語的溫度與責任，永遠與我們如影隨形。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-tertiary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】引用題幹「實名制爭議」破題，拋出提問：匿名帶來的是自由還是失控？</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞 (反面)】舉例匿名板上對老師的人身攻擊，論述匿名導致「言語邊界模糊」與暴戾之氣。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【反思探討 (正面)】轉換視角，舉例受虐者透過匿名求助。論證匿名也是保護弱勢的「盾牌」。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【深入論點】統合正反面，點出癥結在於「發言者的素養」而非制度。提出核心價值：「慎獨」。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【總結體悟】提出具體的行動方針（送出前停頓三秒換位思考），總結論點：名字可隱，責任常在。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+        <footer class="text-center pb-12 mt-16 leading-relaxed border-t border-gray-200/60 pt-10">
+        <div class="flex justify-center mb-6">
+            <img src="../icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="text-gray-600 font-medium text-sm">
+            𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+        </div>
+        <div class="mt-5">
+            <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-xs" style="text-decoration:none;">
+                <span>🏠</span> 返回學思軒作文資源總部
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (情境擴寫)
+            const sentenceData = [
+                { label: "基礎敘述", text: "網路上很多人會匿名罵人，我覺得這樣很不好。", words: 21, btnText: "➕ 加上「具體畫面」" },
+                { label: "情境擴寫", text: "在學校論壇上，我常常看到許多人躲在匿名帳號背後，留下難聽的字眼攻擊同學，我覺得這樣很不好。", words: 44, btnText: "➕ 加上「感官與譬喻」" },
+                { label: "修辭擴寫", text: "在學校論壇上，那些匿名帳號就像躲在暗處的狙擊手，肆意發射著惡毒的字眼攻擊同學，讓整個留言區充滿了令人窒息的烏煙瘴氣。", words: 58, btnText: "➕ 加上「內心反思」" },
+                { label: "反思擴寫 (完成)", text: "在學校論壇上，匿名帳號宛如躲在暗處的狙擊手，肆意發射著惡毒的字眼。這不禁讓我反思，當脫下真實身分的枷鎖後，我們究竟是獲得了言論自由，還是釋放了心中的惡魔？", words: 75, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '加具象', '加修辭', '加反思'],
+                    datasets: [{
+                        label: '字數',
+                        data: [21, 0, 0, 0],
+                        backgroundColor: ['#E8F4FA', '#4A90E2', '#50E3C2', '#F5A623'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#E8F4FA' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [21, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (夾敘夾議五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【問】問題意識", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#4A90E2', task: "從網路時代的背景切入，點出「匿名」現象的普遍性與雙面特性（自由 vs 傷害）。", prompts: ["對你而言，網路匿名像什麼？（面具、保護傘、隱形斗篷、利刃...）", "匿名如何改變了我們平常說話的樣子？"], materials: "運用「譬喻法」將抽象的匿名機制具象化，並運用「對比修辭」凸顯其一體兩面。", hint: "「身處數位時代，『匿名』宛如一張隱形的面具，賦予了人們暢所欲言的自由，卻也悄悄解開了道德的枷鎖……」", icon: "❓" },
+                { id: 'p2', title: "第二段：【津】經驗見聞", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#50E3C2', task: "具體敘述一個與「匿名發言」相關的生活經驗（可以是同學被霸凌，或是自己在匿名版尋求安慰的經歷）。", prompts: ["你曾看過或經歷過什麼印象深刻的匿名留言？", "請具體描述當時的留言內容與受害/受益者的反應。"], materials: "善用「情境描寫」，不要只寫結論，要把受害者的眼淚或網路上的腥風血雨描寫出來。", hint: "「還記得上次校慶前夕，學校的匿名版上出現了一則惡意貼文。那些沒有名字的帳號，用詞極其...」", icon: "👁️" },
+                { id: 'p3', title: "第三段：【趕】感受想法", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#E74C3C', task: "分析第二段的事件，探討「為什麼人們在匿名時會變成這樣？」以及造成的影響。", prompts: ["為什麼人們在匿名時講話會變得很衝或很真誠？", "不用對自己的言論負責，會導致什麼後果？"], materials: "使用「反問法」與「因果分析」，深入挖掘匿名背後的人性弱點或需求。", hint: "「看著那些冷酷的文字，我不禁思索：如果必須署名，他們還會如此口出狂言嗎？匿名的保護傘似乎...」", icon: "💡" },
+                { id: 'p4', title: "第四段：【行】轉折探討", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#F5A623', task: "拉高層次，提出另一個視角（例如：雖然有壞處，但也有保護弱勢的好處），並提出我們該如何面對。", prompts: ["匿名就一定都是壞的嗎？", "面對匿名的亂象，除了禁止，我們還能怎麼做？（網路素養）"], materials: "展現論述的「客觀性」，不要非黑即白，提出治本的方法（如：慎獨、素養）。", hint: "「然而，匿名並非原罪。它同樣為不敢發聲的弱勢群體提供了一個安全的樹洞。關鍵在於，我們是否具備...」", icon: "⚖️" },
+                { id: 'p5', title: "第五段：【程】總結體悟", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#9B59B6', task: "結尾昇華，總結對網路匿名的看法，並寫出對自己的期許。", prompts: ["總結你對網路匿名的看法。", "你期許自己成為什麼樣的網路使用者？"], materials: "前後呼應，再次點出「面具」或「鍵盤」的意象，展現成熟的價值觀。", hint: "「網路匿名是一把雙面刃。即使名字被隱去，我們留下的每一句話依然代表著真實的靈魂。我期許自己...」", icon: "📈" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FDFBF7'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                    charCountDisplay.classList.remove('text-primary');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-primary', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-primary', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            btnCopyAi.addEventListener('click', () => {
+                const fullText = aiOutput.innerText;
+                let textToCopy = fullText;
+                const keyword = "【潤飾示範與拆解】";
+                if (fullText.includes(keyword)) {
+                    textToCopy = fullText.split(keyword)[1].trim();
+                }
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已成功複製！快去下方貼上修改吧！';
+                btnCopyAi.classList.replace('bg-highlight', 'bg-primary');
+                btnCopyAi.classList.replace('hover:bg-primary', 'hover:bg-highlight');
+                btnCopyAi.classList.replace('text-ink', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.replace('bg-primary', 'bg-highlight');
+                    btnCopyAi.classList.replace('hover:bg-highlight', 'hover:bg-primary');
+                    btnCopyAi.classList.replace('text-white', 'text-ink');
+                }, 2500);
+            });
+
+            const apiUrl = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec"; 
+
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+
+            async function fetchWithRetry(url, payload, retries = 5) {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('GAS 回傳格式錯誤，請確認部署權限是否設為「所有人」。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫國中會考作文題目「我對於網路匿名發言的觀察與想法」。
+文章體裁偏向「夾敘夾議」，重點在於結合生活經驗探討匿名發言的利與弊。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或觀點，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。引導他們如何深化論點或增加畫面感。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：譬喻法、對比修辭、細節摹寫、因果推論等）。</p>`;
+
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    const result = await fetchWithRetry(apiUrl, payload);
+                    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (generatedText) {
+                        aiOutput.innerHTML = generatedText;
+                        aiLoading.classList.add('hidden');
+                        aiOutputContainer.classList.remove('hidden');
+                    } else {
+                        const apiErrorMsg = result.error?.message || 'Gemini 未回傳有效文字';
+                        if (apiErrorMsg.toLowerCase().includes('quota') || apiErrorMsg.toLowerCase().includes('429')) {
+                            throw new Error('目前發問人數較多，教練稍微忙不過來了！請等待約 1 分鐘後再試一次喔 ⏳');
+                        }
+                        throw new Error(`API 錯誤：${apiErrorMsg}`);
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiError.innerHTML = `<p>抱歉，教練目前遇到連線問題：<br><strong class="text-sm">${error.message}</strong><br>👉 請確認您的 GAS 部署權限為「所有人」，或按 F12 查看 Console 錯誤。</p>`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+        });
+
+        // 教師巡桌指南 Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,876 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 雙面刃的考驗_當學習遇上手機 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FDFBF7',      /* 溫暖紙張白 */
+                        ink: '#2C3E50',        /* 深藍灰 */
+                        primary: '#4A90E2',    /* 沉穩藍 */
+                        secondary: '#50E3C2',  /* 療癒綠 */
+                        tertiary: '#F5A623',   /* 溫暖橘 */
+                        highlight: '#E8F4FA',  /* 亮藍底色 */
+                        danger: '#E74C3C',     /* 警示紅 */
+                        teacher: '#34495E',    /* 教師區預設底色 */
+                        'teacher-light': '#465C73' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FDFBF7;
+            color: #2C3E50;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #E8F4FA;
+        }
+        .tab-btn.active {
+            background-color: #2C3E50 !important;
+            color: #FDFBF7 !important;
+            border-left: 4px solid #4A90E2;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #4A90E2; }
+            50%, 100% { background-color: rgba(74, 144, 226, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #4A90E2; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+    <!-- 學思軒標準頂部導覽列 -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/80 shadow-xs px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-2 md:gap-3 group no-underline" style="text-decoration:none;">
+                <img src="../icon/seal-red.png" alt="學思軒" class="w-8 h-8 rounded-md shadow-xs group-hover:rotate-6 transition-transform">
+                <span class="font-bold text-gray-800 text-sm md:text-base hidden sm:inline group-hover:text-indigo-600 transition-colors">學思軒・作文教學資源網站</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 text-xs md:text-sm font-semibold transition-all shadow-xs" style="text-decoration:none;">
+                    <span>🏠</span> <span>返回寫作總部</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <header class="bg-highlight/50 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">📱 雙面刃的考驗 📖</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-primary">當學習遇上手機</span> 寫作指南</h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                「當科技融入日常，手機既是獲取知識的窗口，卻也可能成為分散注意力的誘惑。對於它在學習上的利與弊，每個人都有不同體會。」<br>
+                請跟著下方的互動步驟，寫下你與手機在學習過程中的「拉扯、衝突或轉變」，將這份日常經驗化為一篇發人深省的滿分好文。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📝</span> 第一步：從「抽象」到「具象」的擴寫術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫作最怕淪為「流水帳」或只說「滑手機很浪費時間」。透過互動式的「句子長大術」，觀察我們如何將一句平淡的敘述，加入<b>「具體情境」</b>、<b>「感官譬喻」</b>與<b>「內心反思」</b>，擴充成一段充滿張力的段落。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            我用手機查資料，但也常忍不住滑IG，浪費很多時間。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">24 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「具體情境」</button>
+                    </div>
+
+                    <div class="bg-highlight/50 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium">💡 <strong>教師引導語：</strong>「不要只告訴讀者你『浪費時間』，試著把分心的『過程』具體寫出來（如：螢幕跳出的通知、手指的動作），讓讀者看見誘惑的威力！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與畫面感成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「問津趕行程」的骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    面對「當學習遇上手機」這種兼具論說與抒情的題目，本區塊採用<b>「問津趕行程」</b>的五段落組織架構，幫助你從「破題引導」一路寫到「具體事件」、「內心拉扯」、「行動轉折」與「最後體悟」。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【問】問題意識</h3>
+                            <p class="text-tertiary mt-1 font-medium" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">從科技普及切入，點出手機已成為學習中不可或缺，卻又令人又愛又恨的存在。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>對你而言，手機在學習中扮演什麼角色？（圖書館？遊樂場？）</li>
+                                <li>手機對現代學生的學習帶來了什麼樣的拉扯？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「譬喻法」將手機的雙面刃特性具象化，營造文章的論述基調。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「科技的浪潮席捲日常，手機宛如一把銳利的雙面刃，既能為我們披荊斬棘獲取知識，卻也可能切斷我們的專注力……」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-primary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    分心的過程寫得夠具體嗎？戰勝誘惑的轉折有說服力嗎？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會給你優化建議，讓你的文字更有感染力！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/80 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">我原本要用手機查數學怎麼算，結果看到朋友傳訊息給我，我就開始跟他聊天，結果作業都沒寫完，我覺得自己很不應該。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">為了不要再被手機誘惑，我現在讀書都會把手機放在客廳，雖然一開始會一直想去看，但後來發現這樣讀書比較專心。</button>
+                </div>
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述或想法，例如你被手機誘惑的具體事件，或是你如何善用手機學習的過程..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="強化情境畫面感 (描寫手機通知聲響起的誘惑、螢幕閃爍的畫面，或專注力被抽離的具體過程)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🎬 強化情境畫面感</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化情緒反思 (除了寫『很後悔』，試著挖掘『自制力拉扯』或『對時間流逝的焦慮』等深層感受)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🧠 深化情緒反思</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="具體化轉折與行動 (詳細描述你如何戰勝誘惑，或是如何建立使用手機的紀律，展現心境的成長)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🔗 具體化轉折與行動</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center gap-2 transform hover:-translate-y-1">
+                        <span class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-white rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-100 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">AI 教練正在仔細閱讀並準備專屬回饋，請稍候...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8">
+                    <div class="flex items-center justify-between mb-3 border-l-4 border-primary pl-2">
+                        <h3 class="font-bold text-lg text-ink">💡 教練的回饋與示範：</h3>
+                    </div>
+                    
+                    <div id="ai-output" class="bg-white border border-gray-200 rounded-lg p-5 text-ink leading-relaxed ai-content mb-3 shadow-sm">
+                        <!-- AI Response goes here -->
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button id="btn-copy-ai" class="text-sm bg-highlight hover:bg-primary hover:text-white text-ink px-4 py-2 rounded-lg font-bold transition flex items-center gap-2 border border-highlight shadow-sm">
+                            <span>📋 複製示範</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p>抱歉，教練目前遇到連線問題，請確認您的 Google Apps Script 部署或稍後再試一次！</p>
+                </div>
+                
+                <!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-primary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照「問津趕行程」五段式結構，慢慢拼成一篇完整的 900 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 900 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-primary/30">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">⚖️</span>
+                            <h4 class="text-lg font-bold text-paper">1. 避免「兩邊都寫卻流於表面」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：把優點缺點各寫一半，像是在寫沒有感情的「說明文」。<br>
+                            <span class="text-secondary font-bold">引導解方：請學生挑選「單一且印象最深刻的事件」（例如：因沉迷手遊而考砸的懊悔，或因使用背單字App而進步的喜悅）作為核心敘事，將優缺點的論述融入在情節轉折中。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🎭</span>
+                            <h4 class="text-lg font-bold text-paper">2. 避免「轉折生硬、神奇戒斷」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：昨天還滑手機成癮，今天突然就「大徹大悟」完全不碰，轉折極不合理。<br>
+                            <span class="text-secondary font-bold">引導解方：要求寫出「戒斷過程」的掙扎。例如描述剛把手機收起來時的焦慮不安，或是尋找替代方案（如使用番茄鐘）的努力過程，讓轉變有血有肉。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">📢</span>
+                            <h4 class="text-lg font-bold text-paper">3. 避免「過度說教的結尾」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：結尾淪為政令宣導，只會喊口號「我們不要滑手機、要好好讀書」。<br>
+                            <span class="text-secondary font-bold">引導解方：回歸自身感受。引導學生思考自己對「科技與人」關係的體悟。體會到工具本身無罪，強調「找回自我主導權」才是面對科技最好的態度。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的「切入點」如何運用「問津趕行程」的結構營造畫面與張力。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：自制力拉扯 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-control', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🎮</span> 聚焦【自制力的拔河】：奪回專注的遙控器</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20 font-bold">885 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-control" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>科技的浪潮席捲了我們的日常，手機宛如一把銳利的雙面刃，既能為我們披荊斬棘獲取知識，卻也可能切斷我們的專注力。當學習遇上手機，對我而言，就像是一場沒有硝煙的戰爭，稍有不慎，便會淪為螢幕的俘虜，在虛擬的網路世界中迷失了學習的方向。</p>
+                            <p>還記得八年級的某個深夜，那是期中考前夕的衝刺期。原本只是為了查詢一道困難的理化公式而解鎖了手機，但就在螢幕亮起的那一刻，一則來自社群軟體的訊息通知，如同誘餌般在頂端閃爍。我告訴自己「只看一眼就好」，手指卻不由自主地滑開了通知。從回覆訊息到點開短影音，時間彷彿被按下了快進鍵。當我猛然回神，抬頭看向書桌前的時鐘，竟已過了兩個小時。原本應該背得滾瓜爛熟的講義，此刻依然停留在第一頁；而我的大腦，塞滿了搞笑影片的配樂，卻裝不進半點理化公式。</p>
+                            <p>望著黑掉的手機螢幕，倒映出我佈滿血絲的雙眼，一股強烈的懊悔與罪惡感湧上心頭。我發現，真正可怕的不是手機本身，而是我那不堪一擊的自制力。手機就像一個深不見底的黑洞，精準地捕捉了人性中渴望短暫娛樂與逃避壓力的弱點。在學習的枯燥與網路的刺激之間，我節節敗退，讓出了時間的主導權。這種被科技綁架的無力感，遠比考試考砸還要令人感到沮喪。</p>
+                            <p>痛定思痛後，我決定發起一場「專注力保衛戰」。隔天的溫書時間，我狠下心將手機調成飛航模式，並把它鎖進了客廳的抽屜裡。起初的半小時，我的內心無比煎熬，彷彿患了戒斷症候群，大腦不斷發出「去確認一下有沒有新訊息」的渴望，視線也不自覺地飄向門外。但我深吸一口氣，強迫自己將目光鎖死在文字上。隨著時間推移，房間裡只剩下筆尖摩擦紙張的沙沙聲，我逐漸進入了心流狀態。當我終於解完最後一道數學題，伸了個大懶腰時，那種靠自己力量戰勝誘惑的成就感，比破了遊戲紀錄還要令人滿足。</p>
+                            <p>當學習遇上手機，是一場對意志力的終極考驗。我學會了不再依賴「只看五分鐘」的僥倖心態，而是透過物理隔離來建立學習的結界。手機是極佳的工具，但不該成為我們的主人。唯有奪回專注的遙控器，我們才能在數位時代的洪流中，穩定地航向知識的彼岸。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-primary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】使用雙面刃的譬喻破題，點出手機與學習之間的「戰爭」本質。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】具體描寫考前因「查資料」而落入短影音陷阱的過程。對比原本的計畫與流逝的兩小時，畫面感強烈。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】深刻反思：可怕的不是手機，是自己的自制力。剖析被科技綁架的無力感與罪惡感。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】採取具體行動：飛航模式加物理隔離。真實描寫了初期的「戒斷」焦慮，以及隨後進入心流的轉折。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】總結這是一場意志力考驗，得出「工具不該成為主人」的結論，強調奪回主導權的重要性。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：從誘惑到工具 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-tool', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🚀</span> 聚焦【化阻力為助力】：螢幕裡的星辰大海</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/10 text-secondary px-3 py-1 rounded-full border border-secondary/20 font-bold">912 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-tool" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在大人們的眼中，手機彷彿是一頭吞噬學生前途的猛獸，只要一機在手，成績便會江河日下。然而，水能覆舟，亦能載舟。當學習遇上手機，它並非永遠扮演著反派角色；只要我們懂得駕馭，那塊五吋大的螢幕，便能化為一扇通往星辰大海的窗，帶領我們領略傳統課本無法觸及的廣闊世界。</p>
+                            <p>曾經，我也是那個被這頭「猛獸」吞噬的獵物。國一時，我的英文成績一落千丈，看著課本上密密麻麻的單字，只覺得像在看天書。為了逃避挫折，我把大把的時間花在手機遊戲上，在虛擬的戰場裡尋求成就感。直到有一天，我在網路上無意間滑到一位外國YouTuber分享台灣美食的影片。影片中流暢的英文配上生動的畫面，竟然讓我聽懂了幾個單字。那種「原來英文可以這樣用」的新鮮感，像是一道微光，照亮了我對英文的恐懼。</p>
+                            <p>我開始反思自己的行為。手機擁有如此強大的運算能力與無遠弗屆的資訊，難道只能用來打遊戲嗎？同樣是盯著螢幕，我為什麼不讓它成為我學習的武器？我意識到，科技本身是中立的，賦予它價值的是使用者的心態。與其把手機當成逃避現實的防空洞，不如將它打造成專屬的隨身家教。</p>
+                            <p>於是，我開始了我的「手機改造計畫」。我卸載了那些佔據我大量時間的遊戲，換上了一系列的語言學習App。每天通勤的公車上，我不再盲目地滑動社群軟體，而是戴上耳機，聽著TED演講，讓道地的英語發音環繞耳際；遇到不懂的文法，只要輸入關鍵字，立刻就有無數的教學影片為我解惑。手機不再是分散注意力的誘惑，而是我隨查隨學的百科全書。幾個月後，我的英文成績不僅有了起色，更重要的是，我找回了學習的熱情與主動權。</p>
+                            <p>當學習遇上手機，我們不需要將它視為洪水猛獸般避之唯恐不及。真正的自律，不是完全與科技隔絕，而是在充滿誘惑的數位環境中，依然能做出正確的選擇。學會善用手機，讓它成為我們探索世界的望遠鏡，我們便能在浩瀚的知識宇宙中，乘風破浪，抵達更遠的遠方。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-secondary/20">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】用「水能載舟亦能覆舟」的觀點破題，點出手機並非全是缺點，它也可以是通往廣闊世界的窗。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】描述過去逃避英文而沉迷手遊的低潮，到偶然間透過YouTube影片重新燃起對英文興趣的轉折點。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】深層反思：科技是中立的，問題在於使用者的心態。決定不再將手機當作逃避的防空洞，而是學習武器。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】執行「手機改造計畫」：刪除遊戲、下載學習App、利用通勤時間聽演講。將具體的學習改變寫出。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】昇華主題：真正的自律不是隔絕科技，而是在誘惑中做出正確選擇。讓手機成為探索世界的望遠鏡。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：人際與學習的衝突 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-social', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">💬</span> 聚焦【人際與專注的衝突】：靜音模式下的自由</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/10 text-tertiary px-3 py-1 rounded-full border border-tertiary/20 font-bold">926 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-social" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>在我們這個被網路緊緊相連的世代，手機不僅是工具，更是人際關係的延伸。我們害怕錯過群組裡的任何一個笑話，恐懼在朋友圈的討論中缺席。然而，當學習的重量遇上手機裡熱絡的社交圈，一場關於「專注」與「人際」的拉扯便悄悄展開，成為現代學生獨有的壓力來源。</p>
+                            <p>國三上學期，我正面臨著沉重的升學壓力。某個週末午後，我強迫自己坐在書桌前解著繁雜的數學題。正當我好不容易理出頭緒時，「叮咚！」一聲清脆的提示音劃破了寧靜。是班上群組傳來的訊息，大家正熱烈討論著新出的電影。我本想置之不理，但「如果不回覆，會不會顯得我不合群？」的焦慮感立刻湧上心頭。我拿起手機，快速打字加入討論。就這樣，我陷入了「解題五分鐘，回訊息十分鐘」的無限迴圈。一個下午過去了，數學題只寫了半頁，但我的精神卻因為頻繁地在學習與社交間切換，感到前所未有的疲憊與空虛。</p>
+                            <p>看著散亂的算紙與閃爍的螢幕，我陷入了沉思。我之所以無法放下手機，表面上是因為朋友的呼喚，實際上，是源自於我內心深處的「錯失恐懼症（FOMO）」。我太渴望時刻與世界保持連線，以至於忘記了留時間給自己。但這種隨時待命的社交狀態，不僅切割了我的專注力，更讓學習變成了一件支離破碎、充滿焦慮的事。我明白，如果連獨處學習的能力都失去，我又該拿什麼去面對未來的挑戰？</p>
+                            <p>那天傍晚，我做了一個決定。我打開手機設定，勇敢地按下了「勿擾模式」。世界瞬間安靜了下來。起初，這種沒有聲音的安靜讓我感到一絲不安，彷彿自己被世界遺忘了。但我深吸一口氣，將注意力重新放回數學題上。沒有了突如其來的干擾，我的思緒變得像清澈的溪流般順暢。那一晚，我高效率地完成了進度。事後我打開手機，發現其實並沒有什麼非我不可的緊急事件；朋友們依然是朋友，而我，卻贏回了寶貴的學習時光與內心的平靜。</p>
+                            <p>當學習遇上手機，我們必須學會在喧囂的虛擬世界中，為自己畫出一道寧靜的結界。我學會了在學習時開啟靜音模式，因為我懂了：真正的友誼不需要靠二十四小時的在線來維繫，而高質量的學習，卻絕對需要百分之百的專注。適時地與手機「斷線」，我們才能與更真實、更強大的自己「連線」。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-tertiary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】從「人際關係延伸」的角度切入，點出害怕錯過訊息的恐懼，與學習專注之間的衝突。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】具體描寫被群組訊息打斷數學解題的過程。描繪出「解題五分鐘，回訊息十分鐘」導致的極度疲憊感。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】深入剖析心理：表面是回訊息，核心是「錯失恐懼症(FOMO)」。體悟到頻繁切換任務會摧毀專注力。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】勇敢按下「勿擾模式」。描寫從一開始的不安，到後來思緒如清澈溪流般順暢的轉變，以及事後的釋懷。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】結尾點題金句：「適時與手機斷線，才能與強大的自己連線」。學會畫出寧靜的結界。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+        <footer class="text-center pb-12 mt-16 leading-relaxed border-t border-gray-200/60 pt-10">
+        <div class="flex justify-center mb-6">
+            <img src="../icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="text-gray-600 font-medium text-sm">
+            𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+        </div>
+        <div class="mt-5">
+            <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-xs" style="text-decoration:none;">
+                <span>🏠</span> 返回學思軒作文資源總部
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (情境擴寫)
+            const sentenceData = [
+                { label: "基礎敘述", text: "我用手機查資料，但也常忍不住滑IG，浪費很多時間。", words: 24, btnText: "➕ 加上「具體情境」" },
+                { label: "情境擴寫", text: "寫作業時，我原本只想用手機查個單字，卻不小心點開了跳出來的IG通知，一滑就是半小時，浪費了很多時間。", words: 49, btnText: "➕ 加上「感官與譬喻」" },
+                { label: "修辭擴寫", text: "寫作業時，手機就像潘朵拉的盒子，我原本只想查個單字，卻被不斷閃爍的訊息通知勾走了魂，手指在螢幕上無意識地滑動，時間就這樣悄悄流逝。", words: 64, btnText: "➕ 加上「內心反思」" },
+                { label: "反思擴寫 (完成)", text: "寫作業時，手機宛如潘朵拉的盒子，我原想查單字，卻被閃爍的訊息勾走注意力，任由時間在指尖流逝。看著螢幕上冷冰冰的時間，我不禁反思：我究竟是手機的主人，還是被科技綁架的奴隸？", words: 85, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '加具象', '加修辭', '加反思'],
+                    datasets: [{
+                        label: '字數',
+                        data: [24, 0, 0, 0],
+                        backgroundColor: ['#E8F4FA', '#4A90E2', '#50E3C2', '#F5A623'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: '#E8F4FA' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [24, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (問津趕行程五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【問】問題意識", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#4A90E2', task: "從科技普及切入，點出手機已成為學習中不可或缺，卻又令人又愛又恨的存在。", prompts: ["對你而言，手機在學習中扮演什麼角色？（圖書館？遊樂場？）", "手機對現代學生的學習帶來了什麼樣的拉扯？"], materials: "運用「譬喻法」將手機的雙面刃特性具象化，營造文章的論述基調。", hint: "「科技的浪潮席捲日常，手機宛如一把銳利的雙面刃，既能為我們披荊斬棘獲取知識，卻也可能切斷我們的專注力……」", icon: "❓" },
+                { id: 'p2', title: "第二段：【津】經驗見聞", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#50E3C2', task: "具體描寫一次「學習遇上手機」的深刻經驗（如：因查資料而分心熬夜，或利用APP高效學習）。", prompts: ["請描述一次你被手機誘惑，或成功利用手機學習的具體情境。", "當時螢幕上出現了什麼？你的手指做了什麼動作？時間流逝的感覺如何？"], materials: "善用「動態描寫」與「五感摹寫」，將盯著螢幕、滑動手指的過程寫得生動立體。", hint: "「還記得期中考前夕的深夜，我原本只是為了解開一道數學題而拿起手機，沒想到……」", icon: "👁️" },
+                { id: 'p3', title: "第三段：【趕】感受想法", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#E74C3C', task: "深入剖析你在經歷上述事件後的『心理狀態』。挖掘表象背後的深層感受。", prompts: ["分心後，你內心有什麼樣的罪惡感或無力感？是因為自制力不足嗎？", "如果是好的經驗，你體會到了什麼樣的成就感與突破？"], materials: "使用「內心獨白」來展現自我拉扯，將外在的科技誘惑轉化為內在的意志力考驗。", hint: "「望著黑掉的螢幕，一股強烈的懊悔湧上心頭。我發現真正可怕的不是手機，而是……」", icon: "💡" },
+                { id: 'p4', title: "第四段：【行】行動解方", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#F5A623', task: "為了解決困境或維持好習慣，你採取了什麼『具體行動』？請寫出轉折的過程。", prompts: ["你如何建立使用手機的紀律？（物理隔離、刪除APP、開勿擾模式）", "在剛開始改變時，你的心情有什麼掙扎？後來又有什麼收穫？"], materials: "把「戒斷」或「改變」的過程具體化，寫出從焦慮到平靜、從失控到掌控的心境變化。", hint: "「痛定思痛後，我決定發起專注力保衛戰。我狠下心將手機調成飛航模式，並鎖進了抽屜……」", icon: "🏃" },
+                { id: 'p5', title: "第五段：【程】成長體悟", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#9B59B6', task: "總結手機與學習的關係。寫出你從這段經歷中獲得的『成長』與最終態度。", prompts: ["你認為學生應該用什麼樣的態度來面對手機？", "這次經驗讓你對『自律』或『科技與人』的關係有什麼新的體悟？"], materials: "昇華主題，提出「工具無罪，端看人心」或「奪回主導權」等深刻見解。", hint: "「當學習遇上手機，是一場對意志力的終極考驗。我學會了不再依賴僥倖，因為真正的自律是……」", icon: "📈" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FDFBF7'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                    charCountDisplay.classList.remove('text-primary');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-primary', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-primary', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            btnCopyAi.addEventListener('click', () => {
+                const fullText = aiOutput.innerText;
+                let textToCopy = fullText;
+                const keyword = "【潤飾示範與拆解】";
+                if (fullText.includes(keyword)) {
+                    textToCopy = fullText.split(keyword)[1].trim();
+                }
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已成功複製！快去下方貼上修改吧！';
+                btnCopyAi.classList.replace('bg-highlight', 'bg-primary');
+                btnCopyAi.classList.replace('hover:bg-primary', 'hover:bg-highlight');
+                btnCopyAi.classList.replace('text-ink', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.replace('bg-primary', 'bg-highlight');
+                    btnCopyAi.classList.replace('hover:bg-highlight', 'hover:bg-primary');
+                    btnCopyAi.classList.replace('text-white', 'text-ink');
+                }, 2500);
+            });
+
+            const apiUrl = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec"; 
+
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+
+            async function fetchWithRetry(url, payload, retries = 5) {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('GAS 回傳格式錯誤，請確認部署權限是否設為「所有人」。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「當學習遇上手機」的會考抒情文/論說文。
+主題涵蓋：手機誘惑、自制力考驗、數位學習工具的運用、專注力與人際關係的拉扯等。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或情緒覺察，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。用語要像是親切的對話，引導他們寫得更深。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：動態描寫、對比修辭、內心獨白等）。</p>`;
+
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    const result = await fetchWithRetry(apiUrl, payload);
+                    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (generatedText) {
+                        aiOutput.innerHTML = generatedText;
+                        aiLoading.classList.add('hidden');
+                        aiOutputContainer.classList.remove('hidden');
+                    } else {
+                        const apiErrorMsg = result.error?.message || 'Gemini 未回傳有效文字';
+                        if (apiErrorMsg.toLowerCase().includes('quota') || apiErrorMsg.toLowerCase().includes('429')) {
+                            throw new Error('目前發問人數較多，教練稍微忙不過來了！請等待約 1 分鐘後再試一次喔 ⏳');
+                        }
+                        throw new Error(`API 錯誤：${apiErrorMsg}`);
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiError.innerHTML = `<p>抱歉，教練目前遇到連線問題：<br><strong class="text-sm">${error.message}</strong><br>👉 請確認您的 GAS 部署權限為「所有人」，或按 F12 查看 Console 錯誤。</p>`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+        });
+
+        // 教師巡桌指南 Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

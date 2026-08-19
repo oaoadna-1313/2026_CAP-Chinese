@@ -1,0 +1,879 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 折扣與消費心理的觀察 寫作指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FDFBF7',      /* 溫暖紙張白 */
+                        ink: '#2C3E50',        /* 深藍灰 */
+                        primary: '#4A90E2',    /* 沉穩藍 */
+                        secondary: '#50E3C2',  /* 療癒綠 */
+                        tertiary: '#F5A623',   /* 溫暖橘 */
+                        highlight: '#E8F4FA',  /* 亮藍底色 */
+                        danger: '#E74C3C',     /* 警示紅 */
+                        teacher: '#34495E',    /* 教師區預設底色 */
+                        'teacher-light': '#465C73' /* 教師區展開底色 */
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FDFBF7;
+            color: #2C3E50;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #E8F4FA;
+        }
+        .tab-btn.active {
+            background-color: #2C3E50 !important;
+            color: #FDFBF7 !important;
+            border-left: 4px solid #4A90E2;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #4A90E2;
+            color: #4A90E2;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #4A90E2; }
+            50%, 100% { background-color: rgba(74, 144, 226, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #4A90E2; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 4000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+    <!-- 學思軒標準頂部導覽列 -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/80 shadow-xs px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-2 md:gap-3 group no-underline" style="text-decoration:none;">
+                <img src="../icon/seal-red.png" alt="學思軒" class="w-8 h-8 rounded-md shadow-xs group-hover:rotate-6 transition-transform">
+                <span class="font-bold text-gray-800 text-sm md:text-base hidden sm:inline group-hover:text-indigo-600 transition-colors">學思軒・作文教學資源網站</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 text-xs md:text-sm font-semibold transition-all shadow-xs" style="text-decoration:none;">
+                    <span>🏠</span> <span>返回寫作總部</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <header class="bg-highlight/50 text-ink py-12 px-4 shadow-sm text-center border-b border-highlight">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">🛍️ 購物迷思 💸</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight"><span class="text-primary">折扣與消費心理</span> 寫作指南</h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium leading-relaxed">
+                「不論是實體店面或網路商家，常會利用多元的折扣與優惠訊息，做限時限量的加碼或特價活動。這些行銷手段，常能激發消費者的購物慾。這些折扣優惠的訊息為何能引起注意？反映出哪些消費心理或現象？是否也有隱藏的問題？請結合你的經驗或見聞，寫下你的觀察與想法。」<br>
+                跟著下方的互動步驟，學習如何將日常的購物經驗，轉化為具備觀察力、批判性與深刻哲理的知性好文。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-16 md:space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📝</span> 第一步：從「抽象」到「具象」的擴寫術
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    寫這類知性兼抒情的文章，最怕淪為「流水帳」或只有乾癟的說理。透過互動式的「句子長大術」，觀察我們如何將一句平淡的敘述，透過加入<b>「具體畫面」</b>、<b>「感官譬喻」</b>與<b>「內心反思」</b>，擴充成一段引人深思的段落。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎敘述</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            看到打折我就想買東西，結果買了很多沒用的。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-paper px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">21 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-primary text-white rounded-lg font-bold hover:opacity-90 transition w-full md:w-auto shadow-md">➕ 加上「具體情境」</button>
+                    </div>
+
+                    <div class="bg-highlight/50 border-l-4 border-primary p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-ink font-medium">💡 <strong>教師引導語：</strong>「不要只寫『打折』，試著把你被什麼樣的字眼吸引、在哪裡看到、買了什麼具體的東西描寫出來，讓讀者看見你的購物現場！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-paper/50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-tertiary mb-2 text-sm uppercase tracking-wider">字數與畫面感成長</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：「問津趕行程」的骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    面對這種結合見聞與論述的題型，本區塊採用<b>「問津趕行程」</b>的五段落組織架構，幫助你從「破題現象」一路寫到「具體事件」、「心理剖析」、「改變行動」與「最後體悟」。點擊左側標籤，探索各段落的寫作任務。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【問】問題意識</h3>
+                            <p class="text-tertiary mt-1 font-medium" id="tab-words">建議字數：約 110-150 字 (約 5-7 行)</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">從日常生活中無所不在的促銷廣告切入，點出折扣訊息如何吸引人的目光，並帶出主旨。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>你最常在哪裡看到誘人的折扣？（實體店、電商APP、手遊畫面）</li>
+                                <li>這些廣告通常用什麼字眼吸引你？（限時絕殺、買一送一）</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">寫作策略</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">運用「排比」或「誇飾」，列舉不同的折扣標語，營造促銷訊息鋪天蓋地的畫面感。</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                                <h4 class="font-bold text-tertiary mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「『限時搶購』、『買一送三』、『現金回饋無上限』……在這個物資豐饒的時代，五花八門的促銷口號宛如……」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-tertiary mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 border-t-8 border-primary">
+            <div class="mb-8 border-b border-primary/30 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-paper/90 text-lg">
+                    消費的經驗描寫得夠生動嗎？對於「心理現象」的剖析夠深刻嗎？將你寫好的草稿貼在下方，專屬的 <b>AI 寫作教練</b> 會給你優化建議，讓你的文字更有說服力！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-paper text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-primary font-bold bg-highlight/80 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">雙十一的時候我看文具很便宜就買了一大堆，結果送來發現很多根本用不到，覺得很浪費錢。</button>
+                    <button class="quick-draft-btn text-sm bg-white hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-200 shadow-sm">現在買東西前我都會先問自己是不是真的需要，才不會又被商家的買一送一活動騙了。</button>
+                </div>
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-ink font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <textarea id="student-input" rows="4" maxlength="200" class="w-full bg-white border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition" placeholder="請貼上你的一段敘述或想法，例如你因為打折而衝動購物的經驗，或是你對行銷手法的觀察分析..."></textarea>
+                    
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-danger font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <label class="block text-ink font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="強化情境畫面感 (具體描寫促銷廣告的誘惑力、搶購時的急迫感，或是看到戰利品過期堆積成山的畫面)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🎬 強化情境畫面感</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="深化心理剖析 (幫助我挖掘消費背後的心態，例如貪小便宜、怕錯過(FOMO)、補償心態等，不要只寫『腦波弱』)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🧠 深化心理剖析</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="具體化反思與解方 (幫助我把『釐清需要與想要』的轉念過程寫得更有層次，提出有智慧的消費觀)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary hover:bg-gray-50 text-sm font-bold transition shadow-sm">🔗 具體化反思與解方</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button id="btn-ask-ai" class="bg-primary hover:opacity-90 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center gap-2 transform hover:-translate-y-1">
+                        <span class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-white rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-100 shadow-sm">
+                    <div class="dot-flashing"></div>
+                    <p class="text-primary font-medium mt-2">AI 教練正在仔細閱讀並準備專屬回饋，請稍候...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8">
+                    <div class="flex items-center justify-between mb-3 border-l-4 border-primary pl-2">
+                        <h3 class="font-bold text-lg text-ink">💡 教練的回饋與示範：</h3>
+                    </div>
+                    
+                    <div id="ai-output" class="bg-white border border-gray-200 rounded-lg p-5 text-ink leading-relaxed ai-content mb-3 shadow-sm">
+                        <!-- AI Response goes here -->
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button id="btn-copy-ai" class="text-sm bg-highlight hover:bg-primary hover:text-white text-ink px-4 py-2 rounded-lg font-bold transition flex items-center gap-2 border border-highlight shadow-sm">
+                            <span>📋 複製示範</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-danger p-4 text-danger rounded-r-lg">
+                    <p>抱歉，教練目前遇到連線問題，請確認您的 Google Apps Script 部署或稍後再試一次！</p>
+                </div>
+                
+                <!-- 我的文章累積區 -->
+                <div class="mt-10 bg-white border-2 border-primary/50 rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-primary mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以依照「問津趕行程」五段式結構，慢慢拼成一篇完整的 900 字文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-200 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-ink font-bold">目前累積字數：<span id="accumulated-char-count" class="text-primary">0</span> / 900 字</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-primary/30">
+                <h3 class="text-xl font-bold mb-4 text-paper flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="text-lg font-bold text-paper">1. 避免「通篇謾罵商家」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：花太多篇幅指責商人狡猾、愛騙錢，將責任全推給外在環境。<br>
+                            <span class="text-secondary font-bold">引導：請學生將焦點拉回「自我覺察」。行銷手法是固定的，但為何自己會上當？引導他們反思自身的心理盲點（如貪心、盲從）。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">📝</span>
+                            <h4 class="text-lg font-bold text-paper">2. 避免「流水帳清單式」寫法</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：「我買了鞋子，又買了包包，還買了文具...」將文章寫成購物清單。<br>
+                            <span class="text-secondary font-bold">引導：要求學生挑選「單一且最具代表性的事件」來深入描寫。例如集中描寫抽屜裡那一堆放到過期的保健食品，寫出發現浪費時的強烈震撼。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-teacher rounded-xl p-6 border border-teacher-light cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">💡</span>
+                            <h4 class="text-lg font-bold text-paper">3. 結尾提升「理性的層次」</h4>
+                        </div>
+                        <div class="text-paper/80 text-sm leading-relaxed hidden-content">
+                            學生常犯錯誤：結尾只停留在「我以後再也不買了」這種不切實際的宣示。<br>
+                            <span class="text-secondary font-bold">引導：不是不消費，而是「聰明消費」。引導學生思考：有些折扣（如即期品、二手3C）其實是立意良善的。結尾可帶入「需要與想要」的辯證，或是「珍惜物力」的宏觀哲理。</span>
+                        </div>
+                        <div class="text-center text-paper/60 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩不同的「選材視角」如何運用「問津趕行程」的結構，寫出深刻的消費觀察。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- 範文 1：個人衝動消費 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-academic', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🛒</span> 聚焦【衝動消費】：購物車裡的想要與需要</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20 font-bold">870 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-academic" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>「全館滿千免運！」、「絕殺入手價，錯過可惜！」在這個資訊爆炸的時代，每當我們滑開手機，五花八門的促銷口號便如潮水般湧來。這些精心設計的鮮紅字體與倒數計時器，彷彿擁有某種魔力，總能輕易撥動人們心中的購物弦。而我也曾是那個在折扣迷宮中迷失方向的盲目消費者。</p>
+                            <p>記得去年雙十一購物節，電商平臺的廣告鋪天蓋地。原本我只是想買幾支快用完的原子筆，卻在首頁看見了「文具福袋買一送三，限時一小時」的斗大標題。看著螢幕上不斷跳動的倒數秒數，我的心跳也跟著加速。那是一種深怕錯過好康的焦慮，彷彿不按下結帳鍵，我就會成為這場購物狂歡中的輸家。於是，為了湊滿「滿千送百」的門檻，我又胡亂抓了許多精緻的手帳、貼紙和各種顏色的螢光筆放入購物車，滿心歡喜地期待著戰利品的到來。</p>
+                            <p>然而，當沉甸甸的包裹送達，拆開紙箱的那一刻，我迎來的不是滿足，而是一陣莫名的空虛。我看著桌上堆積如山的文具，許多款式我根本用不到，有些甚至與我原有的物品重複。我不禁問自己：我真的「需要」這些東西嗎？我發現，驅使我瘋狂點擊滑鼠的，並非對物品本身的渴望，而是對「划算」這兩個字的貪婪。商家利用了消費者害怕錯過（FOMO）的心理，用一層層的折扣包裝，巧妙地放大了我的「想要」，卻蒙蔽了我對「需要」的理智判斷。</p>
+                            <p>看著那些連包裝都沒拆的文具，巨大的懊悔感湧上心頭。那不僅是對金錢的浪費，更是對物資的揮霍。從那次慘痛的教訓後，我決定改變自己的消費習慣。現在，每當我再次面對螢幕上閃爍的折扣誘惑時，我會強迫自己按下「暫停鍵」。我會將商品放入購物車，但不急著結帳，而是給自己三天的「冷靜期」。幾天後再回頭看，往往會發現那股非買不可的衝動早已消退，真正留下的，才是真正必需的物品。</p>
+                            <p>折扣與優惠本身並沒有錯，它們是市場機制的產物，有時也能幫助我們省下荷包。但身為消費者，我們必須擦亮雙眼，不被行銷話術牽著鼻子走。唯有在每一次結帳前，冷靜地釐清「需要」與「想要」的界線，我們才能真正成為金錢的主人，而不是被慾望綁架的奴隸。把每一分錢花在刀口上，才是最聰明的消費哲學。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-primary/20">
+                            <h4 class="font-bold text-primary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】引用常見的促銷標語破題，點出折扣訊息如潮水般湧來，以及自己曾迷失其中的現象。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】具體敘述「雙十一」買文具的經驗。描寫心跳加速、害怕錯過的急迫感，以及為湊免運而過度消費的過程。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】拆箱後的空虛感引發反思。剖析心理：買的不是物品，而是「划算」；點出商家利用 FOMO 心理放大「想要」。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】寫出轉念後的具體行動——設立「三天冷靜期」。透過時間的沉澱，過濾掉不必要的衝動。</span></li>
+                                <li class="flex gap-2"><span class="text-primary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】總結指出折扣無罪，重點在於消費者需釐清「需要與想要」，昇華出聰明消費的哲理。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 2：見聞觀察 (媽媽的保健食品) -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-peer', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">📦</span> 聚焦【過度囤積】：打折惹的禍——過期倉庫</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-secondary/10 text-secondary px-3 py-1 rounded-full border border-secondary/20 font-bold">885 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-peer" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>每個月的「會員日」、「品牌購物節」，總是各大商場與網路電商的兵家必爭之地。五花八門的折扣訊息，就像漫天飛舞的傳單，無孔不入地滲透進我們的生活。這些看似替消費者省錢的行銷手段，若沒有遇調理性的心智，往往會成為製造浪費的溫床。我家的儲藏櫃，就曾是這場折扣風暴下的重災區。</p>
+                            <p>我的媽媽是個標準的家庭主婦，精打細算是她的日常。為了照顧全家人的健康，她時常流連於各大藥妝店與保健食品網站。只要看到「申辦會員點數五倍送」、「買二送二加碼再折」的斗大紅字，她便會毫不猶豫地按下購買鍵。於是，健骨的、顧眼的、提升免疫力的維他命，如小山丘般堆滿了我們的書桌與櫃子。媽媽總是用充滿愛的語氣提醒我們：「打折很划算，要記得吃喔！」然而，面對那永遠吃不完的膠囊與藥錠，我們的答應聲只是一聲聲偶爾實現的諾言。</p>
+                            <p>直到上個月底的大掃除，這場因為「划算」而堆砌的災難終於爆發。當我們將櫃子深處的物品一一清出時，才驚覺有將近一半的保健食品早已過了保存期限，有些甚至連封膜都未曾拆開。看著那些被丟進垃圾桶的瓶瓶罐罐，媽媽的臉上充滿了無奈與懊悔。我們抽絲剝繭地分析，發現那些促銷商品很多本就是「即期品」，加上受到「買越多越便宜」的話術蠱惑，媽媽不知不覺囤積了遠超我們身體所需的分量。原來，以為省下荷包的背後，其實是落入了貪求折扣的陷阱，造成了更大的金錢與物資浪費。</p>
+                            <p>這次的震撼教育，不僅讓媽媽痛定思痛，也讓我對「消費」有了截然不同的看法。我們開始實施「庫存盤點」計畫，在購買任何特價商品前，必須先打開櫃子確認是否真的缺乏。我們也學會了看懂商家的行銷邏輯：那些免運或回饋金，往往只是誘餌，目的是要你掏出更多的錢去買原本不需要的東西。當我們把焦點從「價格」轉移回「價值」與「實際需求」上，那些煽動性的廣告標語，便再也無法輕易動搖我們的心。</p>
+                            <p>古人云：「半絲半縷，恆念物力維艱。」折扣優惠本是美事，像超商的「i珍食」就能有效減少食物浪費。然而，水能載舟亦能覆舟，當我們被折扣矇蔽了雙眼，將過度消費包裝成精打細算時，損失的將不只是金錢。唯有時刻保持清醒，不被數字遊戲迷惑，我們才能在紛亂的行銷洪流中，做個真正珍惜物資的聰明人。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-secondary/20">
+                            <h4 class="font-bold text-secondary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】點出會員日、購物節等促銷手段，若無理性會成為浪費的溫床，引出家中儲藏櫃的災難。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】描述媽媽為家人健康，受點數與買送活動吸引，囤積大量保健食品的過程。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】透過大掃除發現過期品的震撼，剖析心理：被「買越多越便宜」話術蠱惑，落入貪求折扣陷阱，反而造成浪費。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】提出具體行動「庫存盤點計畫」，將焦點從「價格」轉回「價值與需求」，不再被誘餌牽制。</span></li>
+                                <li class="flex gap-2"><span class="text-secondary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】引用古語，並舉例「i珍食」說明折扣的正面意義，呼籲保持清醒，做個珍惜物資的聰明人。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 範文 3：宏觀哲理與友善消費 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-paper/50 hover:bg-paper flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-self', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🌱</span> 聚焦【消費哲學】：拆解紅色數字的魔咒</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-tertiary/10 text-tertiary px-3 py-1 rounded-full border border-tertiary/20 font-bold">920 字</span>
+                            <span class="essay-icon text-tertiary">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-self" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-ink leading-relaxed text-justify">
+                            <p>漫步在繁華的商圈，或是指尖滑動著五光十色的網頁，我們的感官無時無刻不被各種「促銷」、「優惠」的訊息轟炸。「只限今天」、「絕殺半價」，這些刺眼的紅色字體與驚嘆號，宛如商家設下的甜蜜陷阱。行銷手段推陳出新，不斷挑逗著消費者的神經。然而，在這股狂熱的消費浪潮中，我們是否曾停下腳步思考：到底是什麼在驅使著我們掏出錢包？</p>
+                            <p>我曾經是個熱衷於追求「CP值」的人。每當某個知名手遊推出「儲值滿額再送點數」的限時活動時，我總會克制不住內心的衝動。看著螢幕上倒數的時間條，我會有一種強烈的錯覺：如果現在不買，我就虧大了。為了解鎖那些虛擬的寶物與限定角色，我花光了辛苦存下的零用錢。剛拿到虛寶的那一瞬間，我的確感到了短暫的興奮與滿足；但幾天後，當遊戲熱度退去，看著空蕩蕩的錢包，一股深沉的失落感便會將我淹沒。那些用真金白銀換來的數據，最終只成了手機裡冰冷的存在。</p>
+                            <p>事後冷靜回想，我才驚覺自己掉入了怎樣的心理陷阱。那些看似「買到賺到」的折扣，其實是精算師們利用人性的弱點設計的遊戲。他們利用了我們的「損失嫌惡」——因為害怕錯過優惠而感到痛苦，進而做出非理性的消費決策。我們以為自己佔了商家的便宜，卻沒有意識到，每一次為了湊滿額而多買的商品，每一次因為打折而購入的非必需品，都是在透支自己未來的資源。商家的話術，成功地將我們的「慾望」偽裝成了「需求」。</p>
+                            <p>理解了這層心理機制後，我開始練習為自己的購物慾「踩煞車」。現在，當我面對二手 3C 專賣店的「新機半價」或是便利商店的「i珍食時段折扣」時，我不再是盲目地全盤接收。我學會了分辨：購買二手筆電是因為它符合我的預算且能達到環保循環；購買打折鮮食是因為它能滿足我當下的飢餓且減少剩食浪費。我把折扣當作是達成目的的「工具」，而不是驅使我消費的「主因」。我建立了一份願望清單，只有在清單上待超過兩週的物品，我才會考慮結帳。</p>
+                            <p>面對光怪陸離的折扣世界，我們無法讓廣告消失，但可以改變自己的心態。真正的富足，從來不是來自於擁有了多少打折商品，而是明白自己真正需要什麼。當我們學會看穿紅色數字背後的魔咒，不再讓行銷手段綁架我們的情緒與錢包，我們就能在物質的世界裡保有心靈的自由，讓每一次的消費，都成為展現個人價值與智慧的選擇。</p>
+                        </div>
+                        <div class="bg-paper p-5 rounded-xl mt-6 border border-tertiary/20">
+                            <h4 class="font-bold text-tertiary mb-3 flex items-center gap-2"><span>🎯</span>【架構解析 (問津趕行程)】</h4>
+                            <ul class="space-y-2 text-sm text-ink list-none pl-0">
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第一段（問）：</span> <span class="text-gray-700">【問題意識】描寫實體與網路充滿促銷轟炸的現狀，提出反思：到底是什麼在驅使我們掏出錢包？</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第二段（津）：</span> <span class="text-gray-700">【經驗見聞】以「手遊儲值」為例。描寫害怕錯過的錯覺，以及短暫興奮後伴隨而來的深沉失落感。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第三段（趕）：</span> <span class="text-gray-700">【感受想法】深度剖析「損失嫌惡」心理。點出我們以為佔便宜，實則透支資源，商家的話術將慾望偽裝成了需求。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第四段（行）：</span> <span class="text-gray-700">【行動解方】轉變態度，將折扣視為「工具」而非「主因」。舉例善用二手3C與i珍食，並建立「願望清單」冷卻購物慾。</span></li>
+                                <li class="flex gap-2"><span class="text-tertiary font-bold">• 第五段（程）：</span> <span class="text-gray-700">【成長體悟】總結指出真正的富足是知道自己需要什麼，呼籲看穿數字魔咒，保有心靈與財富的自由。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+ 
+        <footer class="text-center pb-12 mt-16 leading-relaxed border-t border-gray-200/60 pt-10">
+        <div class="flex justify-center mb-6">
+            <img src="../icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="text-gray-600 font-medium text-sm">
+            𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+        </div>
+        <div class="mt-5">
+            <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-xs" style="text-decoration:none;">
+                <span>🏠</span> 返回學思軒作文資源總部
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic (情境擴寫)
+            const sentenceData = [
+                { label: "基礎敘述", text: "看到打折我就想買東西，結果買了很多沒用的。", words: 21, btnText: "➕ 加上「具體情境」" },
+                { label: "情境擴寫", text: "每次滑手機看到「限時買一送一」或「絕殺入手價」的打折訊息，我就忍不住想買東西，結果家裡堆滿了許多沒用的商品。", words: 53, btnText: "➕ 加上「感官與譬喻」" },
+                { label: "修辭擴寫", text: "每次滑手機看到閃爍的「限時買一送一」字眼，那些耀眼的紅色字體就像魔咒般勾起我的購物慾，讓我忍不住清空購物車，結果家裡堆滿了如山般未拆封的無用商品。", words: 74, btnText: "➕ 加上「內心反思」" },
+                { label: "反思擴寫 (完成)", text: "每次滑手機看到閃爍的「限時買一送一」字眼，那些耀眼的紅色字體就像魔咒般勾起我的購物慾，讓我忍不住清空購物車，結果家裡堆滿了如山般未拆封的無用商品。這不禁讓我反思，我買下的究竟是真正的「需要」，還是對折扣貪小便宜的「想要」呢？", words: 110, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎敘述', '加具象', '加修辭', '加反思'],
+                    datasets: [{
+                        label: '字數',
+                        data: [21, 0, 0, 0],
+                        backgroundColor: ['#E8F4FA', '#4A90E2', '#50E3C2', '#F5A623'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 120, grid: { color: '#E8F4FA' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [21, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic (問津趕行程五段式)
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【問】問題意識", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#4A90E2', task: "從日常生活中無所不在的促銷廣告切入，點出折扣訊息如何吸引人的目光，並帶出主旨。", prompts: ["你最常在哪裡看到誘人的折扣？（實體店、電商APP、手遊畫面）", "這些廣告通常用什麼字眼吸引你？（限時絕殺、買一送一）"], materials: "運用「排比」或「誇飾」，列舉不同的折扣標語，營造促銷訊息鋪天蓋地的畫面感。", hint: "「『限時搶購』、『買一送三』、『現金回饋無上限』……在這個物資豐饒的時代，五花八門的促銷口號宛如……」", icon: "❓" },
+                { id: 'p2', title: "第二段：【津】經驗見聞", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#50E3C2', task: "具體敘述一次自己或親友因為「折扣」而衝動消費（或過度囤積）的經驗。", prompts: ["買了什麼？當時是被哪種優惠活動吸引？", "買完之後發現了什麼問題？（放到過期、根本不需要、尺寸不合）"], materials: "善用「細節描寫」，對比購買時的心跳加速與發現浪費時的懊惱與堆積如山的畫面。", hint: "「記得去年雙十一購物節，看著電商平臺上倒數計時的鮮紅數字，我與媽媽忍不住……」", icon: "👁️" },
+                { id: 'p3', title: "第三段：【趕】感受想法", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#E74C3C', task: "深入剖析這個事件背後的「消費心理」。為什麼我們會上當？揭露隱藏的心態。", prompts: ["是因為貪小便宜？怕錯過(FOMO)？還是被商家的話術誤導？", "你買下它，真的是因為『需要』嗎？"], materials: "運用「心理獨白」或「設問法」，挖掘隱藏在購物慾背後盲目的心態，承認自己的不理性。", hint: "「看著角落那些連標籤都沒剪的衣物，我不禁反思，當時驅使我結帳的，真的是對商品的渴望嗎？還是……」", icon: "💡" },
+                { id: 'p4', title: "第四段：【行】行動解方", wordsStr: "約 200-260 字 (約 9-12 行)", weight: 230, color: '#F5A623', task: "面對這些誘惑，你後來做出了什麼改變或採取了什麼具體行動來避免過度消費？", prompts: ["購物前你會多做什麼思考？（列清單、分清想要與需要、等待期）", "你現在如何看待那些折價券與免運優惠？"], materials: "具體寫出「轉念」與「改變」的過程，讓讀者看到你的成長與新的消費習慣。", hint: "「有了那次慘痛的教訓，我開始學會在購物車前按下『暫停鍵』。每當再次看到超殺優惠時……」", icon: "🏃" },
+                { id: 'p5', title: "第五段：【程】成長體悟", wordsStr: "約 110-150 字 (約 5-7 行)", weight: 130, color: '#9B59B6', task: "總結論述，提出對「聰明消費」的見解或人生哲理。", prompts: ["這次經驗讓你學會了什麼道理？", "你認為真正的富足或聰明的消費者應該具備什麼態度？"], materials: "昇華主題，提出「想要不等於需要」、「理性消費」、「把錢花在刀口上」等宏觀見解。", hint: "「五花八門的行銷折扣雖然誘人，但唯有擦亮雙眼，釐清『需要』與『想要』的界線，我們才能……」", icon: "📈" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-white border border-gray-100 font-bold text-ink flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FDFBF7'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach Logic ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    this.classList.add('bg-highlight');
+                    setTimeout(() => this.classList.remove('bg-highlight'), 200);
+                });
+            });
+
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-danger', 'font-bold');
+                    charCountDisplay.classList.remove('text-primary');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-primary', 'font-bold');
+                    charCountDisplay.classList.remove('text-danger');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-danger', 'text-primary', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            btnCopyAi.addEventListener('click', () => {
+                const fullText = aiOutput.innerText;
+                let textToCopy = fullText;
+                const keyword = "【潤飾示範與拆解】";
+                if (fullText.includes(keyword)) {
+                    textToCopy = fullText.split(keyword)[1].trim();
+                }
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已成功複製！快去下方貼上修改吧！';
+                btnCopyAi.classList.replace('bg-highlight', 'bg-primary');
+                btnCopyAi.classList.replace('hover:bg-primary', 'hover:bg-highlight');
+                btnCopyAi.classList.replace('text-ink', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.replace('bg-primary', 'bg-highlight');
+                    btnCopyAi.classList.replace('hover:bg-highlight', 'hover:bg-primary');
+                    btnCopyAi.classList.replace('text-white', 'text-ink');
+                }, 2500);
+            });
+
+            // 保留原本的 Google Apps Script 網址做為中繼站
+            const apiUrl = "https://script.google.com/macros/s/AKfycbwTX1R33gA3Sz_gPOJ-FXRRK5buWGHZvybTsNUKAD57y48sSJVdjAiaRMzbuxqRJoUtLA/exec"; 
+
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+
+            async function fetchWithRetry(url, payload, retries = 5) {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        
+                        const textResponse = await response.text();
+                        try {
+                            return JSON.parse(textResponse);
+                        } catch (parseError) {
+                            throw new Error('GAS 回傳格式錯誤，請確認部署權限是否設為「所有人」。');
+                        }
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                // 更新 System Prompt：改為「折扣優惠與消費心理的觀察」主題
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「折扣優惠與消費心理的觀察」的會考知性/抒情文。
+主題涵蓋：限時特賣、買一送一、過度消費、囤積即期品、貪小便宜、怕錯過(FOMO)、想要與需要的辨證等。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的選材或觀察力，給予鼓勵。</p>
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點給出具體的修改方向。用語要像是親切的對話，引導他們寫得更深。</p>
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（符合國中生 6級分程度），並在句子後面用括號標註你使用了什麼寫作技巧（如：五感摹寫、心理獨白、對比修辭等）。</p>`;
+
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    const result = await fetchWithRetry(apiUrl, payload);
+                    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (generatedText) {
+                        aiOutput.innerHTML = generatedText;
+                        aiLoading.classList.add('hidden');
+                        aiOutputContainer.classList.remove('hidden');
+                    } else {
+                        const apiErrorMsg = result.error?.message || 'Gemini 未回傳有效文字';
+                        if (apiErrorMsg.toLowerCase().includes('quota') || apiErrorMsg.toLowerCase().includes('429')) {
+                            throw new Error('目前發問人數較多，教練稍微忙不過來了！請等待約 1 分鐘後再試一次喔 ⏳');
+                        }
+                        throw new Error(`API 錯誤：${apiErrorMsg}`);
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                    aiError.innerHTML = `<p>抱歉，教練目前遇到連線問題：<br><strong class="text-sm">${error.message}</strong><br>👉 請確認您的 GAS 部署權限為「所有人」，或按 F12 查看 Console 錯誤。</p>`;
+                } finally {
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+        });
+
+        // 教師巡桌指南 Toggle
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-teacher', 'bg-teacher-light');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-teacher-light', 'bg-teacher');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

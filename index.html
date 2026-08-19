@@ -1,0 +1,1058 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學思軒・作文教學資源網站 | 國中會考作文與情境寫作旗艦資源庫</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        },
+                        amberbrand: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        dragon: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&family=Ma+Shan+Zheng&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .serif-title {
+            font-family: 'Noto Serif TC', serif;
+        }
+
+        .calligraphy-bg {
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .card-hover {
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px -8px rgba(99, 102, 241, 0.15), 0 8px 12px -4px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-pattern {
+            background-color: #ffffff;
+            background-image: radial-gradient(#e0e7ff 1.2px, transparent 1.2px), radial-gradient(#ede9fe 1.2px, #ffffff 1.2px);
+            background-size: 48px 48px;
+            background-position: 0 0, 24px 24px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white flex flex-col min-h-screen">
+
+    <!-- ==================== 頂部全域導覽列 ==================== -->
+    <header class="glass-header sticky top-0 z-50 border-b border-slate-200/80 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-18">
+                <!-- 品牌識別組 -->
+                <div class="flex items-center gap-3">
+                    <img src="icon/seal-red.png" alt="學思軒" class="w-9 h-9 rounded-lg shadow-xs hover:rotate-6 transition-transform">
+                    <div class="flex flex-col">
+                        <span class="serif-title font-black text-slate-800 text-base md:text-lg tracking-tight">學思軒・作文教學資源網站</span>
+                        <span class="text-[10px] md:text-xs text-brand-700 font-bold tracking-wider">會考作文 · 閱思龍門文心雕龍寫作教材</span>
+                    </div>
+                </div>
+
+                <!-- 導覽連結 -->
+                <nav class="hidden lg:flex items-center gap-1">
+                    <a href="#featured-strategy" class="px-3.5 py-2 rounded-lg text-sm font-bold text-slate-700 hover:text-brand-700 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="award" class="w-4 h-4 text-amber-500"></i> 會考錦囊
+                    </a>
+                    <a href="#formula-section" class="px-3.5 py-2 rounded-lg text-sm font-bold text-slate-700 hover:text-brand-700 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="compass" class="w-4 h-4 text-brand-600"></i> 問津口訣
+                    </a>
+                    <a href="#topic-series" class="px-3.5 py-2 rounded-lg text-sm font-bold text-slate-700 hover:text-brand-700 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="book-open" class="w-4 h-4 text-indigo-600"></i> 主題思辨寫作
+                    </a>
+                    <a href="#dragon-series" class="px-3.5 py-2 rounded-lg text-sm font-bold text-slate-700 hover:text-brand-700 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="scroll" class="w-4 h-4 text-dragon-600"></i> 閱思龍門文心雕龍
+                    </a>
+                </nav>
+
+                <!-- 快捷搜尋 -->
+                <div class="flex items-center gap-2">
+                    <div class="relative w-44 sm:w-56 md:w-64">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="global-search" placeholder="搜尋題目、關鍵字..." class="w-full pl-9 pr-3 py-1.5 text-xs sm:text-sm rounded-full bg-slate-100 border border-slate-200 focus:outline-none focus:border-brand-500 focus:bg-white transition-all shadow-2xs">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== Hero 橫幅 ==================== -->
+    <section class="hero-pattern relative overflow-hidden border-b border-slate-200/80 pt-5 pb-10 md:pt-6 md:pb-12">
+        <!-- 巨大書法字浮水印 -->
+        <div class="calligraphy-bg absolute right-4 md:right-16 bottom-[-20px] text-[100px] md:text-[180px] text-slate-900/[0.03] select-none pointer-events-none leading-none">
+            學思作文
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100/80 border border-brand-200 text-brand-800 text-xs md:text-sm font-black mb-4 shadow-2xs">
+                    <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+                    學思軒黃于珊、王斐亭老師 · 互動寫作引導
+                </div>
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-8 font-medium">
+                    整合【主題與思辨寫作特訓】與【閱思龍門・文心雕龍素養寫作】兩大教材系列，<br class="hidden md:inline">
+                    從審題破題、情境擴寫、段落藍圖到 6 級分範文精解，帶領每一位同學從容登頂寫作之巔。
+                </p>
+
+                <!-- 關鍵指標數據列 -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto">
+                    <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs">
+                        <div class="text-2xl md:text-3xl font-black text-brand-600">28<span class="text-sm font-bold text-slate-500 ml-0.5">篇</span></div>
+                        <div class="text-xs text-slate-500 font-bold mt-0.5">線上互動指南</div>
+                    </div>
+                    <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs">
+                        <div class="text-2xl md:text-3xl font-black text-dragon-600">5<span class="text-sm font-bold text-slate-500 ml-0.5">段</span></div>
+                        <div class="text-xs text-slate-500 font-bold mt-0.5">問津趕行程架構</div>
+                    </div>
+                    <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs">
+                        <div class="text-2xl md:text-3xl font-black text-amber-600">6<span class="text-sm font-bold text-slate-500 ml-0.5">大</span></div>
+                        <div class="text-xs text-slate-500 font-bold mt-0.5">萬用例可帶儲備</div>
+                    </div>
+                    <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs">
+                        <div class="text-2xl md:text-3xl font-black text-emerald-600">6<span class="text-sm font-bold text-slate-500 ml-0.5">級分</span></div>
+                        <div class="text-xs text-slate-500 font-bold mt-0.5">段落範例剖析</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 旗艦推薦：會考寫作錦囊 ==================== -->
+    <section id="featured-strategy" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 mb-14">
+        <div class="bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl text-white relative overflow-hidden border border-indigo-700/50">
+            <!-- 裝飾背景圈 -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl pointer-events-none"></div>
+
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+                <div class="space-y-4 max-w-2xl text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400 text-indigo-950 text-xs font-black uppercase tracking-wider">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 會考滿分特訓・必讀戰略總覽
+                    </div>
+                    <h2 class="serif-title text-2xl sm:text-3xl md:text-4xl font-black leading-tight text-white">
+                        會考作文 6 級分大絕招：<br class="hidden sm:inline">
+                        【萬用例可帶】 × 【問津趕行程】
+                    </h2>
+                    <p class="text-indigo-100 text-sm sm:text-base leading-relaxed">
+                        面對 50 分鐘、900 字的嚴苛考驗，告別臨場發呆！本單元視覺化解析 5:10:10:10:5 行數配速策略、六大領域萬用例備戰指南，以及直覺清晰的五段搶分口訣。
+                    </p>
+                    <div class="flex flex-wrap gap-2 justify-center lg:justify-start pt-2">
+                        <span class="px-2.5 py-1 rounded-md bg-white/10 text-indigo-200 text-xs font-semibold">⏱️ 50分鐘極速配速</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/10 text-indigo-200 text-xs font-semibold">📊 Chart.js 視覺圖表</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/10 text-indigo-200 text-xs font-semibold">📝 40行滿版布局</span>
+                        <span class="px-2.5 py-1 rounded-md bg-white/10 text-indigo-200 text-xs font-semibold">🎯 必背三大手稿口訣</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto shrink-0">
+                    <a href="topic-writing/cap-exam-writing-guide.html" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-indigo-950 font-black text-base md:text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                        <span>開啟會考寫作錦囊</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#formula-section" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold text-sm backdrop-blur-md transition-all">
+                        <i data-lucide="compass" class="w-4 h-4"></i> 五段架構解析
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 核心方法論：問津趕行程圖解 ==================== -->
+    <section id="formula-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200/90 shadow-sm">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-brand-600 font-black text-xs md:text-sm tracking-widest uppercase">Writing Structure System</span>
+                <h2 class="serif-title text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-1 mb-3">
+                    最強五段式結構：「問津趕行程」
+                </h2>
+                <p class="text-slate-600 text-sm md:text-base">
+                    從字面意義掌握段落職責，層層推進，寫出具備邏輯深度與生命溫度的滿分文章。
+                </p>
+            </div>
+
+            <!-- 五段步驟卡片 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                <!-- 問 -->
+                <div class="bg-slate-50 border-2 border-indigo-100 rounded-2xl p-5 text-center hover:border-indigo-500 hover:bg-white transition-all shadow-2xs">
+                    <div class="w-12 h-12 rounded-full bg-indigo-600 text-white font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">問</div>
+                    <h3 class="font-black text-slate-800 text-base mb-1">【問】問題意識</h3>
+                    <div class="text-xs font-black text-rose-500 mb-2">首段 · 約 5 行 (110-150字)</div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-left bg-white/80 p-2.5 rounded-lg border border-slate-100">
+                        觀察題目現象與材料，點出思考盲點或核心提問，精準破題。
+                    </p>
+                </div>
+
+                <!-- 津 -->
+                <div class="bg-slate-50 border-2 border-sky-100 rounded-2xl p-5 text-center hover:border-sky-500 hover:bg-white transition-all shadow-2xs">
+                    <div class="w-12 h-12 rounded-full bg-sky-500 text-white font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">津</div>
+                    <h3 class="font-black text-slate-800 text-base mb-1">【津】經驗見聞</h3>
+                    <div class="text-xs font-black text-amber-600 mb-2">發展 · 約 10 行 (200-260字)</div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-left bg-white/80 p-2.5 rounded-lg border border-slate-100">
+                        5W「萬用例可帶」登場！具體摹寫場景與事件經過，呈現衝突與轉折。
+                    </p>
+                </div>
+
+                <!-- 趕 -->
+                <div class="bg-slate-50 border-2 border-amber-100 rounded-2xl p-5 text-center hover:border-amber-500 hover:bg-white transition-all shadow-2xs">
+                    <div class="w-12 h-12 rounded-full bg-amber-500 text-white font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">趕</div>
+                    <h3 class="font-black text-slate-800 text-base mb-1">【趕】感受想法</h3>
+                    <div class="text-xs font-black text-amber-600 mb-2">哲思 · 約 10 行 (200-260字)</div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-left bg-white/80 p-2.5 rounded-lg border border-slate-100">
+                        由實入虛。抒發真實心靈衝擊，提煉事件背後的生命意義與價值反思。
+                    </p>
+                </div>
+
+                <!-- 行 -->
+                <div class="bg-slate-50 border-2 border-emerald-100 rounded-2xl p-5 text-center hover:border-emerald-500 hover:bg-white transition-all shadow-2xs">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500 text-white font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">行</div>
+                    <h3 class="font-black text-slate-800 text-base mb-1">【行】行動解方</h3>
+                    <div class="text-xs font-black text-emerald-600 mb-2">加分 · 約 10 行 (200-260字)</div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-left bg-white/80 p-2.5 rounded-lg border border-slate-100">
+                        寫出體悟後的具體實踐作法、調整改變，或對社會議題的實質建議。
+                    </p>
+                </div>
+
+                <!-- 程 -->
+                <div class="bg-slate-50 border-2 border-rose-100 rounded-2xl p-5 text-center hover:border-rose-500 hover:bg-white transition-all shadow-2xs">
+                    <div class="w-12 h-12 rounded-full bg-rose-500 text-white font-black text-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">程</div>
+                    <h3 class="font-black text-slate-800 text-base mb-1">【程】成長體悟</h3>
+                    <div class="text-xs font-black text-rose-500 mb-2">尾段 · 約 5 行 (110-150字)</div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-left bg-white/80 p-2.5 rounded-lg border border-slate-100">
+                        回扣主題首尾呼應，點出深刻收穫並給予未來展望，完美收尾。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 互動過濾標籤列 ==================== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div class="flex items-center justify-between flex-wrap gap-4 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
+            <div class="flex items-center flex-wrap gap-1.5 sm:gap-2" id="filter-tabs">
+                <button class="filter-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-brand-600 text-white shadow-xs transition-all" data-category="all">
+                    全部教材 (<span id="count-all">28</span>)
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-brand-50 hover:text-brand-700 transition-all" data-category="topic">
+                    💡 主題思辨寫作 (<span id="count-topic">17</span>)
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-dragon-50 hover:text-dragon-700 transition-all" data-category="dragon">
+                    🐉 閱思龍門・文心雕龍寫作 (<span id="count-dragon">11</span>)
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-all" data-category="g7">
+                    七年級 (<span id="count-g7">3</span>)
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-all" data-category="g8">
+                    八年級 (<span id="count-g8">4</span>)
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-all" data-category="g9">
+                    九年級 (<span id="count-g9">4</span>)
+                </button>
+            </div>
+            
+            <div class="text-xs text-slate-500 font-medium">
+                顯示符合條件之寫作指南
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 主要教材卡片區 ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 flex-grow">
+        
+        <!-- ==================== 系列一：主題與思辨寫作特訓 ==================== -->
+        <div id="topic-series" class="section-group mb-12">
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-200 pb-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center font-black">💡</div>
+                <div>
+                    <h2 class="serif-title text-xl sm:text-2xl font-black text-slate-900">系列一：主題與思辨寫作特訓</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">涵蓋 AI 與科技倫理、社會觀察、消費心理與自我成長等前瞻會考議題</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="topic-cards-container">
+
+                <!-- 卡片：會考寫作錦囊 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border-2 border-indigo-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="會考作文6級分大絕招 萬用例可帶 問津趕行程" data-tags="會考 滿分 配速 萬用例 問津趕行程">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">🌟 核心戰略</span>
+                            <span class="text-xs text-indigo-600 font-bold">會考總複習</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/cap-exam-writing-guide.html">會考作文 6 級分大絕招：萬用例可帶 × 問津趕行程</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            不用變很強，只要把一件事講清楚：一個萬用例子、五段結構、一點誠實，就夠了。50分鐘900字高效作答攻略。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-wrap gap-1">
+                            <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">配速圖表</span>
+                            <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">極座標圖</span>
+                        </div>
+                        <a href="topic-writing/cap-exam-writing-guide.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：AI 時代的人的價值 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="AI時代的人的價值 人工智慧科技無法取代的一件事" data-tags="科技 AI 人性 同理心 思辨">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-sky-100 text-sky-800 text-xs font-black">🤖 科技思辨</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/ai-human-value.html">AI 時代的人性微光・科技無法取代的一件事</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            當冰冷的程式碼如海嘯般席捲而來，機器運算代勞了精準任務。探討人類靈魂中無法被數據化的同理與溫度。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">情境擴寫 · 範文解析</span>
+                        <a href="topic-writing/ai-human-value.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：AI 與我們的距離 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="AI與我們的距離" data-tags="AI 科技 生活 距離 工具">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-sky-100 text-sky-800 text-xs font-black">🤖 科技思辨</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/ai-and-distance.html">AI 與我們的距離</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            從日常手機語音助理到生成式繪圖，探討人與科技之間那道既親密又微妙的心理界線。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">五段藍圖 · 寫作教練</span>
+                        <a href="topic-writing/ai-and-distance.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：科技倫理的兩難 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="科技倫理的兩難 基因編輯或順其自然" data-tags="基因 倫理 科技 兩難 抉擇">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 text-xs font-black">⚖️ 倫理抉擇</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/tech-ethics-gene-editing.html">科技倫理的兩難：基因編輯或順其自然</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            如果能抹去遺傳疾病，我們該編輯基因嗎？深入探討科技進步與生命自然發展的兩難思辨。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">思辨論述 · 正反立論</span>
+                        <a href="topic-writing/tech-ethics-gene-editing.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：網路匿名發言 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="網路匿名發言" data-tags="網路 匿名 言論自由 責任 霸凌">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-indigo-100 text-indigo-800 text-xs font-black">🌐 數位公民</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/internet-anonymous-speech.html">網路匿名發言</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            螢幕後的鍵盤是抒發自由的翅膀，還是傷人的利刃？引導學生從多元視角反思匿名文化的利弊。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">社會觀察 · 責任自律</span>
+                        <a href="topic-writing/internet-anonymous-speech.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：當學習遇上手機 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="當學習遇上手機" data-tags="手機 學習 專注 自律 誘惑">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 text-xs font-black">📱 生活情境</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/learning-meets-smartphones.html">當學習遇上手機</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            手機是查資料的智慧幫手，還是吞噬專注力的黑洞？刻劃在自律與誘惑拉鋸下的心路歷程。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">生活見聞 · 行動轉化</span>
+                        <a href="topic-writing/learning-meets-smartphones.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：我看詐騙現象的觀察與反思 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="我看詐騙現象的觀察與反思" data-tags="詐騙 信任 社會 現象 反思">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">🔍 社會反思</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/fraud-phenomenon-reflection.html">我看詐騙現象的觀察與反思</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            從簡訊詐騙到深偽技術，分析謊言背後的人性貪念與脆弱，提出重建人際信任的洞見。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">時事剖析 · 價值重建</span>
+                        <a href="topic-writing/fraud-phenomenon-reflection.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：折扣與消費心理 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="折扣與消費心理" data-tags="折扣 消費 心理 需要 想要">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">🏷️ 生活哲思</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/discount-consumer-psychology.html">折扣與消費心理</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            買一送一真的划算嗎？在「需要」與「想要」的迷霧中，寫出對物質慾望與內在富足的醒悟。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">消費觀察 · 心理摹寫</span>
+                        <a href="topic-writing/discount-consumer-psychology.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：互助的溫度_時間銀行 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="互助的溫度 時間銀行" data-tags="互助 時間銀行 志工 溫暖 社會">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 text-xs font-black">🤝 人文關懷</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/time-bank-mutual-aid.html">互助的溫度：時間銀行</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            存入服務、提取陪伴。以新型態社會互助模式為引，書寫人與人之間無私奉獻的真摯溫暖。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">社會創新 · 情感共鳴</span>
+                        <a href="topic-writing/time-bank-mutual-aid.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：生活中的空白 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="生活中的空白" data-tags="空白 留白 獨處 沉澱 節奏">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-teal-100 text-teal-800 text-xs font-black">🍃 心靈空間</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/blank-spaces-in-life.html">生活中的空白</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            在被行程與考試填滿的日子裡，「空白」不是浪費，而是給靈魂呼吸與沉澱的珍貴禮物。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">意境留白 · 情感沉澱</span>
+                        <a href="topic-writing/blank-spaces-in-life.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：賦予事物新面貌 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="賦予事物新面貌" data-tags="創意 轉念 新面貌 廢物利用 視角">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-lime-100 text-lime-800 text-xs font-black">🎨 創意視角</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/giving-things-new-look.html">賦予事物新面貌</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            換個眼光看世界，枯木能成藝術，挫敗亦可化為養分。學習透過轉念給予舊事物全新生命。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">創意轉化 · 視角翻轉</span>
+                        <a href="topic-writing/giving-things-new-look.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：最能代表我的一個字 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="最能代表我的一個字" data-tags="自我 一個字 象徵 個性 成長">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">🪞 自我探索</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/one-character-representing-me.html">最能代表我的一個字</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            以單一漢字提煉自我特質與生命歷程，結合具體事件演繹出專屬於自己的個性肖像。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">字義象徵 · 故事聚焦</span>
+                        <a href="topic-writing/one-character-representing-me.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：因為這項習慣讓我…… -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="因為這項習慣讓我" data-tags="習慣 累積 轉變 成長 紀律">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-blue-100 text-blue-800 text-xs font-black">🌱 習慣力量</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/because-of-this-habit.html">因為這項習慣讓我……</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            微小習慣的日積月累，能創造不可思議的複利奇蹟。寫出習慣養成過程中的掙扎與收穫。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">細節摹寫 · 轉折體悟</span>
+                        <a href="topic-writing/because-of-this-habit.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：我如何面對生活的壓力 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="我如何面對生活的壓力" data-tags="壓力 調適 挫折 成長 韌性">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">🧗 面對逆境</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/coping-with-life-stress.html">我如何面對生活的壓力</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            升學與人際壓力如巨石壓頂，如何將重擔化為向上攀登的踏腳石？誠懇分享調適心法。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">心理描摹 · 行動解方</span>
+                        <a href="topic-writing/coping-with-life-stress.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：我從《論語》學到的事 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="我從論語學到的事" data-tags="論語 經典 儒家 處世 修養">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">📜 經典古今</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/lessons-from-analects.html">我從《論語》學到的事</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            古老典籍不再是生硬背誦，將先聖哲思巧妙印證於現代校園人際與自我修為中。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">古今對照 · 引經據典</span>
+                        <a href="topic-writing/lessons-from-analects.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：老師的教誨 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="老師的教誨" data-tags="師恩 教誨 啟發 成長 感恩">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-red-100 text-red-800 text-xs font-black">🧑‍🏫 師恩如光</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/teachers-teachings.html">老師的教誨</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            一句不經意的叮嚀，一段深刻的啟迪。寫出師長話語如何在迷惘黑夜中點亮前行方向。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">人物描寫 · 對話重現</span>
+                        <a href="topic-writing/teachers-teachings.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 卡片：校園裡的聲音 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="topic all" data-title="校園裡的聲音" data-tags="校園 聲音 五感 摹寫 回憶">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-green-100 text-green-800 text-xs font-black">🔔 五感摹寫</span>
+                            <span class="text-xs text-slate-500 font-medium">主題寫作</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-brand-600 transition-colors">
+                            <a href="topic-writing/sounds-in-campus.html">校園裡的聲音</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            清脆鐘聲、喧鬧操場、翻書沙沙聲。調動聽覺摹寫技巧，譜寫專屬於青春歲月的交響詩篇。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">聽覺摹寫 · 意象營造</span>
+                        <a href="topic-writing/sounds-in-campus.html" class="text-xs font-black text-brand-600 hover:text-brand-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==================== 系列二：閱思龍門・文心雕龍素養寫作 ==================== -->
+        <div id="dragon-series" class="section-group mb-12">
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-200 pb-3">
+                <div class="w-8 h-8 rounded-lg bg-dragon-100 text-dragon-700 flex items-center justify-center font-black">🐉</div>
+                <div>
+                    <h2 class="serif-title text-xl sm:text-2xl font-black text-slate-900">系列二：閱思龍門・文心雕龍素養寫作</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">國中七、八、九年級情境長文寫作訓練，循序漸進培養觀察力、表達力與批判思考力</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="dragon-cards-container">
+
+                <!-- 7上 考試經驗 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g7 all" data-title="7上 小魚兒探龍門 一次難忘的考試經驗" data-tags="7上 國一 考試 挫折 成長 龍門">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-dragon-100 text-dragon-800 text-xs font-black">7 上 · 段一</span>
+                            <span class="text-xs text-slate-500 font-medium">小魚兒探龍門</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g7a-unforgettable-exam.html">7上｜一次難忘的考試經驗</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            踏入國中初試啼聲，面對計時鐘擺的心跳與成績單發下的震撼，學會以真誠筆觸寫出深刻自我對話。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">心理描寫 · 考場氣氛</span>
+                        <a href="dragon-gate/g7a-unforgettable-exam.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 7上 我的老師(同學) -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g7 all" data-title="7上 小魚兒探龍門 我的老師 我的同學" data-tags="7上 國一 人物 寫人 老師 同學">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-dragon-100 text-dragon-800 text-xs font-black">7 上 · 寫人篇</span>
+                            <span class="text-xs text-slate-500 font-medium">小魚兒探龍門</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g7a-my-teacher-or-classmate.html">7上｜我的老師（同學）寫作引導</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            拒絕流水帳外貌描寫！透過「具體事件＋標誌性動作＋關鍵對話」立體刻劃人物靈魂。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">肖像描寫 · 行動特寫</span>
+                        <a href="dragon-gate/g7a-my-teacher-or-classmate.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 7下 大安散策賞花記 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g7 all" data-title="7下 大安散策 自然篇 大安森林公園賞花記" data-tags="7下 國一 大安森林公園 遊記 景物 賞花">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-dragon-100 text-dragon-800 text-xs font-black">7 下 · 自然篇</span>
+                            <span class="text-xs text-slate-500 font-medium">大安散策 (含範例)</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g7b-daan-park-flower-trip.html">7下｜大安森林公園賞花記（長文寫作）</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            走入城市綠肺，結合杜鵑花季與生態觀察，學習「定點特寫＋步移換景」雙軌寫景技巧。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">步移換景 · 景情交融</span>
+                        <a href="dragon-gate/g7b-daan-park-flower-trip.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 8上 臺北嬉遊記 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g8 all" data-title="8上 光點 臺北 城 臺北嬉遊記" data-tags="8上 國二 臺北 遊記 城市 光點 文化">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">8 上 · 城市篇</span>
+                            <span class="text-xs text-slate-500 font-medium">光點．臺北．城</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g8a-taipei-pleasure-trip.html">8上｜臺北嬉遊記</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            以行腳探索臺北地景文化，打破流水帳遊記盲點，從都會脈動提煉獨特城市記憶與美學視角。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">城市書寫 · 文化探索</span>
+                        <a href="dragon-gate/g8a-taipei-pleasure-trip.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 8上 故事．臺北．人 擴寫練習 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g8 all" data-title="8上 故事 臺北 人 擴寫練習" data-tags="8上 國二 擴寫 故事 人物 敘事">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">8 上 · 敘事篇</span>
+                            <span class="text-xs text-slate-500 font-medium">故事．臺北．人</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g8a-story-taipei-expansion.html">8上｜故事．臺北．人（擴寫練習）</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            從小人物的生活片段出發，練習情節鋪陳、衝突製造與心理對話，大幅提升敘事張力。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">故事擴寫 · 情節編織</span>
+                        <a href="dragon-gate/g8a-story-taipei-expansion.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 8下 寶島戀真情 我的家鄉味 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g8 all" data-title="8下 寶島戀真情 我的家鄉味" data-tags="8下 國二 美食 家鄉味 記憶 味覺 情感">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">8 下 · 飲食篇</span>
+                            <span class="text-xs text-slate-500 font-medium">寶島戀真情</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g8b-hometown-flavor.html">8下｜我的家鄉味</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            一道看似尋常的家常菜或在地小吃，藏著祖孫三代的溫情記憶。運用味覺摹寫勾勒深厚親情。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">飲食文學 · 味覺記憶</span>
+                        <a href="dragon-gate/g8b-hometown-flavor.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 8下 臺灣議言堂 從一則新聞談起 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g8 all" data-title="8下 臺灣議言堂 從一則新聞談起" data-tags="8下 國二 新聞 議論 評論 媒體 素養">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 text-xs font-black">8 下 · 議論篇</span>
+                            <span class="text-xs text-slate-500 font-medium">臺灣議言堂</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g8b-news-discussion.html">8下｜從一則新聞談起</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            國中生也能寫出犀利社論！掌握「引述事實＋多方立論＋建設性解方」三部曲，鍛造議論實力。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">時事評論 · 邏輯論證</span>
+                        <a href="dragon-gate/g8b-news-discussion.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 9上 指掌探世界 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g9 all" data-title="9上 指掌探世界" data-tags="9上 國三 科技 數位 世界 掌中 圖表">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">9 上 · 圖表篇</span>
+                            <span class="text-xs text-slate-500 font-medium">指掌探世界</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g9a-world-in-fingertips.html">9上｜指掌探世界</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            面對圖表與情境混合題型，首段精準判讀圖表數據，主體段轉向反思螢幕背後的廣袤世界。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">圖表判讀 · 思辨融合</span>
+                        <a href="dragon-gate/g9a-world-in-fingertips.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 9上 舌尖上的世界 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g9 all" data-title="9上 舌尖上的世界" data-tags="9上 國三 飲食 文化 全球化 舌尖">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">9 上 · 文化篇</span>
+                            <span class="text-xs text-slate-500 font-medium">舌尖上的世界</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g9a-world-on-tongue.html">9上｜舌尖上的世界</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            以異國料理為入口，探討全球化時代飲食文化的融合與碰撞，展現高階跨文化素養視野。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">跨文化書寫 · 宏觀視野</span>
+                        <a href="dragon-gate/g9a-world-on-tongue.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 9下 HI！未來_面對未來，我看見…… -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g9 all" data-title="9下 HI 未來 面對未來 我看見" data-tags="9下 國三 未來 願景 展望 衝刺 畢業">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">9 下 · 展望篇</span>
+                            <span class="text-xs text-slate-500 font-medium">HI！未來</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g9b-facing-the-future.html">9下｜面對未來，我看見……</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            站在國中畢業與會考交會點，凝視未知的世界，以堅毅筆觸寫下青年的抱負與時代使命。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">未來展望 · 抒情議論</span>
+                        <a href="dragon-gate/g9b-facing-the-future.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 9下 未來，continue……_理想的樂齡生活 -->
+                <div class="material-card card-hover bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between" data-category="dragon g9 all" data-title="9下 未來 continue 理想的樂齡生活" data-tags="9下 國三 高齡化 樂齡 世代 關懷 社會">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-800 text-xs font-black">9 下 · 社會篇</span>
+                            <span class="text-xs text-slate-500 font-medium">未來，continue……</span>
+                        </div>
+                        <h3 class="serif-title font-black text-lg text-slate-900 mb-2 hover:text-dragon-600 transition-colors">
+                            <a href="dragon-gate/g9b-ideal-senior-life.html">9下｜理想的樂齡生活</a>
+                        </h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
+                            超高齡社會來臨，換位思考長者的心理需求與尊嚴，勾勒溫暖共融的跨世代樂齡藍圖。
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">同理關懷 · 政策願景</span>
+                        <a href="dragon-gate/g9b-ideal-senior-life.html" class="text-xs font-black text-dragon-600 hover:text-dragon-800 flex items-center gap-1">
+                            進入指引 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==================== 全域頁尾 ==================== -->
+    <footer class="bg-slate-950 text-white pt-14 pb-12 border-t border-slate-800 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- 品牌標語橫幅 -->
+            <div class="flex justify-center mb-6">
+                <img src="icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+            </div>
+
+            <div class="inline-flex flex-wrap justify-center gap-3 text-xs text-slate-400 font-semibold mb-8">
+                <a href="#featured-strategy" class="hover:text-amber-300 transition-colors">會考寫作錦囊</a>
+                <span>·</span>
+                <a href="#formula-section" class="hover:text-amber-300 transition-colors">問津趕行程五段口訣</a>
+                <span>·</span>
+                <a href="#topic-series" class="hover:text-amber-300 transition-colors">主題思辨系列</a>
+                <span>·</span>
+                <a href="#dragon-series" class="hover:text-amber-300 transition-colors">閱思龍門系列</a>
+            </div>
+
+            <div class="pt-6 border-t border-slate-800 text-slate-400 text-xs sm:text-sm font-medium">
+                𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== 互動腳本 ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化 Lucide 圖標
+            lucide.createIcons();
+
+            const searchInput = document.getElementById('global-search');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.material-card');
+            const topicGroup = document.getElementById('topic-series');
+            const dragonGroup = document.getElementById('dragon-series');
+
+            let currentCategory = 'all';
+            let currentSearchTerm = '';
+
+            function updateCards() {
+                let visibleCount = 0;
+                let visibleTopic = 0;
+                let visibleDragon = 0;
+
+                cards.forEach(card => {
+                    const categories = card.getAttribute('data-category') || '';
+                    const title = (card.getAttribute('data-title') || '').toLowerCase();
+                    const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+                    const text = card.innerText.toLowerCase();
+
+                    const matchesCategory = (currentCategory === 'all') || categories.split(' ').includes(currentCategory);
+                    const matchesSearch = !currentSearchTerm || title.includes(currentSearchTerm) || tags.includes(currentSearchTerm) || text.includes(currentSearchTerm);
+
+                    if (matchesCategory && matchesSearch) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                        if (categories.includes('topic')) visibleTopic++;
+                        if (categories.includes('dragon')) visibleDragon++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // 控制分組標題顯示
+                if (topicGroup) {
+                    topicGroup.style.display = (visibleTopic > 0) ? 'block' : 'none';
+                }
+                if (dragonGroup) {
+                    dragonGroup.style.display = (visibleDragon > 0) ? 'block' : 'none';
+                }
+            }
+
+            // 分類按鈕切換
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-brand-600', 'text-white', 'shadow-xs');
+                        b.classList.add('bg-slate-100', 'text-slate-700');
+                    });
+                    btn.classList.add('active', 'bg-brand-600', 'text-white', 'shadow-xs');
+                    btn.classList.remove('bg-slate-100', 'text-slate-700');
+
+                    currentCategory = btn.getAttribute('data-category');
+                    updateCards();
+                });
+            });
+
+            // 搜尋框即時過濾
+            searchInput.addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value.trim().toLowerCase();
+                updateCards();
+            });
+        });
+    </script>
+</body>
+</html>

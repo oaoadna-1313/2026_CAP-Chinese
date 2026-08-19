@@ -1,0 +1,822 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 大安森林公園賞花記：長文寫作互動指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: '#FAF9F6',
+                        ink: '#2D3748',
+                        azalea: '#D97777',
+                        hydrangea: '#7993A3',
+                        ecology: '#728965',
+                        highlight: '#FEF08A'
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+        
+        body {
+            background-color: #FAF9F6;
+            color: #2D3748;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        h1, h2, h3, h4, .serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .step-transition {
+            transition: all 0.5s ease-in-out;
+        }
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #F3F4F6;
+        }
+        .tab-btn.active {
+            background-color: #2D3748 !important;
+            color: #FAF9F6 !important;
+            border-left: 4px solid #D97777;
+        }
+        .checklist-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .checklist-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Loading Animation for AI */
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97777;
+            color: #D97777;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97777;
+            color: #D97777;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #D97777;
+            color: #D97777;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dot-flashing {
+            0% { background-color: #D97777; }
+            50%, 100% { background-color: rgba(217, 119, 119, 0.2); }
+        }
+        
+        /* Styled AI Output */
+        .ai-content b { color: #D97777; font-weight: 700; }
+        .ai-content ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .ai-content li { margin-bottom: 0.25rem; }
+        .ai-content br { margin-bottom: 0.5rem; }
+
+        /* Essay Toggle Transition */
+        .essay-content {
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .essay-content.open {
+            max-height: 3000px;
+            opacity: 1;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+        .essay-icon {
+            transition: transform 0.3s ease;
+        }
+        .essay-btn[aria-expanded="true"] .essay-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+    <!-- 學思軒標準頂部導覽列 -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/80 shadow-xs px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-2 md:gap-3 group no-underline" style="text-decoration:none;">
+                <img src="../icon/seal-red.png" alt="學思軒" class="w-8 h-8 rounded-md shadow-xs group-hover:rotate-6 transition-transform">
+                <span class="font-bold text-gray-800 text-sm md:text-base hidden sm:inline group-hover:text-indigo-600 transition-colors">學思軒・作文教學資源網站</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 text-xs md:text-sm font-semibold transition-all shadow-xs" style="text-decoration:none;">
+                    <span>🏠</span> <span>返回寫作總部</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <header class="bg-ink text-paper py-12 px-4 shadow-md text-center">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-4xl mb-4">🌸</div>
+            <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">大安森林公園賞花記<br><span class="text-azalea">長文寫作互動指南</span></h1>
+            <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto font-light">
+                從「五感採集」到「800字長文」的實戰教學工具。跟著下方的互動步驟，學習如何將零碎的素材組裝、擴寫，建構出層次豐富的優美文章。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-20">
+
+        <!-- 第一步：擴寫練習 -->
+        <section id="expansion-tool" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🛠️</span> 第一步：素材盤點與「擴寫」練習
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    本區塊旨在破除學生對「字數」的恐懼。透過互動式的「句型長大術」，您可以點擊下方按鈕，觀察一個簡單的 10 字短句，如何藉由加入「精準形容詞」、「動態環境」與「主觀譬喻」，一步步擴充成 71 字的優美段落。右側圖表將同步顯示字數成長的視覺化成效。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="bg-paper p-6 rounded-xl border border-gray-200 min-h-[200px] flex flex-col justify-center">
+                        <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wide" id="sentence-label">基礎句</div>
+                        <p class="text-xl md:text-2xl leading-relaxed text-ink step-transition font-serif" id="sentence-text">
+                            我看到粉紅色的杜鵑花。
+                        </p>
+                        <div class="mt-4 text-right">
+                            <span class="inline-block bg-ink text-white px-3 py-1 rounded-full text-sm font-bold shadow" id="word-count-badge">10 字</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="btn-step-1" class="px-5 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition w-full md:w-auto hidden">↺ 重新開始</button>
+                        <button id="btn-next-step" class="px-5 py-3 bg-azalea text-white rounded-lg font-bold hover:bg-red-500 transition w-full md:w-auto shadow-md">➕ 加上「精準形容詞」</button>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mt-4">
+                        <p class="text-sm text-gray-700 font-medium">💡 <strong>教師引導語：</strong>「你們看，只要把採集卡上的『視覺』、『聽覺』和『聯想』加在一起，一句話就能變成一段優美的文字！」</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                    <h3 class="text-center font-bold text-gray-500 mb-2 text-sm uppercase tracking-wider">字數成長幅度</h3>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第二步：文章骨架 -->
+        <section id="structure-blueprint" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🏗️</span> 第二步：800字五段式骨架搭建
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    為了穩固支撐 800 字的篇幅，本區塊將文章解構成「起、承、轉一、轉二、合」五個明確的段落任務。請點擊左側的段落標籤，探索每個段落的寫作目標、引導提問與素材應用。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-4 flex flex-col gap-2" id="tab-container">
+                </div>
+
+                <div class="lg:col-span-8 bg-paper rounded-xl border border-gray-200 p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                    <div class="flex-1 space-y-6">
+                        <div class="border-b-2 border-gray-200 pb-4">
+                            <h3 class="text-2xl font-bold text-ink font-serif" id="tab-title">第一段：【起】城市綠洲的初相遇</h3>
+                            <p class="text-gray-500 mt-1 font-medium" id="tab-words">建議字數：約 100-150 字</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">🎯</span> 寫作任務</h4>
+                            <p class="text-gray-700 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-task">交代背景，營造對比感（都市的喧囂 vs. 公園的寧靜），點出季節與期待。</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-lg font-bold text-ink mb-2 flex items-center gap-2"><span class="text-xl">❓</span> 引導提問</h4>
+                            <ul class="list-disc list-inside text-gray-700 space-y-1 bg-white p-3 rounded shadow-sm border border-gray-100" id="tab-prompts">
+                                <li>你是怎麼來到這裡的？走出捷運站的那一刻，感覺到了什麼？</li>
+                                <li>春天的陽光照在身上是什麼感覺？</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <h4 class="font-bold text-gray-600 mb-1 text-sm">採集卡素材應用</h4>
+                                <p class="text-sm text-gray-700" id="tab-materials">聽覺（車水馬龍聲 vs. 鳥鳴聲）、觸覺（微涼的春風、和煦的陽光）。</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <h4 class="font-bold text-gray-600 mb-1 text-sm">開頭句型提示</h4>
+                                <p class="text-sm text-gray-700 italic" id="tab-hint">「有別於信義路上的車水馬龍，一踏入大安森林公園，迎接我的是...」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/3 flex flex-col justify-center items-center">
+                        <h4 class="text-center font-bold text-gray-500 mb-4 text-sm uppercase tracking-wider">段落字數佔比</h4>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三步：AI 教練與檢核 -->
+        <section id="ai-coach-section" class="bg-ink text-paper rounded-2xl shadow-xl p-6 md:p-10 mb-10 border-t-8 border-azalea">
+            <div class="mb-8 border-b border-gray-700 pb-6">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🤖</span> 第三步：檢核與潤飾 (AI 寫作教練)
+                </h2>
+                <p class="text-gray-300 text-lg">
+                    遇到瓶頸了嗎？將你寫好的草稿或片段貼在下方，選定你想加強的重點，專屬的 <b>AI 寫作教練</b> 會給你具體的優化建議，並示範如何加入五感與修辭技巧！
+                </p>
+            </div>
+
+            <!-- AI 教練互動區 -->
+            <div class="bg-white text-ink rounded-xl p-6 mb-8 shadow-inner">
+                
+                <!-- 防呆破冰：草稿快捷鍵 -->
+                <div class="mb-4 flex flex-wrap items-center gap-2">
+                    <span class="text-sm text-gray-500 font-bold bg-gray-100 px-2 py-1 rounded">💡 沒靈感嗎？點擊試試：</span>
+                    <button class="quick-draft-btn text-sm bg-paper hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-300 shadow-sm">我看到很多紅色的花，覺得很漂亮。</button>
+                    <button class="quick-draft-btn text-sm bg-paper hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full transition border border-gray-300 shadow-sm">風吹過來很涼，旁邊還有鳥在叫。</button>
+                </div>
+
+                <div class="mb-6">
+                    <label for="student-input" class="block text-gray-700 font-bold mb-2">✏️ 貼上你的草稿 (請輸入 200 字以內)：</label>
+                    <!-- 新增 maxlength="200" -->
+                    <textarea id="student-input" rows="3" maxlength="200" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-azalea focus:border-transparent transition" placeholder="請在此輸入 1-3 句話，讓教練一句一句帶你練習..."></textarea>
+                    
+                    <!-- UI 微互動：字數統計 -->
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="char-warning" class="text-xs text-red-500 font-bold opacity-0 transition-opacity">⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。</span>
+                        <div class="text-right text-xs text-gray-400"><span id="char-count">0</span> / 200 字</div>
+                    </div>
+                </div>
+
+                <!-- 賦予選擇權：自訂指導重點 -->
+                <div class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <label class="block text-gray-700 font-bold mb-3">🎯 教練，我這次想加強...</label>
+                    <div class="flex flex-wrap gap-3" id="focus-areas">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="五感描寫 (加入視覺、聽覺、觸覺等具體細節)" class="peer sr-only" checked>
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-azalea peer-checked:text-white peer-checked:border-azalea hover:bg-gray-100 text-sm font-bold transition shadow-sm">👀 豐富五感描寫</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="修辭技巧 (使用譬喻、排比讓句子更有畫面感)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-azalea peer-checked:text-white peer-checked:border-azalea hover:bg-gray-100 text-sm font-bold transition shadow-sm">✨ 提升修辭技巧</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="focus" value="改善流水帳 (增加空間與動作轉換詞，讓句子更連貫)" class="peer sr-only">
+                            <div class="px-4 py-2 rounded-lg border-2 border-gray-200 peer-checked:bg-azalea peer-checked:text-white peer-checked:border-azalea hover:bg-gray-100 text-sm font-bold transition shadow-sm">🔗 改善流水帳</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button id="btn-ask-ai" class="bg-azalea hover:bg-red-500 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center gap-2 transform hover:-translate-y-1">
+                        <span class="text-lg">🚀 請教練指導</span>
+                    </button>
+                </div>
+
+                <!-- Loading 狀態 -->
+                <div id="ai-loading" class="hidden mt-6 p-6 bg-gray-50 rounded-lg flex flex-col items-center justify-center gap-4 border border-gray-100">
+                    <div class="dot-flashing"></div>
+                    <p class="text-gray-500 font-medium mt-2">AI 教練正在仔細閱讀並準備專屬回饋，請稍候...</p>
+                </div>
+
+                <!-- AI 回饋輸出區 -->
+                <div id="ai-output-container" class="hidden mt-8">
+                    <div class="flex items-center justify-between mb-3 border-l-4 border-azalea pl-2">
+                        <h3 class="font-bold text-lg text-ink">💡 教練的回饋與示範：</h3>
+                    </div>
+                    
+                    <div id="ai-output" class="bg-gray-50 border border-gray-200 rounded-lg p-5 text-gray-800 leading-relaxed ai-content mb-3 shadow-sm">
+                        <!-- AI Response goes here -->
+                    </div>
+
+                    <!-- 實用功能：一鍵複製 -->
+                    <div class="flex justify-end">
+                        <button id="btn-copy-ai" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold transition flex items-center gap-2 border border-gray-300">
+                            <span>📋 複製示範</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="ai-error" class="hidden mt-6 bg-red-50 border-l-4 border-red-500 p-4 text-red-700 rounded-r-lg">
+                    <p>抱歉，教練目前遇到連線問題，請稍後再試一次！</p>
+                </div>
+                
+                <!-- 新增：我的文章累積區 (讓學生可以將潤飾後的草稿貼到這裡累積) -->
+                <div class="mt-10 bg-white border-2 border-ecology rounded-xl p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-ink flex items-center gap-2">
+                            <span class="text-2xl">📝</span> 我的文章累積區
+                        </h3>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4 font-medium">
+                        看過教練的建議後，把你自己修改好的「優美句子」貼到這裡吧！你可以一句一句慢慢練習，這裡會幫你保留所有的成果，慢慢拼成一篇完整的文章。
+                    </p>
+                    <textarea id="accumulated-draft" rows="8" class="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-ecology focus:border-transparent transition bg-paper" placeholder="將潤飾好的段落貼上來，或是直接在這裡修改你的最終文章..."></textarea>
+                    
+                    <div class="flex justify-end items-center mt-2">
+                        <div class="text-right text-sm text-gray-500 font-bold">目前累積字數：<span id="accumulated-char-count" class="text-ecology">0</span> / 800 字</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 教師人工巡桌指南 -->
+            <div class="mt-10 pt-6 border-t border-gray-700">
+                <h3 class="text-xl font-bold mb-4 text-gray-200 flex items-center gap-2"><span class="text-2xl">👩‍🏫</span> 教師巡桌指導備忘錄</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="checklist-item bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">⚖️</span>
+                            <h4 class="text-lg font-bold text-white">1. 檢查「感官比例」</h4>
+                        </div>
+                        <div class="text-gray-300 text-sm leading-relaxed hidden-content">
+                            提醒學生：「你的文章目前只有『視覺』，記得把採集卡上的『聽覺』和『觸覺』加進第三或第四段喔！」
+                        </div>
+                        <div class="text-center text-gray-500 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🔗</span>
+                            <h4 class="text-lg font-bold text-white">2. 打破「然後」魔咒</h4>
+                        </div>
+                        <div class="text-gray-300 text-sm leading-relaxed hidden-content">
+                            學生常寫「然後我看到...」。引導他們使用空間轉換詞：<br>
+                            <span class="text-azalea font-bold">「沿著紅土步道往前走...」</span><br>
+                            <span class="text-azalea font-bold">「不經意地一個轉角...」</span><br>
+                            <span class="text-azalea font-bold">「抬頭仰望...」</span>
+                        </div>
+                        <div class="text-center text-gray-500 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+
+                    <div class="checklist-item bg-gray-800 rounded-xl p-6 border border-gray-700 cursor-pointer" onclick="toggleChecklist(this)">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">❤️</span>
+                            <h4 class="text-lg font-bold text-white">3. 深化「感受」</h4>
+                        </div>
+                        <div class="text-gray-300 text-sm leading-relaxed hidden-content">
+                            如果學生寫「我覺得很漂亮」，請追問他：「漂亮在哪裡？是讓你覺得放鬆、驚喜，還是感動？」要求他們把「漂亮」替換成更具體的心理感受。
+                        </div>
+                        <div class="text-center text-gray-500 mt-2 text-xs uppercase show-more-hint">點擊展開說明</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第四步：優秀範文賞析 -->
+        <section id="sample-essays" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            <div class="mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-ink mb-4 flex items-center gap-2">
+                    <span class="text-3xl">📚</span> 第四步：優秀範文賞析
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    觀摩這篇符合「五段式結構」的 800 字範文，看看作者如何將視覺、聽覺、觸覺等五感細節融入文章，並寫出動人的體悟。點擊下方標題，即可展開閱讀完整範文與段落架構解析。
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- 範文：大安森林公園賞花記 -->
+                <div class="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <button class="essay-btn w-full px-6 py-4 text-left font-bold text-ink bg-gray-50 hover:bg-gray-100 flex justify-between items-center transition" aria-expanded="false" onclick="toggleEssay('essay-flower-1', this)">
+                        <span class="flex items-center gap-3 text-lg"><span class="text-2xl">🌸</span> 範文：春日綠洲的五感漫遊</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm bg-pink-100 text-pink-800 px-3 py-1 rounded-full border border-pink-200">806 字</span>
+                            <span class="essay-icon text-gray-400">▼</span>
+                        </div>
+                    </button>
+                    <div id="essay-flower-1" class="essay-content px-6 border-t border-gray-200 bg-white">
+                        <div class="space-y-4 text-gray-700 leading-relaxed text-justify">
+                            <p>有別於信義路上的車水馬龍，一踏入大安森林公園，迎接我的是一片令人心曠神怡的翠綠。初春的微風帶著一絲涼意，拂過臉頰，卻也同時帶來了和煦陽光的溫暖。都市的喧囂彷彿被這片廣大的綠洲隔絕在外，耳邊只剩下清脆的鳥鳴與樹葉沙沙的摩擦聲。帶著滿心的期待，我踏上了這趟尋訪春意的旅程。</p>
+                            <p>順著步道，映入眼簾的是一片燃燒般的色彩——那是熱情奔放的杜鵑花海。遠遠望去，粉紅、桃紅與純白交織成一張鋪滿大地的華麗地毯，沿著蜿蜒的小徑一路蔓延。走近細看，那些帶著胭脂紅漸層的花瓣在微風中輕輕搖曳，邊緣點綴著細小的斑點。有的含苞待放，像害羞的少女；有的熱情綻放，彷彿穿著華麗舞裙的精靈。這片花海用最霸道的姿態，宣告著春天的到來。</p>
+                            <p>順著蜿蜒的步道繼續向前，如果說杜鵑花是熱情的舞者，那麼角落裡的繡球花就是溫柔安靜的詩人。有別於杜鵑的奔放，繡球花以團錦簇的姿態，展現著粉藍與粉紫交融的夢幻漸層。蹲下身子，鼻尖隱約能聞到一股淡淡的清香，混合著雨後泥土的獨特芬芳。輕輕觸摸那如絲絨般柔滑的花瓣，彷彿能感受到春雨留下的濕潤。它們不爭搶陽光，只是靜靜地在樹蔭下綻放自己的優雅。</p>
+                            <p>除了盛開的花朵，這座城市綠洲裡還上演著另一場精彩的交響樂。將視線從花叢移開，生態池畔的白鷺鷥正優雅地涉水而過，突然一個振翅，劃破了水面的平靜。樹枝上，幾隻敏捷的松鼠正抱著果實大快朵頤，不時發出細碎的咀嚼聲。陽光穿透濃密的樹冠，在紅土步道上灑下斑駁的光影。推著嬰兒車的母親、舉著相機捕捉花影的攝影師，以及在草地上奔跑嬉戲的孩子們，他們的笑聲與快門聲，共同譜出了這座公園最動人的春日樂章。</p>
+                            <p>回首望向這片生機盎然的綠洲，我才明白，原來真正的春天不只在枝頭上，更在我們願意慢下來感受的心裡。這趟五感交織的踏查，讓我帶走了滿懷的春意，也洗淨了都市生活累積的疲憊。走出大安森林公園，信義路的車流依舊喧鬧，但我的步伐卻變得無比輕盈，因為我知道，那片美麗的春色已經深深烙印在我的腦海中。</p>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-xl mt-6 border border-gray-100">
+                            <h4 class="font-bold text-azalea mb-3 flex items-center gap-2"><span>🎯</span>【架構解析】</h4>
+                            <ul class="space-y-2 text-sm text-gray-700 list-none pl-0">
+                                <li class="flex gap-2"><span class="text-azalea font-bold min-w-max">• 第一段（起）：</span> 運用對比法，將「車水馬龍」與「綠洲寧靜」對比，並帶入聽覺（鳥鳴）與觸覺（微風），營造期待感。</li>
+                                <li class="flex gap-2"><span class="text-azalea font-bold min-w-max">• 第二段（承）：</span> 鏡頭由遠到近。先寫大景「華麗地毯」，再特寫「漸層花瓣、細小斑點」，並加上精準的視覺譬喻。</li>
+                                <li class="flex gap-2"><span class="text-azalea font-bold min-w-max">• 第三段（轉一）：</span> 轉換觀察對象與感官。加入嗅覺（清香、泥土芬芳）與觸覺（柔滑），與前一段的熱情形成對比。</li>
+                                <li class="flex gap-2"><span class="text-azalea font-bold min-w-max">• 第四段（轉二）：</span> 視角拉遠，寫出白鷺鷥、松鼠與人群的互動。聽覺細節讓整個公園的生態「活」了起來。</li>
+                                <li class="flex gap-2"><span class="text-azalea font-bold min-w-max">• 第五段（合）：</span> 抒發內心感受，點出「真正的春天在心裡」，並與第一段首尾呼應，留下餘韻。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+        <footer class="text-center pb-12 mt-16 leading-relaxed border-t border-gray-200/60 pt-10">
+        <div class="flex justify-center mb-6">
+            <img src="../icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+        </div>
+        <div class="text-gray-600 font-medium text-sm">
+            𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+        </div>
+        <div class="mt-5">
+            <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-xs" style="text-decoration:none;">
+                <span>🏠</span> 返回學思軒作文資源總部
+            </a>
+        </div>
+    </footer>
+
+
+    <script>
+        // --- 核心互動：UI 狀態與圖表 (Step 1 & 2) ---
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Step 1: Sentence Builder Logic
+            const sentenceData = [
+                { label: "基礎句", text: "我看到粉紅色的杜鵑花。", words: 10, btnText: "➕ 加上「精準形容詞」" },
+                { label: "細節擴寫 (視覺)", text: "我看到帶著胭脂紅漸層、邊緣有著細小斑點的杜鵑花。", words: 25, btnText: "➕ 加上「動態與環境」" },
+                { label: "感官擴寫 (聽/觸覺)", text: "春風輕拂，我看到帶著胭脂紅漸層的杜鵑花在風中輕輕搖曳，彷彿聽見了花瓣摩擦的微小聲響。", words: 42, btnText: "➕ 加上「譬喻與感受」" },
+                { label: "情感擴寫 (主觀聯想)", text: "春風輕拂，那些帶著胭脂紅漸層的杜鵑花在風中輕輕搖曳，宛如一群穿著華麗舞裙的精靈，在都市的綠洲裡舉辦著一場盛大的春日舞會，讓人忍不住停下腳步。", words: 71, btnText: "🎉 完成擴寫" }
+            ];
+
+            let currentStep = 0;
+            const elLabel = document.getElementById('sentence-label');
+            const elText = document.getElementById('sentence-text');
+            const elBadge = document.getElementById('word-count-badge');
+            const btnNext = document.getElementById('btn-next-step');
+            const btnReset = document.getElementById('btn-step-1');
+
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            const growthChart = new Chart(ctxGrowth, {
+                type: 'bar',
+                data: {
+                    labels: ['基礎', '加細節', '加環境', '加感受'],
+                    datasets: [{
+                        label: '字數',
+                        data: [10, 0, 0, 0],
+                        backgroundColor: ['#CBD5E0', '#D97777', '#7993A3', '#728965'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 80, grid: { color: '#EDF2F7' }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } },
+                        x: { grid: { display: false }, ticks: { font: { family: "'Noto Sans TC', sans-serif" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' 字'; } } } }
+                }
+            });
+
+            btnNext.addEventListener('click', () => { if (currentStep < 3) { currentStep++; updateSentenceUI(); } });
+            btnReset.addEventListener('click', () => { currentStep = 0; updateSentenceUI(); });
+
+            function updateSentenceUI() {
+                const data = sentenceData[currentStep];
+                elText.style.opacity = 0;
+                setTimeout(() => {
+                    elLabel.textContent = data.label; elText.innerHTML = data.text;
+                    elBadge.textContent = data.words + ' 字'; elText.style.opacity = 1;
+                }, 200);
+
+                if (currentStep === 3) {
+                    btnNext.style.display = 'none'; btnReset.style.display = 'block';
+                } else {
+                    btnNext.style.display = 'block'; btnNext.textContent = data.btnText; btnReset.style.display = 'none';
+                }
+
+                const newData = [10, 0, 0, 0];
+                for (let i = 0; i <= currentStep; i++) newData[i] = sentenceData[i].words;
+                growthChart.data.datasets[0].data = newData;
+                growthChart.update();
+            }
+
+            // Step 2: Paragraph Blueprint Logic
+            const paragraphData = [
+                { id: 'p1', title: "第一段：【起】城市綠洲的初相遇", wordsStr: "約 100-150 字 (約 5-7 行)", weight: 125, color: '#A0AEC0', task: "交代背景，營造對比感（都市的喧囂 vs. 公園的寧靜），點出季節與期待。", prompts: ["你是怎麼來到這裡的？走出捷運站的那一刻，感覺到了什麼？", "春天的陽光照在身上是什麼感覺？"], materials: "聽覺（車水馬龍聲 vs. 鳥鳴聲）、觸覺（微涼的春風、和煦的陽光）。", hint: "「有別於信義路上的車水馬龍，一踏入大安森林公園，迎接我的是...」", icon: "🏙️" },
+                { id: 'p2', title: "第二段：【承】熱情奔放的杜鵑花海", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#D97777', task: "運用「由遠到近」的鏡頭感，描寫杜鵑花的視覺震撼。", prompts: ["遠遠看過去，這片花海像什麼？（譬喻：燃燒的火焰、鋪滿大地的彩繪地毯）", "走近一看，單朵杜鵑花的花瓣有什麼特色？"], materials: "視覺（顏色漸層、形狀）、修辭（排比：有的...有的...還有的...）。", hint: "「順著步道，映入眼簾的是一片燃燒般的色彩...」 (先寫大景的氣勢，再聚焦特寫)", icon: "🌺" },
+                { id: 'p3', title: "第三段：【轉一】溫柔細緻的繡球花徑", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#7993A3', task: "轉換場景與心情，帶入不同的感官（觸覺、嗅覺），形成與杜鵑花的對比。", prompts: ["杜鵑花是熱情的，那繡球花給你什麼感覺？", "仔細看，繡球花是由多少小花組成的？摸起來、聞起來如何？"], materials: "視覺（團錦簇、粉藍粉紫的漸層）、嗅覺（淡淡的清香、雨後泥土味）、觸覺（絲絨般）。", hint: "「順著蜿蜒的步道向前，如果說杜鵑花是熱情的舞者，那麼角落裡的繡球花就是...」", icon: "🪻" },
+                { id: 'p4', title: "第四段：【轉二】花語之外的生態交響樂", wordsStr: "約 150-200 字 (約 7-9 行)", weight: 175, color: '#728965', task: "跳脫純粹的「看花」，將視角放大到整個公園的生態與人文互動（增加深度的關鍵段落）。", prompts: ["除了花，你還觀察到了什麼生命？（生態池的白鷺鷥、樹上的松鼠）", "樹下的光影是如何變化的？人們在公園裡做什麼？"], materials: "聽覺（樹葉沙沙聲、快門聲、笑聲）、視覺（光影斑駁）。", hint: "「除了盛開的花朵，這座城市綠洲裡還上演著另一場精彩的交響樂...」", icon: "🌳" },
+                { id: 'p5', title: "第五段：【合】帶走滿懷的春意", wordsStr: "約 100-150 字 (約 5-7 行)", weight: 125, color: '#D69E2E', task: "收束全文，寫下這趟踏查的內心感悟，與第一段首尾呼應。", prompts: ["準備離開時，你帶走了什麼樣的心情？", "這次的五感體驗，讓你對「春天」或「大自然」有了什麼新的體會？"], materials: "內心獨白、抒情法。", hint: "「回首望向這片生機盎然的綠洲，我才明白，原來真正的春天不只在枝頭上，更在...」", icon: "✨" }
+            ];
+
+            const tabContainer = document.getElementById('tab-container');
+            let activeTabIndex = 0;
+
+            paragraphData.forEach((data, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn w-full text-left px-5 py-4 rounded-lg bg-gray-50 border border-gray-100 font-bold text-gray-700 flex items-center justify-between shadow-sm`;
+                if(index === 0) btn.classList.add('active');
+                
+                btn.innerHTML = `<span class="flex items-center gap-3"><span class="text-xl">${data.icon}</span> <span>${data.title.split('：')[0]}</span></span> <span class="text-xs font-normal opacity-70">${data.wordsStr}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.style.borderLeftColor = 'transparent'; });
+                    btn.classList.add('active'); btn.style.borderLeftColor = data.color;
+                    activeTabIndex = index;
+                    updateTabContent(index); updateDoughnutChart(index);
+                });
+                tabContainer.appendChild(btn);
+            });
+
+            function updateTabContent(index) {
+                const data = paragraphData[index];
+                document.getElementById('tab-title').textContent = data.title;
+                document.getElementById('tab-words').textContent = `建議字數：${data.wordsStr}`;
+                document.getElementById('tab-task').textContent = data.task;
+                
+                const elPrompts = document.getElementById('tab-prompts');
+                elPrompts.innerHTML = '';
+                data.prompts.forEach(p => {
+                    const li = document.createElement('li'); li.textContent = p; elPrompts.appendChild(li);
+                });
+
+                document.getElementById('tab-materials').textContent = data.materials;
+                document.getElementById('tab-hint').textContent = data.hint;
+            }
+
+            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+            const weights = paragraphData.map(d => d.weight);
+            const baseColors = paragraphData.map(d => d.color);
+            const mutedColors = baseColors.map(c => c + '40'); 
+
+            const doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: paragraphData.map(d => d.title.split('：')[0]),
+                    datasets: [{
+                        data: weights, backgroundColor: [baseColors[0], mutedColors[1], mutedColors[2], mutedColors[3], mutedColors[4]],
+                        borderWidth: 2, borderColor: '#FAF9F6'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return '約 ' + context.raw + ' 字'; } } } },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+
+            function updateDoughnutChart(activeIndex) {
+                const newColors = paragraphData.map((d, i) => i === activeIndex ? baseColors[i] : mutedColors[i]);
+                doughnutChart.data.datasets[0].backgroundColor = newColors; doughnutChart.update();
+            }
+
+            tabContainer.querySelector('.tab-btn').style.borderLeftColor = paragraphData[0].color;
+            document.querySelectorAll('.hidden-content').forEach(el => el.style.display = 'none');
+            
+            // --- Step 3: AI Coach UI 互動與 Gemini API 整合 ---
+            const btnAskAI = document.getElementById('btn-ask-ai');
+            const studentInput = document.getElementById('student-input');
+            const charCountDisplay = document.getElementById('char-count');
+            const charWarning = document.getElementById('char-warning');
+            const aiLoading = document.getElementById('ai-loading');
+            const aiOutputContainer = document.getElementById('ai-output-container');
+            const aiOutput = document.getElementById('ai-output');
+            const aiError = document.getElementById('ai-error');
+            const quickDraftBtns = document.querySelectorAll('.quick-draft-btn');
+            const btnCopyAi = document.getElementById('btn-copy-ai');
+            
+            // 新增：文章累積區的變數
+            const accumulatedDraft = document.getElementById('accumulated-draft');
+            const accumulatedCharCount = document.getElementById('accumulated-char-count');
+
+            // 1. 防呆破冰：快捷草稿按鈕
+            quickDraftBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    studentInput.value = this.innerText;
+                    updateCharCount();
+                    // 添加點擊視覺回饋
+                    this.classList.add('bg-gray-300');
+                    setTimeout(() => this.classList.remove('bg-gray-300'), 200);
+                });
+            });
+
+            // 2. UI微互動：草稿區即時字數統計與 200 字警告
+            function updateCharCount() {
+                const len = studentInput.value.length;
+                charCountDisplay.textContent = len;
+                
+                // 接近或達到 200 字時給予提示
+                if (len >= 200) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數已達上限 (200字)！請分批讓教練指導。';
+                    charCountDisplay.classList.add('text-red-500', 'font-bold');
+                } else if (len > 150) {
+                    charWarning.classList.remove('opacity-0');
+                    charWarning.textContent = '⚠️ 字數快到上限囉！建議給教練 1-3 句話，效果最好。';
+                    charCountDisplay.classList.add('text-yellow-600', 'font-bold');
+                    charCountDisplay.classList.remove('text-red-500');
+                } else {
+                    charWarning.classList.add('opacity-0');
+                    charCountDisplay.classList.remove('text-red-500', 'text-yellow-600', 'font-bold');
+                }
+            }
+            studentInput.addEventListener('input', updateCharCount);
+
+            // 3. 累積區即時字數統計
+            accumulatedDraft.addEventListener('input', () => {
+                accumulatedCharCount.textContent = accumulatedDraft.value.length;
+            });
+
+            // 4. 實用功能：複製 AI 回饋 (僅複製示範)
+            btnCopyAi.addEventListener('click', () => {
+                const fullText = aiOutput.innerText;
+                let textToCopy = fullText;
+                const keyword = "【潤飾示範與拆解】";
+                
+                if (fullText.includes(keyword)) {
+                    // 擷取關鍵字之後的內容並去除前後多餘空白
+                    textToCopy = fullText.split(keyword)[1].trim();
+                }
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+
+                const originalHTML = btnCopyAi.innerHTML;
+                btnCopyAi.innerHTML = '✅ 已成功複製！快去下方貼上修改吧！';
+                btnCopyAi.classList.replace('bg-gray-200', 'bg-ecology');
+                btnCopyAi.classList.replace('text-gray-700', 'text-white');
+                setTimeout(() => { 
+                    btnCopyAi.innerHTML = originalHTML;
+                    btnCopyAi.classList.replace('bg-ecology', 'bg-gray-200');
+                    btnCopyAi.classList.replace('text-white', 'text-gray-700');
+                }, 2500);
+            });
+
+            // API Configuration as per instructions
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+
+            async function fetchWithRetry(url, payload, retries = 5) {
+                const delays = [1000, 2000, 4000, 8000, 16000];
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return await response.json();
+                    } catch (error) {
+                        if (i === retries - 1) throw error;
+                        await delay(delays[i]);
+                    }
+                }
+            }
+
+            btnAskAI.addEventListener('click', async () => {
+                const text = studentInput.value.trim();
+                if (!text) {
+                    alert('請先輸入草稿喔！');
+                    return;
+                }
+
+                // 取得學生自訂的指導重點
+                const selectedFocus = document.querySelector('input[name="focus"]:checked').value;
+
+                // UI State: Loading
+                btnAskAI.disabled = true;
+                btnAskAI.classList.add('opacity-50', 'cursor-not-allowed');
+                aiOutputContainer.classList.add('hidden');
+                aiError.classList.add('hidden');
+                aiLoading.classList.remove('hidden');
+
+                // 將學生的「選擇權」加入 Prompt 中
+                const systemPrompt = `你是一位專業且溫柔的國中寫作教練，正在指導學生寫「大安森林公園賞花記」的作文。
+請根據學生輸入的草稿給予回饋。
+
+【特別任務】學生希望這次能特別加強：**${selectedFocus}**。請在給予建議時，特別針對這點進行指導。
+
+回饋必須使用繁體中文，格式請嚴格遵守以下三個段落（請直接使用簡單的 HTML 標籤如 <p>, <b>, <ul>, <li> 進行排版，不要使用 Markdown 星號或井字號）：
+
+<p><b>【教練的肯定】</b><br>簡短稱讚學生的優點，給予鼓勵。</p>
+
+<p><b>【具體建議】</b><br>針對學生選擇的加強重點（${selectedFocus}）給出具體的修改方向。用語要像是對話般親切。</p>
+
+<p><b>【潤飾示範與拆解】</b><br>給出一段改寫後的美句示範（不要太難，符合國中生程度），並在句子後面用括號標註你使用了什麼技巧。
+例如：<br>
+「映入眼簾的是一片燃燒般的紅（視覺譬喻），杜鵑花在微風中輕輕搖曳（動態感）。」</p>`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: text }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                try {
+                    const result = await fetchWithRetry(apiUrl, payload);
+                    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (generatedText) {
+                        // Success: Show output
+                        aiOutput.innerHTML = generatedText;
+                        aiLoading.classList.add('hidden');
+                        aiOutputContainer.classList.remove('hidden');
+                    } else {
+                        throw new Error('No valid text returned');
+                    }
+                } catch (error) {
+                    console.error('AI Coach Error:', error);
+                    aiLoading.classList.add('hidden');
+                    aiError.classList.remove('hidden');
+                } finally {
+                    // Reset button
+                    btnAskAI.disabled = false;
+                    btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+        });
+
+        // 教師巡桌指南的 Toggle 功能
+        function toggleChecklist(element) {
+            const content = element.querySelector('.hidden-content');
+            const hint = element.querySelector('.show-more-hint');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                element.classList.replace('bg-gray-800', 'bg-gray-700');
+                hint.style.display = 'none';
+            } else {
+                content.style.display = 'none';
+                element.classList.replace('bg-gray-700', 'bg-gray-800');
+                hint.style.display = 'block';
+            }
+        }
+
+        // 範文賞析 Toggle 功能
+        function toggleEssay(essayId, btnElement) {
+            const content = document.getElementById(essayId);
+            const isExpanded = btnElement.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('open');
+                btnElement.setAttribute('aria-expanded', 'false');
+            } else {
+                content.classList.add('open');
+                btnElement.setAttribute('aria-expanded', 'true');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+﻿<!-- 
+Palette: Vibrant Playful (Indigo-600, Amber-400, Rose-500, Emerald-500, Sky-400)
+CONFIRMATION: NEITHER Mermaid JS NOR SVG were used anywhere in the output.
+Plan Summary: 
+1. Header/Intro: Sets the context, urgency, and core challenge (50 mins, 900 words).
+2. Data Overview: Key exam constraints presented as big numbers.
+3. Strategy 1 (萬用例可帶): Explains the "Portable Example" concept. Uses a Polar Area chart to show the 6 recommended preparation domains.
+4. Strategy 2 (問津趕行程): Explains the 5-paragraph structure using a CSS-styled flow diagram.
+5. Pacing Analysis: Visualizes the line distribution strategy (5:10:10:10:5) using a Horizontal Bar chart.
+Chart Choices:
+- Polar Area Chart (Chart.js): Goal - Organize/Compare. Chosen to represent the 6 "例可帶" domains as an arsenal of tools the student builds. NO SVG used.
+- Horizontal Bar Chart (Chart.js): Goal - Compare/Organize. Chosen to clearly visualize the pacing and volume of lines required for each paragraph. NO SVG used. 
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>會考作文 6 級分大絕招：萬用例可帶 × 問津趕行程</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Noto Sans TC', sans-serif; background-color: #F3F4F6; color: #1F2937; }
+.chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 380px; } }
+.glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+.step-arrow::after { content: '\279C'; font-size: 1.5rem; color: #9CA3AF; display: block; text-align: center; margin: 0.5rem 0; }
+@media (min-width: 768px) {
+    .step-arrow::after { content: '\279C'; display: inline-block; margin: 0 1rem; transform: translateY(50%); }
+}
+.last-step::after { content: none; }
+</style>
+</head>
+<body class="antialiased pb-20">
+    <!-- 學思軒標準頂部導覽列 -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/80 shadow-xs px-4 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-2 md:gap-3 group no-underline" style="text-decoration:none;">
+                <img src="../icon/seal-red.png" alt="學思軒" class="w-8 h-8 rounded-md shadow-xs group-hover:rotate-6 transition-transform">
+                <span class="font-bold text-gray-800 text-sm md:text-base hidden sm:inline group-hover:text-indigo-600 transition-colors">學思軒・作文教學資源網站</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="../index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 text-xs md:text-sm font-semibold transition-all shadow-xs" style="text-decoration:none;">
+                    <span>🏠</span> <span>返回寫作總部</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+<header class="bg-indigo-700 text-white py-12 px-4 shadow-lg text-center border-b-8 border-amber-400">
+    <div class="max-w-4xl mx-auto">
+        <div class="inline-block bg-rose-500 text-white font-bold px-4 py-1 rounded-full mb-4 shadow-md">會考寫作錦囊</div>
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-4 drop-shadow-md">會考作文 6 級分大絕招</h1>
+        <p class="text-xl md:text-2xl font-light text-indigo-100">告別「重新投胎」，掌握【萬用例可帶】與【問津趕行程】</p>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+    
+    <section class="glass-card p-6 md:p-10 mb-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t-4 border-indigo-500">
+        <div class="w-full md:w-1/3 text-center">
+            <div class="text-6xl font-black text-rose-500 mb-2">50<span class="text-2xl text-gray-500 ml-1">分鐘</span></div>
+            <p class="text-gray-600 font-bold text-lg">嚴苛的時間限制</p>
+            <p class="text-sm text-gray-400 mt-1">需極高的專注力與配速</p>
+        </div>
+        <div class="hidden md:block w-px h-24 bg-gray-200"></div>
+        <div class="w-full md:w-1/3 text-center">
+            <div class="text-6xl font-black text-amber-500 mb-2">900<span class="text-2xl text-gray-500 ml-1">字數</span></div>
+            <p class="text-gray-600 font-bold text-lg">高分基本門檻</p>
+            <p class="text-sm text-gray-400 mt-1">約佔滿稿紙兩面40行</p>
+        </div>
+        <div class="hidden md:block w-px h-24 bg-gray-200"></div>
+        <div class="w-full md:w-1/3 text-center">
+            <div class="text-6xl font-black text-emerald-500 mb-2">18<span class="text-2xl text-gray-500 ml-1">字/分</span></div>
+            <p class="text-gray-600 font-bold text-lg">平均產出速度</p>
+            <p class="text-sm text-gray-400 mt-1">思考與下筆必須同步</p>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+        <section class="glass-card p-8">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-3xl">&#128188;</span>
+                <h2 class="text-3xl font-bold text-indigo-900">核心策略：萬用例可帶</h2>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-6 text-lg">
+                「例可帶」即是<strong class="text-indigo-600">萬用例子</strong>。與其每次上考場耗費寶貴時間重新編故事，不如準備一個「5W 全部固定」的核心經驗。將人物、事件、時間、地點、原因鎖死，根據題目靈活更換切入角度。
+            </p>
+            <div class="bg-indigo-50 rounded-lg p-6 border border-indigo-100">
+                <h3 class="font-bold text-indigo-800 mb-3 flex items-center gap-2"><span class="text-xl">&#128274;</span> 5W 固定法則示範</h3>
+                <ul class="space-y-2 text-indigo-900 font-medium">
+                    <li><span class="bg-indigo-200 px-2 py-1 rounded text-indigo-800 mr-2 text-sm">人物</span>我</li>
+                    <li><span class="bg-indigo-200 px-2 py-1 rounded text-indigo-800 mr-2 text-sm">事件</span>騎車摔倒</li>
+                    <li><span class="bg-indigo-200 px-2 py-1 rounded text-indigo-800 mr-2 text-sm">時間</span>國二某天下午</li>
+                    <li><span class="bg-indigo-200 px-2 py-1 rounded text-indigo-800 mr-2 text-sm">地點</span>放學路上</li>
+                    <li><span class="bg-indigo-200 px-2 py-1 rounded text-indigo-800 mr-2 text-sm">原因</span>耍帥單手騎車</li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-indigo-200">
+                    <p class="text-sm text-gray-600 font-bold mb-2">多角度切入應用：</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-bold">寫「挫折」</span>
+                        <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold">寫「成長」</span>
+                        <span class="bg-sky-100 text-sky-700 px-3 py-1 rounded-full text-sm font-bold">寫「空白」</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card p-8 flex flex-col">
+            <h2 class="text-2xl font-bold text-indigo-900 mb-2">備戰錦囊：6 大準備領域</h2>
+            <p class="text-gray-600 mb-6 text-sm">
+                考前建議在這六個領域各養熟一個「例可帶」，確保上場時有足夠的彈藥庫應對各種題型。此極座標圖展示了六大領域的均衡準備狀態。
+            </p>
+            <div class="flex-grow flex items-center justify-center">
+                <div class="chart-container">
+                    <canvas id="arsenalChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="glass-card p-8 mb-10 border-t-8 border-emerald-400">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-indigo-900 mb-4">結構組織：問津趕行程</h2>
+            <p class="text-gray-700 max-w-2xl mx-auto text-lg">
+                有了骨架，才能長肉。將「例可帶」填入這套最強五段口訣，讓你從字面意義就知道該段寫什麼，搶分更直覺。
+            </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-stretch gap-4 relative">
+            
+            <div class="flex-1 bg-white border-2 border-indigo-100 rounded-xl p-5 shadow-sm text-center relative z-10 md:step-arrow hover:border-indigo-400 transition-colors">
+                <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-md">問</div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">問題意識</h3>
+                <p class="text-sm text-rose-500 font-bold mb-2">5 行 (首段)</p>
+                <p class="text-xs text-gray-600 text-left bg-gray-50 p-2 rounded">觀察材料現象，提出你想討論的方向。展現讀懂題目的能力。</p>
+            </div>
+
+            <div class="flex-1 bg-white border-2 border-indigo-100 rounded-xl p-5 shadow-sm text-center relative z-10 md:step-arrow hover:border-indigo-400 transition-colors">
+                <div class="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-md">津</div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">經驗見聞</h3>
+                <p class="text-sm text-amber-500 font-bold mb-2">10 行 (發展)</p>
+                <p class="text-xs text-gray-600 text-left bg-gray-50 p-2 rounded">5W 例可帶登場！描寫事件過程，務必呈現轉折或衝突點。</p>
+            </div>
+
+            <div class="flex-1 bg-white border-2 border-indigo-100 rounded-xl p-5 shadow-sm text-center relative z-10 md:step-arrow hover:border-indigo-400 transition-colors">
+                <div class="w-12 h-12 bg-amber-500 text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-md">趕</div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">感受想法</h3>
+                <p class="text-sm text-amber-500 font-bold mb-2">10 行 (哲思)</p>
+                <p class="text-xs text-gray-600 text-left bg-gray-50 p-2 rounded">由實入虛。抒發真實感受，提煉事件背後的生命意義與價值。</p>
+            </div>
+
+            <div class="flex-1 bg-white border-2 border-indigo-100 rounded-xl p-5 shadow-sm text-center relative z-10 md:step-arrow hover:border-indigo-400 transition-colors">
+                <div class="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-md">行</div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">行動解方</h3>
+                <p class="text-sm text-amber-500 font-bold mb-2">10 行 (加分)</p>
+                <p class="text-xs text-gray-600 text-left bg-gray-50 p-2 rounded">寫出體悟後的實際改變、具體做法，或對社會議題的實質建議。</p>
+            </div>
+
+            <div class="flex-1 bg-white border-2 border-indigo-100 rounded-xl p-5 shadow-sm text-center relative z-10 last-step hover:border-indigo-400 transition-colors">
+                <div class="w-12 h-12 bg-rose-500 text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-3 shadow-md">程</div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">成長體悟</h3>
+                <p class="text-sm text-rose-500 font-bold mb-2">5 行 (尾段)</p>
+                <p class="text-xs text-gray-600 text-left bg-gray-50 p-2 rounded">總結經驗，回扣主題。點出最終收穫並給予未來展望，完美收尾。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="glass-card p-8 mb-10">
+        <h2 class="text-2xl font-bold text-indigo-900 mb-2">行數配速策略可視化</h2>
+        <p class="text-gray-600 mb-6 text-sm">
+            以 6 級分全卷 40 行為目標，精準的字數分配能確保文章頭尾精鍊，主體論述飽滿。長條圖顯示了各段落的理想行數比例。
+        </p>
+        <div class="chart-container">
+            <canvas id="pacingChart"></canvas>
+        </div>
+    </section>
+
+    <div class="text-center py-6">
+        <p class="text-xl md:text-2xl font-bold text-indigo-900">
+            不用變很強，只要把一件事講清楚：<br>
+            <span class="text-rose-500 underline decoration-wavy decoration-amber-400 mt-2 inline-block">一個萬用例子、五段結構、一點誠實，就夠了。</span>
+        </p>
+    </div>
+
+</main>
+
+<footer class="text-center pb-12 mt-16 leading-relaxed border-t border-gray-200/60 pt-10">
+    <div class="flex justify-center mb-6">
+        <img src="../icon/slogan-god-dark.png" alt="人人都是國文神" class="h-10 md:h-12 object-contain opacity-90 hover:opacity-100 transition-opacity">
+    </div>
+
+    <div class="text-gray-600 font-medium text-sm">
+        𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐
+    </div>
+    <div class="mt-5">
+        <a href="../index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all shadow-xs" style="text-decoration:none;">
+            <span>🏠</span> 返回學思軒作文資源總部
+        </a>
+    </div>
+</footer>
+
+<script>
+const arsenalLabelsRaw = ['最喜歡的主題 (如歷史)', '最難忘的經歷 (個人故事)', '最喜歡的三句話 (金句)', '最愛的食物 (五感摹寫)', '最喜歡的人物 (價值觀)', '最喜歡的作品 (小說電影)'];
+
+const arsenalLabelsWrapped = arsenalLabelsRaw.map(label => {
+    if (label.length <= 16) return label;
+    const lines = [];
+    for(let i=0; i<label.length; i+=12) { 
+        lines.push(label.substring(i, i+12));
+    }
+    return lines;
+});
+
+const ctxArsenal = document.getElementById('arsenalChart').getContext('2d');
+new Chart(ctxArsenal, {
+    type: 'polarArea',
+    data: {
+        labels: arsenalLabelsWrapped,
+        datasets: [{
+            label: '準備充實度',
+            data: [90, 100, 85, 80, 95, 90],
+            backgroundColor: [
+                'rgba(79, 70, 229, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(239, 68, 68, 0.7)',
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(14, 165, 233, 0.7)',
+                'rgba(139, 92, 246, 0.7)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { font: { family: "'Noto Sans TC', sans-serif" } } },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        } else {
+                            return label;
+                        }
+                    }
+                }
+            }
+        },
+        scales: {
+            r: {
+                ticks: { display: false },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            }
+        }
+    }
+});
+
+const pacingLabelsRaw = ['第一段：【問】問題意識', '第二段：【津】經驗見聞', '第三段：【趕】感受想法', '第四段：【行】行動解方', '第五段：【程】成長體悟'];
+
+const ctxPacing = document.getElementById('pacingChart').getContext('2d');
+new Chart(ctxPacing, {
+    type: 'bar',
+    data: {
+        labels: pacingLabelsRaw,
+        datasets: [{
+            label: '建議行數配置 (總計 40 行)',
+            data: [5, 10, 10, 10, 5],
+            backgroundColor: [
+                '#4F46E5', 
+                '#0EA5E9', 
+                '#F59E0B', 
+                '#10B981', 
+                '#EF4444'  
+            ],
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                            return label.join(' ');
+                        } else {
+                            return label;
+                        }
+                    },
+                    label: function(context) {
+                        return context.raw + ' 行';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 12,
+                title: { display: true, text: '稿紙行數', font: { family: "'Noto Sans TC', sans-serif", weight: 'bold' } },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            y: {
+                ticks: { font: { family: "'Noto Sans TC', sans-serif", weight: 'bold' } },
+                grid: { display: false }
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>
