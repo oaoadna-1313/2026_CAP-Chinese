@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[語文學習集練習神器]常誤讀字-成語類別</title>
+<style>
+/* CSS 樣式保持原樣，嚴格禁止修改 */
+:root { --primary: #3949ab; --primary-light: #e8eaf6; --accent: #ff4081; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: #e8eaf6; padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 16px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 15px; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.card-wrapper { width: 320px; height: 420px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.big-char { font-size: 48px; color: var(--primary); margin: 0; line-height: 1.4; letter-spacing: 2px; font-weight: 800; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 40px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: left; justify-content: flex-start; cursor: pointer; border-top: 6px solid var(--primary); }
+.back-content { flex-grow: 1; overflow-y: auto; }
+.back-header { border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+.back-char { font-size: 32px; font-weight: bold; color: var(--primary); letter-spacing: 2px; }
+.section-title { font-size: 13px; color: #fff; background: var(--primary); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 15px; margin-bottom: 8px; }
+.meaning { font-size: 18px; line-height: 1.6; color: #333; font-weight: bold; }
+.sentence { font-size: 16px; line-height: 1.6; color: #546e7a; margin-top: 5px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 10px; }
+.hl { color: var(--accent); font-weight: bold; text-decoration: underline; }
+.hl-yellow { background-color: #fff59d; color: #263238; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.quiz-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+.quiz-question { font-size: 26px; margin: 15px 0; font-weight: bold; color: var(--primary); line-height: 1.5; min-height: 60px; display: flex; align-items: center; justify-content: center;}
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.option-btn { padding: 15px; border: 2px solid #e8eaf6; background: white; border-radius: 10px; cursor: pointer; font-size: 22px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.option-btn:hover { background-color: #e8eaf6; border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.option-desc { font-size: 14px; font-weight: normal; color: #666; margin-top: 5px; line-height: 1.4; display: none; }
+.option-desc.show { display: block; animation: fadeIn 0.3s; }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; display: none; font-size: 16px; }
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 錯題本專用樣式 */
+.wb-badge { background-color: #f44336; color: white; padding: 10px 20px; border-radius: 25px; font-size: 16px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2); }
+.wb-tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; max-width: 650px; margin-bottom: 15px; }
+@media (max-width: 600px) { .wb-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+.wb-tool-btn { border: none; padding: 12px 8px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.wb-tool-btn:hover { transform: translateY(-2px); }
+.wb-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.wb-btn-fc { background-color: #3f51b5; }
+.wb-btn-quiz { background-color: #ff4081; }
+.wb-btn-copy { background-color: #4caf50; }
+.wb-btn-download { background-color: #00acc1; }
+.wb-btn-clear { background-color: #f44336; }
+.wb-auto-remove-box { display: flex; align-items: center; gap: 8px; color: #546e7a; font-size: 15px; margin-bottom: 20px; font-weight: bold; }
+.wb-card-container { width: 100%; max-width: 650px; background: white; border-radius: 15px; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 150px; }
+.wb-empty-msg { color: #78909c; text-align: center; font-size: 18px; padding: 30px 0; font-weight: bold; }
+.wb-item-card { background: #f9fbe7; border-left: 5px solid #81c784; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-item-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-item-meaning { font-size: 14px; color: #37474f; line-height: 1.5; }
+.wb-item-count { font-size: 12px; background: #ffe0b2; color: #e65100; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
+.wb-del-btn { background: none; border: none; color: #ef5350; cursor: pointer; font-size: 18px; padding: 0 5px; }
+</style>
+</head>
+<body>
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title">📜 <span id="inst-title-text"></span> - 使用說明</div>
+<div class="inst-content">
+<p>歡迎來到<b>「<span id="welcome-title-text"></span>」</b>！</p>
+<ul>
+<li><b>第一步：翻卡記憶</b><br>點擊卡片可翻面，查看正確注音與釋義。請誠實標記熟悉度。</li>
+<li><b>第二步：注音測驗</b><br>測驗題目「」中字的正確讀音，從容易混淆的讀音中選出正確答案。</li>
+<li><b>錯題本特訓</b><br>答錯或標記不熟的題目會自動記入錯題本，可隨時進行專項特訓！</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+</div>
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" id="nav-btn-flashcard" onclick="switchMode('flashcard')">📖 翻卡記憶</button>
+<button class="nav-btn" id="nav-btn-meaningQuiz" onclick="switchMode('meaningQuiz')">📝 注音測驗</button>
+<button class="nav-btn" id="nav-btn-wrongBook" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+
+<!-- 翻卡 Mode -->
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<h2 class="big-char" id="fc-char" style="font-size: 32px;"></h2>
+<p class="hint" id="fc-hint">(點擊看正確讀音與釋義)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-header"><span class="back-char" id="fc-back-char" style="font-size: 26px;"></span></div>
+<div class="section-title">讀音</div><div class="meaning" id="fc-sound" style="color:var(--accent); font-size:26px;"></div>
+<div class="section-title">釋義</div><div class="sentence" id="fc-meaning"></div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 注音測驗 Mode -->
+<div id="meaningQuiz-mode" class="mode-container">
+<div id="mq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="mq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:15px;">請選出「 」中字的正確注音：</div>
+<div class="quiz-question" id="mq-question"></div>
+<div class="options-grid" id="mq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="mq-feedback"></div>
+<div id="mq-explanation" style="display:none; text-align:left; background:#f5f7fa; padding:12px; border-radius:8px; width:100%; box-sizing:border-box; font-size:14px; line-height:1.6; color:#37474f; border-left:4px solid var(--primary);"></div>
+<button class="next-q-btn" id="mq-next-btn" onclick="nextQuiz('meaning')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="mq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="mq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="mq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 錯題本 Mode -->
+<div id="wrongBook-mode" class="mode-container">
+  <div id="wb-count-badge" class="wb-badge">目前單元共 0 個錯題 (累計全部單元共 0 個)</div>
+  
+  <div class="wb-tools-grid">
+    <button class="wb-tool-btn wb-btn-fc" id="wb-btn-fc" onclick="startWrongTraining('flashcard')">
+      <span>📖 錯題</span><span>翻卡特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-quiz" id="wb-btn-quiz" onclick="startWrongTraining('meaningQuiz')">
+      <span>📝 錯題</span><span>注音特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-copy" onclick="copyWrongBook()">
+      <span>📋 複製</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-download" onclick="downloadWrongBook()">
+      <span>💾 下載</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-clear" onclick="clearCurrentWrongBook()">
+      <span>🧹 清空</span><span>錯題本</span>
+    </button>
+  </div>
+
+  <div class="wb-auto-remove-box">
+    <input type="checkbox" id="wb-auto-remove" checked>
+    <label for="wb-auto-remove">特訓中答對時，自動移出錯題本</label>
+  </div>
+
+  <div class="wb-card-container" id="wrong-list-container">
+    <div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>
+  </div>
+</div>
+
+<div id="summary-area" style="display: none;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+
+<script>
+// ==========================================
+// 🔴 設定區
+const QUIZ_TITLE = "[語文學習集練習神器]常誤讀字-成語類別"; 
+// ==========================================
+
+// 3. 完整題庫資料（包含精準常見誤讀誘答 distractors）
+const rawVocabData = [
+  { idiom: "圖窮「匕」見", sound: "ㄅㄧˇ", phraseDef: "比喻事情發展到最後，形跡敗露，現出真相。", charDef: "短劍。", distractors: ["ㄅㄧ", "ㄆㄧˇ", "ㄅㄧˋ"] },
+  { idiom: "三頭六「臂」", sound: "ㄅㄧˋ", phraseDef: "比喻人神通廣大，力強可畏。", charDef: "胳膊。", distractors: ["ㄅㄧ", "ㄆㄧˋ", "ㄅㄧˇ"] },
+  { idiom: "慈烏反「哺」", sound: "ㄅㄨˇ", phraseDef: "比喻子女報答父母的養育之恩。", charDef: "餵食。", distractors: ["ㄆㄨˇ", "ㄅㄨˋ", "ㄈㄨˇ"] },
+  { idiom: "虛無「縹」緲", sound: "ㄆㄧㄠˇ", phraseDef: "形容虛幻渺茫，不可捉摸。", charDef: "隱隱約約的樣子。", distractors: ["ㄆㄧㄠ", "ㄅㄧㄠˇ", "ㄆㄧㄠˋ"] },
+  { idiom: "「胼」手胝足", sound: "ㄆㄧㄢˊ", phraseDef: "形容極為辛勞。", charDef: "手掌因勞動而變成的厚繭。", distractors: ["ㄆㄧㄢ", "ㄅㄧㄢˊ", "ㄆㄧㄢˇ"] },
+  { idiom: "東施效「顰」", sound: "ㄆㄧㄣˊ", phraseDef: "比喻盲目胡亂地模仿，結果卻適得其反。", charDef: "皺眉。", distractors: ["ㄆㄧㄣ", "ㄅㄧㄣˊ", "ㄆㄧㄣˇ"] },
+  { idiom: "驚鴻一「瞥」", sound: "ㄆㄧㄝ", phraseDef: "比喻令人驚豔的身影或事物短暫出現。", charDef: "很快地看一眼。", distractors: ["ㄆㄧㄝˇ", "ㄅㄧㄝ", "ㄆㄧㄝˋ"] },
+  { idiom: "「匍」匐前進", sound: "ㄆㄨˊ", phraseDef: "手足伏地爬行。", charDef: "爬行。", distractors: ["ㄆㄨ", "ㄅㄨˊ", "ㄆㄨˇ"] },
+  { idiom: "胼手「胝」足", sound: "ㄓ", phraseDef: "形容極為辛勞。", charDef: "皮肉因摩擦而生成的厚繭。", distractors: ["ㄉㄧ", "ㄓˇ", "ㄑㄧˊ"] },
+  { idiom: "文壇巨「擘」", sound: "ㄅㄛˋ", phraseDef: "比喻傑出的人才。", charDef: "大拇指。", distractors: ["ㄅㄛ", "ㄆㄛˋ", "ㄅㄧˋ"] },
+  { idiom: "如喪考「妣」", sound: "ㄅㄧˇ", phraseDef: "好像死了父母一般。形容悲痛至極。", charDef: "死去的母親。", distractors: ["ㄅㄧˋ", "ㄆㄧˇ", "ㄅㄧ"] },
+  { idiom: "縱橫「捭」闔", sound: "ㄅㄞˇ", phraseDef: "指在政治、外交上運用分化與拉攏的手段。", charDef: "分開。", distractors: ["ㄅㄞˋ", "ㄆㄞˇ", "ㄅㄟˇ"] },
+  { idiom: "剛「愎」自用", sound: "ㄅㄧˋ", phraseDef: "性情倔強，固執己見。", charDef: "任性、固執。", distractors: ["ㄈㄨˋ", "ㄆㄧˋ", "ㄅㄧˇ"] },
+  { idiom: "文壇奇「葩」", sound: "ㄆㄚ", phraseDef: "比喻優秀傑出的人物。", charDef: "花朵。", distractors: ["ㄅㄚ", "ㄆㄚˊ", "ㄆㄚˇ"] },
+  { idiom: "居心「叵」測", sound: "ㄆㄛˇ", phraseDef: "比喻存心險惡，不可推測。", charDef: "不可。", distractors: ["ㄆㄛ", "ㄅㄛˇ", "ㄆㄛˋ"] },
+  { idiom: "如法「炮」製", sound: "ㄆㄠˊ", phraseDef: "比喻依照原樣辦理。", charDef: "用火烘烤。", distractors: ["ㄆㄠˋ", "ㄆㄠ", "ㄅㄠˊ"] },
+  { idiom: "「否」極泰來", sound: "ㄆㄧˇ", phraseDef: "情況壞到極點後逐漸好轉。", charDef: "惡、壞。", distractors: ["ㄈㄡˇ", "ㄆㄧ", "ㄆㄧˋ"] },
+  { idiom: "「牝」雞司晨", sound: "ㄆㄧㄣˋ", phraseDef: "比喻婦人專權。", charDef: "雌性的鳥獸。", distractors: ["ㄆㄧㄣ", "ㄇㄨˇ", "ㄆㄧㄣˇ"] },
+  { idiom: "「顢」頇無能", sound: "ㄇㄢˊ", phraseDef: "形容昏庸糊塗，不明事理。", charDef: "顢頇：糊塗的樣子。", distractors: ["ㄇㄢˇ", "ㄇㄢˋ", "ㄇㄢ"] },
+  { idiom: "顢「頇」無能", sound: "ㄏㄢ", phraseDef: "形容昏庸糊塗，不明事理。", charDef: "顢頇：糊塗的樣子。", distractors: ["ㄏㄢˊ", "ㄏㄢˇ", "ㄍㄢ"] },
+  { idiom: "故態復「萌」", sound: "ㄇㄥˊ", phraseDef: "形容舊有的不良習慣又發作了。", charDef: "發生。", distractors: ["ㄇㄥ", "ㄇㄧㄥˊ", "ㄇㄥˇ"] },
+  { idiom: "「酩」酊大醉", sound: "ㄇㄧㄥˇ", phraseDef: "形容醉得不省人事。", charDef: "醉酒。", distractors: ["ㄇㄧㄥ", "ㄇㄧㄥˋ", "ㄇㄧㄣˇ"] },
+  { idiom: "酩「酊」大醉", sound: "ㄉㄧㄥˇ", phraseDef: "形容醉得不省人事。", charDef: "醉酒的樣子。", distractors: ["ㄉㄧㄥ", "ㄉㄧㄥˋ", "ㄉㄧㄥˊ"] },
+  { idiom: "牝「牡」驪黃", sound: "ㄇㄨˇ", phraseDef: "比喻事物的表面現象。", charDef: "雄性的鳥獸。", distractors: ["ㄇㄨ", "ㄇㄨˋ", "ㄆㄧㄣˋ"] },
+  { idiom: "未雨綢「繆」", sound: "ㄇㄡˊ", phraseDef: "比喻事先做好準備工作。", charDef: "纏縛。", distractors: ["ㄇㄧㄠˋ", "ㄌㄧㄠˋ", "ㄇㄡˇ"] },
+  { idiom: "「驀」然回首", sound: "ㄇㄛˋ", phraseDef: "忽然回頭。", charDef: "忽然。", distractors: ["ㄇㄨˋ", "ㄇㄛ", "ㄇㄚˋ"] },
+  { idiom: "拐彎「抹」角", sound: "ㄇㄛˋ", phraseDef: "比喻說話或做事不直截了當。", charDef: "順著轉折處走。", distractors: ["ㄇㄛˇ", "ㄇㄚ", "ㄇㄛ"] },
+  { idiom: "未雨「綢」繆", sound: "ㄔㄡˊ", phraseDef: "比喻事先做好準備工作。", charDef: "纏縛。", distractors: ["ㄔㄡˇ", "ㄔㄡˋ", "ㄔㄡ"] },
+  { idiom: "作繭自「縛」", sound: "ㄈㄨˊ", phraseDef: "比喻人自惹麻煩，使自己陷入困境。", charDef: "捆綁。", distractors: ["ㄈㄨˋ", "ㄅㄛˊ", "ㄈㄨˇ"] },
+  { idiom: "「拂」袖而去", sound: "ㄈㄨˊ", phraseDef: "形容生氣而離去。", charDef: "甩動。", distractors: ["ㄈㄛˊ", "ㄈㄨ", "ㄈㄨˇ"] },
+  { idiom: "口誅筆「伐」", sound: "ㄈㄚ", phraseDef: "用言語和文字來揭發、譴責別人的罪狀。", charDef: "攻擊。", distractors: ["ㄈㄚˊ", "ㄈㄚˇ", "ㄈㄚˋ"] },
+  { idiom: "「蜚」短流長", sound: "ㄈㄟ", phraseDef: "指無中生有的流言蜚語。", charDef: "流傳的。", distractors: ["ㄈㄟˇ", "ㄈㄟˋ", "ㄈㄟˊ"] },
+  { idiom: "「幡」然悔悟", sound: "ㄈㄢ", phraseDef: "形容澈底悔改。", charDef: "翻轉的樣子。", distractors: ["ㄈㄢˊ", "ㄈㄢˇ", "ㄈㄢˋ"] },
+  { idiom: "跌「宕」不群", sound: "ㄉㄤˋ", phraseDef: "形容性格灑脫，不受拘束。", charDef: "放蕩、不受拘束。", distractors: ["ㄉㄤ", "ㄉㄤˇ", "ㄉㄤˊ"] },
+  { idiom: "「掂」斤減兩", sound: "ㄉㄧㄢ", phraseDef: "比喻過分計較微小的利益。", charDef: "用手托物以估量輕重。", distractors: ["ㄉㄧㄢˋ", "ㄉㄧㄢˇ", "ㄉㄧㄢˊ"] },
+  { idiom: "治絲益「棼」", sound: "ㄈㄣˊ", phraseDef: "比喻行事不得要領，反而使情況更糟。", charDef: "紛亂。", distractors: ["ㄈㄣˇ", "ㄈㄣˋ", "ㄈㄣ"] },
+  { idiom: "妄自「菲」薄", sound: "ㄈㄟˇ", phraseDef: "過於自卑而看輕自己。", charDef: "微薄。", distractors: ["ㄈㄟ", "ㄈㄟˋ", "ㄈㄟˊ"] },
+  { idiom: "舉世震「悼」", sound: "ㄉㄠˋ", phraseDef: "全世界都為之震驚哀悼。", charDef: "哀傷。", distractors: ["ㄉㄠˇ", "ㄉㄠ", "ㄓㄠˋ"] },
+  { idiom: "窮兵「黷」武", sound: "ㄉㄨˊ", phraseDef: "形容極端好戰。", charDef: "濫用。", distractors: ["ㄉㄨˇ", "ㄉㄨˋ", "ㄉㄨ"] },
+  { idiom: "「忐」忑不安", sound: "ㄊㄢˇ", phraseDef: "心神極為不安。", charDef: "心神不定。", distractors: ["ㄊㄢˋ", "ㄊㄢ", "ㄊㄢˊ"] },
+  { idiom: "忐「忑」不安", sound: "ㄊㄜˋ", phraseDef: "心神極為不安。", charDef: "心神不定。", distractors: ["ㄊㄜ", "ㄊㄜˇ", "ㄊㄜˊ"] },
+  { idiom: "玲瓏「剔」透", sound: "ㄊㄧ", phraseDef: "形容精巧奇妙。", charDef: "穿透。", distractors: ["ㄊㄧˋ", "ㄊㄧˇ", "ㄊㄧˊ"] },
+  { idiom: "暴「殄」天物", sound: "ㄊㄧㄢˇ", phraseDef: "比喻糟蹋物品，不知愛惜。", charDef: "滅絕、糟蹋。", distractors: ["ㄓㄣˇ", "ㄊㄧㄢ", "ㄊㄧㄢˋ"] },
+  { idiom: "落「魄」潦倒", sound: "ㄊㄨㄛˋ", phraseDef: "窮困失意。", charDef: "放蕩不受拘束。", distractors: ["ㄆㄛˋ", "ㄆㄛˇ", "ㄊㄨㄛˇ"] },
+  { idiom: "風流「倜」儻", sound: "ㄊㄧˋ", phraseDef: "形容人瀟灑不羈。", charDef: "無拘束的樣子。", distractors: ["ㄊㄧ", "ㄊㄧˇ", "ㄉㄧㄠ"] },
+  { idiom: "風流倜「儻」", sound: "ㄊㄤˇ", phraseDef: "形容人瀟灑不羈。", charDef: "無拘束的樣子。", distractors: ["ㄊㄤˋ", "ㄉㄤˇ", "ㄊㄤ"] },
+  { idiom: "紛至「沓」來", sound: "ㄊㄚˋ", phraseDef: "形容接連不斷地到來。", charDef: "眾多、重覆。", distractors: ["ㄊㄚ", "ㄉㄚˊ", "ㄊㄚˇ"] },
+  { idiom: "「韜」光養晦", sound: "ㄊㄠ", phraseDef: "比喻隱藏才能，不使外露。", charDef: "隱藏。", distractors: ["ㄊㄠˊ", "ㄊㄠˇ", "ㄊㄠˋ"] },
+  { idiom: "韜光養「晦」", sound: "ㄏㄨㄟˋ", phraseDef: "比喻隱藏才能，不使外露。", charDef: "昏暗、隱藏。", distractors: ["ㄇㄟˋ", "ㄏㄨㄟˇ", "ㄏㄨㄟ"] },
+  { idiom: "百折不「撓」", sound: "ㄋㄠˊ", phraseDef: "比喻意志堅強，絕不屈服。", charDef: "屈服。", distractors: ["ㄖㄠˊ", "ㄋㄠˇ", "ㄋㄠˋ"] },
+  { idiom: "深耕易「耨」", sound: "ㄋㄡˋ", phraseDef: "指勤勉務農。", charDef: "除草。", distractors: ["ㄋㄡˇ", "ㄖㄡˋ", "ㄋㄡ"] },
+  { idiom: "「忸」怩不安", sound: "ㄋㄧㄡˇ", phraseDef: "形容羞慚、不好意思的樣子。", charDef: "慚愧的樣子。", distractors: ["ㄋㄧㄡ", "ㄋㄧㄡˋ", "ㄋㄧㄡˊ"] },
+  { idiom: "忸「怩」不安", sound: "ㄋㄧˊ", phraseDef: "形容羞慚、不好意思的樣子。", charDef: "慚愧的樣子。", distractors: ["ㄋㄧ", "ㄋㄧˇ", "ㄋㄧˋ"] },
+  { idiom: "「拈」花惹草", sound: "ㄋㄧㄢˊ", phraseDef: "比喻到處逗留，作風輕浮。", charDef: "用手指夾取。", distractors: ["ㄓㄢ", "ㄋㄧㄢˇ", "ㄋㄧㄢˋ"] },
+  { idiom: "劍拔「弩」張", sound: "ㄋㄨˇ", phraseDef: "比喻情勢緊張。", charDef: "一種發箭的機械。", distractors: ["ㄋㄨˋ", "ㄋㄨ", "ㄋㄨˊ"] },
+  { idiom: "剛毅木「訥」", sound: "ㄋㄜˋ", phraseDef: "形容質樸而不善辭令。", charDef: "言語遲鈍。", distractors: ["ㄋㄚˋ", "ㄋㄜˇ", "ㄋㄜ"] },
+  { idiom: "按「捺」不住", sound: "ㄋㄚˋ", phraseDef: "無法控制忍受。", charDef: "克制、忍耐。", distractors: ["ㄋㄞˋ", "ㄋㄚˇ", "ㄋㄚ"] },
+  { idiom: "丟三「落」四", sound: "ㄌㄚˋ", phraseDef: "形容因粗心而經常忘東忘西。", charDef: "遺漏、忘記。", distractors: ["ㄌㄨㄛˋ", "ㄌㄠˋ", "ㄌㄚˇ"] },
+  { idiom: "以「蠡」測海", sound: "ㄌㄧˊ", phraseDef: "比喻見識淺薄。", charDef: "水瓢。", distractors: ["ㄌㄧˇ", "ㄌㄧˋ", "ㄌㄧ"] },
+  { idiom: "齜牙「咧」嘴", sound: "ㄌㄧㄝˇ", phraseDef: "形容因痛苦或驚恐而面部扭曲的樣子。", charDef: "嘴角向兩邊伸展。", distractors: ["ㄌㄧㄝˋ", "ㄌㄧㄝ", "ㄌㄧㄝˊ"] },
+  { idiom: "身陷「囹」圄", sound: "ㄌㄧㄥˊ", phraseDef: "失去人身自由，被關在牢裡。", charDef: "監獄。", distractors: ["ㄌㄧㄥˇ", "ㄌㄧㄥˋ", "ㄌㄧㄥ"] },
+  { idiom: "身陷囹「圄」", sound: "ㄩˇ", phraseDef: "失去人身自由，被關在牢裡。", charDef: "監獄。", distractors: ["ㄨˊ", "ㄩˋ", "ㄩ"] },
+  { idiom: "宵衣「旰」食", sound: "ㄍㄢˋ", phraseDef: "形容勤於政事。", charDef: "日落。", distractors: ["ㄍㄢ", "ㄍㄢˇ", "ㄍㄢˊ"] },
+  { idiom: "力能「扛」鼎", sound: "ㄍㄤ", phraseDef: "形容力氣極大。", charDef: "雙手舉起重物。", distractors: ["ㄎㄤˊ", "ㄍㄤˇ", "ㄍㄤˋ"] },
+  { idiom: "粗「獷」不文", sound: "ㄍㄨㄤˇ", phraseDef: "性格粗野，不拘禮節。", charDef: "粗野。", distractors: ["ㄎㄨㄤˋ", "ㄍㄨㄤ", "ㄍㄨㄤˋ"] },
+  { idiom: "「觥」籌交錯", sound: "ㄍㄨㄥ", phraseDef: "形容酒宴中互相敬酒的歡樂盛況。", charDef: "酒器。", distractors: ["ㄍㄨㄥˇ", "ㄍㄨㄥˋ", "ㄍㄨㄥˊ"] },
+  { idiom: "命運「坎」坷", sound: "ㄎㄢˇ", phraseDef: "比喻人生的道路曲折、不順利。", charDef: "低陷不平。", distractors: ["ㄎㄢ", "ㄎㄢˋ", "ㄎㄢˊ"] },
+  { idiom: "命運坎「坷」", sound: "ㄎㄜˇ", phraseDef: "比喻人生的道路曲折、不順利。", charDef: "不平坦。", distractors: ["ㄎㄜ", "ㄎㄜˋ", "ㄎㄜˊ"] },
+  { idiom: "兵馬「倥」傯", sound: "ㄎㄨㄥˇ", phraseDef: "兵荒馬亂的樣子。", charDef: "事多而迫促。", distractors: ["ㄎㄨㄥˋ", "ㄎㄨㄥ", "ㄎㄨㄥˊ"] },
+  { idiom: "「喟」然長嘆", sound: "ㄎㄨㄟˋ", phraseDef: "長長地嘆息。", charDef: "嘆息。", distractors: ["ㄨㄟˋ", "ㄎㄨㄟˇ", "ㄎㄨㄟ"] },
+  { idiom: "「溘」然長逝", sound: "ㄎㄜˋ", phraseDef: "指突然死亡。", charDef: "忽然。", distractors: ["ㄎㄜˇ", "ㄎㄜ", "ㄏㄜˋ"] },
+  { idiom: "不落「窠」臼", sound: "ㄎㄜ", phraseDef: "比喻不落俗套，有獨創風格。", charDef: "鳥獸的巢穴。", distractors: ["ㄎㄜˇ", "ㄎㄜˋ", "ㄔㄠˊ"] },
+  { idiom: "「諱」疾忌醫", sound: "ㄏㄨㄟˋ", phraseDef: "比喻掩飾缺點，不願聽人規勸。", charDef: "隱瞞。", distractors: ["ㄨㄟˇ", "ㄏㄨㄟˇ", "ㄏㄨㄟ"] },
+  { idiom: "「沆」瀣一氣", sound: "ㄏㄤˋ", phraseDef: "比喻氣味相投，多指互相勾結做壞事。", charDef: "夜間的水氣。", distractors: ["ㄏㄤˊ", "ㄏㄤˇ", "ㄏㄤ"] },
+  { idiom: "沆「瀣」一氣", sound: "ㄒㄧㄝˋ", phraseDef: "比喻氣味相投，多指互相勾結做壞事。", charDef: "夜間的水氣。", distractors: ["ㄒㄧㄝˇ", "ㄒㄧㄝ", "ㄒㄧㄝˊ"] },
+  { idiom: "「怙」惡不悛", sound: "ㄏㄨˋ", phraseDef: "憑恃權勢，作惡多端，不知悔改。", charDef: "依恃、憑靠。", distractors: ["ㄍㄨ", "ㄏㄨˇ", "ㄏㄨ"] },
+  { idiom: "怙惡不「悛」", sound: "ㄑㄩㄢ", phraseDef: "作惡多端，不知悔改。", charDef: "悔改。", distractors: ["ㄐㄩㄣˋ", "ㄑㄩㄢˇ", "ㄑㄩㄢˋ"] },
+  { idiom: "罪無可「逭」", sound: "ㄏㄨㄢˋ", phraseDef: "罪行無法逃避。", charDef: "逃避。", distractors: ["ㄍㄨㄢˇ", "ㄏㄨㄢˇ", "ㄏㄨㄢ"] },
+  { idiom: "光風「霽」月", sound: "ㄐㄧˋ", phraseDef: "比喻人的胸懷坦蕩，品格高潔。", charDef: "雨過天晴。", distractors: ["ㄐㄧˇ", "ㄐㄧ", "ㄑㄧˊ"] },
+  { idiom: "「旌」旗蔽日", sound: "ㄐㄧㄥ", phraseDef: "形容軍隊陣容壯大。", charDef: "旗子。", distractors: ["ㄐㄧㄥˇ", "ㄐㄧㄥˋ", "ㄐㄧㄥˊ"] },
+  { idiom: "殺雞「儆」猴", sound: "ㄐㄧㄥˇ", phraseDef: "比喻懲罰一個人以警告其他人。", charDef: "警告。", distractors: ["ㄐㄧㄥ", "ㄐㄧㄥˋ", "ㄐㄧㄥˊ"] },
+  { idiom: "「愀」然色變", sound: "ㄑㄧㄠˇ", phraseDef: "形容神色變得嚴肅或憂慮。", charDef: "神色改變的樣子。", distractors: ["ㄑㄧㄡ", "ㄑㄧㄠˋ", "ㄑㄧㄠ"] },
+  { idiom: "「擎」天撼地", sound: "ㄑㄧㄥˊ", phraseDef: "形容力量巨大，氣勢壯闊。", charDef: "向上托舉。", distractors: ["ㄑㄧㄥˇ", "ㄑㄧㄥˋ", "ㄑㄧㄥ"] },
+  { idiom: "面面相「覷」", sound: "ㄑㄩˋ", phraseDef: "形容驚懼或不知所措的樣子。", charDef: "看。", distractors: ["ㄒㄩ", "ㄑㄩˇ", "ㄑㄩ"] },
+  { idiom: "「教」學相長", sound: "ㄐㄧㄠˋ", phraseDef: "教與學兩方面互相影響、互相促進。", charDef: "傳授。", distractors: ["ㄐㄧㄠ", "ㄐㄧㄠˇ", "ㄐㄧㄠˊ"] },
+  { idiom: "草「菅」人命", sound: "ㄐㄧㄢ", phraseDef: "比喻輕視人命，濫殺無辜。", charDef: "一種野草。", distractors: ["ㄍㄨㄢˇ", "ㄐㄧㄢˇ", "ㄐㄧㄢˋ"] },
+  { idiom: "「涇」渭分明", sound: "ㄐㄧㄥ", phraseDef: "比喻界線清楚，是非分明。", charDef: "水名。", distractors: ["ㄐㄧㄥˋ", "ㄐㄧㄥˇ", "ㄐㄧㄥˊ"] },
+  { idiom: "提綱「挈」領", sound: "ㄑㄧㄝˋ", phraseDef: "比喻抓住事物的要領。", charDef: "提起。", distractors: ["ㄑㄧㄝ", "ㄑㄧㄝˇ", "ㄑㄧˋ"] },
+  { idiom: "「鍥」而不捨", sound: "ㄑㄧㄝˋ", phraseDef: "比喻有恆心，堅持到底。", charDef: "雕刻。", distractors: ["ㄑㄧㄝ", "ㄑㄧㄝˇ", "ㄑㄧˋ"] },
+  { idiom: "呼天「搶」地", sound: "ㄑㄧㄤ", phraseDef: "形容極度悲傷哀痛。", charDef: "碰觸。", distractors: ["ㄑㄧㄤˇ", "ㄑㄧㄤˋ", "ㄑㄧㄤˊ"] },
+  { idiom: "兩情繾「綣」", sound: "ㄑㄩㄢˇ", phraseDef: "形容感情深厚，難分難捨。", charDef: "纏綿。", distractors: ["ㄐㄩㄢˇ", "ㄑㄩㄢˋ", "ㄑㄩㄢ"] },
+  { idiom: "兩情「繾」綣", sound: "ㄑㄧㄢˇ", phraseDef: "形容感情深厚，難分難捨。", charDef: "情意纏綿。", distractors: ["ㄑㄧㄢˋ", "ㄑㄧㄢ", "ㄑㄧㄢˊ"] },
+  { idiom: "兄弟「鬩」牆", sound: "ㄒㄧˋ", phraseDef: "比喻內部不和，互相爭鬥。", charDef: "爭吵。", distractors: ["ㄒㄧ", "ㄒㄧˇ", "ㄒㄧˊ"] },
+  { idiom: "不「屑」一顧", sound: "ㄒㄧㄝˋ", phraseDef: "形容輕視，認為不值得一看。", charDef: "認為值得。", distractors: ["ㄒㄧㄝˇ", "ㄒㄧㄝ", "ㄒㄧㄝˊ"] },
+  { idiom: "「枵」腹從公", sound: "ㄒㄧㄠ", phraseDef: "指餓著肚子辦公。形容勤於公事。", charDef: "空腹。", distractors: ["ㄒㄧㄠˇ", "ㄒㄧㄠˋ", "ㄒㄧㄠˊ"] },
+  { idiom: "色彩「絢」麗", sound: "ㄒㄩㄢˋ", phraseDef: "色彩鮮豔美麗。", charDef: "色彩華麗。", distractors: ["ㄒㄩㄢˇ", "ㄒㄩㄢ", "ㄒㄩㄢˊ"] },
+  { idiom: "「徇」私舞弊", sound: "ㄒㄩㄣˋ", phraseDef: "為了私情而做違法亂紀的事。", charDef: "依從。", distractors: ["ㄒㄩㄣ", "ㄒㄩㄣˇ", "ㄒㄩㄣˊ"] },
+  { idiom: "大聲咆「哮」", sound: "ㄒㄧㄠ", phraseDef: "大聲怒吼。", charDef: "猛獸怒吼。", distractors: ["ㄒㄧㄠˋ", "ㄒㄧㄠˇ", "ㄒㄧㄠˊ"] },
+  { idiom: "垂「涎」三尺", sound: "ㄒㄧㄢˊ", phraseDef: "形容非常貪饞，或極想得到。", charDef: "口水。", distractors: ["ㄧㄢˊ", "ㄒㄧㄢˇ", "ㄒㄧㄢˋ"] },
+  { idiom: "字「斟」句酌", sound: "ㄓㄣ", phraseDef: "形容寫文章或說話時，字句斟酌考究。", charDef: "考慮、計量。", distractors: ["ㄓㄣˇ", "ㄓㄣˋ", "ㄓㄣˊ"] },
+  { idiom: "獨樹一「幟」", sound: "ㄓˋ", phraseDef: "比喻自成一家，獨具風格。", charDef: "旗子。", distractors: ["ㄓ", "ㄓˇ", "ㄓˊ"] },
+  { idiom: "不「忮」不求", sound: "ㄓˋ", phraseDef: "指不嫉妒，不貪得。", charDef: "嫉妒。", distractors: ["ㄓ", "ㄓˇ", "ㄓˊ"] },
+  { idiom: "棋高一「著」", sound: "ㄓㄨㄛˊ", phraseDef: "比喻技高一籌。", charDef: "下棋的步子。", distractors: ["ㄓㄠ", "ㄓㄠˊ", "ㄓㄜ"] },
+  { idiom: "一語成「讖」", sound: "ㄔㄣˋ", phraseDef: "一句無心的話，竟變成真的（多指凶事）。", charDef: "預言。", distractors: ["ㄔㄣˇ", "ㄔㄣ", "ㄔㄣˊ"] },
+  { idiom: "大筆如「椽」", sound: "ㄔㄨㄢˊ", phraseDef: "比喻筆力雄健，文章極佳。", charDef: "架在屋頂上的木條。", distractors: ["ㄔㄨㄢˇ", "ㄔㄨㄢˋ", "ㄔㄨㄢ"] },
+  { idiom: "滿目「瘡」痍", sound: "ㄔㄨㄤ", phraseDef: "形容遭受戰亂或天災後，到處是殘破荒涼的景象。", charDef: "外傷。", distractors: ["ㄔㄨㄤˇ", "ㄔㄨㄤˋ", "ㄔㄨㄤˊ"] },
+  { idiom: "命運多「舛」", sound: "ㄔㄨㄢˇ", phraseDef: "命運充滿坎坷，極不順利。", charDef: "乖違、不順利。", distractors: ["ㄔㄨㄢˋ", "ㄔㄨㄢ", "ㄔㄨㄢˊ"] },
+  { idiom: "馳「騁」沙場", sound: "ㄔㄥˇ", phraseDef: "騎馬在戰場上奔跑。", charDef: "騎馬奔跑。", distractors: ["ㄔㄥˋ", "ㄔㄥ", "ㄔㄥˊ"] },
+  { idiom: "媒「妁」之言", sound: "ㄕㄨㄛˋ", phraseDef: "指媒人的介紹。", charDef: "媒人。", distractors: ["ㄕㄨㄛˇ", "ㄕㄨㄛ", "ㄕㄨㄛˊ"] },
+  { idiom: "「歃」血為盟", sound: "ㄕㄚˋ", phraseDef: "古代結盟時，微飲牲血或將血塗在嘴脣上。", charDef: "飲。", distractors: ["ㄔㄚˋ", "ㄕㄚˇ", "ㄕㄚ"] },
+  { idiom: "熙來「攘」往", sound: "ㄖㄤˊ", phraseDef: "形容行人來往頻繁，非常熱鬧。", charDef: "擁擠。", distractors: ["ㄖㄤˇ", "ㄖㄤˋ", "ㄖㄤ"] },
+  { idiom: "被髮左「衽」", sound: "ㄖㄣˋ", phraseDef: "形容未受中原文化開化的地區。", charDef: "衣襟。", distractors: ["ㄖㄣˇ", "ㄖㄣ", "ㄖㄣˊ"] },
+  { idiom: "海市「蜃」樓", sound: "ㄕㄣˋ", phraseDef: "比喻虛幻的事物。", charDef: "大蛤蜊。", distractors: ["ㄕㄣˇ", "ㄕㄣ", "ㄕㄣˊ"] },
+  { idiom: "所費不「貲」", sound: "ㄗ", phraseDef: "耗費無數。", charDef: "計算、計量。", distractors: ["ㄗˇ", "ㄗˋ", "ㄗˊ"] },
+  { idiom: "「齜」牙咧嘴", sound: "ㄗ", phraseDef: "形容因痛苦或驚恐而面部扭曲的樣子。", charDef: "露出牙齒。", distractors: ["ㄘ", "ㄗˇ", "ㄗˋ"] },
+  { idiom: "面目可「憎」", sound: "ㄗㄥ", phraseDef: "容貌令人覺得討厭。", charDef: "令人討厭。", distractors: ["ㄗㄥˇ", "ㄗㄥˋ", "ㄗㄥˊ"] },
+  { idiom: "門衰「祚」薄", sound: "ㄗㄨㄛˋ", phraseDef: "家門衰微，福分淺薄。", charDef: "福分。", distractors: ["ㄗㄨㄛˇ", "ㄗㄨㄛ", "ㄗㄨㄛˊ"] },
+  { idiom: "令人「咋」舌", sound: "ㄗㄜˊ", phraseDef: "形容因害怕或吃驚而說不出話來。", charDef: "咬住舌頭。", distractors: ["ㄓㄚˋ", "ㄗㄜˇ", "ㄗㄜ"] },
+  { idiom: "人謀不「臧」", sound: "ㄗㄤ", phraseDef: "指事情失敗是因為人的計畫不周。", charDef: "善、好。", distractors: ["ㄗㄤˇ", "ㄗㄤˋ", "ㄗㄤˊ"] },
+  { idiom: "信口「雌」黃", sound: "ㄘ", phraseDef: "比喻不顧事實，隨口亂說。", charDef: "一種黃色的礦物，可用來塗改文字。", distractors: ["ㄘˇ", "ㄘˋ", "ㄘˊ"] },
+  { idiom: "一「蹴」可幾", sound: "ㄘㄨˋ", phraseDef: "比喻一舉足就能成功。", charDef: "踢、踏。", distractors: ["ㄐㄧㄡˋ", "ㄘㄨˇ", "ㄘㄨ"] },
+  { idiom: "「猝」不及防", sound: "ㄘㄨˋ", phraseDef: "事情發生太快，來不及防備。", charDef: "突然。", distractors: ["ㄘㄨˇ", "ㄘㄨ", "ㄘㄨˊ"] },
+  { idiom: "睡眼惺「忪」", sound: "ㄙㄨㄥ", phraseDef: "剛睡醒，眼睛尚未張開的樣子。", charDef: "惺忪：清醒。", distractors: ["ㄙㄨㄥˇ", "ㄙㄨㄥˋ", "ㄙㄨㄥˊ"] },
+  { idiom: "虛與委「蛇」", sound: "ㄧˊ", phraseDef: "指假意殷懃，敷衍應付。", charDef: "隨順的樣子。", distractors: ["ㄕㄜˊ", "ㄧˇ", "ㄧˋ"] },
+  { idiom: "虛與「委」蛇", sound: "ㄨㄟ", phraseDef: "指假意殷懃，敷衍應付。", charDef: "隨順的樣子。", distractors: ["ㄨㄟˇ", "ㄨㄟˋ", "ㄨㄟˊ"] },
+  { idiom: "因循「泄」沓", sound: "ㄧˋ", phraseDef: "指拖延廢事。", charDef: "怠慢。", distractors: ["ㄒㄧㄝˋ", "ㄧˇ", "ㄧ"] },
+  { idiom: "因循泄「沓」", sound: "ㄊㄚˋ", phraseDef: "指拖延廢事。", charDef: "怠慢。", distractors: ["ㄉㄚˊ", "ㄊㄚˇ", "ㄊㄚ"] },
+  { idiom: "自怨自「艾」", sound: "ㄧˋ", phraseDef: "指悔恨自己的錯誤，自己改正。", charDef: "治理、改正。", distractors: ["ㄞˋ", "ㄧˇ", "ㄧ"] },
+  { idiom: "「揠」苗助長", sound: "ㄧㄚˋ", phraseDef: "比喻為求速成而未顧及事物的客觀規律。", charDef: "拔起。", distractors: ["ㄧㄚˇ", "ㄧㄚ", "ㄧㄚˊ"] },
+  { idiom: "人事傾「軋」", sound: "ㄧㄚˋ", phraseDef: "人事間互相排擠。", charDef: "排擠。", distractors: ["ㄓㄚˊ", "ㄧㄚˇ", "ㄧㄚ"] },
+  { idiom: "因「噎」廢食", sound: "ㄧㄝ", phraseDef: "比喻因為偶發的挫折，而放棄原本該做的事。", charDef: "食物塞住喉嚨。", distractors: ["ㄧㄝˋ", "ㄧㄝˇ", "ㄧㄝˊ"] },
+  { idiom: "「杳」無音信", sound: "ㄧㄠˇ", phraseDef: "一直沒有消息。", charDef: "幽暗、深遠。", distractors: ["ㄧㄠˋ", "ㄧㄠ", "ㄧㄠˊ"] },
+  { idiom: "良「莠」不齊", sound: "ㄧㄡˋ", phraseDef: "好壞參差，素質不一。", charDef: "狗尾草，比喻不好的人或物。", distractors: ["ㄒㄧㄡˋ", "ㄧㄡˇ", "ㄧㄡ"] },
+  { idiom: "文學造「詣」", sound: "ㄧˋ", phraseDef: "學業或技藝所達到的程度。", charDef: "學問、藝術達到的境界。", distractors: ["ㄓˇ", "ㄧˇ", "ㄧ"] },
+  { idiom: "集「腋」成裘", sound: "ㄧㄝˋ", phraseDef: "比喻積少成多。", charDef: "狐狸腋下的皮毛。", distractors: ["ㄧㄝˇ", "ㄧㄝ", "ㄧㄝˊ"] },
+  { idiom: "「韋」編三絕", sound: "ㄨㄟˊ", phraseDef: "比喻讀書勤奮。", charDef: "去毛加工的熟皮。", distractors: ["ㄨㄟˇ", "ㄨㄟˋ", "ㄨㄟ"] },
+  { idiom: "「萎」靡不振", sound: "ㄨㄟ", phraseDef: "精神不振作。", charDef: "衰頹、衰敗。", distractors: ["ㄨㄟˇ", "ㄨㄟˋ", "ㄨㄟˊ"] },
+  { idiom: "「文」過飾非", sound: "ㄨㄣˋ", phraseDef: "掩飾過失、錯誤。", charDef: "掩飾。", distractors: ["ㄨㄣˊ", "ㄨㄣˇ", "ㄨㄣ"] },
+  { idiom: "卑「鄙」齷齪", sound: "ㄅㄧˇ", phraseDef: "形容人格低下，品行惡劣。", charDef: "品格低劣。", distractors: ["ㄅㄧˋ", "ㄅㄧ", "ㄅㄧˊ"] },
+  { idiom: "卑鄙「齷」齪", sound: "ㄨㄛˋ", phraseDef: "形容人格低下，品行惡劣。", charDef: "齷齪：骯髒，比喻品德卑劣。", distractors: ["ㄨㄛˇ", "ㄨㄛ", "ㄨㄛˊ"] },
+  { idiom: "卑鄙齷「齪」", sound: "ㄔㄨㄛˋ", phraseDef: "形容人格低下，品行惡劣。", charDef: "齷齪：骯髒，比喻品德卑劣。", distractors: ["ㄔㄨㄛˇ", "ㄔㄨㄛ", "ㄔㄨㄛˊ"] },
+  { idiom: "養「癰」遺患", sound: "ㄩㄥ", phraseDef: "比喻姑息壞人壞事而留下禍患。", charDef: "毒瘡。", distractors: ["ㄩㄥˇ", "ㄩㄥˋ", "ㄩㄥˊ"] },
+  { idiom: "負「隅」頑抗", sound: "ㄩˊ", phraseDef: "憑藉險要的地勢做最後的抵抗。", charDef: "山勢險阻的地方。", distractors: ["ㄩˇ", "ㄩˋ", "ㄩ"] },
+  { idiom: "鍾靈「毓」秀", sound: "ㄩˋ", phraseDef: "形容山川秀美，人才輩出。", charDef: "孕育。", distractors: ["ㄧㄡˋ", "ㄩˇ", "ㄩ"] }
+];
+
+const vocabData = rawVocabData.map(item => {
+  const match = item.idiom.match(/「(.*?)」/);
+  const targetChar = match ? match[1] : item.idiom;
+  return {
+    idiom: item.idiom,
+    targetChar: targetChar,
+    sound: item.sound,
+    distractors: item.distractors || [],
+    meaning: `【${targetChar}】：${item.charDef}<br>【詞】：${item.phraseDef}`,
+    charDef: item.charDef,
+    phraseDef: item.phraseDef,
+    sentence: `成語例句應用：${item.idiom}。`
+  };
+});
+
+let appState = { 
+  currentMode: 'flashcard', 
+  deck: [], 
+  nextRoundDeck: [], 
+  currentIndex: 0, 
+  stats: { good: 0, bad: 0 }, 
+  isQuizAnswered: false, 
+  hasVisitedBack: false, 
+  round: 1, 
+  startTime: null, 
+  isWrongTraining: false 
+};
+
+let modeStates = {};
+
+function startApp() { 
+  document.getElementById('instruction-overlay').style.display = 'none'; 
+  document.getElementById('main-app').style.display = 'flex'; 
+  initGame('flashcard'); 
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function highlightTag(text) {
+  if (!text) return "";
+  return text.replace(/\([^)]+相關\)/g, '<span class="hl-yellow">$&</span>');
+}
+
+/* --- 錯題本 LocalStorage 核心模組 --- */
+function getWrongBook() {
+  try {
+    const data = localStorage.getItem('idiom_misread_wrong_pool');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWrongBook(pool) {
+  try {
+    localStorage.setItem('idiom_misread_wrong_pool', JSON.stringify(pool));
+  } catch (e) {}
+  renderWrongBook();
+}
+
+function addToWrongBook(item) {
+  if (!item) return;
+  const word = item.idiom || item.key || item.word || item.question || item.char || "";
+  let meaningStr = item.meaning || item.answer || item.translation || item.explanation || "";
+  let sentenceStr = item.sentence || item.question || item.original || "";
+  let pool = getWrongBook();
+  let exist = pool.find(x => (x.idiom || x.key || x.word || x.question || x.char) === word);
+
+  if (exist) {
+    exist.wrongCount = (exist.wrongCount || 1) + 1;
+    exist.lastWrongTime = new Date().getTime();
+  } else {
+    pool.push({
+      idiom: word,
+      sound: item.sound || "",
+      meaning: meaningStr,
+      sentence: sentenceStr,
+      wrongCount: 1,
+      lastWrongTime: new Date().getTime(),
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(pool);
+}
+
+function removeFromWrongBook(word) {
+  let pool = getWrongBook();
+  pool = pool.filter(x => (x.idiom || x.key || x.word || x.question || x.char) !== word);
+  saveWrongBook(pool);
+}
+
+function renderWrongBook() {
+  const pool = getWrongBook();
+  const currentPool = pool.filter(x => x.chapter === QUIZ_TITLE);
+  
+  const countBadge = document.getElementById('wb-count-badge');
+  if (countBadge) {
+    countBadge.innerText = `目前單元共 ${currentPool.length} 個錯題 (累計全部單元共 ${pool.length} 個)`;
+  }
+
+  const btnFc = document.getElementById('wb-btn-fc');
+  const btnQuiz = document.getElementById('wb-btn-quiz');
+  if (btnFc) btnFc.disabled = currentPool.length === 0;
+  if (btnQuiz) btnQuiz.disabled = currentPool.length === 0;
+
+  const container = document.getElementById('wrong-list-container');
+  if (!container) return;
+
+  if (currentPool.length === 0) {
+    container.innerHTML = `<div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>`;
+    return;
+  }
+
+  let html = '';
+  currentPool.forEach(item => {
+    html += `
+      <div class="wb-item-card">
+        <div>
+          <div class="wb-item-title">
+            ${item.idiom} <span style="color:var(--accent); font-size:16px;">[${item.sound || ''}]</span>
+            <span class="wb-item-count">錯 ${item.wrongCount || 1} 次</span>
+          </div>
+          <div class="wb-item-meaning">${item.meaning}</div>
+        </div>
+        <button class="wb-del-btn" title="移出錯題本" onclick="removeFromWrongBook('${(item.idiom || '').replace(/'/g, "\\'")}');">🗑️</button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function clearCurrentWrongBook() {
+  if (!confirm("確定要清空『本單元』的所有錯題紀錄嗎？")) return;
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.chapter !== QUIZ_TITLE);
+  saveWrongBook(pool);
+}
+
+function copyWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可複製！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom} [${x.sound}]：\n${x.meaning.replace(/<br>/g, '\n')}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => alert("已複製本單元錯題至剪貼簿！"));
+}
+
+function downloadWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可下載！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom} [${x.sound}]：\n${x.meaning.replace(/<br>/g, '\n')}`).join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${QUIZ_TITLE}_錯題本.txt`;
+  a.click();
+}
+
+function startWrongTraining(mode) {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可以進行特訓喔！"); return; }
+  
+  appState.isWrongTraining = true;
+  appState.currentMode = mode;
+  
+  appState.deck = pool.map(p => {
+    let found = vocabData.find(v => v.idiom === p.idiom);
+    return found || p;
+  });
+
+  if (mode !== 'flashcard') {
+    shuffleArray(appState.deck);
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${mode}`);
+  if (targetBtn) targetBtn.classList.add('active');
+  
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetModeDiv = document.getElementById(`${mode}-mode`);
+  if (targetModeDiv) targetModeDiv.classList.add('active');
+
+  appState.nextRoundDeck = []; 
+  appState.currentIndex = 0; 
+  appState.stats = { good: 0, bad: 0 }; 
+  appState.isQuizAnswered = false; 
+  appState.hasVisitedBack = false;
+  appState.startTime = new Date();
+
+  document.getElementById('summary-area').style.display = 'none';
+
+  const prefix = mode === 'flashcard' ? 'fc' : 'mq';
+  const badge = document.getElementById(`${prefix}-round-badge`);
+  if (badge) {
+    badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+    badge.style.backgroundColor = "var(--accent)";
+  }
+
+  updateStatsUI();
+  const cardEl = document.getElementById('card');
+  if (cardEl) cardEl.classList.remove('flipped');
+  
+  if (mode === 'flashcard') {
+    loadFlashcard();
+  } else if (mode === 'meaningQuiz') {
+    loadQuiz('meaning');
+  }
+}
+
+function initGame(mode, isRetry = false) { 
+   appState.isWrongTraining = false;
+   if (mode === 'wrongBook') {
+     document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+     const wbMode = document.getElementById('wrongBook-mode');
+     if (wbMode) wbMode.classList.add('active');
+     renderWrongBook();
+     return;
+   } 
+   appState.currentMode = mode; 
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (isRetry && appState.nextRoundDeck.length > 0) { 
+       appState.deck = [...appState.nextRoundDeck]; 
+       appState.round++; 
+   } else { 
+       appState.deck = [...vocabData]; 
+       appState.round = 1; 
+   }
+   
+   if (mode === 'meaningQuiz') { 
+       shuffleArray(appState.deck);
+   }
+
+   appState.nextRoundDeck = []; 
+   appState.currentIndex = 0; 
+   appState.stats = { good: 0, bad: 0 }; 
+   appState.isQuizAnswered = false; 
+   appState.hasVisitedBack = false; 
+   
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   
+   const prefix = mode === 'flashcard' ? 'fc' : 'mq'; 
+   const badge = document.getElementById(`${prefix}-round-badge`); 
+   badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`; 
+   badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+   
+   updateStatsUI(); 
+   document.getElementById('card').classList.remove('flipped'); 
+   
+   if (mode === 'flashcard') loadFlashcard(); 
+   else if (mode === 'meaningQuiz') loadQuiz('meaning'); 
+}
+
+function switchMode(newMode) {
+  const oldMode = appState.currentMode;
+
+  if (oldMode && oldMode !== 'wrongBook') {
+    const summaryArea = document.getElementById('summary-area');
+    modeStates[oldMode] = {
+      deck: [...appState.deck],
+      nextRoundDeck: [...appState.nextRoundDeck],
+      currentIndex: appState.currentIndex,
+      stats: { ...appState.stats },
+      round: appState.round,
+      isWrongTraining: appState.isWrongTraining,
+      startTime: appState.startTime,
+      summaryVisible: summaryArea ? (summaryArea.style.display === 'block') : false
+    };
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${newMode}`);
+  if (targetBtn) targetBtn.classList.add('active');
+
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetContainer = document.getElementById(`${newMode}-mode`);
+  if (targetContainer) targetContainer.classList.add('active');
+
+  if (newMode === 'wrongBook') {
+    appState.currentMode = 'wrongBook';
+    document.getElementById('summary-area').style.display = 'none';
+    renderWrongBook();
+    return;
+  }
+
+  if (modeStates[newMode]) {
+    const saved = modeStates[newMode];
+    appState.currentMode = newMode;
+    appState.deck = [...saved.deck];
+    appState.nextRoundDeck = [...saved.nextRoundDeck];
+    appState.currentIndex = saved.currentIndex;
+    appState.stats = { ...saved.stats };
+    appState.round = saved.round;
+    appState.isWrongTraining = saved.isWrongTraining;
+    appState.startTime = saved.startTime || new Date();
+
+    const prefix = newMode === 'flashcard' ? 'fc' : 'mq';
+    const badge = document.getElementById(`${prefix}-round-badge`);
+    if (badge) {
+      if (appState.isWrongTraining) {
+        badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+        badge.style.backgroundColor = "var(--accent)";
+      } else {
+        badge.innerText = appState.round > 1 ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`;
+        badge.style.backgroundColor = appState.round > 1 ? "var(--warning)" : "var(--primary)";
+      }
+    }
+
+    if (saved.summaryVisible) {
+      showSummary();
+    } else {
+      document.getElementById('summary-area').style.display = 'none';
+      updateStatsUI();
+      if (newMode === 'flashcard') loadFlashcard();
+      else if (newMode === 'meaningQuiz') loadQuiz('meaning');
+    }
+  } else {
+    initGame(newMode, false);
+  }
+}
+
+function updateStatsUI() { 
+  if (appState.currentMode === 'wrongBook') return;
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+  
+  if (appState.currentMode === 'flashcard') { 
+    const knownEl = document.getElementById(`${prefix}-known-count`);
+    const unknownEl = document.getElementById(`${prefix}-unknown-count`);
+    if (knownEl) knownEl.innerText = appState.stats.good; 
+    if (unknownEl) unknownEl.innerText = appState.stats.bad; 
+  } else { 
+    const correctEl = document.getElementById(`${prefix}-correct-count`);
+    const wrongEl = document.getElementById(`${prefix}-wrong-count`);
+    if (correctEl) correctEl.innerText = appState.stats.good; 
+    if (wrongEl) wrongEl.innerText = appState.stats.bad; 
+  } 
+  
+  const left = appState.deck.length - appState.currentIndex; 
+  const leftEl = document.getElementById(`${prefix}-left-count`);
+  if (leftEl) leftEl.innerText = left > 0 ? left : 0; 
+}
+
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; 
+  if(!card) return; 
+  document.getElementById('fc-char').innerText = card.idiom; 
+  document.getElementById('front-actions').classList.remove('visible'); 
+  document.getElementById('fc-hint').style.opacity = '1'; 
+  document.getElementById('fc-back-char').innerText = card.idiom; 
+  document.getElementById('fc-sound').innerText = card.sound || "";
+  document.getElementById('fc-meaning').innerHTML = card.meaning; 
+  document.getElementById('card').classList.remove('flipped'); 
+  appState.hasVisitedBack = false; 
+  document.getElementById('fc-game-area').style.display = 'block'; 
+  updateStatsUI(); 
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); 
+  const isFlippingToBack = !cardEl.classList.contains('flipped'); 
+  cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) { 
+    appState.hasVisitedBack = true; 
+  } else if (appState.hasVisitedBack) { 
+    document.getElementById('front-actions').classList.add('visible'); 
+    document.getElementById('fc-hint').style.opacity = '0'; 
+  } 
+}
+
+function rateCard(isKnown) { 
+  const currentCard = appState.deck[appState.currentIndex];
+  if (isKnown) { 
+    appState.stats.good++; 
+    if (appState.isWrongTraining) {
+      const autoRemove = document.getElementById('wb-auto-remove');
+      if (autoRemove && autoRemove.checked) {
+        removeFromWrongBook(currentCard.idiom);
+      }
+    }
+  } else { 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentCard); 
+    addToWrongBook(currentCard);
+  } 
+  appState.currentIndex++; 
+  updateStatsUI(); 
+  if (appState.currentIndex < appState.deck.length) { 
+    setTimeout(() => loadFlashcard(), 200); 
+  } else { 
+    showSummary(); 
+  }
+}
+
+function loadQuiz(type) { 
+  const currentItem = appState.deck[appState.currentIndex]; 
+  if (!currentItem) return;
+  const prefix = 'mq'; 
+  appState.isQuizAnswered = false; 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'none'; 
+  document.getElementById(`${prefix}-feedback`).innerText = ''; 
+  const expBox = document.getElementById(`${prefix}-explanation`);
+  if (expBox) expBox.style.display = 'none'; 
+  
+  document.getElementById('mq-question').innerHTML = currentItem.idiom; 
+  
+  // 建立 4 個選項：正確答案 + 誘答音
+  let options = [currentItem.sound];
+  let dists = currentItem.distractors || [];
+  dists.forEach(d => {
+    if (!options.includes(d) && options.length < 4) options.push(d);
+  });
+  
+  // 若不足 4 個選項，自其他題目隨機補足
+  while (options.length < 4) {
+    let rand = vocabData[Math.floor(Math.random() * vocabData.length)].sound;
+    if (!options.includes(rand)) options.push(rand);
+  }
+  options = shuffleArray(options);
+  
+  const container = document.getElementById(`${prefix}-options`); 
+  container.innerHTML = ''; 
+  options.forEach(opt => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'option-btn'; 
+    btn.innerText = opt; 
+    btn.onclick = () => checkAnswer(btn, opt, currentItem, type); 
+    container.appendChild(btn); 
+  }); 
+  document.getElementById(`${prefix}-game-area`).style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selectedSound, correctItem, type) { 
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const prefix = 'mq'; 
+  const isCorrect = (selectedSound === correctItem.sound); 
+  
+  if (isCorrect) { 
+    btn.classList.add('correct'); 
+    document.getElementById(`${prefix}-feedback`).innerText = "✅ 答對了！"; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--success)"; 
+    appState.stats.good++; 
+    if (appState.isWrongTraining) {
+      const autoRemove = document.getElementById('wb-auto-remove');
+      if (autoRemove && autoRemove.checked) {
+        removeFromWrongBook(correctItem.idiom);
+      }
+    }
+  } else { 
+    btn.classList.add('wrong'); 
+    document.getElementById(`${prefix}-feedback`).innerText = `❌ 答錯了！正確讀音是：【 ${correctItem.sound} 】`; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--danger)"; 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(correctItem); 
+    addToWrongBook(correctItem);
+  } 
+  
+  // 顯示詳解
+  const expBox = document.getElementById(`${prefix}-explanation`);
+  if (expBox) {
+    expBox.innerHTML = `<b>💡 詳解說明：</b><br>${correctItem.meaning}`;
+    expBox.style.display = 'block';
+  }
+
+  const container = document.getElementById(`${prefix}-options`); 
+  Array.from(container.children).forEach(child => { 
+    if (child.innerText === correctItem.sound) { 
+      child.classList.add('correct'); 
+    } 
+  }); 
+  
+  updateStatsUI(); 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'block'; 
+}
+
+function nextQuiz(type) { 
+  appState.currentIndex++; 
+  if (appState.currentIndex < appState.deck.length) { 
+    loadQuiz(type); 
+  } else { 
+    showSummary(); 
+  }
+}
+
+function showSummary() { 
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+  const gameArea = document.getElementById(`${prefix}-game-area`);
+  if (gameArea) gameArea.style.display = 'none'; 
+  document.getElementById('summary-area').style.display = 'block'; 
+  window.scrollTo(0, 0); 
+  
+  const endTime = new Date(); 
+  const durationSeconds = Math.floor((endTime - (appState.startTime || endTime)) / 1000); 
+  const minutes = Math.floor(durationSeconds / 60); 
+  const seconds = durationSeconds % 60; 
+  const durationStr = `${minutes}分${seconds}秒`;
+
+  const total = appState.stats.good + appState.stats.bad;
+  const accuracy = total > 0 ? Math.round((appState.stats.good / total) * 100) : 0;
+  
+  let summaryHtml = `
+    <p>完成題數：<b>${total}</b> 題</p>
+    <p>正確率：<b>${accuracy}%</b></p>
+    <p>耗時：<b>${durationStr}</b></p>
+  `;
+
+  if (appState.nextRoundDeck.length > 0) {
+    summaryHtml += `<p style="color:var(--warning);">還有 <b>${appState.nextRoundDeck.length}</b> 題待加強！</p>`;
+    document.getElementById('btn-retry').style.display = 'inline-block';
+  } else {
+    summaryHtml += `<p style="color:var(--success);">太棒了！所有題目都精熟了！</p>`;
+    document.getElementById('btn-retry').style.display = 'none';
+  }
+
+  document.getElementById('summary-text').innerHTML = summaryHtml;
+}
+
+function restartRound() { initGame(appState.currentMode, true); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.title = QUIZ_TITLE;
+  const mainTitle = document.getElementById('main-title-text');
+  if (mainTitle) mainTitle.innerText = QUIZ_TITLE;
+
+  const instTitle = document.getElementById('inst-title-text');
+  if (instTitle) instTitle.innerText = QUIZ_TITLE;
+
+  const welcomeTitle = document.getElementById('welcome-title-text');
+  if (welcomeTitle) welcomeTitle.innerText = QUIZ_TITLE;
+
+  renderWrongBook();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,4187 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>學思軒練習神器資源網站 | 國語文全方位自我鍛鍊殿堂</title>
+  <meta name="description" content="學思軒國語文練習神器資源整合網站，收錄語文補給站互動學習殿堂、語文學習集主題測驗與橘子形音義核心單元，具備進度雲端記錄、學習成就排行榜與教師後台。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --primary: #1b4d3e;        /* 墨翠綠 (主色) */
+      --primary-dark: #12352b;   /* 深墨綠 */
+      --primary-light: #2c6e59;  /* 翠青綠 */
+      --accent: #c8963e;         /* 典雅古金 (強調色) */
+      --accent-hover: #b0802f;   /* 金棕色 */
+      --accent-light: #fbf5ea;   /* 淺金色背景 */
+      --orange-accent: #e67e22;  /* 橘子活力橙 */
+      --orange-light: #fef5ec;   /* 淺橙底 */
+      --purple-accent: #6c5ce7;  /* 典雅紫 */
+      --purple-light: #f3f0ff;
+      --bg: #f4f7f4;             /* 柔和護眼淺綠灰底 */
+      --surface: #ffffff;        /* 純白卡片底 */
+      --surface-subtle: #ebf2ee; /* 淺玉石底色 */
+      --text-main: #1f2d27;      /* 主要深墨文字 */
+      --text-muted: #5e7168;     /* 輔助灰綠文字 */
+      --border: #d5e2dc;         /* 淺灰綠邊框 */
+      --border-focus: #1b4d3e;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --shadow-sm: 0 2px 6px rgba(27, 77, 62, 0.06);
+      --shadow-md: 0 6px 18px rgba(27, 77, 62, 0.09);
+      --shadow-lg: 0 14px 32px rgba(27, 77, 62, 0.13);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", "Heiti TC", sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+        .serif-title {
+      font-family: 'Noto Serif TC', serif;
+    }
+    .calligraphy-bg {
+      font-family: 'Ma Shan Zheng', cursive;
+    }
+    .glass-header {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .hero-pattern {
+      background-color: #ffffff;
+      background-image: radial-gradient(#d1fae5 1.2px, transparent 1.2px), radial-gradient(#e0f2fe 1.2px, #ffffff 1.2px);
+      background-size: 48px 48px;
+      background-position: 0 0, 24px 24px;
+    }
+
+    /* 網頁頂部全幅封面圖 */
+    .site-cover-container {
+      width: 100%;
+      background: #092019;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .site-cover-image {
+      max-width: 1240px;
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+      object-fit: cover;
+    }
+
+    /* 頂部導覽列 */
+    header.site-header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 65%, var(--primary-light) 100%);
+      color: #ffffff;
+      padding: 30px 20px 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(18, 53, 43, 0.25);
+    }
+
+    header.site-header::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(200, 150, 62, 0.22) 0%, rgba(200, 150, 62, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    header.site-header::after {
+      content: "";
+      position: absolute;
+      bottom: -60px;
+      left: 10%;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #f7e6c4;
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    h1.site-title {
+      font-family: 'Noto Serif TC', "Songti TC", serif;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #ffffff;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    p.site-subtitle {
+      font-size: clamp(14px, 1.8vw, 16px);
+      color: #d1e2db;
+      max-width: 760px;
+      margin: 0 auto 18px;
+      font-weight: 400;
+    }
+
+    /* 學生身分狀態條 (Student Status Badge - Header Embedded) */
+    .student-status-badge {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 50px;
+      padding: 4px 12px 4px 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+    }
+
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      cursor: pointer;
+      padding-right: 6px;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    .student-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c8963e, #e67e22);
+      color: #ffffff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      border: 1.5px solid #ffffff;
+      flex-shrink: 0;
+    }
+
+    .student-details .name {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .student-details .role {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 500;
+      display: none; /* compact for header */
+    }
+
+    .badge-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      padding: 5px 12px;
+      font-size: 12.5px;
+      border-radius: 50px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      white-space: nowrap;
+    }
+
+    .btn-sm:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-sm {
+      background: linear-gradient(135deg, #d97706, #b45309) !important;
+      color: #ffffff !important;
+      border: 1px solid #b45309 !important;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.25) !important;
+    }
+
+    .btn-primary-sm:hover {
+      background: linear-gradient(135deg, #b45309, #92400e) !important;
+      color: #ffffff !important;
+    }
+
+    .btn-passbook-sm {
+      background: #eff6ff !important;
+      color: #1d4ed8 !important;
+      border: 1px solid #bfdbfe !important;
+    }
+
+    .btn-passbook-sm:hover {
+      background: #dbeafe !important;
+      color: #1e40af !important;
+    }
+    .btn-sm:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-sm {
+      background: var(--accent);
+      border-color: var(--accent-hover);
+      color: #fff;
+    }
+    .btn-primary-sm:hover {
+      background: var(--accent-hover);
+    }
+
+    /* 主要容器 */
+    main.main-content {
+      max-width: 1240px;
+      width: 100%;
+      margin: -24px auto 40px;
+      padding: 0 20px;
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 頂部數據概覽橫幅 (Stats Banner) */
+    .stats-banner-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 20px 28px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      padding: 4px 12px;
+      border-left: 3px solid var(--primary-light);
+    }
+
+    .stat-item:first-child {
+      border-left-color: var(--accent);
+    }
+    .stat-item:last-child {
+      border-left-color: var(--orange-accent);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .stat-val small {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-subtle);
+      border-radius: 10px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      transition: width 0.6s ease;
+      border-radius: 10px;
+    }
+
+    /* 雙榮譽排行榜區塊 */
+    .leaderboards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .leaderboards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .leaderboard-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 18px 22px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .leaderboard-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .leaderboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .leaderboard-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 90px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      background: var(--surface-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      transition: var(--transition);
+    }
+
+    .leaderboard-item:hover {
+      background: #e2ece7;
+      transform: translateX(2px);
+    }
+
+    .leaderboard-rank {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #cfded7;
+      color: var(--primary-dark);
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-right: 8px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .leaderboard-item.rank-1 .leaderboard-rank {
+      background: #ffd700;
+      color: #614800;
+      box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+    }
+
+    .leaderboard-item.rank-2 .leaderboard-rank {
+      background: #e0e0e0;
+      color: #424242;
+    }
+
+    .leaderboard-item.rank-3 .leaderboard-rank {
+      background: #cd7f32;
+      color: #fff;
+    }
+
+    .leaderboard-user {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .leaderboard-score {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* 控制面板（搜尋、專區分頁、練習狀態過濾） */
+    .control-panel {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 22px 28px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    /* 頂層分頁按鈕 */
+    .section-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sec-tab {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .sec-tab:hover {
+      background: #e1ede6;
+      color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .sec-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(27, 77, 62, 0.25);
+    }
+
+    .sec-tab .count-badge {
+      background: rgba(0, 0, 0, 0.12);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sec-tab.active .count-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    /* 搜尋列與狀態下拉選單 */
+    .controls-search-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    input#search-input {
+      width: 100%;
+      padding: 12px 42px 12px 46px;
+      border-radius: 50px;
+      border: 2px solid var(--border);
+      font-size: 15px;
+      background-color: var(--surface-subtle);
+      color: var(--text-main);
+      transition: var(--transition);
+      outline: none;
+      font-family: inherit;
+    }
+
+    input#search-input:focus {
+      background-color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(27, 77, 62, 0.12);
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #cfded7;
+      border: none;
+      color: var(--text-main);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .clear-search-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .status-select-wrap {
+      min-width: 180px;
+    }
+
+    select.filter-select {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 50px;
+      border: 2px solid var(--border);
+      background-color: var(--surface-subtle);
+      font-size: 14.5px;
+      color: var(--text-main);
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    select.filter-select:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* 細項主題篩選標籤 */
+    .filter-tags-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 14px 2px 2px;
+      scrollbar-width: thin;
+    }
+
+    .filter-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .tag-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .tag-btn:hover {
+      background: var(--surface-subtle);
+      color: var(--primary);
+      border-color: var(--primary-light);
+    }
+
+    .tag-btn.active {
+      background: var(--accent-light);
+      color: var(--accent-hover);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* 資訊與結果統計條 */
+    .results-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding: 0 4px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .results-count strong {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* 卡片網格 Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    /* 單元卡片 */
+    .quiz-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-light);
+    }
+
+    .quiz-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .quiz-card:hover::before {
+      opacity: 1;
+    }
+
+    .quiz-card.orange-theme:hover::before {
+      background: linear-gradient(90deg, #e67e22, #f39c12);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .category-block {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .main-cat-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .main-cat-label.main-supply {
+      color: #7c3aed;
+    }
+
+    .main-cat-label.main-chinese {
+      color: #1b4d3e;
+    }
+
+    .main-cat-label.main-orange {
+      color: #c25e00;
+    }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      background: var(--surface-subtle);
+      color: var(--primary-dark);
+      border: 1px solid rgba(27, 77, 62, 0.12);
+      transition: var(--transition);
+    }
+
+    .category-pill.supply,
+    .category-pill.pill-supply {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #ddd6fe;
+    }
+
+    .category-pill.orange {
+      background: var(--orange-light);
+      color: #b75908;
+      border-color: #fbd6b5;
+    }
+
+    .category-pill.pill-words {
+      background: #ebf7f1;
+      color: #177643;
+      border-color: #bee5d1;
+    }
+
+    .category-pill.pill-culture {
+      background: #fbf5ea;
+      color: #91681b;
+      border-color: #f1dfbf;
+    }
+
+    .category-pill.pill-phonetics {
+      background: #f3f0ff;
+      color: #5a4bcf;
+      border-color: #ddd5fa;
+    }
+
+    .category-pill.pill-idiom-topic {
+      background: #eff9fa;
+      color: #0e6f79;
+      border-color: #bee5eb;
+    }
+
+    .category-pill.pill-grammar {
+      background: #fdf2f8;
+      color: #9d174d;
+      border-color: #fbcfe8;
+    }
+
+        .card-header-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      line-height: 1.3;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+
+    .grade-badge.grade-7up {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+    .grade-badge.grade-7down {
+      background: #f0fdf4;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+    .grade-badge.grade-8up {
+      background: #fffbeb;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .grade-badge.grade-8down {
+      background: #faf5ff;
+      color: #7e22ce;
+      border-color: #e9d5ff;
+    }
+    .grade-badge.grade-9up {
+      background: #fff7ed;
+      color: #c2410c;
+      border-color: #fed7aa;
+    }
+
+    .fav-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #b8c9c1;
+      padding: 4px;
+      border-radius: 50%;
+      transition: var(--transition);
+      line-height: 1;
+    }
+
+    .fav-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .fav-btn.favorited {
+      color: #e74c3c;
+    }
+
+    .card-body {
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+
+    .quiz-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .quiz-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* 卡片狀態與成果標籤 */
+    .card-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .status-badge.not_started {
+      background: #f0f3f1;
+      color: #7b8e85;
+    }
+
+    .status-badge.mastered {
+      background: #e8f8f0;
+      color: #1b8a53;
+      border: 1px solid #c2ebd5;
+    }
+
+    .status-badge.good {
+      background: #eef6ff;
+      color: #2072c4;
+      border: 1px solid #c7e0ff;
+    }
+
+    .status-badge.need_improvement {
+      background: #fff4e5;
+      color: #b75908;
+      border: 1px solid #fdd8ad;
+    }
+
+    .status-score-tag {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: var(--accent-hover);
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-record-result {
+      flex: 1;
+      padding: 9px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface-subtle);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+
+    .btn-record-result:hover {
+      background: #dfece5;
+      border-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .start-quiz-btn {
+      flex: 1.2;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .start-quiz-btn:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(27, 77, 62, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .start-quiz-btn.orange-btn {
+      background: var(--orange-accent);
+    }
+
+    .start-quiz-btn.orange-btn:hover {
+      background: #cf6d17;
+    }
+
+    .start-quiz-btn.supply-btn {
+      background: #7c3aed;
+    }
+
+    .start-quiz-btn.supply-btn:hover {
+      background: #6d28d9;
+    }
+
+    /* 空狀態 */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* 頁尾 */
+    footer.site-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 36px 20px 48px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-highlight {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* 返回頂部按鈕 */
+    .back-to-top {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 99;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ==========================================
+       MODAL 樣式 (登入、成果記錄、指南、後台)
+       ========================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 53, 43, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Modal 階層層級管理 (確保存摺與明細彈窗在教師後台上方最上層顯示) */
+    #learningPassbookModal {
+      z-index: 10050;
+    }
+    #studentDetailModal {
+      z-index: 10050;
+    }
+    #deleteStudentModal {
+      z-index: 10060;
+    }
+    #teacherAuthModal {
+      z-index: 10020;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-card.modal-lg {
+      max-width: 900px;
+    }
+
+    @keyframes modalSlideUp {
+      from { transform: translateY(20px) scale(0.96); }
+      to { transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-subtle);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .modal-close-btn:hover {
+      color: var(--danger);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .modal-body {
+      padding: 24px;
+      font-size: 14.5px;
+      color: var(--text-main);
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--surface-subtle);
+    }
+
+    /* 表單組件 */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--primary-dark);
+      font-size: 14px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--text-main);
+      background: #fff;
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.15);
+    }
+
+    /* PIN 碼 4 格輸入框 */
+    .pin-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .pin-digit {
+      width: 52px;
+      height: 60px;
+      font-size: 26px;
+      text-align: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: var(--surface-subtle);
+      transition: var(--transition);
+    }
+
+    .pin-digit:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(27, 77, 62, 0.15);
+    }
+
+    /* 成果選擇按鈕群組 */
+    .status-select-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .status-opt-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--surface-subtle);
+    }
+
+    .status-opt-card:hover {
+      border-color: var(--primary-light);
+      background: #fff;
+    }
+
+    .status-opt-card.selected {
+      border-color: var(--primary);
+      background: #e8f8f0;
+      box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.15);
+    }
+
+    .status-opt-card .opt-icon {
+      font-size: 22px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .status-opt-card .opt-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+        /* 練習診斷評估紅綠燈樣式 */
+    .diagnosis-box {
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      transition: var(--transition);
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      margin-top: 4px;
+    }
+
+    .diagnosis-box.light-green {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .diagnosis-box.light-green .diagnosis-status-title {
+      color: #15803d;
+    }
+    .diagnosis-box.light-green .diagnosis-desc {
+      color: #166534;
+    }
+
+    .diagnosis-box.light-yellow {
+      background: #fefce8;
+      border-color: #fde047;
+    }
+    .diagnosis-box.light-yellow .diagnosis-status-title {
+      color: #a16207;
+    }
+    .diagnosis-box.light-yellow .diagnosis-desc {
+      color: #854d0e;
+    }
+
+    .diagnosis-box.light-red {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+    .diagnosis-box.light-red .diagnosis-status-title {
+      color: #b91c1c;
+    }
+    .diagnosis-box.light-red .diagnosis-desc {
+      color: #991b1b;
+    }
+
+    .traffic-light-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .traffic-light-icon {
+      font-size: 26px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .diagnosis-content {
+      flex: 1;
+    }
+
+    .diagnosis-status-title {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .diagnosis-desc {
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .btn-modal {
+      padding: 10px 20px;
+      font-size: 14.5px;
+      font-weight: 700;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-modal-cancel {
+      background: #fff;
+      color: var(--text-muted);
+    }
+
+    .btn-modal-cancel:hover {
+      background: #eee;
+    }
+
+    .btn-modal-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-modal-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* 教師後台表格樣式 */
+    .teacher-panel-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .teacher-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .teacher-table-wrap {
+      overflow-x: auto;
+      max-height: 480px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    table.teacher-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+    }
+
+    table.teacher-table th {
+      background: var(--surface-subtle);
+      padding: 12px 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.teacher-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    table.teacher-table tr:hover td {
+      background: #f7faf8;
+    }
+
+    /* Toast 通知 */
+    #toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast-msg {
+      background: var(--primary-dark);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1), toastOut 0.3s forwards 2.7s;
+    }
+
+    @keyframes toastIn {
+    /* 學習存摺專用樣式 */
+    .btn-passbook-sm {
+      background: linear-gradient(135deg, rgba(200, 150, 62, 0.4), rgba(230, 126, 34, 0.4));
+      border: 1px solid rgba(255, 223, 158, 0.6);
+      color: #fff;
+      font-weight: 700;
+    }
+    .btn-passbook-sm:hover {
+      background: linear-gradient(135deg, rgba(200, 150, 62, 0.75), rgba(230, 126, 34, 0.75));
+      transform: translateY(-1px);
+    }
+
+    .passbook-profile-card {
+      background: linear-gradient(135deg, #f8fbf9 0%, #eef5f1 100%);
+      border: 1px solid #d0e4d9;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .passbook-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c8963e, #1b4d3e);
+      color: #fff;
+      font-weight: 900;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(27, 77, 62, 0.2);
+      border: 2px solid #fff;
+      flex-shrink: 0;
+    }
+
+    .passbook-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .passbook-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .passbook-name-row h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .passbook-badge {
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 50px;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: var(--transition);
+    }
+
+    /* 各等級稱號不同底色白字膠囊 */
+    .badge-rank-novice {
+      background: linear-gradient(135deg, #2e7d32, #43a047); /* 森林青綠 */
+    }
+
+    .badge-rank-apprentice {
+      background: linear-gradient(135deg, #1775c0, #1e88e5); /* 沉穩寶藍 */
+    }
+
+    .badge-rank-expert {
+      background: linear-gradient(135deg, #d35400, #e67e22); /* 亮眼琥珀橘 */
+    }
+
+    .badge-rank-master {
+      background: linear-gradient(135deg, #6c3483, #8e44ad); /* 高貴紫羅蘭 */
+    }
+
+    .badge-rank-grandmaster {
+      background: linear-gradient(135deg, #b8860b, #e5a93b); /* 璀璨至尊金 */
+      box-shadow: 0 0 10px rgba(218, 165, 32, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .passbook-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .passbook-summary-pill {
+      background: #fff;
+      border: 1px solid #d0e4d9;
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .passbook-summary-pill .pill-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .passbook-summary-pill .pill-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .passbook-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .passbook-stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .passbook-stat-box .box-icon {
+      font-size: 18px;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .passbook-stat-box .box-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .passbook-stat-box .box-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+
+    .pb-filter-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    @media print {
+        box-shadow: none !important;
+        border: none !important;
+      }
+      .modal-header .modal-close-btn, .modal-footer, .pb-filter-btns {
+        display: none !important;
+      }
+    }
+    .btn-teacher-primary {
+    background: #1b4d3e !important;
+    color: #ffffff !important;
+    border: 1px solid #12352b !important;
+    box-shadow: 0 2px 6px rgba(27, 77, 62, 0.3) !important;
+  }
+  .btn-teacher-primary:hover {
+    background: #12352b !important;
+    color: #ffffff !important;
+  }
+
+  .btn-teacher-accent {
+    background: #c8963e !important;
+    color: #ffffff !important;
+    border: 1px solid #b0802f !important;
+    box-shadow: 0 2px 6px rgba(200, 150, 62, 0.3) !important;
+  }
+  .btn-teacher-accent:hover {
+    background: #b0802f !important;
+    color: #ffffff !important;
+  }
+
+  .btn-teacher-danger {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fca5a5 !important;
+  }
+  .btn-teacher-danger:hover {
+    background: #fecaca !important;
+    color: #b91c1c !important;
+  }
+</style>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 學思軒會考攻略 跨站全域導覽 Bar -->
+  <nav style="background: #0f172a; color: #e2e8f0; padding: 7px 16px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fbbf24; position: sticky; top: 0; z-index: 9999; backdrop-filter: blur(8px); box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+      <a href="index.html" style="color: #fbbf24; text-decoration: none; display: flex; align-items: center; gap: 5px;">
+        🏛️ 回【邁向會考之路】
+      </a>
+      <span style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; padding: 2px 6px; border-radius: 4px; font-size: 11px;">語文教學資源站</span>
+    </div>
+    <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-weight: 500;">
+      <a href="idiom-hub.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#f59e0b'" onmouseout="this.style.color='#cbd5e1'">📗 成語教學資源庫</a>
+      <span style="color: #475569;">|</span>
+      <a href="composition-hub.html" style="color: #cbd5e1; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#a78bfa'" onmouseout="this.style.color='#cbd5e1'">✍️ 作文教學資源庫</a>
+    </div>
+  </nav>
+
+  <!-- ==================== 頂部全域導覽列 (White Glass Header) ==================== -->
+  <header class="glass-header sticky top-0 z-50 border-b border-slate-200/80 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between min-h-[64px] py-2 gap-3 flex-wrap md:flex-nowrap">
+        <!-- 品牌識別組 -->
+        <a href="index.html" class="flex items-center gap-3 text-inherit no-underline flex-shrink-0">
+          <img src="icon/seal-red.png" alt="學思軒" class="w-9 h-9 rounded-lg shadow-xs hover:rotate-6 transition-transform">
+          <div class="flex flex-col">
+            <span class="serif-title font-black text-slate-800 text-base md:text-lg tracking-tight">學思軒・語文教學資源網站</span>
+            <span class="text-[10px] md:text-xs text-emerald-700 font-bold tracking-wider">會考國文練習神器大寶庫</span>
+          </div>
+        </a>
+
+        <!-- 學生身分與快捷功能列 (移動至頂部導覽列右側) -->
+        <div class="student-status-badge">
+          <div class="student-info" id="studentStatusBlock" onclick="openStudentAuthModal()" title="點此切換或登入學生身分">
+            <div class="student-avatar" id="studentAvatar">訪</div>
+            <div class="student-details">
+              <div class="name" id="studentNameDisplay">訪客模式 (未登入) ▾</div>
+              <div class="role" id="studentRoleDisplay">點此登入身分</div>
+            </div>
+          </div>
+          <div class="badge-actions">
+            <button class="btn-sm" onclick="openGuideModal()">📖 使用指南</button>
+            <button class="btn-sm btn-passbook-sm" id="btnPassbookToggle" onclick="openMyPassbook()">📖 我的學習存摺</button>
+            <button class="btn-sm btn-primary-sm" id="btnLoginToggle" onclick="openStudentAuthModal()">🔑 登入身分</button>
+            <button class="btn-sm" id="btnLogoutBtn" style="display: none; color: #ffb8b8;" onclick="handleStudentLogout()">🚪 登出</button>
+            <button class="btn-sm" onclick="promptTeacherMode()">⚙️ 教師管理後台</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== Hero 橫幅 ==================== -->
+  <section class="hero-pattern relative overflow-hidden border-b border-slate-200/80 pt-5 pb-8 md:pt-6 md:pb-10">
+    <!-- 巨大書法字浮水印 -->
+    <div class="calligraphy-bg absolute right-4 md:right-16 bottom-[-20px] text-[100px] md:text-[180px] text-slate-900/[0.03] select-none pointer-events-none leading-none">
+      國文神器
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+        <!-- 左側：標題介紹與關鍵指標 -->
+        <div class="lg:col-span-7 xl:col-span-8 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-800 text-xs md:text-sm font-black mb-4 shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+            學思軒黃于珊、王斐亭老師 · 語文練習神器
+          </div>
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed mb-6 font-medium">
+            整合【語文補給站】、【語文學習集】與【橘子形音義】三大教材系列，<br class="hidden sm:inline">
+            涵蓋六書造字、詞性活用、修辭神技、節令節氣與書法圖鑑等全方位練習單元，即時追蹤自學歷程與精熟成果！
+          </p>
+
+          <!-- 關鍵指標數據列 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto lg:mx-0">
+            <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs text-center">
+              <div class="text-2xl md:text-3xl font-black text-emerald-600">100+<span class="text-sm font-bold text-slate-500 ml-0.5">篇</span></div>
+              <div class="text-xs text-slate-500 font-bold mt-0.5">線上練習神器</div>
+            </div>
+            <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs text-center">
+              <div class="text-2xl md:text-3xl font-black text-orange-600">25<span class="text-sm font-bold text-slate-500 ml-0.5">單元</span></div>
+              <div class="text-xs text-slate-500 font-bold mt-0.5">橘子形音義</div>
+            </div>
+            <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs text-center">
+              <div class="text-2xl md:text-3xl font-black text-amber-600">106<span class="text-sm font-bold text-slate-500 ml-0.5">篇</span></div>
+              <div class="text-xs text-slate-500 font-bold mt-0.5">語文學習集</div>
+            </div>
+            <div class="bg-white/90 border border-slate-200 rounded-xl p-3 shadow-xs text-center">
+              <div class="text-2xl md:text-3xl font-black text-blue-600">100%<span class="text-sm font-bold text-slate-500 ml-0.5"></span></div>
+              <div class="text-xs text-slate-500 font-bold mt-0.5">全方位會考攻略</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側：封面主圖（航向偉大的國文航道） -->
+        <div class="lg:col-span-5 xl:col-span-4 flex justify-center lg:justify-end">
+          <div class="relative group w-full max-w-md lg:max-w-none">
+            <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500 rounded-2xl blur-md opacity-25 group-hover:opacity-40 transition duration-500"></div>
+            <div class="relative overflow-hidden rounded-2xl bg-white border border-slate-200/90 shadow-md">
+              <img src="icon/learning-roadmap-h.png" alt="航向偉大的國文航道" class="w-full h-auto object-cover transform group-hover:scale-[1.02] transition duration-500">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- 控制面板（搜尋、專區切換、狀態過濾） -->
+    <section class="control-panel">
+      <!-- 頂部專區切換 -->
+      <div class="section-tabs">
+        <button class="sec-tab active" data-sec="all">
+          <span>🌟 全部練習神器</span>
+        </button>
+        <button class="sec-tab" data-sec="7up">
+          <span>🌱 七上</span>
+        </button>
+        <button class="sec-tab" data-sec="7down">
+          <span>🌿 七下</span>
+        </button>
+        <button class="sec-tab" data-sec="8up">
+          <span>🍂 八上</span>
+        </button>
+        <button class="sec-tab" data-sec="8down">
+          <span>🌾 八下</span>
+        </button>
+        <button class="sec-tab" data-sec="9up">
+          <span>🎓 九上</span>
+        </button>
+        <button class="sec-tab" data-sec="fav">
+          <span>❤️ 我的收藏</span>
+          <span class="count-badge" id="tab-count-fav">0</span>
+        </button>
+        <button class="sec-tab" data-sec="history">
+          <span>🕒 練習紀錄</span>
+          <span class="count-badge" id="tab-count-history">0</span>
+        </button>
+      </div>
+
+      <!-- 搜尋與狀態過濾 -->
+      <div class="controls-search-row">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="搜尋練習神器名稱、關鍵字、典故或分類 (按下 / 快速搜尋)..." autocomplete="off">
+          <button class="clear-search-btn" id="clear-search" title="清除搜尋">✕</button>
+        </div>
+        <div class="status-select-wrap">
+          <select id="statusFilter" class="filter-select" onchange="handleFilterChange()">
+            <option value="all">🎯 所有練習狀態</option>
+            <option value="not_started">⚪ 未完成</option>
+            <option value="精熟">🌟 已完成 (精熟)</option>
+            <option value="普通">👍 已完成 (普通)</option>
+            <option value="待加強">💪 已完成 (待加強)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 細項標籤篩選列 -->
+      <div class="filter-tags-wrap" id="tagFilterRow">
+        <span class="filter-label">🏷️ 標籤：</span>
+        <button class="tag-btn active" data-cat="all">全部類別 (133)</button>
+        <button class="tag-btn" data-cat="語文補給站">語文補給站 (2)</button>
+        <button class="tag-btn" data-cat="語文常識">語文常識 (19)</button>
+        <button class="tag-btn" data-cat="文化常識">文化常識 (33)</button>
+        <button class="tag-btn" data-cat="詞語運用">詞語運用 (23)</button>
+        <button class="tag-btn" data-cat="語文成語">語文成語 (22)</button>
+        <button class="tag-btn" data-cat="語文形音義">語文形音義 (9)</button>
+        <button class="tag-btn" data-cat="橘子形音義">橘子形音義 (25)</button>
+      </div>
+    </section>
+
+    <!-- 結果資訊列 -->
+    <div class="results-info-bar">
+      <div class="results-count">
+        目前顯示 <strong id="current-count">133</strong> 項練習神器
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted);">
+        💡 點擊「開始練習」開啟測驗；點擊「📝 紀錄成果」記錄您的熟練度
+      </div>
+    </div>
+
+    <!-- 卡片網格 -->
+    <div class="card-grid" id="card-grid"></div>
+
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;">
+        <img src="icon/slogan-god.png" alt="只要有心人人都是國文神" style="max-width: 320px; width: 85%; height: auto; display: block; opacity: 0.9;">
+      </div>
+      <div style="font-size: 12px; color: #8fa39a; margin-top: 2px;">𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐</div>
+    </div>
+  </footer>
+
+  <!-- 返回頂部按鈕 -->
+  <button class="back-to-top" id="back-to-top" title="回到頂部">↑</button>
+
+  <!-- Toast 訊息容器 -->
+  <div id="toast-container"></div>
+
+  <!-- ========================================================
+       MODAL 1: 學生身分登入 / 安全 PIN 碼彈窗
+       ======================================================== -->
+  <div class="modal-backdrop" id="studentAuthModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="authModalTitle">🔑 學生身分登入</div>
+        <button class="modal-close-btn" onclick="closeModal('studentAuthModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- 步驟 1: 填寫班級座號姓名 -->
+        <form id="authStep1Form" onsubmit="handleAuthStep1(event)">
+          <p style="margin-bottom: 14px; color: var(--text-muted); font-size: 13.5px;">
+            請登記您的班級與座號，即可在雲端與本機同步紀錄您的練習成果與解鎖排行榜！
+          </p>
+          <div class="form-group">
+            <label class="form-label">班級 (例：701、805)</label>
+            <input type="text" id="authClassInput" class="form-control" placeholder="請輸入班級 (數字，如 701)" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">座號 (例：1 ~ 45)</label>
+            <input type="number" id="authSeatInput" class="form-control" placeholder="請輸入座號" min="1" max="50" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">學生姓名</label>
+            <input type="text" id="authNameInput" class="form-control" placeholder="請輸入真實姓名" required>
+          </div>
+          <button type="submit" class="btn-modal btn-modal-primary" style="width: 100%; margin-top: 8px;" id="btnAuthNext">下一步 ➔</button>
+        </form>
+
+        <!-- 步驟 2: PIN 碼驗證或設定 -->
+        <div id="authStep2Area" style="display: none; text-align: center;">
+          <p id="pinPromptDesc" style="margin-bottom: 14px; color: var(--text-muted); font-size: 14px;">
+            請輸入您的 <strong>4 位數安全 PIN 碼</strong>：
+          </p>
+          <div class="pin-input-group">
+            <input type="password" class="pin-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*" autofocus>
+            <input type="password" class="pin-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-digit" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+          </div>
+          <div id="pinErrorMsg" style="color: var(--danger); font-size: 13px; font-weight: 700; margin-bottom: 12px; display: none;"></div>
+          <div style="display: flex; gap: 10px; justify-content: center; margin-top: 14px;">
+            <button class="btn-modal btn-modal-cancel" onclick="backToAuthStep1()">上一步</button>
+            <button class="btn-modal btn-modal-primary" onclick="submitAuthPin()">確認登入</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: 練習成果紀錄彈窗 (Record Result Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="recordResultModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📝 紀錄練習成果</div>
+        <button class="modal-close-btn" onclick="closeModal('recordResultModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 14px; padding: 10px 14px; background: var(--surface-subtle); border-radius: var(--radius-sm);">
+          <div style="font-size: 12px; color: var(--text-muted);" id="modalItemCategory">語文補給站</div>
+          <div style="font-size: 16px; font-weight: 800; color: var(--primary-dark);" id="modalItemTitle">移覺（通感）修辭互動學習殿堂</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">1. 選擇熟練度狀態</label>
+          <div class="status-select-cards">
+            <div class="status-opt-card" data-val="精熟" onclick="selectStatusOpt(this, '精熟')">
+              <span class="opt-icon">🌟</span>
+              <span class="opt-title">精熟</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">答對 85% 以上</div>
+            </div>
+            <div class="status-opt-card" data-val="普通" onclick="selectStatusOpt(this, '普通')">
+              <span class="opt-icon">👍</span>
+              <span class="opt-title">普通</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">答對 60~84%</div>
+            </div>
+            <div class="status-opt-card" data-val="待加強" onclick="selectStatusOpt(this, '待加強')">
+              <span class="opt-icon">💪</span>
+              <span class="opt-title">待加強</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">答對 60% 以下</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 練習診斷評估 (紅綠燈號) -->
+        <div class="form-group">
+          <label class="form-label">2. 練習診斷評估</label>
+          <div class="diagnosis-box light-green" id="modalDiagnosisBox">
+            <div class="traffic-light-wrapper">
+              <span class="traffic-light-icon" id="diagnosisLightIcon">🟢</span>
+              <div class="diagnosis-content">
+                <div class="diagnosis-status-title" id="diagnosisStatusTitle">🟢 綠燈（精熟）</div>
+                <div class="diagnosis-desc" id="diagnosisStatusDesc">可以暫時先不用複習。表現優異，核心概念已高度精熟！</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">3. 練習備註 / 錯題提醒 (選填)</label>
+          <input type="text" id="recordNoteInput" class="form-control" placeholder="例如：錯在第 3 題成語釋義，已加入錯題本">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" id="btnDeleteRecord" style="color: var(--danger); margin-right: auto; display: none;" onclick="deleteCurrentRecord()">🗑️ 清除紀錄</button>
+        <button class="btn-modal btn-modal-cancel" onclick="closeModal('recordResultModal')">取消</button>
+        <button class="btn-modal btn-modal-primary" onclick="saveCurrentRecord()">💾 儲存成果</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: 學生使用指南彈窗 (Guide Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="guideModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">📖 學思軒練習神器學生使用指南</div>
+        <button class="modal-close-btn" onclick="closeModal('guideModal')">✕</button>
+      </div>
+      <div class="modal-body" style="line-height: 1.8;">
+        <h3 style="color: var(--primary); margin-bottom: 8px;">🌟 如何使用本平台進行自主學習？</h3>
+        <ol style="padding-left: 20px; margin-bottom: 18px;">
+          <li><strong>登入身分</strong>：點擊右上角「🔑 登入身分」，輸入班級、座號、姓名及 4 位數 PIN 碼，開啟跨裝置雲端記錄。</li>
+          <li><strong>選擇單元進行練習</strong>：點選任一卡片的「開始練習 ➔」開啟神器的翻卡、測驗與填空模式。</li>
+          <li><strong>紀錄練習成果</strong>：測驗完成後，回到首頁點擊該單元的「📝 紀錄成果」，選擇熟練度（精熟🌟 / 普通👍 / 待加強💪）並填寫分數與錯題備註。</li>
+          <li><strong>查看「📖 我的學習存摺」</strong>：隨時點擊頂部的「📖 我的學習存摺」，查閱自己的全方位修練進度、三大領域雷達分佈與詳細歷史歷程！</li>
+          <li><strong>挑戰榮譽排行榜</strong>：完成練習後，系統會即時更新完成度榜與精熟榜，與全校同學一起突破自學極限！</li>
+        </ol>
+
+        <h3 style="color: var(--primary); margin-bottom: 8px;">📖 什麼是「我的學習存摺」？</h3>
+        <p style="margin-bottom: 12px; color: var(--text-muted);">
+          當您登入身分後，系統便會自動在雲端資料庫建立並即時載入專屬於您的<strong>「學習存摺」</strong>：
+        </p>
+        <ul style="padding-left: 20px; margin-bottom: 18px;">
+          <li><strong>即時載入雲端歷程</strong>：登入後自動更新頂部進度條、精熟達標總量，點擊存摺可隨時調閱個人完整練習明細。</li>
+          <li><strong>三大專區進度解析</strong>：即時統計「語文學習集 (106篇)」、「語文補給站 (2篇)」與「橘子形音義 (25單元)」各自的修練完成率。</li>
+          <li><strong>自學榮譽五大稱號徽章</strong>：
+            <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+              <div><span class="passbook-badge badge-rank-novice" style="font-size: 11px; padding: 2px 8px;">🌱 自學啟航新秀</span>：初階入門自學者</div>
+              <div><span class="passbook-badge badge-rank-apprentice" style="font-size: 11px; padding: 2px 8px;">📘 國語文勤勉學子</span>：完成 <strong>30 項</strong> 以上練習</div>
+              <div><span class="passbook-badge badge-rank-expert" style="font-size: 11px; padding: 2px 8px;">🌟 國語文精熟名將</span>：達成 <strong>60 項</strong> 精熟達標 (85%+)</div>
+              <div><span class="passbook-badge badge-rank-master" style="font-size: 11px; padding: 2px 8px;">🏆 國語文自學達人</span>：達成 <strong>85 項</strong> 精熟達標</div>
+              <div><span class="passbook-badge badge-rank-grandmaster" style="font-size: 11px; padding: 2px 8px;">👑 國語文全能宗師</span>：達成 <strong>110 項</strong> 精熟達標</div>
+            </div>
+          </li>
+          <li style="margin-top: 8px;"><strong>自學證明列印</strong>：支援「🖨️ 列印存摺證明」，一鍵列印或匯出為 PDF 學習成果證明。</li>
+          <li><strong>師生雲端同步</strong>：國文老師也可由教師後台查閱學生的學習存摺，掌握全班練習狀況並給予精準輔導。</li>
+        </ul>
+
+        <h3 style="color: var(--primary); margin-bottom: 8px;">🔐 安全 PIN 碼保護機制</h3>
+        <p style="margin-bottom: 14px; color: var(--text-muted);">
+          首次登入時自訂 4 位數字 PIN 碼，請牢記此密碼！往後登入皆會進行安全驗證，防止他人竄改您的進度。若不慎忘記密碼，可請國文老師由「教師管理後台」協助重設。
+        </p>
+
+        <div style="background: var(--surface-subtle); padding: 12px 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--accent);">
+          <strong>💡 貼心提醒：</strong>平台具備離線快取功能，就算沒有網路，您的練習存摺與進度依然會妥善儲存於本機瀏覽器中！
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-primary" onclick="closeModal('guideModal')">我知道了！開始練習</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: 學生個人學習存摺彈窗 (Learning Passbook Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="learningPassbookModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header" style="background: linear-gradient(135deg, #1b4d3e, #2c6e59); color: #fff;">
+        <div class="modal-title" style="color: #fff;" id="passbookModalTitle">
+          <span>📖</span> 學思軒 &middot; 學生個人學習存摺
+        </div>
+        <button class="modal-close-btn" style="color: #fff;" onclick="closeModal('learningPassbookModal')">✕</button>
+      </div>
+      <div class="modal-body" id="passbookPrintArea">
+        <!-- 存摺個人資訊橫幅 -->
+        <div class="passbook-profile-card">
+          <div class="passbook-avatar" id="passbookAvatar">生</div>
+          <div class="passbook-info">
+            <div class="passbook-name-row">
+              <h2 id="passbookStudentName">學生姓名</h2>
+              <span class="passbook-badge" id="passbookLevelBadge">國語文自學達人</span>
+            </div>
+            <div class="passbook-meta" id="passbookStudentMeta">
+              班級：- &middot; 座號：- &middot; 存摺編號：-
+            </div>
+          </div>
+          <div class="passbook-summary-pill">
+            <span class="pill-label">達成精熟率</span>
+            <span class="pill-val" id="passbookMasteryRate">0%</span>
+          </div>
+        </div>
+
+        <!-- 4大核心累積指標 -->
+        <div class="passbook-stats-grid">
+          <div class="passbook-stat-box">
+            <span class="box-icon">🎯</span>
+            <div class="box-val" id="pbStatCompleted">0 / 133</div>
+            <div class="box-label">已完成練習神器</div>
+            <div class="progress-bar-bg" style="margin-top: 6px;">
+              <div class="progress-bar-fill" id="pbProgressBar"></div>
+            </div>
+          </div>
+          <div class="passbook-stat-box">
+            <span class="box-icon">🌟</span>
+            <div class="box-val" style="color: #1b8a53;" id="pbStatMastered">0 項</div>
+            <div class="box-label">精熟達標 (85%+)</div>
+          </div>
+          <div class="passbook-stat-box">
+            <span class="box-icon">👍</span>
+            <div class="box-val" style="color: #2072c4;" id="pbStatGood">0 項</div>
+            <div class="box-label">普通熟練 (60~84%)</div>
+          </div>
+          <div class="passbook-stat-box">
+            <span class="box-icon">💪</span>
+            <div class="box-val" style="color: #e67e22;" id="pbStatNeedImprove">0 項</div>
+            <div class="box-label">待加強複習 (60%-)</div>
+          </div>
+        </div>
+
+        <!-- 三大領域修練雷達/分佈進度 -->
+        <div class="passbook-domains-card">
+          <h4 style="margin-bottom: 12px; color: var(--primary-dark); font-size: 15px; display: flex; align-items: center; gap: 6px;">
+            <span>📊</span> 三大領域修練進度分佈
+          </h4>
+          <div class="domain-item">
+            <div class="domain-header">
+              <span>💻 語文學習集 (主題測驗)</span>
+              <strong id="pbDomainLang">0 / 106 (0%)</strong>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pbDomainLangBar" style="background: linear-gradient(90deg, #1b4d3e, #2ecc71);"></div></div>
+          </div>
+          <div class="domain-item" style="margin-top: 10px;">
+            <div class="domain-header">
+              <span>✨ 語文補給站 (互動學習殿堂)</span>
+              <strong id="pbDomainSupply">0 / 2 (0%)</strong>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pbDomainSupplyBar" style="background: linear-gradient(90deg, #7c3aed, #9333ea);"></div></div>
+          </div>
+          <div class="domain-item" style="margin-top: 10px;">
+            <div class="domain-header">
+              <span>🍊 橘子形音義 (核心單元)</span>
+              <strong id="pbDomainOrange">0 / 25 (0%)</strong>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="pbDomainOrangeBar" style="background: linear-gradient(90deg, #e67e22, #f39c12);"></div></div>
+          </div>
+        </div>
+
+        <!-- 歷程篩選與明細清單 -->
+        <div style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <h4 style="color: var(--primary-dark); font-size: 15px; display: flex; align-items: center; gap: 6px;">
+              <span>📜</span> 詳細學習存摺明細歷程 (<span id="pbRecordCount">0</span> 筆)
+            </h4>
+            <div class="pb-filter-btns">
+              <button class="pb-filter-btn active" data-filter="all" onclick="filterPassbookTable('all')">全部</button>
+              <button class="pb-filter-btn" data-filter="精熟" onclick="filterPassbookTable('精熟')">🌟 精熟</button>
+              <button class="pb-filter-btn" data-filter="普通" onclick="filterPassbookTable('普通')">👍 普通</button>
+              <button class="pb-filter-btn" data-filter="待加強" onclick="filterPassbookTable('待加強')">💪 待加強</button>
+            </div>
+          </div>
+
+          <div class="teacher-table-wrap" style="max-height: 360px;">
+            <table class="teacher-table">
+              <thead>
+                <tr>
+                  <th>領域專區</th>
+                  <th>練習單元名稱</th>
+                  <th>熟練度狀態</th>
+                  <th>學習心得 / 錯題備註</th>
+                  <th>紀錄時間</th>
+                  <th>特訓</th>
+                </tr>
+              </thead>
+              <tbody id="passbookTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" onclick="printPassbook()">🖨️ 列印存摺證明</button>
+        <button class="btn-modal btn-modal-primary" onclick="closeModal('learningPassbookModal')">關閉存摺</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 4: 教師管理後台彈窗 (Teacher Dashboard Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="teacherModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">⚙️ 教師管理後台 &middot; 全班練習概況</div>
+        <button class="modal-close-btn" onclick="closeModal('teacherModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="teacher-panel-container">
+          <div class="teacher-toolbar">
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <label style="font-weight: 700; font-size: 13.5px;">篩選班級：</label>
+              <select id="teacherClassSelect" class="filter-select" style="padding: 6px 14px; width: auto;" onchange="renderTeacherTable()">
+                <option value="all">全部班級</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn-sm btn-teacher-primary" onclick="exportRecordsToCSV()">📊 匯出 CSV 成績表</button>
+              <button class="btn-sm btn-teacher-accent" onclick="renderTeacherTable()">🔄 重新整理</button>
+              <button class="btn-sm btn-teacher-danger" onclick="clearAllPracticeDataPrompt()">🧹 清空全體紀錄</button>
+            </div>
+          </div>
+
+          <!-- 雙榮譽排行榜 (教師後台專屬呈現) -->
+          <div class="leaderboards-grid" style="margin-bottom: 20px;">
+            <div class="leaderboard-card">
+              <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                  <span>👑</span> 完成進度排行榜
+                </div>
+                <span style="font-size: 12px; color: var(--text-muted);">依完成練習神器總數排序</span>
+              </div>
+              <ul class="leaderboard-list" id="completionLeaderboard">
+                <li style="text-align: center; color: var(--text-muted); padding: 15px; font-size: 13px;">尚未有完成紀錄，登入並紀錄成果成為第一名！</li>
+              </ul>
+            </div>
+
+            <div class="leaderboard-card">
+              <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                  <span>🏆</span> 精熟最多排行榜
+                </div>
+                <span style="font-size: 12px; color: var(--text-muted);">依精熟 (🌟) 項目排序</span>
+              </div>
+              <ul class="leaderboard-list" id="masteryLeaderboard">
+                <li style="text-align: center; color: var(--text-muted); padding: 15px; font-size: 13px;">尚未有精熟紀錄，快來挑戰精熟吧！</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="teacher-table-wrap">
+            <table class="teacher-table">
+              <thead>
+                <tr>
+                  <th>班級</th>
+                  <th>座號</th>
+                  <th>姓名</th>
+                  <th>完成題數</th>
+                  <th>精熟題數 (🌟)</th>
+                  <th>完成率</th>
+                  <th>最後更新</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="teacherTableBody">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">載入學生練習資料中...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" onclick="closeModal('teacherModal')">關閉後台</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 6: 教師通行密碼輸入彈窗 (密碼遮罩 *)
+       ======================================================== -->
+  <div class="modal-backdrop" id="teacherAuthModal">
+    <div class="modal-card" style="max-width: 420px;">
+      <div class="modal-header">
+        <div class="modal-title">🔐 教師管理後台登入</div>
+        <button class="modal-close-btn" onclick="closeModal('teacherAuthModal')">✕</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+          請輸入教師管理通行密碼以進入系統：
+        </p>
+        <div class="form-group">
+          <input type="password" id="teacherPassInput" class="form-control" placeholder="••••••••" style="text-align: center; font-size: 24px; letter-spacing: 6px;" autofocus>
+        </div>
+        <div id="teacherAuthErrorMsg" style="color: var(--danger); font-size: 13px; font-weight: 700; display: none; margin-bottom: 10px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" onclick="closeModal('teacherAuthModal')">取消</button>
+        <button class="btn-modal btn-modal-primary" onclick="verifyTeacherPass()">確認登入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 5: 個別學生練習詳情彈窗 (Student Detail Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="studentDetailModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <div class="modal-title" id="studentDetailTitle">📋 學生練習明細</div>
+        <button class="modal-close-btn" onclick="closeModal('studentDetailModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="studentDetailSummary" style="margin-bottom: 16px; padding: 12px; background: var(--surface-subtle); border-radius: var(--radius-sm); font-size: 14px;"></div>
+        <!-- 雙榮譽排行榜 (教師後台專屬呈現) -->
+          <div class="leaderboards-grid" style="margin-bottom: 20px;">
+            <div class="leaderboard-card">
+              <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                  <span>👑</span> 完成進度排行榜
+                </div>
+                <span style="font-size: 12px; color: var(--text-muted);">依完成練習神器總數排序</span>
+              </div>
+              <ul class="leaderboard-list" id="completionLeaderboard">
+                <li style="text-align: center; color: var(--text-muted); padding: 15px; font-size: 13px;">尚未有完成紀錄，登入並紀錄成果成為第一名！</li>
+              </ul>
+            </div>
+
+            <div class="leaderboard-card">
+              <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                  <span>🏆</span> 精熟最多排行榜
+                </div>
+                <span style="font-size: 12px; color: var(--text-muted);">依精熟 (🌟) 項目排序</span>
+              </div>
+              <ul class="leaderboard-list" id="masteryLeaderboard">
+                <li style="text-align: center; color: var(--text-muted); padding: 15px; font-size: 13px;">尚未有精熟紀錄，快來挑戰精熟吧！</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="teacher-table-wrap">
+          <table class="teacher-table">
+            <thead>
+              <tr>
+                <th>專區</th>
+                <th>單元名稱</th>
+                <th>練習狀態</th>
+                <th>心得備註</th>
+                <th>完成時間</th>
+              </tr>
+            </thead>
+            <tbody id="studentDetailTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" onclick="closeModal('studentDetailModal')">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 7: 刪除學生資料安全密碼確認彈窗 (Delete Student Modal)
+       ======================================================== -->
+  <div class="modal-backdrop" id="deleteStudentModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header" style="background: #fff5f5; border-bottom-color: #ffd6d6;">
+        <div class="modal-title" style="color: var(--danger);">
+          <span>🗑️</span> 刪除學生練習紀錄
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('deleteStudentModal')">✕</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div style="background: rgba(231, 76, 60, 0.08); border: 1px solid rgba(231, 76, 60, 0.25); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 16px; text-align: left;">
+          <p style="margin: 0; color: #c0392b; font-weight: 700; font-size: 14px;" id="deleteStudentWarningText">
+            ⚠️ 確定要刪除學生【-】的全部雲端紀錄嗎？
+          </p>
+          <p style="margin: 6px 0 0; color: var(--text-muted); font-size: 12.5px;">
+            此操作將永久清除該學生的學習存摺、133 項測驗進度與排行榜積分，無法還原！
+          </p>
+        </div>
+
+        <p style="color: var(--text-main); font-size: 13.5px; font-weight: 600; margin-bottom: 10px;">
+          請輸入教師管理通行密碼確認刪除：
+        </p>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <input type="password" id="deleteStudentPassInput" class="form-control" placeholder="••••••••" style="text-align: center; font-size: 22px; letter-spacing: 5px;">
+        </div>
+        <div id="deleteStudentErrorMsg" style="color: var(--danger); font-size: 13px; font-weight: 700; display: none; margin-bottom: 8px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal btn-modal-cancel" onclick="closeModal('deleteStudentModal')">取消</button>
+        <button class="btn-modal" style="background: var(--danger); color: #fff; border: none; font-weight: 700;" onclick="confirmDeleteStudent()">確認永久刪除</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. FIREBASE CONFIGURATION & HYBRID STORAGE
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHmla0pVHvuj3RfdnEphapKT14HMak_uM",
+      authDomain: "junsharestation.firebaseapp.com",
+      databaseURL: "https://junsharestation-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "junsharestation",
+      storageBucket: "junsharestation.firebasestorage.app",
+      messagingSenderId: "994865455871",
+      appId: "1:994865455871:web:4bafe13dcba968f6dd62ca"
+    };
+
+    let database = null;
+    let practiceRecordsRef = null;
+    let isFirebaseActive = false;
+
+    try {
+      if (typeof firebase !== "undefined" && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        practiceRecordsRef = database.ref('xuesixuan_practice_portal_records');
+        isFirebaseActive = true;
+      }
+    } catch (e) {
+      console.warn("Firebase 未啟用或離線模式：", e);
+    }
+
+    // LocalStorage Keys
+    const STORAGE_KEYS = {
+      STUDENT_SESSION: 'xuesixuan_student_session',
+      LOCAL_RECORDS: 'xuesixuan_local_records',
+      FAV_LIST: 'xuesixuan_fav_list',
+      HISTORY_LIST: 'xuesixuan_history_list'
+    };
+
+    // State Variables
+    let currentStudent = null;       // { class: "701", seat: 1, name: "王小明" }
+    let studentRecords = {};         // { itemId: { status, score, note, lastUpdated } }
+    let allStudentsCloudRecords = {}; // For leaderboards and teacher dashboard
+    let activeAuthAction = null;     // { mode: 'verify'|'setup', studentKey, savedPin, student }
+    let currentRecordingQuiz = null; // Quiz object being edited
+    let selectedModalStatus = '精熟';
+
+    // ==========================================
+    // 2. 練習神器完整資料庫 (133項)
+    // ==========================================
+    const SUB_KUOBAO = "kuobao-practice";
+    const SUB_LANG = "yuwen-practice";
+    const SUB_ORANGE = "orange-practice";
+
+    const QUIZ_DATABASE = [
+      // ── 語文補給站 (八上 · 語文補給站) ──
+      { id: "supply_01", title: "移覺（通感）修辭互動學習殿堂", grade: "八上", mainCategory: "語文補給站", subCategory: "語文補給站", category: "語文補給站", section: "supply", path: `${SUB_KUOBAO}/yijay.html`, desc: "將一種感官感覺轉化為另一種感官經驗的移覺（通感）修辭互動學習殿堂，含動態星盤、典範圖鑑與語音朗讀。", icon: "✨" },
+      { id: "supply_02", title: "時序之美：傳統節日與二十四節氣殿堂", grade: "八上", mainCategory: "語文補給站", subCategory: "語文補給站", category: "語文補給站", section: "supply", path: `${SUB_KUOBAO}/holiday.html`, desc: "探索傳統四大節日、民俗活動、二十四節氣時序之美與古典詩詞對應互動學習殿堂。", icon: "🏮" },
+      // ── 語文學習集 (七上 · 語文形音義) ──
+      { id: "lang_47", title: "常誤讀字-「吐」的注音辨識", grade: "七上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-tu.html`, desc: "精準辨別多音字「吐」的不同讀音與語境用法。", icon: "🔤" },
+      // ── 語文學習集 (七上 · 語文成語) ──
+      { id: "lang_48", title: "誇飾成語", grade: "七上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-hyperbole.html`, desc: "包含放大或縮小誇飾修辭手法的成語專題。", icon: "💡" },
+      { id: "lang_49", title: "朋友相關成語", grade: "七上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-friends.html`, desc: "管鮑之交、刎頸之交等各類交情與友誼成語大全。", icon: "💡" },
+      { id: "lang_50", title: "論語相關成語", grade: "七上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-analects.html`, desc: "孔門弟子言行與《論語》名篇淬鍊出的千古成語。", icon: "💡" },
+      // ── 語文學習集 (七上 · 詞語運用) ──
+      { id: "lang_51", title: "然字詞語", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-word-ran.html`, desc: "「然」字在古代漢語中作為形容詞後綴與副詞的用法。", icon: "💬" },
+      { id: "lang_52", title: "映襯法", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-rhetoric-contrast.html`, desc: "反襯、對襯、雙襯等對比鮮明的映襯修辭練習。", icon: "💬" },
+      { id: "lang_53", title: "年齡代稱", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-culture-age.html`, desc: "垂髫、總角、及笄、弱冠、而立、知命、花甲等年歲借代。", icon: "💬" },
+      { id: "lang_54", title: "死亡代稱", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-culture-death.html`, desc: "崩、薨、卒、不祿、歿、羽化、圓寂等身分死亡用語。", icon: "💬" },
+      { id: "lang_55", title: "諧義歇後語", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-allegory-meaning.html`, desc: "前後意義關聯引申的民間智慧歇後語大考驗。", icon: "💬" },
+      { id: "lang_56", title: "諧音歇後語", grade: "七上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-allegory-homophone.html`, desc: "巧妙運用同音、近音雙關的幽默歇後語配對。", icon: "💬" },
+      // ── 語文學習集 (七上 · 文化常識) ──
+      { id: "lang_57", title: "動物猜謎", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-riddle-animals.html`, desc: "趣味燈謎與特徵描述猜測動物的益智文學題。", icon: "📜" },
+      { id: "lang_58", title: "詠物詩(動物植物)", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-flora-fauna.html`, desc: "蟬、螢、松、竹、梅、菊等動植物托物言志詩判斷。", icon: "📜" },
+      { id: "lang_59", title: "詠物詩(物品及其他)", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-objects.html`, desc: "風箏、蠟燭、鏡子、傘等生活器物詠物名詩解讀。", icon: "📜" },
+      { id: "lang_60", title: "季節(相關詞句)", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-season-verses.html`, desc: "從古典詩詞描寫的景物氣候準確判定春夏秋冬四季。", icon: "📜" },
+      { id: "lang_61", title: "季節(關鍵字詞)", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-season-keywords.html`, desc: "東風、荷花、金風、朔風等季節密碼快速捕捉。", icon: "📜" },
+      { id: "lang_62", title: "文意大補帖-中式", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-comprehension-chinese.html`, desc: "傳統中華文人思維與經典篇章文意強化訓練。", icon: "📜" },
+      { id: "lang_63", title: "文意大補帖-西式", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-comprehension-western.html`, desc: "西方哲理名言與翻譯文學閱讀理解關鍵素養。", icon: "📜" },
+      { id: "lang_64", title: "論語相關佳句", grade: "七上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-analects-quotes.html`, desc: "《論語》修身、求學、交友、處世重要名句精解。", icon: "📜" },
+      // ── 語文學習集 (七下 · 語文形音義) ──
+      { id: "lang_65", title: "生僻字重要詞語版", grade: "七下", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-rare-words.html`, desc: "經典文章與文白語境中的重要生僻字詞判讀。", icon: "🔤" },
+      // ── 語文學習集 (七下 · 詞語運用) ──
+      { id: "lang_66", title: "方位詞判斷", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-direction-words.html`, desc: "東南西北前後左右的實指方位與文化象徵涵義。", icon: "💬" },
+      { id: "lang_67", title: "同義反義偏義複詞", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-compound-words.html`, desc: "偏義複詞重點突破與同義、反義構詞規則判斷。", icon: "💬" },
+      { id: "lang_68", title: "雙重否定判斷", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-double-negation.html`, desc: "否定詞疊加產生的強烈肯定文意與邏輯辨識。", icon: "💬" },
+      { id: "lang_69", title: "量詞", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-classifiers.html`, desc: "中文豐富細膩的名量詞與動量詞搭配與文法測驗。", icon: "💬" },
+      { id: "lang_70", title: "實數虛數", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-numbers-real-virtual.html`, desc: "判斷詩文中數字是真實計數還是形容極多、極少的虛指。", icon: "💬" },
+      { id: "lang_71", title: "摹寫修辭", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-rhetoric-sensory.html`, desc: "視覺、聽覺、嗅覺、味覺、觸覺五官感受摹寫辨識。", icon: "💬" },
+      { id: "lang_72", title: "慣用語", grade: "七下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-idiomatic-phrases.html`, desc: "炒魷魚、敲竹槓、馬後砲等生動三字常考慣用語。", icon: "💬" },
+      // ── 語文學習集 (七下 · 語文常識) ──
+      { id: "lang_73", title: "六書寶典", grade: "七下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-six-writings.html`, desc: "象形、指事、會意、形聲、轉注、假借六書造字原則完整拆解。", icon: "📖" },
+      { id: "lang_74", title: "書體判斷", grade: "七下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-calligraphy-judgment.html`, desc: "甲骨文、金文、篆書、隸書、楷書、行書、草書演變與字形特徵判讀。", icon: "📖" },
+      // ── 語文學習集 (七下 · 文化常識) ──
+      { id: "lang_75", title: "顏色字判斷", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-color-words.html`, desc: "青、白、朱、赤、玄、緇等顏色詞的實指與借代活用。", icon: "📜" },
+      { id: "lang_76", title: "古今用語大不同──人物篇", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-ancient-modern-people.html`, desc: "細作、郎中、捕快、仵作等古代職稱與現代稱謂對照。", icon: "📜" },
+      { id: "lang_77", title: "古今用語大不同──人體部位、動作", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-ancient-modern-body.html`, desc: "古代人體器官與動作詞彙的古今意義演變對比。", icon: "📜" },
+      { id: "lang_78", title: "古今容器大集合", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-ancient-vessels.html`, desc: "樽、爵、觥、罈、鼎等古代各類酒器、食器與容量名稱。", icon: "📜" },
+      { id: "lang_79", title: "外來語", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-loanwords.html`, desc: "梵語、英語、日語等外來音譯詞與意譯詞辨析。", icon: "📜" },
+      { id: "lang_80", title: "詠人(詩詞句)", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-people-verses.html`, desc: "判斷古典詩詞中所歌詠讚頌的歷史風雲人物名句。", icon: "📜" },
+      { id: "lang_81", title: "詠人(關鍵字)", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-people-keywords.html`, desc: "從詩中線索特徵詞迅速推敲鎖定歷史名將文人。", icon: "📜" },
+      { id: "lang_82", title: "古今用語大不同──職業篇", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-ancient-modern-occupations.html`, desc: "仵作、庖丁、戲子、店小二、捕快、郎中等古代職業稱呼與現代職稱對照辨析。", icon: "📜" },
+      { id: "lang_83", title: "詩詞常見意象", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-imagery.html`, desc: "月（思鄉）、柳（送別）、杜鵑（哀怨）、鴻雁（書信）、浮雲（遊子）等古典詩詞意象密碼。", icon: "📜" },
+      { id: "lang_84", title: "詩詞表現手法", grade: "七下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-poetry-techniques.html`, desc: "借景抒情、托物言志、虛實相生、動靜結合、以樂襯哀等古典詩歌核心修辭表現手法。", icon: "📜" },
+      // ── 語文學習集 (八上 · 語文形音義) ──
+      { id: "lang_85", title: "通同字", grade: "八上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-interchangeable-chars.html`, desc: "古今文言常見通假字、古今字與異體字辨別對照。", icon: "🔤" },
+      // ── 語文學習集 (八上 · 語文成語) ──
+      { id: "lang_86", title: "疊字成語", grade: "八上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-reduplication.html`, desc: "AABB、AABC、ABAC等含有重疊字的經典成語。", icon: "💡" },
+      { id: "lang_87", title: "與人相關成語", grade: "八上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-people.html`, desc: "描寫人的神態、品德、容貌與舉止特徵的成語。", icon: "💡" },
+      { id: "lang_88", title: "《世說新語》相關成語", grade: "八上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-shishuo.html`, desc: "魏晉名士風流與《世說新語》名篇所產生的成語。", icon: "💡" },
+      { id: "lang_89", title: "《史記》相關成語", grade: "八上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-shiji.html`, desc: "司馬遷《史記》中百轉千迴的英雄歷史成語。", icon: "💡" },
+      { id: "lang_90", title: "《史記》經典成語", grade: "八上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-shiji-classic.html`, desc: "《史記》核心焦點名句與必考精選成語。", icon: "💡" },
+      // ── 語文學習集 (八上 · 詞語運用) ──
+      { id: "lang_91", title: "疊字詞", grade: "八上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-word-reduplication.html`, desc: "古詩文與現代散文中各種重疊詞的意象表達與修辭。", icon: "💬" },
+      { id: "lang_92", title: "連接詞運用", grade: "八上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-conjunctions.html`, desc: "因果、轉折、遞進、條件等複句關聯詞精確選用。", icon: "💬" },
+      { id: "lang_93", title: "移覺(通感)修辭", grade: "八上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-rhetoric-synesthesia.html`, desc: "將一種感官感覺轉化為另一種感官經驗的移覺修辭突破。", icon: "💬" },
+      { id: "lang_94", title: "狀聲詞", grade: "八上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-onomatopoeia.html`, desc: "摹擬風聲、雨聲、流水聲、笑聲等萬物聲音的詞彙。", icon: "💬" },
+      // ── 語文學習集 (八上 · 語文常識) ──
+      { id: "lang_95", title: "判斷句型", grade: "八上", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-sentence-types.html`, desc: "敘事句、有無句、表態句、判斷句四大基本句型辨析。", icon: "📖" },
+      { id: "lang_96", title: "詞性判斷", grade: "八上", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-part-of-speech.html`, desc: "名詞、動詞、形容詞、副詞、介詞、連詞精準定位。", icon: "📖" },
+      { id: "lang_97", title: "詞性活用判斷", grade: "八上", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-pos-inflection.html`, desc: "名詞作動詞、形容詞作動詞等文言轉品活用解析。", icon: "📖" },
+      { id: "lang_98", title: "詞性結構判斷", grade: "八上", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-pos-structure.html`, desc: "成語與四字詞內部詞性結構（如：名動名動、副形副形）。", icon: "📖" },
+      // ── 語文學習集 (八上 · 文化常識) ──
+      { id: "lang_99", title: "二十四節氣", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-24-solar-terms.html`, desc: "立春至大寒二十四節氣順序、氣候特徵與農事生活文化。", icon: "📜" },
+      { id: "lang_100", title: "小說流變", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-novel-evolution.html`, desc: "筆記小說、傳奇、話本、明清四大奇書與章回小說脈絡。", icon: "📜" },
+      { id: "lang_101", title: "小說回目", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-novel-chapters.html`, desc: "《三國演義》、《水滸傳》、《西遊記》、《紅樓夢》回目對應。", icon: "📜" },
+      { id: "lang_102", title: "《世說新語》36類目", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-shishuo-36-categories.html`, desc: "德行、言語、政事、文學、雅量、豪爽等門類篇章分類。", icon: "📜" },
+      { id: "lang_103", title: "節慶(詩詞句)", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-festival-poems.html`, desc: "春節、元宵、清明、端午、七夕、中秋、重陽傳統節令詩句。", icon: "📜" },
+      { id: "lang_104", title: "古文格言", grade: "八上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-prose-maxims.html`, desc: "歷代古文名家警策名言、修身處世哲理與歷屆大考常考經典格言精解。", icon: "📜" },
+      // ── 語文學習集 (八下 · 語文形音義) ──
+      { id: "lang_105", title: "常誤讀字-美食類別", grade: "八下", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-food.html`, desc: "日常飲食與菜單中經常讀錯的特殊國字注音。", icon: "🔤" },
+      { id: "lang_106", title: "常誤讀字-蟲魚鳥獸", grade: "八下", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-animals.html`, desc: "大自然動植物與生物專用字的特殊正確讀音。", icon: "🔤" },
+      // ── 語文學習集 (八下 · 語文成語) ──
+      { id: "lang_107", title: "三國演義成語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-three-kingdoms.html`, desc: "三顧茅廬、草船借箭、望梅止渴等《三國演義》英雄人物傳奇成語典故精選。", icon: "💡" },
+      { id: "lang_108", title: "動物植物大自然成語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-nature.html`, desc: "取材於鳥獸花木與大自然景觀的成語典故。", icon: "💡" },
+      // ── 語文學習集 (八下 · 詞語運用) ──
+      { id: "lang_109", title: "句子的語氣", grade: "八下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-sentence-tone.html`, desc: "陳述、疑問、反詰、感嘆、祈使、推測等語氣判斷。", icon: "💬" },
+      { id: "lang_110", title: "一詞多義", grade: "八下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-word-polysemy.html`, desc: "同一詞彙在不同句子情境中的文意與詞義判斷。", icon: "💬" },
+      { id: "lang_111", title: "ABB疊詞型形容詞", grade: "八下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-abb-adjectives.html`, desc: "綠油油、白茫茫、沉甸甸等ABB疊詞形容詞用法。", icon: "💬" },
+      { id: "lang_112", title: "病句判斷(詞語誤用&冗詞贅字)", grade: "八下", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-faulty-sentences.html`, desc: "會考常考病句挑錯：成分殘缺、語義重複、詞語誤用。", icon: "💬" },
+      // ── 語文學習集 (八下 · 語文常識) ──
+      { id: "lang_113", title: "書信——書信與謙詞敬語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-letters-courtesy.html`, desc: "稱謂、提稱語、結尾問候語與家大人、家慈等謙敬用語規範。", icon: "📖" },
+      { id: "lang_114", title: "題辭大全", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-inscriptions-all.html`, desc: "婚嫁、祝壽、生子、喬遷、開業、哀輓等場合題辭總覽。", icon: "📖" },
+      { id: "lang_115", title: "題辭成語(初階_考成語版)", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-inscriptions-basic.html`, desc: "依情境場合選填正確題辭成語之基礎實力測驗。", icon: "📖" },
+      { id: "lang_116", title: "題辭成語(考分類版)", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-inscriptions-category.html`, desc: "各類經典題辭所屬場合分類判定（如嫁女、男壽等）。", icon: "📖" },
+      { id: "lang_117", title: "題辭成語(考成語版)", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-inscriptions-advanced.html`, desc: "題辭深度進階應用題與常考成語精熟挑戰。", icon: "📖" },
+      { id: "lang_118", title: "對聯判斷", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-couplets-judgment.html`, desc: "上下聯字數相等、詞性對仗、平仄協調（仄起平收）及春聯、行業聯、題賀聯情境判讀。", icon: "📖" },
+      { id: "lang_119", title: "謙詞敬語-01與親友稱呼有關的敬語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-courtesy-01-honorific-relatives.html`, desc: "尊翁、令堂、令尊、令愛、令郎、貴寶號等對他人尊長親友之敬稱用語。", icon: "📖" },
+      { id: "lang_120", title: "謙詞敬語-02與親友稱呼有關的謙詞", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-courtesy-02-humble-relatives.html`, desc: "家父、家母、舍弟、舍妹、小兒、犬子、寒舍等對己方家族親友之謙稱用語。", icon: "📖" },
+      { id: "lang_121", title: "謙詞敬語-03與人的所有物有關的謙詞敬語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-courtesy-03-possessions.html`, desc: "大作、尊容、貴姓、法眼（敬詞）與拙作、愚見、敝校、菲酌（謙詞）之辨析運用。", icon: "📖" },
+      { id: "lang_122", title: "謙詞敬語-04與人的事情有關的謙詞敬語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-courtesy-04-actions.html`, desc: "賜教、垂青、光臨、借光（敬詞）與拜訪、叨擾、敬謝不敏、洗耳恭聽（謙詞）之辨析運用。", icon: "📖" },
+      { id: "lang_123", title: "謙詞敬語-05謙詞敬語-書信往來訪客迎賓的謙詞敬語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-courtesy-05-letters-guests.html`, desc: "書信啟封詞、提稱語、客套祝頌及迎賓會客社交往來之謙敬用語綜合檢測。", icon: "📖" },
+      { id: "lang_124", title: "書信稱謂", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-letters-appellations.html`, desc: "祖父母、父母、師長、平輩、晚輩書信稱謂與自稱規範（如門生、受業、愚弟、父字）。", icon: "📖" },
+      { id: "lang_125", title: "書信用語", grade: "八下", mainCategory: "語文學習集", subCategory: "語文常識", category: "語文常識", section: "chinese", path: `${SUB_LANG}/yuwen-letters-terminology.html`, desc: "提稱語（膝下、尊前、道鑒）、啟事敬詞、申石詞、結尾祝候語及署名禮告詞大全。", icon: "📖" },
+      // ── 語文學習集 (八下 · 文化常識) ──
+      { id: "lang_126", title: "三十六計", grade: "八下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-thirty-six-stratagems.html`, desc: "勝戰計、敵戰計、攻戰計等三十六計謀略名稱與內涵。", icon: "📜" },
+      { id: "lang_127", title: "三國演義歇後語", grade: "八下", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-allegory-three-kingdoms.html`, desc: "劉備借荊州、周瑜打黃蓋、張飛捉螞蚱等三國人物情節相關之民間趣味歇後語。", icon: "📜" },
+      // ── 語文學習集 (九上 · 語文形音義) ──
+      { id: "lang_128", title: "常誤讀字-成語類別", grade: "九上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-idioms.html`, desc: "成語中容易讀錯字音的高頻考題與字音糾正。", icon: "🔤" },
+      { id: "lang_129", title: "常誤讀字-綜合練習(上)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-comprehensive-1.html`, desc: "國中會考必備常用字易讀錯音綜合辨析練習(上)。", icon: "🔤" },
+      { id: "lang_130", title: "常誤讀字-綜合練習(下)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-misread-comprehensive-2.html`, desc: "國中會考必備常用字易讀錯音綜合辨析練習(下)。", icon: "🔤" },
+      { id: "lang_131", title: "易錯字一百", grade: "九上", mainCategory: "語文學習集", subCategory: "語文形音義", category: "語文形音義", section: "chinese", path: `${SUB_LANG}/yuwen-typo-hundred.html`, desc: "國中生與會考歷屆最常混淆誤寫之一百組關鍵字形辨析與改錯特訓。", icon: "🔤" },
+      // ── 語文學習集 (九上 · 語文成語) ──
+      { id: "lang_132", title: "四字以上成語(上)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-multi-char-1.html`, desc: "五字、六字、八字等長句熟語與諺語成語(上)。", icon: "💡" },
+      { id: "lang_133", title: "四字以上成語(中)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-multi-char-2.html`, desc: "五字、六字、八字等長句熟語與諺語成語(中)。", icon: "💡" },
+      { id: "lang_134", title: "四字以上成語(下)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-multi-char-3.html`, desc: "五字、六字、八字等長句熟語與諺語成語(下)。", icon: "💡" },
+      { id: "lang_135", title: "歷史人物典故成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-historical-figures.html`, desc: "項羽、劉邦、諸葛亮、蘇軾等歷史名人相關成語配對。", icon: "💡" },
+      { id: "lang_136", title: "經典基測、會考成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-exam-classics.html`, desc: "歷屆基測與會考出現頻率最高的核心焦點成語總整理。", icon: "💡" },
+      { id: "lang_137", title: "相似相反成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-synonyms-antonyms.html`, desc: "成語近義詞與反義詞對照配對與語意比較測驗。", icon: "💡" },
+      { id: "lang_138", title: "褒義貶義成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-commendatory-derogatory.html`, desc: "成語感情色彩（褒義、貶義、中性）之精確判定。", icon: "💡" },
+      { id: "lang_139", title: "雙句成語(上)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-paired-1.html`, desc: "前後兩句呼應對仗的經典成語典故(上)。", icon: "💡" },
+      { id: "lang_140", title: "雙句成語(下)", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-paired-2.html`, desc: "前後兩句呼應對仗的經典成語典故(下)。", icon: "💡" },
+      { id: "lang_141", title: "書籍典故成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-book-allusions.html`, desc: "出自《左傳》、《莊子》、《戰國策》等名著的成語。", icon: "💡" },
+      { id: "lang_142", title: "孟子相關成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-mencius.html`, desc: "《孟子》雄辯滔滔中蘊含的深刻哲理成語。", icon: "💡" },
+      { id: "lang_143", title: "戰國策相關成語", grade: "九上", mainCategory: "語文學習集", subCategory: "語文成語", category: "語文成語", section: "chinese", path: `${SUB_LANG}/yuwen-idiom-zhanguoce.html`, desc: "狡兔三窟、狐假虎威、鷸蚌相爭等《戰國策》縱橫策士經典歷史成語與典故探究。", icon: "💡" },
+      // ── 語文學習集 (九上 · 詞語運用) ──
+      { id: "lang_144", title: "易混淆詞語", grade: "九上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-confusable-words.html`, desc: "字形或字義相近但用法大不相同的常考詞語辨析。", icon: "💬" },
+      { id: "lang_145", title: "生活常用詞", grade: "九上", mainCategory: "語文學習集", subCategory: "詞語運用", category: "詞語運用", section: "chinese", path: `${SUB_LANG}/yuwen-daily-words.html`, desc: "日常會話與寫作中經常使用與容易用錯的詞彙。", icon: "💬" },
+      // ── 語文學習集 (九上 · 文化常識) ──
+      { id: "lang_146", title: "句子涵義(白話文)", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-sentence-meaning-vernacular.html`, desc: "現代散文名篇佳句深層主旨與文意脈絡理解。", icon: "📜" },
+      { id: "lang_147", title: "句子涵義(文言文)", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-sentence-meaning-classical.html`, desc: "文言經典名言直譯、意譯與哲理內涵解析。", icon: "📜" },
+      { id: "lang_148", title: "句子涵義(俗諺)", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-sentence-meaning-proverbs.html`, desc: "民間智慧俗語、格言、警句的涵義與情境應用。", icon: "📜" },
+      { id: "lang_149", title: "蘇軾名句填空", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-quotes-sushi.html`, desc: "東坡名篇〈赤壁賦〉、〈念奴嬌〉、〈水調歌頭〉、〈記承天寺夜遊〉千古名句精準填空。", icon: "📜" },
+      { id: "lang_150", title: "宋詞50精選填空", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-song-ci-50.html`, desc: "李清照、辛棄疾、蘇軾、歐陽脩、柳永等兩宋豪放婉約名家五十首精選詞句填空。", icon: "📜" },
+      { id: "lang_151", title: "宋詞精選填空(上)", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-song-ci-1.html`, desc: "北宋名家詞作（晏殊、歐陽脩、柳永、蘇軾、秦觀等）經典名句精選填空測驗。", icon: "📜" },
+      { id: "lang_152", title: "宋詞精選填空(下)", grade: "九上", mainCategory: "語文學習集", subCategory: "文化常識", category: "文化常識", section: "chinese", path: `${SUB_LANG}/yuwen-song-ci-2.html`, desc: "南宋名家詞作（李清照、辛棄疾、陸游、姜夔等）千古傳誦經典名篇精選填空測驗。", icon: "📜" },
+      // ── 橘子形音義 (九上 · 字形) ──
+      { id: "orange_153", title: "(橘子)10-1[字形]易錯字(上)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-1-shape-typo-1.html`, desc: "形近易錯國字精準辨別特訓(上)。", icon: "🍊" },
+      { id: "orange_154", title: "(橘子)10-1[字形]易錯字(下)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-1-shape-typo-2.html`, desc: "形近易錯國字精準辨別特訓(下)。", icon: "🍊" },
+      { id: "orange_155", title: "(橘子)10-2[字形]常誤用字辨別", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-2-shape-misused.html`, desc: "字音相同但字義大不相同的易誤用字辨析。", icon: "🍊" },
+      { id: "orange_156", title: "(橘子)10-3[字形]形近字(上)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-3-shape-similar-1.html`, desc: "偏旁部首微小差異的形近字對比與造詞(上)。", icon: "🍊" },
+      { id: "orange_157", title: "(橘子)10-3[字形]形近字(中)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-3-shape-similar-2.html`, desc: "偏旁部首微小差異的形近字對比與造詞(中)。", icon: "🍊" },
+      { id: "orange_158", title: "(橘子)10-3[字形]形近字(下)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字形", category: "字形", section: "orange", path: `${SUB_ORANGE}/orange-10-3-shape-similar-3.html`, desc: "偏旁部首微小差異的形近字對比與造詞(下)。", icon: "🍊" },
+      // ── 橘子形音義 (九上 · 字音) ──
+      { id: "orange_159", title: "(橘子)11-1[字音]常誤讀字-01成語類別", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-idiom.html`, desc: "成語中極易讀錯的重點國字注音加強。", icon: "🍊" },
+      { id: "orange_160", title: "(橘子)11-1[字音]常誤讀字-02美食料理", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-food.html`, desc: "菜名、食材與料理手法的特殊讀音測驗。", icon: "🍊" },
+      { id: "orange_161", title: "(橘子)11-1[字音]常誤讀字-03蟲魚鳥獸", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-animals.html`, desc: "動植物名稱中的生僻專用字注音辨析。", icon: "🍊" },
+      { id: "orange_162", title: "(橘子)11-1[字音]常誤讀字-04其他(上)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-others-1.html`, desc: "日常生活與常見專有名詞常誤讀字(上)。", icon: "🍊" },
+      { id: "orange_163", title: "(橘子)11-1[字音]常誤讀字-04其他(中)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-others-2.html`, desc: "日常生活與常見專有名詞常誤讀字(中)。", icon: "🍊" },
+      { id: "orange_164", title: "(橘子)11-1[字音]常誤讀字-04其他(下)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-1-sound-others-3.html`, desc: "日常生活與常見專有名詞常誤讀字(下)。", icon: "🍊" },
+      { id: "orange_165", title: "(橘子)11-2[字音]一字多音(上)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-2-sound-polyphone-1.html`, desc: "破音字與多音字在不同詞性及語境中的讀音(上)。", icon: "🍊" },
+      { id: "orange_166", title: "(橘子)11-2[字音]一字多音(中)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-2-sound-polyphone-2.html`, desc: "破音字與多音字在不同詞性及語境中的讀音(中)。", icon: "🍊" },
+      { id: "orange_167", title: "(橘子)11-2[字音]一字多音(下)", grade: "九上", mainCategory: "橘子形音義", subCategory: "字音", category: "字音", section: "orange", path: `${SUB_ORANGE}/orange-11-2-sound-polyphone-3.html`, desc: "破音字與多音字在不同詞性及語境中的讀音(下)。", icon: "🍊" },
+      // ── 橘子形音義 (九上 · 字義) ──
+      { id: "orange_168", title: "(橘子)12-1[字義]一字多義-01", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-01.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-01。", icon: "🍊" },
+      { id: "orange_169", title: "(橘子)12-1[字義]一字多義-02", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-02.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-02。", icon: "🍊" },
+      { id: "orange_170", title: "(橘子)12-1[字義]一字多義-03", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-03.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-03。", icon: "🍊" },
+      { id: "orange_171", title: "(橘子)12-1[字義]一字多義-04", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-04.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-04。", icon: "🍊" },
+      { id: "orange_172", title: "(橘子)12-1[字義]一字多義-05", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-05.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-05。", icon: "🍊" },
+      { id: "orange_173", title: "(橘子)12-1[字義]一字多義-06", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-06.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-06。", icon: "🍊" },
+      { id: "orange_174", title: "(橘子)12-1[字義]一字多義-07", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-07.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-07。", icon: "🍊" },
+      { id: "orange_175", title: "(橘子)12-1[字義]一字多義-08", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-08.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-08。", icon: "🍊" },
+      { id: "orange_176", title: "(橘子)12-1[字義]一字多義-09", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-09.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-09。", icon: "🍊" },
+      { id: "orange_177", title: "(橘子)12-1[字義]一字多義-10", grade: "九上", mainCategory: "橘子形音義", subCategory: "字義", category: "字義", section: "orange", path: `${SUB_ORANGE}/orange-12-1-meaning-polysemy-10.html`, desc: "國中關鍵核心字詞多重語意延伸與文白對比-10。", icon: "🍊" }
+    ];
+
+
+    // ==========================================
+    // 3. 學生身分與登入核心邏輯
+    // ==========================================
+    function getStudentKey(student) {
+      if (!student) return 'guest';
+      const cleanClass = String(student.class).replace(/[^a-zA-Z0-9]/g, '');
+      const cleanSeat = String(student.seat).padStart(2, '0');
+      return `${cleanClass}_${cleanSeat}`;
+    }
+
+    function loadStudentSession() {
+      try {
+        const savedSession = localStorage.getItem(STORAGE_KEYS.STUDENT_SESSION);
+        if (savedSession) {
+          currentStudent = JSON.parse(savedSession);
+          updateStudentUI();
+          loadStudentRecords();
+        } else {
+          currentStudent = null;
+          updateStudentUI();
+          loadStudentRecords();
+        }
+      } catch (e) {
+        console.error("載入學生狀態失敗：", e);
+      }
+    }
+
+    function updateStudentUI() {
+      const avatarEl = document.getElementById("studentAvatar");
+      const nameEl = document.getElementById("studentNameDisplay");
+      const roleEl = document.getElementById("studentRoleDisplay");
+      const btnLoginToggle = document.getElementById("btnLoginToggle");
+      const btnLogoutBtn = document.getElementById("btnLogoutBtn");
+
+      if (currentStudent) {
+        const initial = currentStudent.name ? currentStudent.name.charAt(0) : "生";
+        avatarEl.textContent = initial;
+        nameEl.innerHTML = `${currentStudent.class}班 ${currentStudent.seat}號 <strong>${currentStudent.name}</strong> ▾`;
+        roleEl.textContent = "雲端同步已就緒 &middot; 點擊可切換身分或變更密碼";
+        btnLoginToggle.textContent = "🔄 切換身分";
+        btnLogoutBtn.style.display = "inline-flex";
+      } else {
+        avatarEl.textContent = "訪";
+        nameEl.textContent = "訪客模式 (未登入) ▾";
+        roleEl.textContent = "點此登入身分，即可雲端/本機記錄您的練習成果！";
+        btnLoginToggle.textContent = "🔑 登入身分";
+        btnLogoutBtn.style.display = "none";
+      }
+    }
+
+    function openStudentAuthModal() {
+      const modal = document.getElementById("studentAuthModal");
+      const step1 = document.getElementById("authStep1Form");
+      const step2 = document.getElementById("authStep2Area");
+      const errorMsg = document.getElementById("pinErrorMsg");
+      
+      step1.style.display = "block";
+      step2.style.display = "none";
+      errorMsg.style.display = "none";
+      activeAuthAction = null;
+
+      if (currentStudent) {
+        document.getElementById("authClassInput").value = currentStudent.class;
+        document.getElementById("authSeatInput").value = currentStudent.seat;
+        document.getElementById("authNameInput").value = currentStudent.name;
+      }
+
+      openModal("studentAuthModal");
+      setTimeout(() => document.getElementById("authClassInput").focus(), 200);
+    }
+
+    function handleAuthStep1(e) {
+      e.preventDefault();
+      const classVal = document.getElementById("authClassInput").value.trim();
+      const seatVal = parseInt(document.getElementById("authSeatInput").value);
+      const nameVal = document.getElementById("authNameInput").value.trim();
+
+      if (!classVal || !seatVal || !nameVal) {
+        showToast("⚠️ 請完整填寫班級、座號與姓名！");
+        return;
+      }
+
+      const tempStudent = { class: classVal, seat: seatVal, name: nameVal };
+      const studentKey = getStudentKey(tempStudent);
+
+      const btnNext = document.getElementById("btnAuthNext");
+      const origText = btnNext.textContent;
+      btnNext.disabled = true;
+      btnNext.textContent = "連線查詢中...";
+
+      // 檢查 Firebase 或 LocalStorage 中的密碼
+      if (isFirebaseActive && practiceRecordsRef) {
+        practiceRecordsRef.child(`${studentKey}/profile`).once('value').then(snapshot => {
+          btnNext.disabled = false;
+          btnNext.textContent = origText;
+          const profile = snapshot.val() || {};
+          const savedPin = profile.pin;
+
+          setupPinStep(tempStudent, studentKey, savedPin);
+        }).catch(err => {
+          btnNext.disabled = false;
+          btnNext.textContent = origText;
+          console.warn("雲端查詢失敗，使用本地驗證：", err);
+          const localProfile = getLocalProfile(studentKey);
+          setupPinStep(tempStudent, studentKey, localProfile ? localProfile.pin : null);
+        });
+      } else {
+        btnNext.disabled = false;
+        btnNext.textContent = origText;
+        const localProfile = getLocalProfile(studentKey);
+        setupPinStep(tempStudent, studentKey, localProfile ? localProfile.pin : null);
+      }
+    }
+
+    function getLocalProfile(studentKey) {
+      try {
+        const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+        return records[studentKey] ? records[studentKey].profile : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setupPinStep(student, studentKey, savedPin) {
+      const step1 = document.getElementById("authStep1Form");
+      const step2 = document.getElementById("authStep2Area");
+      const desc = document.getElementById("pinPromptDesc");
+      const pinDigits = document.querySelectorAll(".pin-digit");
+
+      step1.style.display = "none";
+      step2.style.display = "block";
+      pinDigits.forEach(i => i.value = "");
+
+      if (savedPin) {
+        activeAuthAction = { mode: 'verify', studentKey, savedPin, student };
+        desc.innerHTML = `已找到 <strong>${student.class}班 ${student.seat}號 ${student.name}</strong> 的檔案！<br>請輸入 <strong>4 位數安全 PIN 碼</strong> 以載入紀錄：`;
+      } else {
+        activeAuthAction = { mode: 'setup', studentKey, savedPin: null, student };
+        desc.innerHTML = `歡迎首次使用！請自訂並牢記您的 <strong>4 位數安全 PIN 碼</strong>：`;
+      }
+
+      setupPinInputEvents();
+      setTimeout(() => pinDigits[0].focus(), 150);
+    }
+
+    function setupPinInputEvents() {
+      const pinDigits = document.querySelectorAll(".pin-digit");
+      pinDigits.forEach((input, idx) => {
+        input.oninput = (e) => {
+          const val = e.target.value;
+          if (!/^[0-9]$/.test(val)) {
+            e.target.value = '';
+            return;
+          }
+          if (val.length === 1 && idx < pinDigits.length - 1) {
+            pinDigits[idx + 1].focus();
+          }
+        };
+        input.onkeydown = (e) => {
+          if (e.key === 'Backspace' && e.target.value === '' && idx > 0) {
+            pinDigits[idx - 1].focus();
+            pinDigits[idx - 1].value = '';
+          } else if (e.key === 'Enter') {
+            submitAuthPin();
+          }
+        };
+      });
+    }
+
+    function backToAuthStep1() {
+      document.getElementById("authStep1Form").style.display = "block";
+      document.getElementById("authStep2Area").style.display = "none";
+      activeAuthAction = null;
+    }
+
+    function submitAuthPin() {
+      const pinDigits = document.querySelectorAll(".pin-digit");
+      let pinVal = "";
+      pinDigits.forEach(d => pinVal += d.value);
+
+      const errorMsg = document.getElementById("pinErrorMsg");
+
+      if (pinVal.length !== 4) {
+        errorMsg.textContent = "❌ 請完整輸入 4 位數數字密碼！";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if (!activeAuthAction) return;
+
+      const { mode, studentKey, savedPin, student } = activeAuthAction;
+
+      if (mode === 'verify') {
+        if (savedPin === pinVal) {
+          completeLogin(student, pinVal);
+        } else {
+          errorMsg.textContent = "❌ PIN 碼錯誤，請重新輸入！";
+          errorMsg.style.display = "block";
+          pinDigits.forEach(d => d.value = "");
+          pinDigits[0].focus();
+        }
+      } else if (mode === 'setup') {
+        completeLogin(student, pinVal);
+      }
+    }
+
+    function completeLogin(student, pin) {
+      currentStudent = student;
+      const studentKey = getStudentKey(student);
+
+      localStorage.setItem(STORAGE_KEYS.STUDENT_SESSION, JSON.stringify(student));
+
+      // 寫入/更新 Profile
+      const profileData = {
+        class: student.class,
+        seat: student.seat,
+        name: student.name,
+        pin: pin,
+        lastActive: Date.now()
+      };
+
+      if (isFirebaseActive && practiceRecordsRef) {
+        practiceRecordsRef.child(`${studentKey}/profile`).update(profileData).catch(e => console.warn(e));
+      }
+
+      // 更新本地檔案
+      try {
+        const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+        if (!records[studentKey]) records[studentKey] = {};
+        records[studentKey].profile = profileData;
+        localStorage.setItem(STORAGE_KEYS.LOCAL_RECORDS, JSON.stringify(records));
+      } catch (e) {}
+
+      updateStudentUI();
+      closeModal("studentAuthModal");
+      showToast(`🎉 歡迎，${student.name} 同學！已載入您的練習紀錄。`);
+      loadStudentRecords();
+    }
+
+    function handleStudentLogout() {
+      if (confirm("確定要登出當前身分嗎？（練習紀錄依然會保存在雲端與本機）")) {
+        localStorage.removeItem(STORAGE_KEYS.STUDENT_SESSION);
+        currentStudent = null;
+        studentRecords = {};
+        updateStudentUI();
+        renderCards();
+        updateStatsBanner();
+        showToast("👋 已成功登出，切換為訪客模式。");
+      }
+    }
+
+    // ==========================================
+    // 4. 練習紀錄載入與同步 (Record Sync Engine)
+    // ==========================================
+    function loadStudentRecords() {
+      const studentKey = getStudentKey(currentStudent);
+
+      // 先讀取本地快取
+      try {
+        const localRecords = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+        if (localRecords[studentKey] && localRecords[studentKey].items) {
+          studentRecords = localRecords[studentKey].items;
+        } else {
+          studentRecords = {};
+        }
+      } catch (e) {
+        studentRecords = {};
+      }
+
+      renderCards();
+      updateStatsBanner();
+      syncLeaderboardAndCloud();
+
+      // 若有 Firebase 則拉取最新資料同步
+      if (isFirebaseActive && practiceRecordsRef) {
+        practiceRecordsRef.child(`${studentKey}/items`).once('value').then(snapshot => {
+          const cloudItems = snapshot.val();
+          if (cloudItems) {
+            studentRecords = Object.assign({}, studentRecords, cloudItems);
+            // 寫回本地快取
+            saveStudentRecordsToLocal(studentKey, studentRecords);
+            renderCards();
+            updateStatsBanner();
+          }
+        }).catch(e => console.warn("拉取雲端紀錄失敗：", e));
+      }
+    }
+
+    function saveStudentRecordsToLocal(studentKey, items) {
+      try {
+        const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+        if (!records[studentKey]) records[studentKey] = {};
+        records[studentKey].items = items;
+        records[studentKey].lastUpdated = Date.now();
+        localStorage.setItem(STORAGE_KEYS.LOCAL_RECORDS, JSON.stringify(records));
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // 5. 紀錄成果 MODAL 操作
+    // ==========================================
+    function openRecordModal(quizId) {
+      const quiz = QUIZ_DATABASE.find(q => q.id === quizId);
+      if (!quiz) return;
+
+      currentRecordingQuiz = quiz;
+      document.getElementById("modalItemCategory").textContent = `${quiz.icon} ${quiz.mainCategory} · ${quiz.subCategory}`;
+      document.getElementById("modalItemTitle").textContent = quiz.title;
+
+      const existingRecord = studentRecords[quiz.id] || null;
+      const btnDelete = document.getElementById("btnDeleteRecord");
+
+      if (existingRecord) {
+        selectedModalStatus = existingRecord.status || '精熟';
+        document.getElementById("recordNoteInput").value = existingRecord.note || '';
+        btnDelete.style.display = "inline-flex";
+      } else {
+        selectedModalStatus = '精熟';
+        document.getElementById("recordNoteInput").value = '';
+        btnDelete.style.display = "none";
+      }
+
+      updateStatusOptCardsUI();
+      openModal("recordResultModal");
+    }
+
+    function selectStatusOpt(el, val) {
+      selectedModalStatus = val;
+      updateStatusOptCardsUI();
+    }
+
+    function updateStatusOptCardsUI() {
+      const cards = document.querySelectorAll(".status-opt-card");
+      cards.forEach(c => {
+        if (c.dataset.val === selectedModalStatus) {
+          c.classList.add("selected");
+        } else {
+          c.classList.remove("selected");
+        }
+      });
+
+      // 更新 2. 練習診斷評估紅綠燈號
+      const box = document.getElementById("modalDiagnosisBox");
+      const icon = document.getElementById("diagnosisLightIcon");
+      const title = document.getElementById("diagnosisStatusTitle");
+      const desc = document.getElementById("diagnosisStatusDesc");
+
+      if (box && icon && title && desc) {
+        box.classList.remove("light-green", "light-yellow", "light-red");
+
+        if (selectedModalStatus === '精熟') {
+          box.classList.add("light-green");
+          icon.textContent = "🟢";
+          title.textContent = "🟢 綠燈（精熟）";
+          desc.textContent = "可以暫時先不用複習。表現優異，核心概念已高度精熟！";
+        } else if (selectedModalStatus === '普通') {
+          box.classList.add("light-yellow");
+          icon.textContent = "🟡";
+          title.textContent = "🟡 黃燈（普通）";
+          desc.textContent = "有需要再複習。建議考前或有空時再次加強鞏固！";
+        } else if (selectedModalStatus === '待加強') {
+          box.classList.add("light-red");
+          icon.textContent = "🔴";
+          title.textContent = "🔴 紅燈（待加強）";
+          desc.textContent = "一定要再複習！概念尚未熟練，請務必重新練習並檢視錯題。";
+        }
+      }
+    }
+
+    function saveCurrentRecord() {
+      if (!currentRecordingQuiz) return;
+
+      const noteVal = document.getElementById("recordNoteInput").value.trim();
+
+      const recordItem = {
+        status: selectedModalStatus,
+        note: noteVal || null,
+        lastUpdated: Date.now()
+      };
+
+      const quizId = currentRecordingQuiz.id;
+      studentRecords[quizId] = recordItem;
+
+      const studentKey = getStudentKey(currentStudent);
+      saveStudentRecordsToLocal(studentKey, studentRecords);
+
+      if (isFirebaseActive && practiceRecordsRef) {
+        practiceRecordsRef.child(`${studentKey}/items/${quizId}`).set(recordItem).catch(e => console.warn(e));
+        if (currentStudent) {
+          practiceRecordsRef.child(`${studentKey}/profile/lastActive`).set(Date.now()).catch(e => console.warn(e));
+        }
+      }
+
+      closeModal("recordResultModal");
+      showToast(`✅ 已成功儲存「${currentRecordingQuiz.title}」練習成果！`);
+      renderCards();
+      updateStatsBanner();
+      syncLeaderboardAndCloud();
+    }
+
+    function deleteCurrentRecord() {
+      if (!currentRecordingQuiz) return;
+      if (confirm(`確定要清除「${currentRecordingQuiz.title}」的練習紀錄嗎？`)) {
+        const quizId = currentRecordingQuiz.id;
+        delete studentRecords[quizId];
+
+        const studentKey = getStudentKey(currentStudent);
+        saveStudentRecordsToLocal(studentKey, studentRecords);
+
+        if (isFirebaseActive && practiceRecordsRef) {
+          practiceRecordsRef.child(`${studentKey}/items/${quizId}`).remove().catch(e => console.warn(e));
+        }
+
+        closeModal("recordResultModal");
+        showToast(`🗑️ 已清除「${currentRecordingQuiz.title}」的紀錄。`);
+        renderCards();
+        updateStatsBanner();
+        syncLeaderboardAndCloud();
+      }
+    }
+
+    // ==========================================
+    // 5.5 學習存摺系統 (Learning Passbook Engine)
+    // ==========================================
+    let currentViewingPassbookRecords = { profile: {}, items: {} };
+    let passbookActiveFilter = 'all';
+
+    function openMyPassbook() {
+      if (!currentStudent) {
+        showToast("💡 請先登入身分，系統即可即時連線載入您的雲端學習存摺！");
+        openStudentAuthModal();
+        return;
+      }
+      const studentKey = getStudentKey(currentStudent);
+      renderAndOpenPassbook(studentKey, currentStudent, studentRecords, false);
+    }
+
+    function openStudentPassbook(studentKey) {
+      const studentData = allStudentsCloudRecords[studentKey];
+      if (!studentData) {
+        showToast("⚠️ 找不到該學生的存摺紀錄！");
+        return;
+      }
+      renderAndOpenPassbook(studentKey, studentData.profile || {}, studentData.items || {}, true);
+    }
+
+    function renderAndOpenPassbook(studentKey, profile, items, isTeacherView) {
+      currentViewingPassbookRecords = { profile: profile || {}, items: items || {} };
+
+      const totalTools = QUIZ_DATABASE.length;
+      let completedCount = 0;
+      let masteredCount = 0;
+      let goodCount = 0;
+      let needImproveCount = 0;
+
+      // 三大領域計算
+      let langCompleted = 0, supplyCompleted = 0, orangeCompleted = 0;
+      const langTotal = QUIZ_DATABASE.filter(q => q.section === 'chinese').length;
+      const supplyTotal = QUIZ_DATABASE.filter(q => q.section === 'supply' || q.category === '語文補給站').length;
+      const orangeTotal = QUIZ_DATABASE.filter(q => q.section === 'orange').length;
+
+      Object.entries(currentViewingPassbookRecords.items).forEach(([id, rec]) => {
+        if (rec && (rec.status === '精熟' || rec.status === '普通' || rec.status === '待加強')) {
+          completedCount++;
+          if (rec.status === '精熟') masteredCount++;
+          else if (rec.status === '普通') goodCount++;
+          else if (rec.status === '待加強') needImproveCount++;
+
+          const q = QUIZ_DATABASE.find(item => item.id === id);
+          if (q) {
+            if (q.section === 'chinese') langCompleted++;
+            else if (q.section === 'supply' || q.category === '語文補給站') supplyCompleted++;
+            else if (q.section === 'orange') orangeCompleted++;
+          }
+        }
+      });
+
+      const masteryRate = completedCount > 0 ? Math.round((masteredCount / completedCount) * 100) : 0;
+      const overallPercent = Math.round((completedCount / totalTools) * 100);
+
+      // 設定自學稱號與不同底色膠囊 (依精熟/完成題數判定)
+      let levelBadge = "🌱 自學啟航新秀";
+      let levelClass = "badge-rank-novice";
+
+      if (masteredCount >= 110) {
+        levelBadge = "👑 國語文全能宗師";
+        levelClass = "badge-rank-grandmaster";
+      } else if (masteredCount >= 85) {
+        levelBadge = "🏆 國語文自學達人";
+        levelClass = "badge-rank-master";
+      } else if (masteredCount >= 60) {
+        levelBadge = "🌟 國語文精熟名將";
+        levelClass = "badge-rank-expert";
+      } else if (completedCount >= 30) {
+        levelBadge = "📘 國語文勤勉學子";
+        levelClass = "badge-rank-apprentice";
+      }
+
+      // 填入個人資訊
+      document.getElementById("passbookModalTitle").innerHTML = isTeacherView 
+        ? `<span>📋</span> 學思軒 &middot; 學生學習存摺 (教師檢視模式)`
+        : `<span>📖</span> 學思軒 &middot; 學生個人學習存摺`;
+
+      const avatarChar = profile.name ? profile.name.charAt(0) : "生";
+      document.getElementById("passbookAvatar").textContent = avatarChar;
+      document.getElementById("passbookStudentName").textContent = profile.name || "同學";
+      
+      const badgeEl = document.getElementById("passbookLevelBadge");
+      badgeEl.textContent = levelBadge;
+      badgeEl.className = `passbook-badge ${levelClass}`;
+      document.getElementById("passbookStudentMeta").innerHTML = `
+        班級：<strong>${profile.class || '-'}</strong> 班 &middot; 
+        座號：<strong>${profile.seat || '-'}</strong> 號 &middot; 
+        存摺識別碼：<code>${studentKey}</code>
+      `;
+      document.getElementById("passbookMasteryRate").textContent = `${masteryRate}%`;
+
+      // 4 大指標
+      document.getElementById("pbStatCompleted").textContent = `${completedCount} / ${totalTools} (${overallPercent}%)`;
+      document.getElementById("pbProgressBar").style.width = `${overallPercent}%`;
+      document.getElementById("pbStatMastered").textContent = `${masteredCount} 項`;
+      document.getElementById("pbStatGood").textContent = `${goodCount} 項`;
+      document.getElementById("pbStatNeedImprove").textContent = `${needImproveCount} 項`;
+
+      // 3 大領域進度
+      const langPct = langTotal > 0 ? Math.round((langCompleted / langTotal) * 100) : 0;
+      const supplyPct = supplyTotal > 0 ? Math.round((supplyCompleted / supplyTotal) * 100) : 0;
+      const orangePct = orangeTotal > 0 ? Math.round((orangeCompleted / orangeTotal) * 100) : 0;
+
+      if (document.getElementById("pbDomainLang")) document.getElementById("pbDomainLang").textContent = `${langCompleted} / ${langTotal} (${langPct}%)`;
+      if (document.getElementById("pbDomainLangBar")) document.getElementById("pbDomainLangBar").style.width = `${langPct}%`;
+
+      if (document.getElementById("pbDomainSupply")) document.getElementById("pbDomainSupply").textContent = `${supplyCompleted} / ${supplyTotal} (${supplyPct}%)`;
+      if (document.getElementById("pbDomainSupplyBar")) document.getElementById("pbDomainSupplyBar").style.width = `${supplyPct}%`;
+
+      if (document.getElementById("pbDomainOrange")) document.getElementById("pbDomainOrange").textContent = `${orangeCompleted} / ${orangeTotal} (${orangePct}%)`;
+      if (document.getElementById("pbDomainOrangeBar")) document.getElementById("pbDomainOrangeBar").style.width = `${orangePct}%`;
+
+      // 載入表格清單
+      filterPassbookTable('all');
+      openModal("learningPassbookModal");
+    }
+
+    function filterPassbookTable(filterStatus) {
+      passbookActiveFilter = filterStatus;
+      const btns = document.querySelectorAll(".pb-filter-btn");
+      btns.forEach(b => {
+        if (b.dataset.filter === filterStatus) b.classList.add("active");
+        else b.classList.remove("active");
+      });
+
+      const tbody = document.getElementById("passbookTableBody");
+      const items = currentViewingPassbookRecords.items || {};
+
+      const list = [];
+      QUIZ_DATABASE.forEach(q => {
+        const rec = items[q.id];
+        if (!rec) return;
+
+        if (filterStatus === 'all' || rec.status === filterStatus) {
+          list.push({ quiz: q, record: rec });
+        }
+      });
+
+      // 依最後更新時間排序
+      list.sort((a, b) => (b.record.lastUpdated || 0) - (a.record.lastUpdated || 0));
+      document.getElementById("pbRecordCount").textContent = list.length;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:var(--text-muted);">目前尚無符合篩選條件的學習存摺紀錄。</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(item => {
+        const q = item.quiz;
+        const rec = item.record;
+
+        let statusBadge = `<span class="status-badge not_started">⚪ 未完成</span>`;
+        if (rec.status === '精熟') statusBadge = `<span class="status-badge mastered">🌟 精熟</span>`;
+        else if (rec.status === '普通') statusBadge = `<span class="status-badge good">👍 普通</span>`;
+        else if (rec.status === '待加強') statusBadge = `<span class="status-badge need_improvement">💪 待加強</span>`;
+
+        const noteText = rec.note || '-';
+        const dateText = rec.lastUpdated ? new Date(rec.lastUpdated).toLocaleDateString() : '-';
+
+        return `
+          <tr>
+            <td>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 700;">${q.mainCategory}</div>
+              <span class="category-pill" style="font-size: 11.5px; padding: 2px 8px;">${q.icon} ${q.subCategory}</span>
+            </td>
+            <td><strong>${q.title}</strong></td>
+            <td>${statusBadge}</td>
+            <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noteText}</td>
+            <td style="font-size: 12px; color: var(--text-muted);">${dateText}</td>
+            <td>
+              <a href="${q.path}" target="_blank" class="btn-sm" style="padding: 3px 8px; font-size: 11.5px; text-decoration: none; display: inline-flex;" onclick="recordHistory('${q.id}')">
+                開始特訓 ➔
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function printPassbook() {
+      window.print();
+    }
+
+    // ==========================================
+    // 6. 統計數據與雙榮譽排行榜
+    // ==========================================
+    function updateStatsBanner() {
+      const totalTools = QUIZ_DATABASE.length;
+      let completedCount = 0;
+      let masteredCount = 0;
+
+      Object.values(studentRecords).forEach(rec => {
+        if (rec && (rec.status === '精熟' || rec.status === '普通' || rec.status === '待加強')) {
+          completedCount++;
+          if (rec.status === '精熟') masteredCount++;
+        }
+      });
+
+      const percentage = Math.round((completedCount / totalTools) * 100);
+
+      document.getElementById("stat-total-tools").innerHTML = `${totalTools} <small>項</small>`;
+      document.getElementById("stat-user-completed").textContent = completedCount;
+      document.getElementById("stat-user-percentage").textContent = `${percentage}%`;
+      document.getElementById("stat-user-mastered").innerHTML = `${masteredCount} <small>項</small>`;
+      document.getElementById("stat-user-progress-bar").style.width = `${percentage}%`;
+
+      // 專區徽章數量更新 (僅收藏與紀錄)
+      const favs = getFavorites();
+      const history = getHistory();
+      if (document.getElementById("tab-count-fav")) document.getElementById("tab-count-fav").textContent = favs.length;
+      if (document.getElementById("tab-count-history")) document.getElementById("tab-count-history").textContent = history.length;
+    }
+
+    function syncLeaderboardAndCloud() {
+      // 讀取全體學生資料（Firebase 或 本地快取）
+      if (isFirebaseActive && practiceRecordsRef) {
+        practiceRecordsRef.once('value').then(snapshot => {
+          const allData = snapshot.val() || {};
+          allStudentsCloudRecords = allData;
+          renderLeaderboards(allData);
+          const validStudentCount = Object.keys(allData).filter(k => k && k !== 'guest' && allData[k] && allData[k].profile).length;
+          document.getElementById("stat-total-students").innerHTML = `${validStudentCount} <small>人</small>`;
+        }).catch(e => {
+          fallbackLocalLeaderboard();
+        });
+      } else {
+        fallbackLocalLeaderboard();
+      }
+    }
+
+    function fallbackLocalLeaderboard() {
+      const localRecords = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+      allStudentsCloudRecords = localRecords;
+      renderLeaderboards(localRecords);
+      const validStudentCount = Object.keys(localRecords).filter(k => k && k !== 'guest' && localRecords[k] && localRecords[k].profile).length;
+      document.getElementById("stat-total-students").innerHTML = `${validStudentCount} <small>人</small>`;
+    }
+
+    function renderLeaderboards(recordsData) {
+      const compListEl = document.getElementById("completionLeaderboard");
+      const mastListEl = document.getElementById("masteryLeaderboard");
+
+      const studentList = [];
+
+      Object.entries(recordsData).forEach(([key, val]) => {
+        if (!val || key === 'guest') return;
+        const profile = val.profile || {};
+        const items = val.items || {};
+        
+        let completed = 0;
+        let mastered = 0;
+
+        Object.values(items).forEach(it => {
+          if (it && (it.status === '精熟' || it.status === '普通' || it.status === '待加強')) {
+            completed++;
+            if (it.status === '精熟') mastered++;
+          }
+        });
+
+        if (completed > 0 || mastered > 0 || (currentStudent && getStudentKey(currentStudent) === key)) {
+          studentList.push({
+            key,
+            class: profile.class || '',
+            seat: profile.seat || '',
+            name: profile.name || '同學',
+            completed,
+            mastered,
+            lastActive: profile.lastActive || 0
+          });
+        }
+      });
+
+      // 如果列表為空，填入示範或自己
+      if (studentList.length === 0 && currentStudent) {
+        studentList.push({
+          key: getStudentKey(currentStudent),
+          class: currentStudent.class,
+          seat: currentStudent.seat,
+          name: currentStudent.name,
+          completed: Object.keys(studentRecords).length,
+          mastered: Object.values(studentRecords).filter(r => r.status === '精熟').length,
+          lastActive: Date.now()
+        });
+      }
+
+      // 完成榜排序
+      const sortedByCompleted = [...studentList].sort((a, b) => b.completed - a.completed || b.mastered - a.mastered).slice(0, 5);
+      // 精熟榜排序
+      const sortedByMastered = [...studentList].sort((a, b) => b.mastered - a.mastered || b.completed - a.completed).slice(0, 5);
+
+      if (sortedByCompleted.length === 0) {
+        compListEl.innerHTML = `<li style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">尚未有完成紀錄，登入並紀錄成果成為第一名！</li>`;
+      } else {
+        compListEl.innerHTML = sortedByCompleted.map((s, idx) => `
+          <li class="leaderboard-item rank-${idx + 1}">
+            <div class="leaderboard-user">
+              <span class="leaderboard-rank">${idx + 1}</span>
+              <span>${s.class ? s.class + '班 ' : ''}${s.name}</span>
+            </div>
+            <span class="leaderboard-score">🏆 ${s.completed} 項</span>
+          </li>
+        `).join("");
+      }
+
+      if (sortedByMastered.length === 0) {
+        mastListEl.innerHTML = `<li style="text-align:center; padding:12px; color:var(--text-muted); font-size:13px;">尚未有精熟紀錄，快來挑戰精熟吧！</li>`;
+      } else {
+        mastListEl.innerHTML = sortedByMastered.map((s, idx) => `
+          <li class="leaderboard-item rank-${idx + 1}">
+            <div class="leaderboard-user">
+              <span class="leaderboard-rank">${idx + 1}</span>
+              <span>${s.class ? s.class + '班 ' : ''}${s.name}</span>
+            </div>
+            <span class="leaderboard-score" style="color: var(--accent-hover);">🌟 ${s.mastered} 項</span>
+          </li>
+        `).join("");
+      }
+    }
+
+    // ==========================================
+    // 7. 收藏與歷史紀錄 (Favorites & History)
+    // ==========================================
+    function getFavorites() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEYS.FAV_LIST);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function toggleFavorite(id, e) {
+      if (e) e.stopPropagation();
+      let favs = getFavorites();
+      if (favs.includes(id)) {
+        favs = favs.filter(item => item !== id);
+        showToast("🤍 已取消收藏");
+      } else {
+        favs.push(id);
+        showToast("❤️ 已加入我的收藏");
+      }
+      localStorage.setItem(STORAGE_KEYS.FAV_LIST, JSON.stringify(favs));
+      updateStatsBanner();
+      renderCards();
+    }
+
+    function recordHistory(id) {
+      try {
+        let history = JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY_LIST) || "[]");
+        history = history.filter(item => item !== id);
+        history.unshift(id);
+        if (history.length > 50) history = history.slice(0, 50);
+        localStorage.setItem(STORAGE_KEYS.HISTORY_LIST, JSON.stringify(history));
+        updateStatsBanner();
+      } catch (e) {}
+    }
+
+    function getHistory() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEYS.HISTORY_LIST);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    // ==========================================
+    // 8. 卡片渲染與篩選系統
+    // ==========================================
+    let currentSection = "all";
+    let currentCategory = "all";
+    let currentStatusFilter = "all";
+    let searchQuery = "";
+
+    function handleFilterChange() {
+      currentStatusFilter = document.getElementById("statusFilter").value;
+      renderCards();
+    }
+
+    function getFilteredQuizzes() {
+      const favs = getFavorites();
+      const history = getHistory();
+
+      return QUIZ_DATABASE.filter(quiz => {
+        // 分區與年段過濾
+        if (currentSection === "7up" && quiz.grade !== "七上") return false;
+        if (currentSection === "7down" && quiz.grade !== "七下") return false;
+        if (currentSection === "8up" && quiz.grade !== "八上") return false;
+        if (currentSection === "8down" && quiz.grade !== "八下") return false;
+        if (currentSection === "9up" && quiz.grade !== "九上") return false;
+        if (currentSection === "fav" && !favs.includes(quiz.id)) return false;
+        if (currentSection === "history" && !history.includes(quiz.id)) return false;
+
+        // 類別標籤過濾 (支援 mainCategory、subCategory、category、section)
+        if (currentCategory !== "all") {
+          const matchMain = quiz.mainCategory === currentCategory;
+          const matchSub = quiz.subCategory === currentCategory;
+          const matchCat = quiz.category === currentCategory;
+          const matchSection = (currentCategory === "橘子形音義" && quiz.section === "orange") ||
+                               (currentCategory === "語文學習集" && quiz.section === "chinese") ||
+                               (currentCategory === "語文補給站" && (quiz.section === "supply" || quiz.mainCategory === "語文補給站" || quiz.category === "語文補給站" || quiz.subCategory === "語文補給站"));
+          const matchPhonetics = (currentCategory === "形音義" && (quiz.subCategory === "語文形音義" || quiz.subCategory === "形音義" || quiz.section === "orange" || quiz.subCategory === "字形" || quiz.subCategory === "字音" || quiz.subCategory === "字義"));
+
+          if (!matchMain && !matchSub && !matchCat && !matchSection && !matchPhonetics) return false;
+        }
+
+        // 狀態過濾 (not_started, 精熟, 普通, 待加強)
+        const rec = studentRecords[quiz.id];
+        const status = rec ? rec.status : 'not_started';
+
+        if (currentStatusFilter === 'not_started' && status !== 'not_started') return false;
+        if (currentStatusFilter === '精熟' && status !== '精熟') return false;
+        if (currentStatusFilter === '普通' && status !== '普通') return false;
+        if (currentStatusFilter === '待加強' && status !== '待加強') return false;
+
+        // 關鍵字搜尋
+        if (searchQuery.trim() !== "") {
+          const q = searchQuery.trim().toLowerCase();
+          const matchTitle = quiz.title.toLowerCase().includes(q);
+          const matchDesc = quiz.desc.toLowerCase().includes(q);
+          const matchCat = (quiz.category && quiz.category.toLowerCase().includes(q)) ||
+                           (quiz.mainCategory && quiz.mainCategory.toLowerCase().includes(q)) ||
+                           (quiz.subCategory && quiz.subCategory.toLowerCase().includes(q));
+          const matchId = quiz.id.toLowerCase().includes(q);
+          if (!matchTitle && !matchDesc && !matchCat && !matchId) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function renderCards() {
+      const grid = document.getElementById("card-grid");
+      const filtered = getFilteredQuizzes();
+      const favs = getFavorites();
+
+      document.getElementById("current-count").textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <span class="empty-icon">🍃</span>
+            <h3 style="color: var(--primary-dark); margin-bottom: 8px;">未找到符合條件的練習神器</h3>
+            <p style="color: var(--text-muted); font-size: 14px;">請嘗試更換關鍵字、清除狀態篩選或切換至「全部神器」。</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(quiz => {
+        const isFav = favs.includes(quiz.id);
+        const isOrange = quiz.section === "orange";
+        const isSupply = quiz.section === "supply" || quiz.mainCategory === "語文補給站" || quiz.subCategory === "語文補給站";
+        const cardThemeClass = isOrange ? "orange-theme" : (isSupply ? "supply-theme" : "");
+        const btnClass = isOrange ? "start-quiz-btn orange-btn" : (isSupply ? "start-quiz-btn supply-btn" : "start-quiz-btn");
+
+        let pillThemeClass = "";
+        if (isSupply || quiz.subCategory === "語文補給站") {
+          pillThemeClass = "supply";
+        } else if (isOrange) {
+          pillThemeClass = "orange";
+        } else if (quiz.subCategory === "詞語運用") {
+          pillThemeClass = "pill-words";
+        } else if (quiz.subCategory === "文化常識") {
+          pillThemeClass = "pill-culture";
+        } else if (quiz.subCategory === "語文常識") {
+          pillThemeClass = "pill-grammar";
+        } else if (quiz.subCategory === "語文形音義" || quiz.subCategory === "形音義") {
+          pillThemeClass = "pill-phonetics";
+        } else if (quiz.subCategory === "語文成語" || quiz.subCategory === "成語") {
+          pillThemeClass = "pill-idiom-topic";
+        }
+
+        let mainCatClass = "main-chinese";
+        let mainCatIcon = "💻";
+        if (isSupply) {
+          mainCatClass = "main-supply";
+          mainCatIcon = "✨";
+        } else if (isOrange) {
+          mainCatClass = "main-orange";
+          mainCatIcon = "🍊";
+        }
+
+        const rec = studentRecords[quiz.id];
+        let statusBadgeHtml = `<span class="status-badge not_started">⚪ 未練習</span>`;
+        let scoreTagHtml = "";
+
+        if (rec) {
+          if (rec.status === '精熟') {
+            statusBadgeHtml = `<span class="status-badge mastered">🌟 精熟</span>`;
+          } else if (rec.status === '普通') {
+            statusBadgeHtml = `<span class="status-badge good">👍 普通</span>`;
+          } else if (rec.status === '待加強') {
+            statusBadgeHtml = `<span class="status-badge need_improvement">💪 待加強</span>`;
+          }
+
+          if (rec.score !== null && rec.score !== undefined) {
+            scoreTagHtml = `<span class="status-score-tag">${rec.score} 分</span>`;
+          }
+        }
+
+        return `
+          <div class="quiz-card ${cardThemeClass}" data-id="${quiz.id}">
+            <div class="card-header">
+              <div class="category-block">
+                <span class="main-cat-label ${mainCatClass}">
+                  <span>${mainCatIcon}</span>
+                  <span>${quiz.mainCategory || '國語文'}</span>
+                </span>
+                <span class="category-pill ${pillThemeClass}">
+                  <span>${quiz.icon}</span>
+                  <span>${quiz.subCategory || quiz.category}</span>
+                </span>
+              </div>
+              <div class="card-header-right">
+                ${quiz.grade ? `<span class="grade-badge grade-${quiz.grade === '七上' ? '7up' : quiz.grade === '七下' ? '7down' : quiz.grade === '八上' ? '8up' : quiz.grade === '八下' ? '8down' : '9up'}" title="年段：${quiz.grade}">🔖 ${quiz.grade}</span>` : ''}
+                <button class="fav-btn ${isFav ? 'favorited' : ''}" 
+                        title="${isFav ? '取消收藏' : '加入收藏'}" 
+                        onclick="toggleFavorite('${quiz.id}', event)">
+                  ${isFav ? '❤️' : '🤍'}
+                </button>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <h2 class="quiz-title" title="${quiz.title}">${quiz.title}</h2>
+              <p class="quiz-desc">${quiz.desc}</p>
+            </div>
+
+            <div class="card-status-row">
+              ${statusBadgeHtml}
+              ${scoreTagHtml}
+            </div>
+
+            <div class="card-footer">
+              <button class="btn-record-result" onclick="openRecordModal('${quiz.id}')" title="登記此單元練習成果">
+                📝 紀錄成果
+              </button>
+              <a href="${quiz.path}" class="${btnClass}" target="_blank" onclick="recordHistory('${quiz.id}')">
+                開始練習 ➔
+              </a>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ==========================================
+    // 9. 教師管理後台邏輯 (SHA-256 密碼雜湊防窺)
+    // ==========================================
+    const TEACHER_AUTH_HASHES = [
+      "0a456038711245dd4072fafcbe63b6a34258d7ebc87753839ce17e42d512dfe7", // 主要密碼雜湊
+      "996b48fd3814ad825c594e692903a8bf5bb17018ed3214576c487426f425504a"  // 後備通行碼雜湊
+    ];
+
+    async function computeSHA256(str) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str.trim().toLowerCase());
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function promptTeacherMode() {
+      const input = document.getElementById("teacherPassInput");
+      const errorMsg = document.getElementById("teacherAuthErrorMsg");
+      if (input) input.value = "";
+      if (errorMsg) errorMsg.style.display = "none";
+      openModal("teacherAuthModal");
+      setTimeout(() => {
+        if (input) input.focus();
+      }, 150);
+    }
+
+    async function verifyTeacherPass() {
+      const input = document.getElementById("teacherPassInput");
+      const errorMsg = document.getElementById("teacherAuthErrorMsg");
+      const val = input ? input.value.trim() : "";
+
+      if (!val) {
+        errorMsg.textContent = "❌ 請輸入密碼！";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      try {
+        const inputHash = await computeSHA256(val);
+        if (TEACHER_AUTH_HASHES.includes(inputHash)) {
+          closeModal("teacherAuthModal");
+          showToast("🔓 驗證成功！已開啟教師管理後台。");
+          openTeacherDashboard();
+        } else {
+          errorMsg.textContent = "❌ 密碼錯誤，請重新輸入！";
+          errorMsg.style.display = "block";
+          input.value = "";
+          input.focus();
+        }
+      } catch (e) {
+        console.error("雜湊計算失敗：", e);
+      }
+    }
+
+    async function clearAllPracticeDataPrompt() {
+      const confirmInput = prompt("⚠️ 警告：這將會清空「學思軒練習神器資源中心」全體的學生練習紀錄與排行！\n若確認執行清空，請輸入教師通行密碼：");
+      if (confirmInput) {
+        try {
+          const inputHash = await computeSHA256(confirmInput);
+          if (TEACHER_AUTH_HASHES.includes(inputHash)) {
+            if (isFirebaseActive && practiceRecordsRef) {
+              practiceRecordsRef.remove().then(() => {
+                localStorage.removeItem(STORAGE_KEYS.LOCAL_RECORDS);
+                allStudentsCloudRecords = {};
+                studentRecords = {};
+                showToast("🧹 已成功清空所有學生練習紀錄與排行！");
+                renderTeacherTable();
+                updateStatsBanner();
+                syncLeaderboardAndCloud();
+                renderCards();
+              }).catch(e => {
+                alert("清除失敗：" + e.message);
+              });
+            } else {
+              localStorage.removeItem(STORAGE_KEYS.LOCAL_RECORDS);
+              allStudentsCloudRecords = {};
+              studentRecords = {};
+              showToast("🧹 (本地模式) 已清空所有學生練習紀錄！");
+              renderTeacherTable();
+              updateStatsBanner();
+              syncLeaderboardAndCloud();
+              renderCards();
+            }
+          } else {
+            alert("❌ 密碼錯誤，已取消清除作業。");
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    function openTeacherDashboard() {
+      renderLeaderboards(allStudentsCloudRecords);
+      // 填入班級選單
+      const classSelect = document.getElementById("teacherClassSelect");
+      const classes = new Set();
+
+      Object.values(allStudentsCloudRecords).forEach(s => {
+        if (s && s.profile && s.profile.class) {
+          classes.add(s.profile.class);
+        }
+      });
+
+      classSelect.innerHTML = `<option value="all">全部班級 (${Object.keys(allStudentsCloudRecords).length}人)</option>` + 
+        Array.from(classes).sort().map(c => `<option value="${c}">${c} 班</option>`).join("");
+
+      renderTeacherTable();
+      openModal("teacherModal");
+    }
+
+    function renderTeacherTable() {
+      const classFilter = document.getElementById("teacherClassSelect").value;
+      const tbody = document.getElementById("teacherTableBody");
+
+      const list = [];
+      const totalTools = QUIZ_DATABASE.length;
+
+      Object.entries(allStudentsCloudRecords).forEach(([key, val]) => {
+        if (!val || key === 'guest') return;
+        const profile = val.profile || {};
+        const items = val.items || {};
+
+        if (classFilter !== 'all' && profile.class !== classFilter) return;
+
+        let completed = 0;
+        let mastered = 0;
+
+        Object.values(items).forEach(it => {
+          if (it && (it.status === '精熟' || it.status === '普通' || it.status === '待加強')) {
+            completed++;
+            if (it.status === '精熟') mastered++;
+          }
+        });
+
+        list.push({
+          key,
+          class: profile.class || '-',
+          seat: profile.seat || '-',
+          name: profile.name || '同學',
+          pin: profile.pin || '未設',
+          completed,
+          mastered,
+          percentage: Math.round((completed / totalTools) * 100),
+          lastActive: profile.lastActive ? new Date(profile.lastActive).toLocaleDateString() : '無紀錄',
+          items
+        });
+      });
+
+      list.sort((a, b) => {
+        if (a.class !== b.class) return String(a.class).localeCompare(String(b.class));
+        return (parseInt(a.seat) || 0) - (parseInt(b.seat) || 0);
+      });
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--text-muted);">該班級尚無學生練習資料。</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(s => `
+        <tr>
+          <td><strong>${s.class}</strong></td>
+          <td>${s.seat}</td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.completed} / ${totalTools}</td>
+          <td><span style="color: var(--accent-hover); font-weight: 700;">🌟 ${s.mastered}</span></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span>${s.percentage}%</span>
+            </div>
+          </td>
+          <td style="font-size: 12px; color: var(--text-muted);">${s.lastActive}</td>
+          <td>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <button class="btn-sm" style="padding: 4px 8px; font-size: 12px; background: rgba(200, 150, 62, 0.2); border-color: #c8963e; color: #b0802f; font-weight: 700;" onclick="openStudentPassbook('${s.key}')">📖 存摺</button>
+              <button class="btn-sm" style="padding: 4px 8px; font-size: 12px;" onclick="viewStudentDetails('${s.key}')">📋 明細</button>
+              <button class="btn-sm" style="padding: 4px 8px; font-size: 12px; color: #ff9800;" onclick="resetStudentPinPrompt('${s.key}', '${s.name}')">🔑 重設PIN</button>
+              <button class="btn-sm" style="padding: 4px 8px; font-size: 12px; color: #e74c3c; border-color: rgba(231, 76, 60, 0.4); background: rgba(231, 76, 60, 0.08);" onclick="promptDeleteStudent('${s.key}', '${s.name}', '${s.class}', '${s.seat}')">🗑️ 刪除</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function viewStudentDetails(studentKey) {
+      const studentData = allStudentsCloudRecords[studentKey];
+      if (!studentData) return;
+
+      const profile = studentData.profile || {};
+      const items = studentData.items || {};
+
+      document.getElementById("studentDetailTitle").textContent = `📋 ${profile.class}班 ${profile.seat}號 ${profile.name} 的練習詳情`;
+      
+      const totalTools = QUIZ_DATABASE.length;
+      let completedCount = 0;
+      let masteredCount = 0;
+
+      Object.values(items).forEach(it => {
+        if (it && (it.status === '精熟' || it.status === '普通' || it.status === '待加強')) {
+          completedCount++;
+          if (it.status === '精熟') masteredCount++;
+        }
+      });
+
+      document.getElementById("studentDetailSummary").innerHTML = `
+        <strong>學生基本資料：</strong>${profile.class}班 ${profile.seat}號 <strong>${profile.name}</strong> &middot; 
+        <strong>完成進度：</strong>${completedCount} / ${totalTools} (${Math.round((completedCount/totalTools)*100)}%) &middot; 
+        <strong>精熟單元：</strong>${masteredCount} 項 &middot; 
+        <strong>安全PIN碼：</strong><code>${profile.pin || '未設定'}</code>
+      `;
+
+      const tbody = document.getElementById("studentDetailTableBody");
+      
+      tbody.innerHTML = QUIZ_DATABASE.map(q => {
+        const it = items[q.id];
+        let statusText = `<span style="color:#aaa;">⚪ 未練習</span>`;
+        let noteText = "-";
+        let dateText = "-";
+
+        if (it) {
+          if (it.status === '精熟') statusText = `<span style="color:var(--success); font-weight:700;">🌟 精熟</span>`;
+          else if (it.status === '普通') statusText = `<span style="color:var(--primary); font-weight:700;">👍 普通</span>`;
+          else if (it.status === '待加強') statusText = `<span style="color:var(--warning); font-weight:700;">💪 待加強</span>`;
+
+          if (it.note) noteText = it.note;
+          if (it.lastUpdated) dateText = new Date(it.lastUpdated).toLocaleDateString();
+        }
+
+        return `
+          <tr>
+            <td>
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 700;">${q.mainCategory}</div>
+              <span style="font-size: 12px; color: var(--primary-dark); font-weight: 600;">${q.icon} ${q.subCategory}</span>
+            </td>
+            <td><strong>${q.title}</strong></td>
+            <td>${statusText}</td>
+            <td style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noteText}</td>
+            <td style="font-size: 12px; color: var(--text-muted);">${dateText}</td>
+          </tr>
+        `;
+      }).join("");
+
+      openModal("studentDetailModal");
+    }
+
+    let pendingDeleteStudentKey = null;
+    let pendingDeleteStudentName = "";
+
+    function promptDeleteStudent(studentKey, studentName, sClass, sSeat) {
+      pendingDeleteStudentKey = studentKey;
+      pendingDeleteStudentName = studentName;
+
+      const warningText = document.getElementById("deleteStudentWarningText");
+      if (warningText) {
+        warningText.innerHTML = `⚠️ 確定要刪除學生【<strong>${sClass ? sClass + ' 班 ' : ''}${sSeat ? sSeat + ' 號 ' : ''}${studentName}</strong>】的全部紀錄嗎？`;
+      }
+      const passInput = document.getElementById("deleteStudentPassInput");
+      const errorMsg = document.getElementById("deleteStudentErrorMsg");
+      if (passInput) passInput.value = "";
+      if (errorMsg) errorMsg.style.display = "none";
+
+      openModal("deleteStudentModal");
+      setTimeout(() => {
+        if (passInput) passInput.focus();
+      }, 150);
+    }
+
+    async function confirmDeleteStudent() {
+      if (!pendingDeleteStudentKey) return;
+
+      const passInput = document.getElementById("deleteStudentPassInput");
+      const errorMsg = document.getElementById("deleteStudentErrorMsg");
+      const val = passInput ? passInput.value.trim() : "";
+
+      if (!val) {
+        errorMsg.textContent = "❌ 請輸入教師管理通行密碼！";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      try {
+        const inputHash = await computeSHA256(val);
+        if (TEACHER_AUTH_HASHES.includes(inputHash)) {
+          const keyToDelete = pendingDeleteStudentKey;
+          const nameToDelete = pendingDeleteStudentName;
+
+          if (isFirebaseActive && practiceRecordsRef) {
+            practiceRecordsRef.child(keyToDelete).remove().then(() => {
+              delete allStudentsCloudRecords[keyToDelete];
+              try {
+                const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+                delete records[keyToDelete];
+                localStorage.setItem(STORAGE_KEYS.LOCAL_RECORDS, JSON.stringify(records));
+              } catch (e) {}
+
+              // 若刪除的是當前登入身分，切回訪客
+              if (currentStudent && getStudentKey(currentStudent) === keyToDelete) {
+                localStorage.removeItem(STORAGE_KEYS.STUDENT_SESSION);
+                currentStudent = null;
+                studentRecords = {};
+                updateStudentUI();
+              }
+
+              closeModal("deleteStudentModal");
+              showToast(`🗑️ 已成功刪除【${nameToDelete}】同學的全部紀錄！`);
+              renderTeacherTable();
+              updateStatsBanner();
+              syncLeaderboardAndCloud();
+              renderCards();
+            }).catch(e => {
+              alert("刪除失敗：" + e.message);
+            });
+          } else {
+            // 本機模式
+            delete allStudentsCloudRecords[keyToDelete];
+            try {
+              const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+              delete records[keyToDelete];
+              localStorage.setItem(STORAGE_KEYS.LOCAL_RECORDS, JSON.stringify(records));
+            } catch (e) {}
+
+            if (currentStudent && getStudentKey(currentStudent) === keyToDelete) {
+              localStorage.removeItem(STORAGE_KEYS.STUDENT_SESSION);
+              currentStudent = null;
+              studentRecords = {};
+              updateStudentUI();
+            }
+
+            closeModal("deleteStudentModal");
+            showToast(`🗑️ (本地模式) 已成功刪除【${nameToDelete}】同學的紀錄！`);
+            renderTeacherTable();
+            updateStatsBanner();
+            syncLeaderboardAndCloud();
+            renderCards();
+          }
+        } else {
+          errorMsg.textContent = "❌ 密碼錯誤，無法刪除！";
+          errorMsg.style.display = "block";
+          if (passInput) {
+            passInput.value = "";
+            passInput.focus();
+          }
+        }
+      } catch (e) {
+        console.error("雜湊驗證失敗：", e);
+      }
+    }
+
+    function resetStudentPinPrompt(studentKey, studentName) {
+      const newPin = prompt(`請輸入為學生【${studentName}】重設的 4 位數新 PIN 碼 (例：1234)：`);
+      if (newPin && /^\d{4}$/.test(newPin)) {
+        if (isFirebaseActive && practiceRecordsRef) {
+          practiceRecordsRef.child(`${studentKey}/profile/pin`).set(newPin).then(() => {
+            showToast(`✅ 已將【${studentName}】的 PIN 碼重設為：${newPin}`);
+            syncLeaderboardAndCloud();
+            renderTeacherTable();
+          });
+        } else {
+          try {
+            const records = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOCAL_RECORDS) || "{}");
+            if (records[studentKey] && records[studentKey].profile) {
+              records[studentKey].profile.pin = newPin;
+              localStorage.setItem(STORAGE_KEYS.LOCAL_RECORDS, JSON.stringify(records));
+            }
+            showToast(`✅ (本地模式) 已將 PIN 碼重設為：${newPin}`);
+            renderTeacherTable();
+          } catch (e) {}
+        }
+      } else if (newPin !== null) {
+        alert("❌ 格式錯誤！PIN 碼必須為 4 位數字。");
+      }
+    }
+
+    function exportRecordsToCSV() {
+      const rows = [
+        ["班級", "座號", "姓名", "完成總題數", "精熟題數", "完成率(%)", "安全PIN碼", "最後上線時間"]
+      ];
+
+      const totalTools = QUIZ_DATABASE.length;
+
+      Object.entries(allStudentsCloudRecords).forEach(([key, val]) => {
+        if (!val || key === 'guest') return;
+        const profile = val.profile || {};
+        const items = val.items || {};
+
+        let completed = 0;
+        let mastered = 0;
+
+        Object.values(items).forEach(it => {
+          if (it && (it.status === '精熟' || it.status === '普通' || it.status === '待加強')) {
+            completed++;
+            if (it.status === '精熟') mastered++;
+          }
+        });
+
+        rows.push([
+          profile.class || '',
+          profile.seat || '',
+          profile.name || '',
+          completed,
+          mastered,
+          Math.round((completed / totalTools) * 100),
+          profile.pin || '',
+          profile.lastActive ? new Date(profile.lastActive).toLocaleString() : ''
+        ]);
+      });
+
+      let csvContent = "\uFEFF"; // UTF-8 BOM
+      rows.forEach(row => {
+        csvContent += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",") + "\r\n";
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `學思軒練習神器全班成績報表_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("📊 CSV 成績報表已成功匯出！");
+    }
+
+    // ==========================================
+    // 10. 介面輔助函式 (Modal, Toast, Events)
+    // ==========================================
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add("show");
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove("show");
+    }
+
+    function openGuideModal() {
+      openModal("guideModal");
+    }
+
+    function showToast(msg) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast-msg";
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // 初始化事件監聽
+    function initEvents() {
+      // 搜尋事件
+      const searchInput = document.getElementById("search-input");
+      const clearBtn = document.getElementById("clear-search");
+
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        clearBtn.style.display = searchQuery ? "flex" : "none";
+        renderCards();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        searchQuery = "";
+        clearBtn.style.display = "none";
+        searchInput.focus();
+        renderCards();
+      });
+
+      // 專區分頁切換
+      const secTabs = document.querySelectorAll(".sec-tab");
+      secTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          secTabs.forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+          currentSection = tab.dataset.sec;
+
+          setCategoryFilter("all");
+          renderCards();
+        });
+      });
+
+      // 主題分類標籤
+      const tagBtns = document.querySelectorAll(".tag-btn");
+      tagBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          setCategoryFilter(btn.dataset.cat);
+          renderCards();
+        });
+      });
+
+      function setCategoryFilter(cat) {
+        currentCategory = cat;
+        tagBtns.forEach(b => {
+          if (b.dataset.cat === cat) b.classList.add("active");
+          else b.classList.remove("active");
+        });
+      }
+
+      // 返回頂部
+      const backToTopBtn = document.getElementById("back-to-top");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) backToTopBtn.classList.add("visible");
+        else backToTopBtn.classList.remove("visible");
+      });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // 教師後台密碼 Enter 鍵支援
+      const teacherPassInput = document.getElementById("teacherPassInput");
+      if (teacherPassInput) {
+        teacherPassInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            verifyTeacherPass();
+          }
+        });
+      }
+
+      // 刪除學生確認密碼 Enter 鍵支援
+      const deleteStudentPassInput = document.getElementById("deleteStudentPassInput");
+      if (deleteStudentPassInput) {
+        deleteStudentPassInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            confirmDeleteStudent();
+          }
+        });
+      }
+
+      // 鍵盤快捷鍵
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "/" && document.activeElement !== searchInput && !document.querySelector(".modal-backdrop.show")) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === "Escape") {
+          const openModals = document.querySelectorAll(".modal-backdrop.show");
+          openModals.forEach(m => m.classList.remove("show"));
+        }
+      });
+
+      // 點擊 Modal 外圍關閉
+      document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+        backdrop.addEventListener("click", (e) => {
+          if (e.target === backdrop) backdrop.classList.remove("show");
+        });
+      });
+    }
+
+    // 頁面載入執行
+    document.addEventListener("DOMContentLoaded", () => {
+      initEvents();
+      loadStudentSession();
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

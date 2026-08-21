@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[語文學習集練習神器]宋詞精選填空(上)</title>
+<style>
+/* CSS 樣式保持原樣，嚴格禁止修改 */
+:root { --primary: #3949ab; --primary-light: #e8eaf6; --accent: #ff4081; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: #e8eaf6; padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 16px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 15px; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* 卡片加大：加寬為 400px，加高為 650px，並使用 max-width 避免手機破版 */
+.card-wrapper { width: 400px; max-width: 95vw; height: 650px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.big-char { font-size: 24px; color: var(--primary); margin: 0; line-height: 1.6; letter-spacing: 1px; font-weight: 800; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 40px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: left; justify-content: flex-start; cursor: pointer; border-top: 6px solid var(--primary); }
+.back-content { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+.back-content::-webkit-scrollbar { width: 6px; }
+.back-content::-webkit-scrollbar-thumb { background-color: #cfd8dc; border-radius: 10px; }
+.back-header { border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+.back-char { font-size: 24px; font-weight: bold; color: var(--accent); letter-spacing: 1px; }
+.section-title { font-size: 13px; color: #fff; background: var(--primary); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 15px; margin-bottom: 8px; }
+.meaning { font-size: 18px; line-height: 1.6; color: #333; font-weight: bold; }
+.sentence { font-size: 16px; line-height: 1.6; color: #546e7a; margin-top: 5px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 15px; padding-bottom: 5px;}
+.hl { color: var(--accent); font-weight: bold; text-decoration: underline; }
+.source-box { background: #f0f4f8; border-left: 4px solid var(--accent); padding: 12px; margin-top: 5px; margin-bottom: 10px; border-radius: 0 8px 8px 0; text-align: left; }
+.source-tag { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 6px; }
+.source-original { font-size: 15px; color: #263238; font-weight: bold; margin-bottom: 6px; line-height: 1.5; }
+.source-translation { font-size: 14px; color: #546e7a; line-height: 1.6; margin-top: 5px; }
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.quiz-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+.quiz-question { font-size: 20px; margin: 15px 0; font-weight: bold; color: #333; line-height: 1.6; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.option-btn { padding: 15px; border: 2px solid #e8eaf6; background: white; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.option-btn:hover { background-color: #e8eaf6; border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.option-desc { font-size: 14px; font-weight: normal; color: #666; margin-top: 5px; line-height: 1.4; display: none; }
+.option-desc.show { display: block; animation: fadeIn 0.3s; }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; display: none; font-size: 16px; }
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 錯題本專用樣式 */
+.wb-badge { background-color: #f44336; color: white; padding: 10px 20px; border-radius: 25px; font-size: 16px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2); }
+.wb-tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; max-width: 650px; margin-bottom: 15px; }
+@media (max-width: 600px) { .wb-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+.wb-tool-btn { border: none; padding: 12px 8px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.wb-tool-btn:hover { transform: translateY(-2px); }
+.wb-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.wb-btn-fc { background-color: #3f51b5; }
+.wb-btn-quiz { background-color: #ff4081; }
+.wb-btn-copy { background-color: #4caf50; }
+.wb-btn-download { background-color: #00acc1; }
+.wb-btn-clear { background-color: #f44336; }
+.wb-auto-remove-box { display: flex; align-items: center; gap: 8px; color: #546e7a; font-size: 15px; margin-bottom: 20px; font-weight: bold; }
+.wb-card-container { width: 100%; max-width: 650px; background: white; border-radius: 15px; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 150px; }
+.wb-empty-msg { color: #78909c; text-align: center; font-size: 18px; padding: 30px 0; font-weight: bold; }
+.wb-item-card { background: #f9fbe7; border-left: 5px solid #81c784; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-item-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-item-meaning { font-size: 14px; color: #37474f; line-height: 1.5; }
+.wb-item-count { font-size: 12px; background: #ffe0b2; color: #e65100; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
+.wb-del-btn { background: none; border: none; color: #ef5350; cursor: pointer; font-size: 18px; padding: 0 5px; }
+</style>
+</head>
+<body>
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title">📜 <span id="inst-title-text"></span> - 使用說明</div>
+<div class="inst-content">
+<p>歡迎來到<b>「<span id="welcome-title-text"></span>」</b>！</p>
+<ul>
+<li><b>第一步：翻卡記憶</b><br>正面呈現宋詞填空題，點擊卡片可翻面查看正確解答、完整詞句與白話語譯。請誠實標記熟悉度。</li>
+<li><b>第二步：填空測驗</b><br>題目將出示宋詞填空題，請選出最正確的填空選項！</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐[cite: 1]</div>
+</div>
+</div>
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" onclick="switchMode('flashcard')">📖 翻卡記憶</button>
+<button class="nav-btn" onclick="switchMode('meaningQuiz')">📝 填空測驗</button>
+<button class="nav-btn" id="nav-btn-wrongBook" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<h2 class="big-char" id="fc-char"></h2>
+<p class="hint" id="fc-hint">(點擊看解答、完整詞句與翻譯)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-header"><span class="back-char" id="fc-back-char"></span></div>
+<div class="section-title">出處篇名</div>
+<div class="source-box">
+  <div class="source-tag" id="fc-source-text"></div>
+</div>
+<div class="section-title">完整詞句</div>
+<div class="sentence" id="fc-example"></div>
+<div class="section-title">白話語譯</div>
+<div class="source-box">
+  <div class="source-translation" id="fc-translation"></div>
+</div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<div id="meaningQuiz-mode" class="mode-container">
+<div id="mq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="mq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請選出括號中的正確答案：</div>
+<div class="quiz-question" id="mq-question"></div>
+<div class="options-grid" id="mq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:16px; font-weight:bold; line-height:1.6;" id="mq-feedback"></div>
+<button class="next-q-btn" id="mq-next-btn" onclick="nextQuiz('meaning')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="mq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="mq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="mq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<!-- 錯題本 Mode -->
+<div id="wrongBook-mode" class="mode-container">
+  <div id="wb-count-badge" class="wb-badge">目前單元共 0 個錯題 (累計全部單元共 0 個)</div>
+  
+  <div class="wb-tools-grid">
+    <button class="wb-tool-btn wb-btn-fc" id="wb-btn-fc" onclick="startWrongTraining('flashcard')">
+      <span>📖 錯題</span><span>翻卡特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-quiz" id="wb-btn-quiz" onclick="startWrongTraining('meaningQuiz')">
+      <span>📝 錯題</span><span>測驗特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-copy" onclick="copyWrongBook()">
+      <span>📋 複製</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-download" onclick="downloadWrongBook()">
+      <span>💾 下載</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-clear" onclick="clearCurrentWrongBook()">
+      <span>🧹 清空</span><span>錯題本</span>
+    </button>
+  </div>
+
+  <div class="wb-auto-remove-box">
+    <input type="checkbox" id="wb-auto-remove" checked>
+    <label for="wb-auto-remove">特訓中答對時，自動移出錯題本</label>
+  </div>
+
+  <div class="wb-card-container" id="wrong-list-container">
+    <div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>
+  </div>
+</div>
+<div id="summary-area" style="display: none;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐[cite: 1]</div>
+</div>
+<script>
+const QUIZ_TITLE = "[語文學習集練習神器]宋詞精選填空(上)"; 
+
+const translationMap = {
+  "雨霖鈴˙柳永": "秋後的蟬叫得淒涼急促，面對著傍晚長亭，一陣陣急雨剛剛停歇。在京城門外設帳餞別卻毫無心緒，依依不捨之際，船伕已催促著要啟程了。兩人緊握雙手淚眼相望，哽咽得連一句話也說不出來。想到從此離去，千里煙波浩渺，傍晚沉沉的雲霧籠罩著遼闊的楚地天空。自古以來多情的人最傷心離別，更何況是在這冷落淒清的秋天！今夜酒醒時會在什麼地方？只有楊柳依依的江岸、清晨的冷風與殘月相伴。這一去就是經年累月，縱使有良辰美景也如同虛設。即使有萬種柔情蜜意，又能向誰傾訴呢？",
+  "水調歌頭˙蘇軾": "明月從什麼時候開始有的呢？我端起酒杯遙問青天。不知道天上的仙宮，今晚是哪一年？我想乘著清風飛回天上，又擔心玉石砌成的樓閣太過高寒。在月下起舞與清影相隨，又哪裡比得上人間呢？月兒轉過朱紅樓閣，低懸在雕花門窗前，照著徹夜未眠的人。月亮對人不該有怨恨吧，為什麼總是在人們離別時才圓呢？人有悲歡離合的變遷，月有陰晴圓缺的轉換，這種事自古以來就很難周全。只希望心中思念的人平安長久，縱使相隔千里也能共享這美好的月光。",
+  "西江月˙辛棄疾": "（其一·醉裏且貪歡笑）在醉意中暫且尋歡作樂，哪裡還有工夫去發愁。近來才發覺古代書本上的道理，完全相信它反倒毫無用處。昨夜在松樹邊喝醉倒下，我還開口問松樹：『我醉成怎樣了？』恍惚中只疑心松樹搖動是要來扶我，我便用手推開松樹說：『走開！』\n（其二·夜行黃沙道中）明月升起驚飛了棲息樹枝的喜鵲，清涼的夜風中傳來陣陣蟬鳴。稻花飄香中彷彿在暢談著豐收的年景，耳邊傳來陣陣歡快的蛙聲。天邊閃爍著七八顆稀疏的星光，山前灑落著兩三點濛濛細雨。過去熟悉的茅草客店就在土地廟樹林旁，走過溪水上的木橋拐個彎，它就忽然出現在眼前。",
+  "江城子˙蘇軾": "（其一·乙卯正月二十日夜記夢）生者與死者天人永隔整整十年，不去刻意回想，卻自然難以忘懷。遠在千里之外的孤墳，毫無地方可以傾訴心中的淒涼。縱然今日再次相逢恐怕也認不出來了，我已是滿面風塵，兩鬢如霜。昨夜幽幽夢境中忽然回到了故鄉，看見妳坐在小軒窗前，正梳妝打扮。兩人相對無言，唯有熱淚千行。料想每年最令人痛斷腸的地方，便是那明月照耀下、長滿矮松的山岡。\n（其二·密州出獵）我這老夫姑且發發少年人的狂氣，左手牽著黃犬，右臂托著蒼鷹，隨從們頭戴錦帽身披貂裘，千騎駿馬奔騰席捲平坦的山岡。為報答全城百姓隨同太守出獵的盛情，我親自開弓射虎，讓大家看看我如當年孫郎般的英姿！痛飲之後胸懷開闊膽氣更豪，兩鬢微白又有何妨？何時朝廷能像漢文帝派遣馮唐那樣派人前來宣慰重用？我定當拉滿雕弓如一輪圓月，望向西北邊疆，射下侵擾國土的天狼星！",
+  "臨江仙˙蘇軾": "夜裡在東坡暢飲醒了又醉，回住所時彷彿已經是三更半夜了。家童睡得鼾聲如雷，怎麼敲門都不回應，我只好拄著拐杖，靜靜佇立江邊聽著流水聲。常常遺憾這身軀不能完全由自己做主，何時才能忘卻塵世名利的奔波營求呢？夜深了風漸漸平息，水面波紋平靜，真想駕一葉扁舟從此遠遁，在廣闊的江海中寄託下半生。",
+  "南鄉子˙李珣": "乘著裝飾華美的彩船，經過滿開蓮花的池塘，划船時唱起的歌聲驚動了沉睡中的鴛鴦。遊賞的採蓮女子頭戴鮮花、相互挨著嬉笑，競相展現姣好美麗的身姿，爭著折下圓圓的荷葉來遮擋傍晚西斜的夕陽。",
+  "相見歡˙李煜": "（其一·林花謝了春紅）樹林裡的花朵已經褪去了春天的艷紅，時光過得實在太匆促。無奈早晨才迎來寒雨，傍晚又吹起冷風。美人帶淚的殘紅，留人沈醉，何時才能重逢？這自是人生無盡長恨，如同奔流江水永遠向東流去。",
+  "望江南˙溫庭筠": "梳洗梳理完畢，獨自依靠在望江樓上眺望。遠方江面上千百艘船隻駛過，卻都不是心上人乘坐的船。夕陽的餘暉脈脈含情地灑在悠悠流淌的江水上，思念之深令人在長滿白蘋的洲渚旁肝腸寸斷。",
+  "釵頭鳳˙唐婉": "世態炎涼，人情險惡，一場黃昏暮雨輕易打落了嬌弱的花朵。晨風吹乾了昨夜的淚痕，但殘留的淚跡依然清晰。想在信紙上寫下滿腔心事，卻只能獨自對著欄杆自言自語。難啊，難啊，難！人事各奔前程，今天早已不同於昨日，病弱的靈魂常像鞦韆索般飄搖無依。城角號聲淒寒，夜色即將退去。害怕別人詢問關心，只能強忍淚水強裝歡笑。瞞著吧，瞞著吧，瞞著吧！",
+  "醜奴兒˙辛棄疾": "年輕時不懂得愁苦的滋味，總是喜歡登上高樓。喜歡登上高樓，為了寫出新詞而勉強裝出愁緒。如今飽嘗了人間的所有愁苦，想說卻又說不出口。想說卻又說不出口，只得淡淡說一句：好一個清涼的秋天啊！",
+  "訴衷情˙陸游": "當年萬里奔赴前線期盼立功封侯，單槍匹馬駐守在梁州前線。如今山河阻隔夢醒何處，舊日的貂皮大衣上已落滿塵土。胡人尚未消滅，兩鬢卻已早生白髮，眼淚白白流淌。這一生誰能料想得到，心神依然嚮往著天山戰場，身軀卻已衰老在偏遠的滄洲。",
+  "鷓鴣天˙晏幾道": "當年舞女彩袖翩翩殷勤地端著玉杯勸酒，我甘心沉醉在酒宴中面色泛紅。舞姿翩躚直到樓頂月落，歌聲悠揚直到桃花扇底微風止歇。自從離別之後，無時無刻不在懷念相逢的情景。多少回在夢境中與妳相聚。今夜只管點著明亮的燈燭照耀著妳，心中仍深深害怕這場相聚只是一場夢境。",
+  "漁歌子˙張志和": "西塞山前白鷺在晴空中飛翔，桃花盛開的溪流中鱖魚正肥美。頭戴青竹笠，身穿綠蓑衣，在斜風細雨中怡然自得，根本不需要急著回家。",
+  "南鄉子˙辛棄疾": "從哪裡可以望見中原神州？眼前只有北固樓壯闊的風光。千古以來興旺與衰亡了多少史事？悠悠歲月無窮無盡，只有滾滾長江奔流不息。年少時便統領萬千披甲戴盔的雄兵，割據雄踞東南征戰不休。放眼天下英雄誰是他的對手？唯有曹操與劉備而已。生兒子就應當如同孫仲謀那樣英勇有為！",
+  "卜算子˙李之儀": "我住在長江源頭，妳住在長江盡頭。天天思念著妳卻見不到妳，但我們共飲著同一條長江的水。這江水何時才會停歇，這相思離恨何時才能了結？只希望妳的心如同我的心一樣，就絕不會辜負這份深切的相思之意。",
+  "虞美人˙蔣捷": "年輕時在歡場歌樓上聽雨，紅色的燭光昏暗地照著羅帳。壯年時在異鄉客船中聽雨，江面廣闊雲層低垂，聽著失群的孤雁在淒涼西風中悲鳴。而如今在幽靜的僧廬下聽雨，兩鬢早已花白斑白。人間的悲歡離合總是如此無情，任由階前的雨滴點點滴滴一直落到天亮。",
+  "長相思˙白居易": "汴水悠悠流淌，泗水悠悠流淌，一同流到了瓜洲古渡頭。遠處的吳山彷彿凝聚著點點愁思。思念悠悠，怨恨悠悠，直到心上人歸來時才肯罷休。月光皎潔明亮，伊人正獨自倚在樓頭思念。",
+  "清平樂˙辛棄疾": "低矮茅草屋顯得十分小巧，溪邊長滿了青翠碧綠的小草。帶著醉意的吳地方言聽來分外親切溫柔，那滿頭白髮的老公公老婆婆是誰家的呢？大兒子正在溪東的豆田裡鋤草，二兒子正忙著編織雞籠。最惹人喜愛的是調皮淘氣的小兒子，正趴在溪頭剝著剛採下的蓮蓬吃。",
+  "夜遊宮˙陸游": "雪後的清晨軍營中號角聲四起，夢醒時分恍惚不知身在何地。戰馬奔馳無聲如潮水般湧動。想念邊境要塞關河，正是雁門關以西、青海湖畔的前線。寒夜燈下從夢中驚醒，滴漏聲已斷，月光斜斜照在窗紙上。自許能馳騁萬里建功封侯，有誰知道，我雖兩鬢斑白殘破，但報國的雄心永遠未死！",
+  "破陣子˙辛棄疾": "醉夢中挑亮油燈拔劍觀看，夢醒時聽見各營傳來相連的號角聲。把烤牛肉分發給部下將士享用，軍樂隊演奏著塞外的雄壯戰歌。秋天沙場上正進行閱兵點將。戰馬像的盧馬一樣奔馳如飛，弓弦響如驚雷震天。一心想為君王完成收復天下的大業，贏得生前死後的萬世美名，可惜如今兩鬢早已白髮叢生！",
+  "定風波˙蘇軾": "不用理會穿透樹林敲打樹葉的風雨聲，何妨一邊長嘯歌唱一邊漫步徐行。手拄竹杖腳穿草鞋比騎馬還要輕快，有什麼好怕的？披著一件蓑衣在煙雨中任憑風雨過一生。微寒的春風吹醒了酒意，略帶寒意，山頭初升的夕陽卻溫暖相迎。回頭望向剛才走過風雨蕭瑟的地方，信步歸去，既無所謂風雨，也無所謂天晴。"
+};
+
+const rawData = [
+  {"q": "_____悽切，對長亭晚，驟雨初歇。都門帳飲無緒，留戀處，蘭舟催發。〈雨霖鈴˙柳永〉", "a": "寒蟬", "b": "秋蟬"},
+  {"q": "寒蟬悽切，對長亭晚，_____初歇。都門帳飲無緒，留戀處，蘭舟催發。〈雨霖鈴˙柳永〉", "a": "驟雨", "b": "細雨"},
+  {"q": "寒蟬悽切，對_____晚，驟雨初歇。都門帳飲無緒，留戀處，蘭舟催發。〈雨霖鈴˙柳永〉", "a": "長亭", "b": "涼亭"},
+  {"q": "寒蟬悽切，對長亭晚，驟雨初歇。都門帳飲無緒，方留戀處，_____催發。〈雨霖鈴˙柳永〉", "a": "蘭舟", "b": "方舟"},
+  {"q": "_____相看淚眼，竟無語凝噎。念去去，千里煙波，暮靄沉沉楚天闊。〈雨霖鈴˙柳永〉", "a": "執手", "b": "相擁"},
+  {"q": "執手相看淚眼，竟_____凝噎。念去去，千里煙波，暮靄沉沉楚天闊。〈雨霖鈴˙柳永〉", "a": "無語", "b": "語塞"},
+  {"q": "執手相看淚眼，竟無語凝噎。念去去，千里煙波，_____沉沉楚天闊。〈雨霖鈴˙柳永〉", "a": "暮靄", "b": "死氣"},
+  {"q": "多情自古傷_____，更那堪冷落清秋節！今宵酒醒何處？楊柳岸，曉風殘月。〈雨霖鈴˙柳永〉", "a": "離別", "b": "分離"},
+  {"q": "多情自古傷離別，更那堪冷落_____！今宵酒醒何處？楊柳岸，曉風殘月。〈雨霖鈴˙柳永〉", "a": "清秋節", "b": "情人節"},
+  {"q": "多情自古傷離別，更那堪冷落清秋節！今宵酒醒何處？_____，曉風殘月。〈雨霖鈴˙柳永〉", "a": "楊柳岸", "b": "桃花岸"},
+  {"q": "多情自古傷離別，更那堪冷落清秋節！今宵酒醒何處？楊柳岸，_____。〈雨霖鈴˙柳永〉", "a": "曉風殘月", "b": "風花雪月"},
+  {"q": "此去經年，應是_____虛設。便縱有千種風情，更與何人說？〈雨霖鈴˙柳永〉", "a": "良辰好景", "b": "風花雪月"},
+  {"q": "此去經年，應是良辰好景虛設。便縱有_____，更與何人說？〈雨霖鈴˙柳永〉", "a": "千種風情", "b": "英雄豪傑"},
+  {"q": "明月幾時有？把酒問_____。不知天上宮闕，今夕是何年？〈水調歌頭˙蘇軾〉", "a": "青天", "b": "蒼天"},
+  {"q": "明月幾時有？把酒問青天。不知天上_____，今夕是何年？〈水調歌頭˙蘇軾〉", "a": "宮闕", "b": "龍宮"},
+  {"q": "明月幾時有？把酒問青天。不知天上宮闕，今夕是_____？〈水調歌頭˙蘇軾〉", "a": "何年", "b": "何處"},
+  {"q": "我欲_____，又恐瓊樓玉宇，高處不勝寒。起舞弄清影，何似在人間？〈水調歌頭˙蘇軾〉", "a": "乘風歸去", "b": "隨波逐流"},
+  {"q": "我欲乘風歸去，又恐_____，高處不勝寒。起舞弄清影，何似在人間？〈水調歌頭˙蘇軾〉", "a": "瓊樓玉宇", "b": "雕闌玉砌"},
+  {"q": "我欲乘風歸去，又恐瓊樓玉宇，高處_____。起舞弄清影，何似在人間？〈水調歌頭˙蘇軾〉", "a": "不勝寒", "b": "可堪涼"},
+  {"q": "我欲乘風歸去，又恐瓊樓玉宇，高處不勝寒。起舞弄_____，何似在人間？〈水調歌頭˙蘇軾〉", "a": "清影", "b": "陰影"},
+  {"q": "我欲乘風歸去，又恐瓊樓玉宇，高處不勝寒。起舞弄清影，何似在_____？〈水調歌頭˙蘇軾〉", "a": "人間", "b": "天上"},
+  {"q": "轉_____，低綺戶，照無眠。不應有恨，何事長向別時圓？〈水調歌頭˙蘇軾〉", "a": "朱閣", "b": "朱門"},
+  {"q": "轉朱閣，低_____，照無眠。不應有恨，何事長向別時圓？〈水調歌頭˙蘇軾〉", "a": "綺戶", "b": "綺窗"},
+  {"q": "轉朱閣，低綺戶，照_____。不應有恨，何事長向別時圓？〈水調歌頭˙蘇軾〉", "a": "無眠", "b": "失眠"},
+  {"q": "轉朱閣，低綺戶，照無眠。不應_____，何事長向別時圓？〈水調歌頭˙蘇軾〉", "a": "有恨", "b": "無恨"},
+  {"q": "轉朱閣，低綺戶，照無眠。不應有恨，何事長向_____？〈水調歌頭˙蘇軾〉", "a": "別時圓", "b": "聚時缺"},
+  {"q": "人有_____，月有陰晴圓缺，此事古難全。但願人長久，千里共嬋娟。〈水調歌頭˙蘇軾〉", "a": "悲歡離合", "b": "喜怒哀樂"},
+  {"q": "人有悲歡離合，月有_____，此事古難全。但願人長久，千里共嬋娟。〈水調歌頭˙蘇軾〉", "a": "陰晴圓缺", "b": "悲歡離合"},
+  {"q": "人有悲歡離合，月有陰晴圓缺，此事_____。但願人長久，千里共嬋娟。〈水調歌頭˙蘇軾〉", "a": "古難全", "b": "永不變"},
+  {"q": "人有悲歡離合，月有陰晴圓缺，此事古難全。但願_____，千里共嬋娟。〈水調歌頭˙蘇軾〉", "a": "人長久", "b": "長相守"},
+  {"q": "人有悲歡離合，月有陰晴圓缺，此事古難全。但願人長久，千里_____。〈水調歌頭˙蘇軾〉", "a": "共嬋娟", "b": "共玉蟾"},
+  {"q": "醉裏且貪歡笑，_____。近來始覺古人書，信著全無是處。昨夜鬆邊醉倒，問鬆我醉何如。只疑鬆動要來扶。以手推鬆曰去。〈西江月˙辛棄疾〉", "a": "要愁那得工夫", "b": "要閒那得時間"},
+  {"q": "醉裏且貪歡笑，要愁那得工夫。近來始覺古人書，_____。昨夜鬆邊醉倒，問鬆我醉何如。只疑鬆動要來扶。以手推鬆曰去。〈西江月˙辛棄疾〉", "a": "信著全無是處", "b": "讀著全是益處"},
+  {"q": "醉裏且貪歡笑，要愁那得工夫。近來始覺古人書。信著全無是處。昨夜松邊醉倒，_____。只疑松動要來扶，以手推松曰去。〈西江月˙辛棄疾〉", "a": "問松我醉何如", "b": "問松我為何人"},
+  {"q": "醉裏且貪歡笑，要愁那得工夫。近來始覺古人書。信著全無是處。昨夜松邊醉倒，問松我醉何如。只疑松動要來扶，_____。〈西江月˙辛棄疾〉", "a": "以手推松曰去", "b": "以手將松推去"},
+  {"q": "十年生死兩茫茫，_____，自難忘。千里孤墳，無處話淒涼。縱使相逢應不識，塵滿面，鬢如霜。〈江城子˙蘇軾〉", "a": "不思量", "b": "細回想"},
+  {"q": "十年生死兩茫茫，不思量，_____。千里孤墳，無處話淒涼。縱使相逢應不識，塵滿面，鬢如霜。〈江城子˙蘇軾〉", "a": "自難忘", "b": "故遺忘"},
+  {"q": "十年生死兩茫茫，不思量，自難忘。千里孤墳，無處_____。縱使相逢應不識，塵滿面，鬢如霜。〈江城子˙蘇軾〉", "a": "話淒涼", "b": "見故人"},
+  {"q": "十年生死兩茫茫，不思量，自難忘。千里孤墳，無處話淒涼。縱使相逢應不識，_____，鬢如霜。〈江城子˙蘇軾〉", "a": "塵滿面", "b": "鬢如墨"},
+  {"q": "十年生死兩茫茫，不思量，自難忘。千里孤墳，無處話淒涼。縱使相逢應不識，塵滿面，_____。〈江城子˙蘇軾〉", "a": "鬢如霜", "b": "髮如雪"},
+  {"q": "夜來幽夢忽還鄉，_____，正梳妝。相顧無言，惟有淚千行。料得年年腸斷處，明月夜，短松岡。〈江城子˙蘇軾〉", "a": "小軒窗", "b": "大綺戶"},
+  {"q": "夜來幽夢忽還鄉，小軒窗，_____。相顧無言，惟有淚千行。料得年年腸斷處，明月夜，短松岡。〈江城子˙蘇軾〉", "a": "正梳妝", "b": "正孤眠"},
+  {"q": "夜來幽夢忽還鄉，小軒窗，正梳妝。相顧無言，惟有_____。料得年年腸斷處，明月夜，短松岡。〈江城子˙蘇軾〉", "a": "淚千行", "b": "涕泗流"},
+  {"q": "夜來幽夢忽還鄉，小軒窗，正梳妝。相顧無言，惟有淚千行。料得年年腸斷處，_____，短松岡。〈江城子˙蘇軾〉", "a": "明月夜", "b": "新月夜"},
+  {"q": "夜來幽夢忽還鄉，小軒窗，正梳妝。相顧無言，惟有淚千行。料得年年腸斷處，明月夜，_____。〈江城子˙蘇軾〉", "a": "短松岡", "b": "高修竹"},
+  {"q": "夜飲東坡醒復醉，_____。家童鼻息已雷鳴，敲門都不應，倚杖聽江聲。〈臨江仙˙蘇軾〉", "a": "歸來彷彿三更", "b": "覺來已是亭午"},
+  {"q": "夜飲東坡醒復醉，歸來彷彿三更。家童鼻息已雷鳴，_____，倚杖聽江聲。〈臨江仙˙蘇軾〉", "a": "敲門都不應", "b": "呼喊皆不聽"},
+  {"q": "夜飲東坡醒復醉，歸來彷彿三更。家童鼻息已雷鳴，敲門都不應，_____。〈臨江仙˙蘇軾〉", "a": "倚杖聽江聲", "b": "拄杖聽鳥鳴"},
+  {"q": "長恨此身非我有，_____。夜闌風靜縠紋平，小舟從此逝，江海寄餘生。〈臨江仙˙蘇軾〉", "a": "何時忘卻營營", "b": "何必在意悠悠"},
+  {"q": "長恨此身非我有，何時忘卻營營。夜闌風靜縠紋平，_____，江海寄餘生。〈臨江仙˙蘇軾〉", "a": "小舟從此逝", "b": "白雲從此飄"},
+  {"q": "長恨此身非我有，何時忘卻營營。夜闌風靜縠紋平，小舟從此逝，_____。〈臨江仙˙蘇軾〉", "a": "江海寄餘生", "b": "魚兒已悠遊"},
+  {"q": "乘_____，過蓮塘，棹歌驚起睡鴛鴦。遊女帶花偎伴笑，爭窈窕，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "彩舫", "b": "扁舟"},
+  {"q": "乘彩舫，過_____，棹歌驚起睡鴛鴦。遊女帶花偎伴笑，爭窈窕，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "蓮塘", "b": "池塘"},
+  {"q": "乘彩舫，過蓮塘，_____驚起睡鴛鴦。遊女帶花偎伴笑，爭窈窕，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "棹歌", "b": "山歌"},
+  {"q": "乘彩舫，過蓮塘，棹歌驚起睡_____。遊女帶花偎伴笑，爭窈窕，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "鴛鴦", "b": "天鵝"},
+  {"q": "乘彩舫，過蓮塘，棹歌驚起睡鴛鴦。_____帶花偎伴笑，爭窈窕，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "遊女", "b": "侍女"},
+  {"q": "乘彩舫，過蓮塘，棹歌驚起睡鴛鴦。遊女帶花偎伴笑，爭_____，競折團荷遮晚照。〈南鄉子˙李珣〉", "a": "窈窕", "b": "嫵媚"},
+  {"q": "乘彩舫，過蓮塘，棹歌驚起睡鴛鴦。遊女帶花偎伴笑，爭窈窕，競折_____遮晚照。〈南鄉子˙李珣〉", "a": "團荷", "b": "蓮蓬"},
+  {"q": "乘彩舫，過蓮塘，棹歌驚起睡鴛鴦。遊女帶花偎伴笑，爭窈窕，競折團荷遮_____。〈南鄉子˙李珣〉", "a": "晚照", "b": "明月"},
+  {"q": "林花謝了_____，太匆匆。無奈朝來寒雨，晚來風。胭脂淚，相留醉，幾時重。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "春紅", "b": "秋楓"},
+  {"q": "林花謝了春紅，太_____。無奈朝來寒雨，晚來風。胭脂淚，相留醉，幾時重。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "匆匆", "b": "冉冉"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來_____，晚來風。胭脂淚，相留醉，幾時重。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "寒雨", "b": "朔風"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來寒雨，晚來_____。胭脂淚，相留醉，幾時重。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "風", "b": "雪"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來寒雨，晚來風。_____淚，相留醉，幾時重。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "胭脂", "b": "梨花"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來寒雨，晚來風。胭脂淚，相留醉，幾時_____。自是人生長恨，水長東。〈相見歡˙李煜〉", "a": "重", "b": "逢"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來寒雨，晚來風。胭脂淚，相留醉，幾時重。自是_____長恨，水長東。〈相見歡˙李煜〉", "a": "人生", "b": "心中"},
+  {"q": "林花謝了春紅，太匆匆。無奈朝來寒雨，晚來風。胭脂淚，相留醉，幾時重。自是人生長恨，水長_____。〈相見歡˙李煜〉", "a": "東", "b": "西"},
+  {"q": "梳洗罷，獨倚望_____。過盡千帆皆不是，斜暉脈脈水悠悠。腸斷白蘋洲。〈望江南˙溫庭筠〉", "a": "江樓", "b": "神州"},
+  {"q": "_____罷，獨倚望江樓。過盡千帆皆不是，斜暉脈脈水悠悠。腸斷白蘋洲。〈望江南˙溫庭筠〉", "a": "梳洗", "b": "整衣"},
+  {"q": "梳洗罷，獨倚望江樓。過盡_____皆不是，斜暉脈脈水悠悠。腸斷白蘋洲。〈望江南˙溫庭筠〉", "a": "千帆", "b": "扁舟"},
+  {"q": "梳洗罷，獨倚望江樓。過盡千帆皆不是，斜暉_____水悠悠。腸斷白蘋洲。〈望江南˙溫庭筠〉", "a": "脈脈", "b": "閃閃"},
+  {"q": "梳洗罷，獨倚望江樓。過盡千帆皆不是，斜暉脈脈水_____。腸斷白蘋洲。〈望江南˙溫庭筠〉", "a": "悠悠", "b": "滾滾"},
+  {"q": "世情_____，人情惡，雨送黃昏花易落。曉風乾，淚痕殘。欲箋心事，獨語斜闌。難，難，難！〈釵頭鳳˙唐婉〉", "a": "薄", "b": "厚"},
+  {"q": "世情薄，人情_____，雨送黃昏花易落。曉風乾，淚痕殘。欲箋心事，獨語斜闌。難，難，難！〈釵頭鳳˙唐婉〉", "a": "惡", "b": "善"},
+  {"q": "世情薄，人情惡，雨送黃昏花易_____。曉風乾，淚痕殘。欲箋心事，獨語斜闌。難，難，難！〈釵頭鳳˙唐婉〉", "a": "落", "b": "長"},
+  {"q": "世情薄，人情惡，雨送黃昏花易落。曉風_____，淚痕殘。欲箋心事，獨語斜闌。難，難，難！〈釵頭鳳˙唐婉〉", "a": "乾", "b": "涼"},
+  {"q": "世情薄，人情惡，雨送黃昏花易落。曉風乾，淚痕_____。欲箋心事，獨語斜闌。難，難，難！〈釵頭鳳˙唐婉〉", "a": "殘", "b": "長"},
+  {"q": "世情薄，人情惡，雨送黃昏花易落。曉風乾，淚痕殘。欲箋心事，獨語_____。難，難，難！〈釵頭鳳˙唐婉〉", "a": "斜闌", "b": "高樓"},
+  {"q": "世情薄，人情惡，雨送黃昏花易落。曉風乾，淚痕殘。欲箋心事，獨語斜闌。_____！〈釵頭鳳˙唐婉〉", "a": "難，難，難", "b": "易，易，易"},
+  {"q": "人成_____，今非昨，病魂常似鞦韆索。角聲寒，夜闌珊。怕人尋問，咽淚裝歡。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "各", "b": "分"},
+  {"q": "人成各，今非_____，病魂常似鞦韆索。角聲寒，夜闌珊。怕人尋問，咽淚裝歡。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "昨", "b": "今"},
+  {"q": "人成各，今非昨，病魂常似鞦韆_____。角聲寒，夜闌珊。怕人尋問，咽淚裝歡。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "索", "b": "架"},
+  {"q": "人成各，今非昨，病魂常似鞦韆索。角聲_____，夜闌珊。怕人尋問，咽淚裝歡。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "寒", "b": "響"},
+  {"q": "人成各，今非昨，病魂常似鞦韆索。角聲寒，夜_____。怕人尋問，咽淚裝歡。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "闌珊", "b": "漫漫"},
+  {"q": "人成各，今非昨，病魂常似鞦韆索。角聲寒，夜闌珊。怕人尋問，咽淚_____。瞞，瞞，瞞！〈釵頭鳳˙唐婉〉", "a": "裝歡", "b": "吞聲"},
+  {"q": "人成各，今非昨，病魂常似鞦韆索。角聲寒，夜闌珊。怕人尋問，咽淚裝歡。_____！〈釵頭鳳˙唐婉〉", "a": "瞞，瞞，瞞", "b": "騙，騙，騙"},
+  {"q": "少年不識_____，愛上層樓。愛上層樓。爲賦新詞強說愁。而今識盡愁滋味，欲說還休。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "愁滋味", "b": "情滋味"},
+  {"q": "少年不識愁滋味，_____。愛上層樓。爲賦新詞強說愁。而今識盡愁滋味，欲說還休。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "愛上層樓", "b": "更上層樓"},
+  {"q": "少年不識愁滋味，愛上層樓。愛上層樓。爲賦新詞_____。而今識盡愁滋味，欲說還休。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "強說愁", "b": "直抒情"},
+  {"q": "少年不識愁滋味，愛上層樓。愛上層樓。_____強說愁。而今識盡愁滋味，欲說還休。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "為賦新詞", "b": "為填新詞"},
+  {"q": "少年不識愁滋味，愛上層樓。愛上層樓。爲賦新詞強說愁。而今識盡_____，欲說還休。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "愁滋味", "b": "情滋味"},
+  {"q": "少年不識愁滋味，愛上層樓。愛上層樓。爲賦新詞強說愁。而今識盡愁滋味，_____。欲說還休。卻道天涼好個秋。〈醜奴兒˙辛棄疾〉", "a": "欲說還休", "b": "直抒胸臆"},
+  {"q": "少年不識愁滋味，愛上層樓。愛上層樓。爲賦新詞強說愁。而今識盡愁滋味，欲說還休。欲說還休。卻道_____。〈醜奴兒˙辛棄疾〉", "a": "天涼好個秋", "b": "天暖好個冬"},
+  {"q": "當年萬里_____，匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。胡未滅，鬢先秋。淚空流。此生誰料，心在天山，身老滄洲。〈訴衷情˙陸游〉", "a": "覓封侯", "b": "尋諸侯"},
+  {"q": "當年萬里覓封侯，匹馬戍梁州。關河夢斷何處，塵暗舊_____。胡未滅，鬢先秋。淚空流。此生誰料，心在天山，身老滄洲。〈訴衷情˙陸游〉", "a": "貂裘", "b": "布衣"},
+  {"q": "當年萬里覓封侯。匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。_____，鬢先秋，淚空流。此生誰料，心在天山，身老滄洲。〈訴衷情˙陸游〉", "a": "胡未滅", "b": "宋未滅"},
+  {"q": "當年萬里覓封侯。匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。胡未滅，_____，淚空流。此生誰料，心在天山，身老滄洲。〈訴衷情˙陸游〉", "a": "鬢先秋", "b": "髮如雪"},
+  {"q": "當年萬里覓封侯。匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。胡未滅，鬢先秋，_____。此生誰料，心在天山，身老滄洲。〈訴衷情˙陸游〉", "a": "淚空流", "b": "淚珠落"},
+  {"q": "當年萬里覓封侯。匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。胡未滅，鬢先秋，淚空流。此生誰料，心在_____，身老滄洲。〈訴衷情˙陸游〉", "a": "天山", "b": "泰山"},
+  {"q": "當年萬里覓封侯。匹馬戍梁州。關河夢斷何處，塵暗舊貂裘。胡未滅，鬢先秋，淚空流。此生誰料，心在天山，身老_____。〈訴衷情˙陸游〉", "a": "滄洲", "b": "神州"},
+  {"q": "彩袖殷勤捧_____。當年拚卻醉顏紅。舞低楊柳樓心月，歌盡桃花扇底風。〈鷓鴣天˙晏幾道〉", "a": "玉鍾", "b": "寶鼎"},
+  {"q": "彩袖殷勤捧玉鍾。當年拚卻_____紅。舞低楊柳樓心月，歌盡桃花扇底風。〈鷓鴣天˙晏幾道〉", "a": "醉顏", "b": "朱顏"},
+  {"q": "彩袖殷勤捧玉鍾。當年拚卻醉顏紅。舞低_____樓心月，歌盡桃花扇底風。〈鷓鴣天˙晏幾道〉", "a": "楊柳", "b": "修竹"},
+  {"q": "彩袖殷勤捧玉鍾。當年拚卻醉顏紅。舞低楊柳樓心月，歌盡_____扇底風。〈鷓鴣天˙晏幾道〉", "a": "桃花", "b": "梅花"},
+  {"q": "從_____，憶相逢。幾回魂夢與君同。今宵剩把銀釭照，猶恐相逢是夢中。〈鷓鴣天˙晏幾道〉", "a": "別後", "b": "死後"},
+  {"q": "從別後，憶_____。幾回魂夢與君同。今宵剩把銀釭照，猶恐相逢是夢中。〈鷓鴣天˙晏幾道〉", "a": "相逢", "b": "難忘"},
+  {"q": "從別後，憶相逢。幾回_____與君同。今宵剩把銀釭照，猶恐相逢是夢中。〈鷓鴣天˙晏幾道〉", "a": "魂夢", "b": "年歲"},
+  {"q": "從別後，憶相逢。幾回魂夢與君同。今宵剩把_____照，猶恐相逢是夢中。〈鷓鴣天˙晏幾道〉", "a": "銀釭", "b": "紅顏"},
+  {"q": "從別後，憶相逢。幾回魂夢與君同。今宵剩把銀釭照，猶恐相逢是_____。〈鷓鴣天˙晏幾道〉", "a": "夢中", "b": "天上"},
+  {"q": "西塞山前_____，桃花流水鱖魚肥。青箬笠，綠蓑衣，斜風細雨不須歸。〈漁歌子˙張志和〉", "a": "白鷺飛", "b": "鱖魚肥"},
+  {"q": "西塞山前白鷺飛，桃花流水_____。青箬笠，綠蓑衣，斜風細雨不須歸。〈漁歌子˙張志和〉", "a": "鱖魚肥", "b": "白鷺飛"},
+  {"q": "西塞山前白鷺飛，桃花流水鱖魚肥。_____，綠蓑衣，斜風細雨不須歸。〈漁歌子˙張志和〉", "a": "青箬笠", "b": "紅錦衣"},
+  {"q": "西塞山前白鷺飛，桃花流水鱖魚肥。青箬笠，_____，斜風細雨不須歸。〈漁歌子˙張志和〉", "a": "綠蓑衣", "b": "紫紈褲"},
+  {"q": "西塞山前白鷺飛，桃花流水鱖魚肥。青箬笠，綠蓑衣，斜風細雨_____。〈漁歌子˙張志和〉", "a": "不須歸", "b": "匆匆歸"},
+  {"q": "何處_____？滿眼風光北固樓。千古興亡多少事？悠悠。不盡長江滾滾流。〈南鄉子˙辛棄疾〉", "a": "望神州", "b": "望天闕"},
+  {"q": "何處望神州？滿眼風光_____。千古興亡多少事？悠悠。不盡長江滾滾流。〈南鄉子˙辛棄疾〉", "a": "北固樓", "b": "黃鶴樓"},
+  {"q": "何處望神州？滿眼風光北固樓。_____多少事？悠悠。不盡長江滾滾流。〈南鄉子˙辛棄疾〉", "a": "千古興亡", "b": "十年生死"},
+  {"q": "何處望神州？滿眼風光北固樓。千古興亡多少事？_____。不盡長江滾滾流。〈南鄉子˙辛棄疾〉", "a": "悠悠", "b": "渺渺"},
+  {"q": "何處望神州？滿眼風光北固樓。千古興亡多少事？悠悠。不盡長江_____。〈南鄉子˙辛棄疾〉", "a": "滾滾流", "b": "潺潺流"},
+  {"q": "年少_____，坐斷東南戰未休。天下英雄誰敵手？曹劉。生子當如孫仲謀。〈南鄉子˙辛棄疾〉", "a": "萬兜鍪", "b": "千鍾粟"},
+  {"q": "年少萬兜鍪，坐斷東南_____。天下英雄誰敵手？曹劉。生子當如孫仲謀。〈南鄉子˙辛棄疾〉", "a": "戰未休", "b": "戰已停"},
+  {"q": "年少萬兜鍪，坐斷東南戰未休。天下英雄誰敵手？_____。生子當如孫仲謀。〈南鄉子˙辛棄疾〉", "a": "曹劉", "b": "關張"},
+  {"q": "年少萬兜鍪，坐斷東南戰未休。_____誰敵手？曹劉。生子當如孫仲謀。〈南鄉子˙辛棄疾〉", "a": "天下英雄", "b": "當代軍師"},
+  {"q": "年少萬兜鍪，坐斷東南戰未休。天下英雄誰敵手？曹劉。生子當如_____。〈南鄉子˙辛棄疾〉", "a": "孫仲謀", "b": "諸葛亮"},
+  {"q": "我住_____，君住長江尾。日日思君不見君，共飲長江水。此水幾時休，此恨何時已。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "長江頭", "b": "黃河頭"},
+  {"q": "我住長江頭，君住_____。日日思君不見君，共飲長江水。此水幾時休，此恨何時已。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "長江尾", "b": "黃河尾"},
+  {"q": "我住長江頭，君住長江尾。日日思君_____，共飲長江水。此水幾時休，此恨何時已。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "不見君", "b": "日訪君"},
+  {"q": "我住長江頭，君住長江尾。日日思君不見君，共飲_____。此水幾時休，此恨何時已。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "長江水", "b": "黃河水"},
+  {"q": "我住長江頭，君住長江尾。日日思君不見君，共飲長江水。此水_____，此恨何時已。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "幾時休", "b": "何時有"},
+  {"q": "我住長江頭，君住長江尾。日日思君不見君，共飲長江水。此水幾時休，此恨_____。只願君心似我心，定不負相思意。〈卜算子˙李之儀〉", "a": "何時已", "b": "幾時有"},
+  {"q": "我住長江頭，君住長江尾。日日思君不見君，共飲長江水。此水幾時休，此恨何時已。只願君心_____，定不負相思意。〈卜算子˙李之儀〉", "a": "似我心", "b": "同彼心"},
+  {"q": "我住長江頭，君住長江尾。日日思君不見君，共飲長江水。此水幾時休，此恨何時已。只願君心似我心，定不負_____。〈卜算子˙李之儀〉", "a": "相思意", "b": "離別情"},
+  {"q": "少年聽雨_____上，紅燭昏羅帳。壯年聽雨客舟中，江闊雲低，斷雁叫西風。〈虞美人˙蔣捷〉", "a": "歌樓", "b": "高臺"},
+  {"q": "少年聽雨歌樓上，紅燭昏_____。壯年聽雨客舟中，江闊雲低，斷雁叫西風。〈虞美人˙蔣捷〉", "a": "羅帳", "b": "素帳"},
+  {"q": "少年聽雨歌樓上，紅燭昏羅帳。壯年聽雨_____中，江闊雲低、斷雁叫西風。〈虞美人˙蔣捷〉", "a": "客舟", "b": "馬車"},
+  {"q": "少年聽雨歌樓上，紅燭昏羅帳。壯年聽雨客舟中，江闊雲低、斷雁叫_____。〈虞美人˙蔣捷〉", "a": "西風", "b": "東風"},
+  {"q": "而今聽雨_____下，鬢已星星也。悲歡離合總無情，一任階前，點滴到天明。〈虞美人˙蔣捷〉", "a": "僧廬", "b": "茆店"},
+  {"q": "而今聽雨僧廬下，鬢已_____也。悲歡離合總無情，一任階前，點滴到天明。〈虞美人˙蔣捷〉", "a": "星星", "b": "零零"},
+  {"q": "而今聽雨僧廬下，鬢已星星也。悲歡離合總_____，一任階前、點滴到天明。〈虞美人˙蔣捷〉", "a": "無情", "b": "有意"},
+  {"q": "而今聽雨僧廬下，鬢已星星也。悲歡離合總無情，一任_____、點滴到天明。〈虞美人˙蔣捷〉", "a": "階前", "b": "堂前"},
+  {"q": "而今聽雨僧廬下，鬢已星星也。悲歡離合總無情，一任階前、點滴到_____。〈虞美人˙蔣捷〉", "a": "天明", "b": "心裡"},
+  {"q": "_____別枝驚鵲，清風半夜鳴蟬。稻花香裏說豐年，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "明月", "b": "金烏"},
+  {"q": "明月別枝_____，清風半夜鳴蟬。稻花香裏說豐年，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "驚鵲", "b": "驚風"},
+  {"q": "明月別枝驚鵲，_____半夜鳴蟬。稻花香裏說豐年，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "清風", "b": "驟雨"},
+  {"q": "明月別枝驚鵲，清風半夜_____。稻花香裏說豐年，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "鳴蟬", "b": "狼嚎"},
+  {"q": "明月別枝驚鵲，清風半夜鳴蟬。_____香裏說豐年，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "稻花", "b": "桂花"},
+  {"q": "明月別枝驚鵲，清風半夜鳴蟬。稻花香裏說_____，聽取蛙聲一片。〈西江月˙辛棄疾〉", "a": "豐年", "b": "歉年"},
+  {"q": "明月別枝驚鵲，清風半夜鳴蟬。稻花香裏說豐年，聽取_____一片。〈西江月˙辛棄疾〉", "a": "蛙聲", "b": "蟬鳴"},
+  {"q": "七八個星_____，兩三點雨山前。舊時茅店社林邊，路轉溪頭忽見。〈西江月˙辛棄疾〉", "a": "天外", "b": "山前"},
+  {"q": "七八個星天外，兩三點雨_____。舊時茅店社林邊，路轉溪頭忽見。〈西江月˙辛棄疾〉", "a": "山前", "b": "天外"},
+  {"q": "七八個星天外，兩三點雨山前。舊時_____社林邊，路轉溪橋忽見。〈西江月˙辛棄疾〉", "a": "茆店", "b": "稼軒"},
+  {"q": "七八個星天外，兩三點雨山前。舊時茅店社林邊，路轉_____忽見。〈西江月˙辛棄疾〉", "a": "溪橋", "b": "渡口"},
+  {"q": "_____流，泗水流，流到瓜州古渡頭。吳山點點愁。思悠悠，恨悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "汴水", "b": "長江"},
+  {"q": "汴水流，_____流，流到瓜州古渡頭。吳山點點愁。思悠悠，恨悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "泗水", "b": "長江"},
+  {"q": "汴水流，泗水流，流到_____古渡頭。吳山點點愁。思悠悠，恨悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "瓜州", "b": "神州"},
+  {"q": "汴水流，泗水流，流到瓜州古渡頭。吳山點點_____。思悠悠，恨悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "愁", "b": "情"},
+  {"q": "汴水流，泗水流，流到瓜州古渡頭。吳山點點愁。_____悠悠，恨悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "思", "b": "意"},
+  {"q": "汴水流，泗水流，流到瓜州古渡頭。吳山點點愁。思悠悠，_____悠悠，恨到歸時方始休。月明人倚樓。〈長相思˙白居易〉", "a": "恨", "b": "愛"},
+  {"q": "汴水流，泗水流，流到瓜州古渡頭。吳山點點愁。思悠悠，恨悠悠，恨到_____方始休。月明人倚樓。〈長相思˙白居易〉", "a": "歸時", "b": "來時"},
+  {"q": "汴水流，泗水流，流到瓜州古渡頭。吳山點點愁。思悠悠，恨悠悠，恨到歸時方始休。月明人倚_____。〈長相思˙白居易〉", "a": "樓", "b": "欄"},
+  {"q": "_____低小，溪上青青草。醉裏吳音相媚好，白髮誰家翁媼？〈清平樂˙辛棄疾〉", "a": "茅檐", "b": "房舍"},
+  {"q": "茅檐低小，溪上青青_____。醉裏吳音相媚好，白髮誰家翁媼？〈清平樂˙辛棄疾〉", "a": "草", "b": "水"},
+  {"q": "茅檐低小，溪上青青草。醉裏吳音相媚好，_____誰家翁媼？〈清平樂˙辛棄疾〉", "a": "白髮", "b": "黑髮"},
+  {"q": "茅檐低小，溪上青青草。醉裏吳音相媚好，白髮誰家_____？〈清平樂˙辛棄疾〉", "a": "翁媼", "b": "爺孃"},
+  {"q": "大兒鋤豆溪東，中兒正織_____。最喜小兒亡賴，溪頭臥剝蓮蓬。〈清平樂˙辛棄疾〉", "a": "雞籠", "b": "機杼"},
+  {"q": "大兒鋤豆溪東，中兒正織雞籠。最喜小兒亡賴，溪頭臥剝_____。〈清平樂˙辛棄疾〉", "a": "蓮蓬", "b": "青豆"},
+  {"q": "雪曉_____亂起，夢遊處、不知何地。鐵騎無聲望似水。想關河，雁門西，青海際。〈夜遊宮˙陸游〉", "a": "清笳", "b": "琵琶"},
+  {"q": "雪曉清笳亂起。夢遊處、不知何地。_____無聲望似水。想關河，雁門西，青海際。〈夜遊宮˙陸游〉", "a": "鐵騎", "b": "胡騎"},
+  {"q": "雪曉清笳亂起。夢遊處、不知何地。鐵騎無聲望似水。想關河，_____，青海際。〈夜遊宮˙陸游〉", "a": "雁門西", "b": "楊關東"},
+  {"q": "雪曉清笳亂起。夢遊處、不知何地。鐵騎無聲望似水。想關河，雁門西，_____。〈夜遊宮˙陸游〉", "a": "青海際", "b": "東海際"},
+  {"q": "睡覺寒燈裏，_____斷、月斜窗紙。自許封侯在萬里。有誰知，鬢雖殘，心未死。〈夜遊宮˙陸游〉", "a": "漏聲", "b": "鐘聲"},
+  {"q": "睡覺寒燈裏。漏聲斷、月斜窗紙。自許封侯在_____。有誰知，鬢雖殘，心未死。〈夜遊宮˙陸游〉", "a": "萬里", "b": "咫尺"},
+  {"q": "睡覺寒燈裏。漏聲斷、月斜窗紙。自許封侯在萬里。有誰知，_____，心未死。〈夜遊宮˙陸游〉", "a": "鬢雖殘", "b": "人雖老"},
+  {"q": "睡覺寒燈裏。漏聲斷、月斜窗紙。自許封侯在萬里。有誰知，鬢雖殘，_____。〈夜遊宮˙陸游〉", "a": "心未死", "b": "志未滅"},
+  {"q": "醉裏_____看劍，夢迴吹角連營。八百里分麾下炙，五十弦翻塞外聲。沙場秋點兵。〈破陣子˙辛棄疾〉", "a": "挑燈", "b": "熄燈"},
+  {"q": "馬作的盧飛快，弓如霹靂弦驚。了卻君王天下事，贏得生前身後名，可憐_____。〈破陣子˙辛棄疾〉", "a": "白髮生", "b": "華髮落"},
+  {"q": "莫聽穿林_____聲，何妨吟嘯且徐行。竹杖芒鞋輕勝馬，誰怕？一蓑煙雨任平生。〈定風波˙蘇軾〉", "a": "打葉", "b": "落木"},
+  {"q": "莫聽穿林打葉聲，何妨_____且徐行。竹杖芒鞋輕勝馬，誰怕？一蓑煙雨任平生。〈定風波˙蘇軾〉", "a": "吟嘯", "b": "呼嘯"},
+  {"q": "莫聽穿林打葉聲，何妨吟嘯且_____。竹杖芒鞋輕勝馬，誰怕？一蓑煙雨任平生。〈定風波˙蘇軾〉", "a": "徐行", "b": "急行"},
+  {"q": "莫聽穿林打葉聲，何妨吟嘯且徐行。竹杖芒鞋輕勝_____，誰怕？一蓑煙雨任平生。〈定風波˙蘇軾〉", "a": "馬", "b": "轎"},
+  {"q": "莫聽穿林打葉聲，何妨吟嘯且徐行。竹杖芒鞋輕勝馬，_____？一蓑煙雨任平生。〈定風波˙蘇軾〉", "a": "誰怕", "b": "誰知"},
+  {"q": "莫聽穿林打葉聲，何妨吟嘯且徐行。竹杖芒鞋輕勝馬，誰怕？一蓑_____任平生。〈定風波˙蘇軾〉", "a": "煙雨", "b": "日照"},
+  {"q": "莫聽穿林打葉聲，何妨吟嘯且徐行。竹杖芒鞋輕勝馬，誰怕？一蓑煙雨任_____。〈定風波˙蘇軾〉", "a": "平生", "b": "餘生"},
+  {"q": "_____春風吹酒醒，微冷，山頭斜照卻相迎。回首向來蕭瑟處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "料峭", "b": "和煦"},
+  {"q": "料峭春風吹_____，微冷，山頭斜照卻相迎。回首向來蕭瑟處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "酒醒", "b": "酒醉"},
+  {"q": "料峭春風吹酒醒，微_____，山頭斜照卻相迎。回首向來蕭瑟處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "冷", "b": "醺"},
+  {"q": "料峭春風吹酒醒，微冷，山頭_____卻相迎。回首向來蕭瑟處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "斜照", "b": "晨曦"},
+  {"q": "料峭春風吹酒醒，微冷，山頭斜照卻相_____。回首向來蕭瑟處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "迎", "b": "逢"},
+  {"q": "料峭春風吹酒醒，微冷，山頭斜照卻相迎。回首向來_____處，歸去，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "蕭瑟", "b": "蕭蕭"},
+  {"q": "料峭春風吹酒醒，微冷，山頭斜照卻相迎。回首向來蕭瑟處，_____，也無風雨也無晴。〈定風波˙蘇軾〉", "a": "歸去", "b": "回首"},
+  {"q": "料峭春風吹酒醒，微冷，山頭斜照卻相迎。回首向來蕭瑟處，歸去，也無_____也無晴。〈定風波˙蘇軾〉", "a": "風雨", "b": "陰雨"},
+  {"q": "料峭春風吹酒醒，微冷，山頭斜照卻相迎。回首向來蕭瑟處，歸去，也無風雨也無_____。〈定風波˙蘇軾〉", "a": "晴", "b": "陰"},
+  {"q": "老夫聊發_____狂，左牽黃，右擎蒼，錦帽貂裘，千騎卷平岡。為報傾城隨太守，親射虎，看孫郎。〈江城子˙蘇軾〉", "a": "少年", "b": "中年"},
+  {"q": "老夫聊發少年狂，左_____，右擎蒼，錦帽貂裘，千騎卷平岡。為報傾城隨太守，親射虎，看孫郎。〈江城子˙蘇軾〉", "a": "牽黃", "b": "牽牛"},
+  {"q": "老夫聊發少年狂，左牽黃，右_____，錦帽貂裘，千騎卷平岡。為報傾城隨太守，親射虎，看孫郎。〈江城子˙蘇軾〉", "a": "擎蒼", "b": "擎鳥"},
+  {"q": "酒酣胸膽尚開張，鬢_____，又何妨？持節雲中，何日遣馮唐？會挽雕弓如滿月，西北望，射天狼。〈江城子˙蘇軾〉", "a": "微霜", "b": "灰白"},
+  {"q": "酒酣胸膽尚開張，鬢微霜，又何妨？持節雲中，何日遣馮唐？會挽雕弓如滿月，西北望，射_____。〈江城子˙蘇軾〉", "a": "天狼", "b": "星宿"}
+];
+
+const vocabData = rawData.map(item => {
+  const match = item.q.match(/〈(.*?)〉/);
+  const source = match ? match[1] : "宋詞選";
+  const completed = item.q.replace(/_{2,}/g, item.a);
+  const trans = translationMap[source] || "暫無語譯";
+  return {
+    idiom: item.q,
+    front: item.q,
+    back: item.a,
+    meaning: `正解：【${item.a}】`,
+    source_text: source,
+    sentence: completed,
+    translation: trans,
+    options: [item.a, item.b]
+  };
+});
+
+let appState = { currentMode: 'flashcard', deck: [], nextRoundDeck: [], currentIndex: 0, stats: { good: 0, bad: 0 }, isQuizAnswered: false, hasVisitedBack: false, round: 1, startTime: null, isWrongTraining: false };
+
+let modeStates = {};
+
+function startApp() { document.getElementById('instruction-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; initGame('flashcard'); }
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+/* --- 錯題本 LocalStorage 核心模組 --- */
+function getWrongBook() {
+  try {
+    const data = localStorage.getItem('ci_top_wrong_pool');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWrongBook(pool) {
+  try {
+    localStorage.setItem('ci_top_wrong_pool', JSON.stringify(pool));
+  } catch (e) {}
+  renderWrongBook();
+}
+
+function addToWrongBook(item) {
+  if (!item) return;
+  const word = item.idiom || item.front || "";
+  let meaningStr = `【正解】${item.back} (${item.source_text})\n【語譯】${item.translation}`;
+  let sentenceStr = item.sentence || "";
+  let pool = getWrongBook();
+  let exist = pool.find(x => x.idiom === word);
+
+  if (exist) {
+    exist.wrongCount = (exist.wrongCount || 1) + 1;
+    exist.lastWrongTime = new Date().getTime();
+  } else {
+    pool.push({
+      idiom: word,
+      meaning: meaningStr,
+      sentence: sentenceStr,
+      wrongCount: 1,
+      lastWrongTime: new Date().getTime(),
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(pool);
+}
+
+function removeFromWrongBook(word) {
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.idiom !== word);
+  saveWrongBook(pool);
+}
+
+function renderWrongBook() {
+  const pool = getWrongBook();
+  const currentPool = pool.filter(x => x.chapter === QUIZ_TITLE);
+  
+  const countBadge = document.getElementById('wb-count-badge');
+  if (countBadge) {
+    countBadge.innerText = `目前單元共 ${currentPool.length} 個錯題 (累計全部單元共 ${pool.length} 個)`;
+  }
+
+  const btnFc = document.getElementById('wb-btn-fc');
+  const btnQuiz = document.getElementById('wb-btn-quiz');
+  if (btnFc) btnFc.disabled = currentPool.length === 0;
+  if (btnQuiz) btnQuiz.disabled = currentPool.length === 0;
+
+  const container = document.getElementById('wrong-list-container');
+  if (!container) return;
+
+  if (currentPool.length === 0) {
+    container.innerHTML = `<div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>`;
+    return;
+  }
+
+  let html = '';
+  currentPool.forEach(item => {
+    html += `
+      <div class="wb-item-card">
+        <div style="flex-grow:1; padding-right:10px;">
+          <div class="wb-item-title" style="font-size:16px; line-height:1.5;">
+            ${item.idiom}
+            <span class="wb-item-count">錯 ${item.wrongCount || 1} 次</span>
+          </div>
+          <div class="wb-item-meaning" style="white-space: pre-wrap;">${item.meaning}</div>
+        </div>
+        <button class="wb-del-btn" title="移出錯題本" onclick="removeFromWrongBook('${(item.idiom || '').replace(/'/g, "\\'")}');">🗑️</button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function clearCurrentWrongBook() {
+  if (!confirm("確定要清空『本單元』的所有錯題紀錄嗎？")) return;
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.chapter !== QUIZ_TITLE);
+  saveWrongBook(pool);
+}
+
+function copyWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可複製！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}\n   ${x.meaning}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => alert("已複製本單元錯題至剪貼簿！"));
+}
+
+function downloadWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可下載！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}\n   ${x.meaning}${x.sentence ? '\n   完整句：' + x.sentence : ''}`).join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${QUIZ_TITLE}_錯題本.txt`;
+  a.click();
+}
+
+function startWrongTraining(mode) {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可以進行特訓喔！"); return; }
+  
+  appState.isWrongTraining = true;
+  appState.currentMode = mode;
+  
+  const mainData = (typeof vocabData !== 'undefined') ? vocabData : [];
+  
+  appState.deck = pool.map(p => {
+    let found = mainData.find(v => v.idiom === p.idiom);
+    return found || p;
+  });
+
+  if (mode !== 'flashcard') {
+    shuffleArray(appState.deck);
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${mode}`) || document.querySelector(`.nav-btn[onclick*="${mode}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetModeDiv = document.getElementById(`${mode}-mode`);
+  if (targetModeDiv) targetModeDiv.classList.add('active');
+
+  appState.nextRoundDeck = []; 
+  appState.currentIndex = 0; 
+  appState.stats = { good: 0, bad: 0 }; 
+  appState.isQuizAnswered = false; 
+  appState.hasVisitedBack = false;
+  appState.startTime = new Date();
+
+  document.getElementById('summary-area').style.display = 'none';
+
+  const prefix = mode === 'flashcard' ? 'fc' : 'mq';
+  const badge = document.getElementById(`${prefix}-round-badge`);
+  if (badge) {
+    badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+    badge.style.backgroundColor = "var(--accent)";
+  }
+
+  updateStatsUI();
+  const cardEl = document.getElementById('card');
+  if (cardEl) cardEl.classList.remove('flipped');
+  
+  if (mode === 'flashcard') {
+    loadFlashcard();
+  } else if (mode === 'meaningQuiz') {
+    loadQuiz('meaning');
+  }
+}
+
+function initGame(mode, isRetry = false) { 
+   appState.isWrongTraining = false;
+   if (mode === 'wrongBook') {
+     document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+     const wbMode = document.getElementById('wrongBook-mode');
+     if (wbMode) wbMode.classList.add('active');
+     renderWrongBook();
+     return;
+   } 
+   appState.currentMode = mode; 
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (isRetry && appState.nextRoundDeck.length > 0) { 
+        appState.deck = [...appState.nextRoundDeck]; 
+        appState.round++; 
+   } else { 
+        appState.deck = [...vocabData]; 
+        appState.round = 1; 
+   }
+   
+   if (mode === 'meaningQuiz') {
+        shuffleArray(appState.deck);
+   }
+
+   appState.nextRoundDeck = []; appState.currentIndex = 0; appState.stats = { good: 0, bad: 0 }; appState.isQuizAnswered = false; appState.hasVisitedBack = false; 
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   const prefix = mode === 'flashcard' ? 'fc' : 'mq'; 
+   const badge = document.getElementById(`${prefix}-round-badge`); 
+   badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部 ${appState.deck.length} 題)`; 
+   badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+   updateStatsUI(); 
+   const cardEl = document.getElementById('card');
+   if (cardEl) cardEl.classList.remove('flipped'); 
+   if (mode === 'flashcard') loadFlashcard(); else if (mode === 'meaningQuiz') loadQuiz('meaning'); 
+}
+
+function switchMode(newMode) {
+  const oldMode = appState.currentMode;
+  
+  modeStates[oldMode] = {
+    deck: [...appState.deck],
+    nextRoundDeck: [...appState.nextRoundDeck],
+    currentIndex: appState.currentIndex,
+    stats: { ...appState.stats },
+    isWrongTraining: appState.isWrongTraining,
+    summaryVisible: document.getElementById('summary-area').style.display,
+    round: appState.round,
+    startTime: appState.startTime
+  };
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const clickedBtn = event ? event.target : document.querySelector(`.nav-btn[onclick*="${newMode}"]`);
+  if (clickedBtn) clickedBtn.classList.add('active');
+
+  if (modeStates[newMode]) {
+    const state = modeStates[newMode];
+    appState.currentMode = newMode;
+    appState.deck = [...state.deck];
+    appState.nextRoundDeck = [...state.nextRoundDeck];
+    appState.currentIndex = state.currentIndex;
+    appState.stats = { ...state.stats };
+    appState.isWrongTraining = state.isWrongTraining;
+    appState.round = state.round;
+    appState.startTime = state.startTime;
+
+    document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+    document.getElementById(`${newMode}-mode`).classList.add('active');
+    document.getElementById('summary-area').style.display = state.summaryVisible;
+
+    updateStatsUI();
+
+    if (newMode === 'wrongBook') {
+      renderWrongBook();
+    } else if (newMode === 'flashcard') {
+      loadFlashcard();
+    } else if (newMode === 'meaningQuiz') {
+      loadQuiz('meaning');
+    }
+  } else {
+    initGame(newMode, false);
+  }
+}
+
+function updateStatsUI() { 
+  if (appState.currentMode === 'wrongBook') return;
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+  if (appState.currentMode === 'flashcard') { 
+    document.getElementById(`${prefix}-known-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-unknown-count`).innerText = appState.stats.bad; 
+  } else { 
+    document.getElementById(`${prefix}-correct-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-wrong-count`).innerText = appState.stats.bad; 
+  } 
+  const left = appState.deck.length - appState.currentIndex; 
+  const leftEl = document.getElementById(`${prefix}-left-count`);
+  if (leftEl) leftEl.innerText = left > 0 ? left : 0; 
+}
+
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; if(!card) return; 
+
+  document.getElementById('fc-char').innerText = card.front; 
+  document.getElementById('front-actions').classList.remove('visible'); 
+  document.getElementById('fc-hint').style.opacity = '1'; 
+  
+  document.getElementById('fc-back-char').innerText = card.back; 
+  document.getElementById('fc-source-text').innerText = "【" + card.source_text + "】";
+  
+  const highlightedSentence = card.sentence.replace(card.back, `<span class="hl">${card.back}</span>`);
+  document.getElementById('fc-example').innerHTML = highlightedSentence; 
+  document.getElementById('fc-translation').innerText = card.translation;
+  
+  document.getElementById('card').classList.remove('flipped'); 
+  appState.hasVisitedBack = false; 
+  document.getElementById('fc-game-area').style.display = 'block'; 
+  updateStatsUI();
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); const isFlippingToBack = !cardEl.classList.contains('flipped'); cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) appState.hasVisitedBack = true; else if (appState.hasVisitedBack) { document.getElementById('front-actions').classList.add('visible'); document.getElementById('fc-hint').style.opacity = '0'; } 
+}
+
+function rateCard(isKnown) { 
+  const currentCard = appState.deck[appState.currentIndex];
+  if (isKnown) {
+    appState.stats.good++;
+    if (appState.isWrongTraining && document.getElementById('wb-auto-remove').checked) {
+      removeFromWrongBook(currentCard.idiom);
+    }
+  } else {
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentCard);
+    addToWrongBook(currentCard);
+  } 
+  appState.currentIndex++; 
+  updateStatsUI(); 
+  if (appState.currentIndex < appState.deck.length) {
+    setTimeout(() => loadFlashcard(), 200);
+  } else {
+    showSummary();
+  }
+}
+
+function loadQuiz(type) { 
+  const currentItem = appState.deck[appState.currentIndex]; 
+  const prefix = 'mq'; 
+  appState.isQuizAnswered = false; 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'none'; 
+  document.getElementById(`${prefix}-feedback`).innerText = ''; 
+  
+  document.getElementById('mq-question').innerHTML = `
+    <div style="font-size:18px; color:var(--primary); line-height:1.6; margin-bottom:8px;">${currentItem.front}</div>
+  `;
+  
+  let options = [...currentItem.options]; 
+  shuffleArray(options);
+  
+  const container = document.getElementById(`${prefix}-options`); 
+  container.innerHTML = ''; 
+  
+  options.forEach(optText => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'option-btn'; 
+    btn.innerHTML = `<div>${optText}</div>`; 
+    btn.onclick = () => checkAnswer(btn, optText, currentItem, type); 
+    container.appendChild(btn); 
+  }); 
+  document.getElementById(`${prefix}-game-area`).style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selectedText, correct, type) { 
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const prefix = 'mq'; 
+  const isCorrect = selectedText === correct.back; 
+  
+  let feedbackHtml = '';
+  if (isCorrect) { 
+    btn.classList.add('correct'); 
+    feedbackHtml = `<span style="color:var(--success);">✅ 答對了！正解：【${correct.back}】</span>`; 
+    appState.stats.good++; 
+    if (appState.isWrongTraining && document.getElementById('wb-auto-remove').checked) {
+      removeFromWrongBook(correct.idiom);
+    }
+  } else { 
+    btn.classList.add('wrong'); 
+    feedbackHtml = `<span style="color:var(--danger);">❌ 答錯了。正解是：【${correct.back}】</span>`; 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(correct); 
+    addToWrongBook(correct);
+  } 
+
+  feedbackHtml += `<div style="font-size:13px; color:#546e7a; font-weight:normal; margin-top:8px; text-align:left; background:#f5f7fa; padding:10px; border-radius:8px; border-left:3px solid var(--primary);"><b>【語譯】</b>${correct.translation}</div>`;
+  document.getElementById(`${prefix}-feedback`).innerHTML = feedbackHtml;
+  
+  const container = document.getElementById(`${prefix}-options`); 
+  Array.from(container.children).forEach(child => { 
+    if (child.firstChild.innerText === correct.back) { 
+      child.classList.add('correct'); 
+    } 
+  }); 
+  updateStatsUI(); 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'block'; 
+}
+
+function nextQuiz(type) { 
+  appState.currentIndex++; 
+  if (appState.currentIndex < appState.deck.length) loadQuiz(type); 
+  else showSummary(); 
+}
+
+function showSummary() { 
+   const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+   document.getElementById(`${prefix}-game-area`).style.display = 'none'; 
+   document.getElementById('summary-area').style.display = 'block'; 
+   window.scrollTo(0, 0); 
+   const endTime = new Date(); 
+   const durationSeconds = Math.floor((endTime - appState.startTime) / 1000); 
+   const minutes = Math.floor(durationSeconds / 60); 
+   const seconds = durationSeconds % 60; 
+   const durationStr = `${minutes}分${seconds}秒`;
+   const summaryText = document.getElementById('summary-text'); 
+   const restartBtn = document.getElementById('btn-retry'); 
+   let msg = ""; 
+   msg += `<div style="margin-bottom:15px; font-size:16px; color:#78909c;">⏱️ 本次練習時間：${durationStr}</div>`;
+   if (appState.currentMode === 'flashcard') { 
+     msg += `本輪掌握：<b style="color:var(--success)">${appState.stats.good}</b> 個<br>需複習：<b style="color:var(--warning)">${appState.stats.bad}</b> 個`; 
+   } else { 
+     msg += `答對：<b style="color:var(--success)">${appState.stats.good}</b><br>答錯：<b style="color:var(--danger)">${appState.stats.bad}</b>`; 
+   } 
+   if (appState.nextRoundDeck.length === 0) { 
+     msg += `<br><br><b>✨ 太棒了！全部通過！✨</b>`; 
+     restartBtn.innerText = "🏆 重新開始全部"; 
+     restartBtn.onclick = resetAll; 
+   } else { 
+     msg += `<br><br>還有 <b>${appState.nextRoundDeck.length}</b> 個不熟，繼續特訓！`; 
+     restartBtn.innerText = "🔄 複習不熟的內容"; 
+     restartBtn.onclick = restartRound; 
+   } 
+   summaryText.innerHTML = msg; 
+}
+
+function restartRound() { initGame(appState.currentMode, true); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+document.addEventListener('DOMContentLoaded', () => {
+   document.title = QUIZ_TITLE;
+   document.querySelector('h1').innerText = QUIZ_TITLE;
+   document.getElementById('inst-title-text').innerText = QUIZ_TITLE;
+   document.getElementById('welcome-title-text').innerText = QUIZ_TITLE;
+});
+</script>
+</body>
+</html>

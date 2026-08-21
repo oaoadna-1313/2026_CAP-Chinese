@@ -1,0 +1,2719 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>時序之美：傳統節日與二十四節氣互動學習殿堂</title>
+  <!-- Google Fonts for Chinese Calligraphy & Modern Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --primary: #c2410c;
+      --primary-light: #ffedd5;
+      --primary-dark: #7c2d12;
+      --spring: #15803d;
+      --spring-bg: #f0fdf4;
+      --summer: #b91c1c;
+      --summer-bg: #fef2f2;
+      --autumn: #b45309;
+      --autumn-bg: #fffbeb;
+      --winter: #1d4ed8;
+      --winter-bg: #eff6ff;
+      --gold: #d97706;
+      --dark: #1e293b;
+      --gray: #64748b;
+      --light-bg: #faf7f2;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --border: #e2dcd5;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 20px 30px -10px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark);
+      line-height: 1.65;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(217, 119, 6, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(194, 65, 12, 0.04) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .serif {
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    /* 頂部導覽列 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+    }
+
+    .brand-seal-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .brand-seal-img:hover {
+      transform: rotate(5deg) scale(1.08);
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .brand-badge {
+      font-size: 0.72rem;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+      width: fit-content;
+      margin-top: 2px;
+      border: 1px solid rgba(194, 65, 12, 0.2);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 0.5rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--primary), var(--gold));
+      color: white;
+      border: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 10px rgba(194, 65, 12, 0.25);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(194, 65, 12, 0.35);
+    }
+
+    /* 主容器 */
+    main {
+      max-width: 1280px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero 旗艦標題區 */
+    .hero {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #f1f5f9 100%);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "春・夏・秋・冬";
+      position: absolute;
+      right: 2%;
+      bottom: -15px;
+      font-size: 5rem;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 900;
+      color: rgba(194, 65, 12, 0.04);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      max-width: 820px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-tag {
+      background: white;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* 區塊通用樣式 */
+    section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 5.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2dcd5;
+      padding-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--gray);
+    }
+
+    /* 單元一：曆法大解密 */
+    .calendar-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .calc-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .calc-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .calc-card.sun { border-top: 5px solid #ea580c; }
+    .calc-card.moon { border-top: 5px solid #0284c7; }
+    .calc-card.hybrid { border-top: 5px solid #16a34a; }
+
+    .calc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .calc-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sun .calc-icon { background: #ffedd5; color: #ea580c; }
+    .moon .calc-icon { background: #e0f2fe; color: #0284c7; }
+    .hybrid .calc-icon { background: #dcfce7; color: #16a34a; }
+
+    .calc-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .calc-alias {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .calc-desc {
+      font-size: 0.95rem;
+      color: #475569;
+      margin-bottom: 1rem;
+    }
+
+    .calc-badge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: #f8fafc;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+
+    /* 迷思比較器 */
+    .simulator-box {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-top: 1.5rem;
+    }
+
+    .simulator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .simulator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sim-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .sim-tab-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .sim-tab-btn.active {
+      background: var(--gold);
+      color: #fff;
+      font-weight: 700;
+      border-color: var(--gold);
+    }
+
+    .sim-display-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .sim-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fcd34d;
+      margin-bottom: 0.5rem;
+    }
+
+    .sim-rule {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .sim-timeline {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .sim-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    /* 單元二：節慶百寶箱 */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-chip {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--primary-dark);
+      color: white;
+      border-color: var(--primary-dark);
+    }
+
+    .festivals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .festival-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .festival-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .fest-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .fest-time {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+    }
+
+    .fest-season-tag {
+      font-size: 0.8rem;
+      color: var(--gray);
+      background: #f1f5f9;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .fest-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .fest-customs {
+      font-size: 0.9rem;
+      color: #334155;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .custom-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+    }
+
+    .kw-tag {
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .poem-box {
+      background: #fdfbf7;
+      border-left: 4px solid var(--gold);
+      padding: 1rem;
+      border-radius: 0 10px 10px 0;
+      margin-top: 0.5rem;
+      font-size: 0.92rem;
+    }
+
+    .poem-author {
+      font-size: 0.8rem;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .poem-text {
+      color: #1e293b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .poem-trans-box {
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed #e2dcd5;
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+      background: #faf8f5;
+      padding: 0.5rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    /* 單元三：二十四節氣 */
+    .solar-season-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .season-btn {
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .season-btn.spring { background: var(--spring-bg); color: var(--spring); border-color: rgba(21, 128, 61, 0.3); }
+    .season-btn.summer { background: var(--summer-bg); color: var(--summer); border-color: rgba(185, 28, 28, 0.3); }
+    .season-btn.autumn { background: var(--autumn-bg); color: var(--autumn); border-color: rgba(180, 83, 9, 0.3); }
+    .season-btn.winter { background: var(--winter-bg); color: var(--winter); border-color: rgba(29, 78, 216, 0.3); }
+
+    .season-btn.active {
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .season-btn.spring.active { background: var(--spring); border-color: var(--spring); }
+    .season-btn.summer.active { background: var(--summer); border-color: var(--summer); }
+    .season-btn.autumn.active { background: var(--autumn); border-color: var(--autumn); }
+    .season-btn.winter.active { background: var(--winter); border-color: var(--winter); }
+
+    .rhyme-banner {
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      border: 2px dashed var(--gold);
+      border-radius: 16px;
+      padding: 1.25rem 1.75rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .rhyme-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #78350f;
+      letter-spacing: 2px;
+      line-height: 1.8;
+    }
+
+    .terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .term-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .term-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .term-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+
+    .term-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .term-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .term-degree {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-bottom: 0.6rem;
+    }
+
+    .term-desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+
+    .term-poem {
+      font-size: 0.82rem;
+      background: #f8fafc;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      color: #334155;
+      border-left: 3px solid #cbd5e1;
+      margin-bottom: 0.4rem;
+    }
+
+    .term-trans {
+      font-size: 0.78rem;
+      color: #64748b;
+      background: #fafaf9;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      line-height: 1.4;
+    }
+
+    /* 單元四：詩詞密碼獵手 (20 題) */
+    .hunter-container {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .hunter-intro {
+      margin-bottom: 1.5rem;
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    .hunter-filter-bar {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .h-chip {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.2s;
+    }
+
+    .h-chip.active, .h-chip:hover {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
+
+    .hunter-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .hunter-card {
+      background: #fafaf9;
+      border: 1px solid #e7e5e4;
+      border-radius: 14px;
+      padding: 1.25rem;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hunter-card:hover {
+      border-color: var(--gold);
+      background: #fffdf5;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08);
+    }
+
+    .hunter-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .hunter-idx-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #f5f5f4;
+      color: #78716c;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .hunter-author {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .hunter-poem {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1c1917;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+
+    /* 單元四按鈕組 */
+    .hunter-btn-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .h-action-btn {
+      flex: 1;
+      padding: 0.45rem 0.6rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      transition: all 0.15s;
+    }
+
+    .h-trans-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+    }
+
+    .h-trans-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .h-clue-btn {
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      color: #92400e;
+    }
+
+    .h-clue-btn:hover {
+      background: #fde68a;
+    }
+
+    .hunter-trans-box {
+      margin-top: 0.6rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      font-size: 0.84rem;
+      color: #475569;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .hunter-trans-box.show {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .hunter-answer-box {
+      margin-top: 0.6rem;
+      padding: 0.85rem;
+      border-radius: 8px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      font-size: 0.88rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .hunter-answer-box.show {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    /* 單元五：會考神射手 (10 題互動測驗) */
+    .quiz-container {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .quiz-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .quiz-question {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 1.25rem;
+      line-height: 1.55;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 0.9rem 1.2rem;
+      border-radius: 12px;
+      font-size: 0.98rem;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      color: #334155;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .quiz-opt-btn:hover:not([disabled]) {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .quiz-opt-btn.correct {
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
+      font-weight: 700;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .quiz-feedback {
+      padding: 1.25rem;
+      border-radius: 12px;
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .quiz-feedback-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .quiz-feedback-desc {
+      font-size: 0.92rem;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .quiz-controls {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* 測驗結算畫面 */
+    .quiz-result-view {
+      text-align: center;
+      padding: 2rem 1rem;
+      display: none;
+    }
+
+    .result-score {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+
+    .result-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      background: var(--gold);
+      color: white;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    /* 頁尾 Footer */
+    footer {
+      background: #09090b;
+      color: #e2e8f0;
+      padding: 4rem 1.5rem 2.5rem;
+      border-top: 1px solid #27272a;
+      text-align: center;
+      position: relative;
+      margin-top: 4rem;
+    }
+
+    .footer-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .footer-banner-img {
+      max-width: 340px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.12));
+      transition: transform 0.3s ease;
+    }
+
+    .footer-banner-img:hover {
+      transform: scale(1.03);
+    }
+
+    .footer-credit {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-notes {
+      font-size: 0.82rem;
+      color: #71717a;
+      line-height: 1.6;
+    }
+
+    /* 單元六：練習神器專區樣式 */
+    .practice-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .practice-tab-btn {
+      background: white;
+      border: 2px solid var(--border);
+      color: var(--dark);
+      padding: 0.65rem 1.3rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .practice-tab-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .practice-tab-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--gold));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(194, 65, 12, 0.3);
+    }
+
+    .practice-container {
+      background: white;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .practice-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .practice-info {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .practice-badge {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .practice-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .secondary-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .practice-iframe-wrap {
+      width: 100%;
+      height: 850px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      background: #f5f7fa;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .practice-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 教材圖解卡片樣式 */
+    .textbook-diagram-box {
+      background: #fdfbf7;
+      border: 1px solid #e7dfd5;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .diagram-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .diagram-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .diagram-toggle-btn {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+      padding: 0.35rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .diagram-toggle-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--gold);
+    }
+
+    .diagram-content {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .diagram-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+      margin-top: 0.75rem;
+    }
+
+    .diagram-img-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2dcd5;
+      background: white;
+      cursor: zoom-in;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .diagram-img-wrap:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .diagram-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .diagram-img-wrap:hover img {
+      transform: scale(1.015);
+    }
+
+    .diagram-zoom-tip {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.82);
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .diagram-caption {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* 燈箱 Modal */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .lightbox-modal.show {
+      display: flex;
+    }
+
+    .lightbox-container {
+      position: relative;
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-caption {
+      color: #e2e8f0;
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -45px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    @media print {
+      header, .action-btn, .filter-bar, .hunter-filter-bar, .sim-tabs, .quiz-controls, footer, .season-btn, .hunter-btn-group, .diagram-toggle-btn, .diagram-zoom-tip {
+        display: none !important;
+      }
+      body {
+        background: white;
+        color: black;
+      }
+      .calc-card, .festival-card, .term-card, .hunter-card, .quiz-container, .textbook-diagram-box {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        break-inside: avoid;
+      }
+      .hunter-trans-box, .hunter-answer-box, .diagram-content {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列：先呈現 學思軒印章.png ，其後緊接著 語文補給站logo.png -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand-group" title="回到教材入口首頁">
+        <img src="icon/seal-red.png" alt="學思軒印章" class="brand-seal-img">
+        <img src="icon/logo-yuwen.png" alt="語文補給站" class="brand-logo-img" onerror="this.src='icon/logo-yuwen.png'">
+        <div class="brand-text">
+          <div class="brand-title serif">
+            時序之美
+          </div>
+          <span class="brand-badge">國中會考・傳統節日與二十四節氣</span>
+        </div>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="../index.html"><i data-lucide="home"></i>首頁</a></li>
+          <li><a href="#calendar-sec"><i data-lucide="sun-moon"></i>曆法大解密</a></li>
+          <li><a href="#festivals-sec"><i data-lucide="sparkles"></i>傳統節日</a></li>
+          <li><a href="#solarterms-sec"><i data-lucide="leaf"></i>二十四節氣</a></li>
+          <li><a href="#hunter-sec"><i data-lucide="key-round"></i>詩詞密碼(20題)</a></li>
+          <li><a href="#quiz-sec"><i data-lucide="award"></i>會考神射手(10題)</a></li>
+          <li><a href="#practice-sec" style="background: linear-gradient(135deg, #ffedd5, #fef3c7); color: var(--primary-dark); font-weight: 800;"><i data-lucide="gamepad-2"></i> 練習神器</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main>
+
+    <!-- Hero 旗艦標題區 -->
+    <div class="hero">
+      <h1 class="serif">歲月流轉・天地同歌</h1>
+      <p>結合<b>國文科詩詞意境（點擊查看白話語譯）</b>與<b>自然科天文曆法</b>，徹底搞懂「農曆、陽曆、月相盈虧與二十四節氣」的會考核心密碼！</p>
+      <div class="hero-tags">
+        <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#16a34a; width:16px;"></i> 國中跨領域核心素養</div>
+        <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#16a34a; width:16px;"></i> 詩詞點選展開白話語譯</div>
+        <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#16a34a; width:16px;"></i> 20 題詩詞密碼獵手</div>
+        <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#16a34a; width:16px;"></i> 10 題會考跨科測驗</div>
+      </div>
+    </div>
+
+    <!-- 單元一：曆法大解密 -->
+    <section id="calendar-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="sun-moon" style="color: var(--gold);"></i> 單元一：曆法大解密（觀念破解）</h2>
+          <p class="section-subtitle">打破迷思！二十四節氣不是看農曆，而是看太陽的「陽曆」！</p>
+        </div>
+      </div>
+
+      <div class="calendar-matrix">
+        <!-- 陽曆 -->
+        <div class="calc-card sun">
+          <div class="calc-header">
+            <div>
+              <div class="calc-title">陽曆（太陽曆）</div>
+              <div class="calc-alias">俗稱：國曆、公曆、西曆</div>
+            </div>
+            <div class="calc-icon"><i data-lucide="sun"></i></div>
+          </div>
+          <div class="calc-desc">
+            依據<b>地球繞太陽公轉</b>一週（約 365.2422 天）制定。特點是四季氣候分明，春暖夏熱秋涼冬冷皆與陽曆日期高度吻合。
+          </div>
+          <div class="calc-badge-list">
+            <div>☀️ <b>代表項目：</b>二十四節氣（立春、清明、夏至、冬至等）</div>
+            <div>📌 <b>關鍵特性：</b>公曆日期幾乎固定（誤差僅 1~2 天）</div>
+          </div>
+        </div>
+
+        <!-- 陰曆 -->
+        <div class="calc-card moon">
+          <div class="calc-header">
+            <div>
+              <div class="calc-title">陰曆（太陰曆）</div>
+              <div class="calc-alias">純月亮曆法（如伊斯蘭曆）</div>
+            </div>
+            <div class="calc-icon"><i data-lucide="moon"></i></div>
+          </div>
+          <div class="calc-desc">
+            完全依據<b>月球繞地球公轉</b>之月相盈虧（朔望月約 29.53 天）制定。每月初一為朔（無月），十五為望（滿月）。但一年僅約 354 天，與四季脫節。
+          </div>
+          <div class="calc-badge-list">
+            <div>🌙 <b>核心優點：</b>與潮汐高低潮、夜間照明極度契合</div>
+            <div>⚠️ <b>問題：</b>每過三年會比太陽年少約 33 天，季節會漂移</div>
+          </div>
+        </div>
+
+        <!-- 農曆 -->
+        <div class="calc-card hybrid">
+          <div class="calc-header">
+            <div>
+              <div class="calc-title">農曆（陰陽合曆）</div>
+              <div class="calc-alias">俗稱：舊曆、夏曆、漢曆</div>
+            </div>
+            <div class="calc-icon"><i data-lucide="calendar-sync"></i></div>
+          </div>
+          <div class="calc-desc">
+            <b>中華先祖的偉大發明！</b>以月相定月份（初一為朔，十五為望），同時設置<b>「十九年七閏」的閏月機制</b>來調和太陽回歸年，兼顧月相與四季。
+          </div>
+          <div class="calc-badge-list">
+            <div>🏮 <b>代表節日：</b>春節、元宵、端午、七夕、中秋、重陽</div>
+            <div>💡 <b>關鍵特性：</b>農曆日期固定，但在陽曆（國曆）上每年日期都不同</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 迷思互動比較器 -->
+      <div class="simulator-box">
+        <div class="simulator-grid">
+          <div>
+            <h3 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem; color: #fde68a;">
+              <i data-lucide="lightbulb" style="display:inline; vertical-align:middle; width:22px;"></i> 會考魔王觀念：節日 vs 節氣比較器
+            </h3>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.25rem;">
+              點擊下方切換案例，觀察為什麼「中秋節的國曆每年都在跳」，而「清明節的國曆每年都固定在 4/4~4/6」！
+            </p>
+            <div class="sim-tabs">
+              <button class="sim-tab-btn active" data-type="festival" onclick="switchSim('festival', this)">🏮 傳統節日（以中秋為例）</button>
+              <button class="sim-tab-btn" data-type="solar" onclick="switchSim('solar', this)">🌦️ 二十四節氣（以清明/冬至為例）</button>
+            </div>
+          </div>
+
+          <div id="sim-content" class="sim-display-card">
+            <!-- 動態注入內容 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元二：節慶百寶箱 -->
+    <section id="festivals-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="sparkles" style="color: var(--primary);"></i> 單元二：十大傳統節日與經典詩詞（附白話語譯）</h2>
+          <p class="section-subtitle">掌握習俗關鍵字，一秒破解會考「節日判讀」題！</p>
+        </div>
+      </div>
+
+      <!-- 經典教材圖解：傳統節日總覽 -->
+      <div class="textbook-diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-title serif">
+            <i data-lucide="book-marked" style="color: var(--primary);"></i>
+            【主題式國學常識】傳統節日圖解總覽
+          </div>
+          <button class="diagram-toggle-btn" onclick="toggleDiagram('diagram-festival', this)">
+            <i data-lucide="chevron-up" style="width:14px;"></i> 收合教材圖表
+          </button>
+        </div>
+        <div class="diagram-content" id="diagram-festival">
+          <div class="diagram-img-wrap" onclick="openLightbox('holiday/book-festivals-1.png', '【主題式國學常識】傳統節日總覽（春節、元宵、清明、端午、七夕、中秋、重陽）')">
+            <img src="holiday/book-festivals-1.png" alt="主題式國學常識：傳統節日" loading="lazy">
+            <div class="diagram-zoom-tip"><i data-lucide="zoom-in" style="width:13px;"></i> 點擊放大全螢幕檢視</div>
+          </div>
+          <p class="diagram-caption">📖 <b>教材參考：</b>《主題式國學常識》（小五南）｜ 彙整春節、元宵、清明、端午、七夕、中秋、重陽之時間、習俗、代表食物與應景詩詞。</p>
+        </div>
+      </div>
+
+      <!-- 篩選列 -->
+      <div class="filter-bar">
+        <button class="filter-chip active" onclick="filterFestivals('all', this)"><i data-lucide="layers"></i> 全部節日 (10)</button>
+        <button class="filter-chip" onclick="filterFestivals('spring', this)">🌸 春季節日 (春節/元宵/寒食/清明)</button>
+        <button class="filter-chip" onclick="filterFestivals('summer', this)">☀️ 夏季節日 (端午)</button>
+        <button class="filter-chip" onclick="filterFestivals('autumn', this)">🍁 秋季節日 (七夕/中元/中秋/重陽)</button>
+        <button class="filter-chip" onclick="filterFestivals('winter', this)">❄️ 冬季節日 (除夕)</button>
+      </div>
+
+      <!-- 節日卡片網格 -->
+      <div class="festivals-grid" id="festivals-container">
+        <!-- JS 動態渲染卡片 -->
+      </div>
+    </section>
+
+    <!-- 單元三：二十四節氣 -->
+    <section id="solarterms-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="leaf" style="color: var(--spring);"></i> 單元三：二十四節氣與四季流轉（附白話語譯）</h2>
+          <p class="section-subtitle">太陽在黃道上每移動 15° 為一節氣，是古代農耕的超級指南！</p>
+        </div>
+      </div>
+
+      <!-- 節氣歌朗朗上口 -->
+      <div class="rhyme-banner">
+        <div style="font-size: 0.9rem; color: var(--gold); font-weight: 700; margin-bottom: 0.3rem;">🎵 國中必背《二十四節氣歌》</div>
+        <div class="rhyme-text serif">
+          春雨驚春清穀天，夏滿芒夏暑相連。<br>
+          秋處露秋寒霜降，冬雪雪冬小大寒。<br>
+          <span style="font-size: 0.95rem; color: #92400e; font-weight: normal;">每月兩節不變更，最多相差一兩天。上半年來六廿一，下半年來八廿三。</span>
+        </div>
+      </div>
+
+      <!-- 經典教材圖解：二十四節氣春夏與秋冬圖解 -->
+      <div class="textbook-diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-title serif">
+            <i data-lucide="book-marked" style="color: var(--spring);"></i>
+            【主題式國學常識】二十四節氣圖解總表（春夏篇 ＆ 秋冬篇）
+          </div>
+          <button class="diagram-toggle-btn" onclick="toggleDiagram('diagram-solarterms', this)">
+            <i data-lucide="chevron-up" style="width:14px;"></i> 收合教材圖表
+          </button>
+        </div>
+        <div class="diagram-content" id="diagram-solarterms">
+          <div class="diagram-gallery">
+            <div class="diagram-img-wrap" onclick="openLightbox('holiday/book-solar-terms-1.png', '【主題式國學常識】二十四節氣（一）春季與夏季圖解')">
+              <img src="holiday/book-solar-terms-1.png" alt="主題式國學常識：二十四節氣（一）" loading="lazy">
+              <div class="diagram-zoom-tip"><i data-lucide="zoom-in" style="width:13px;"></i> 點擊放大（春夏季）</div>
+            </div>
+            <div class="diagram-img-wrap" onclick="openLightbox('holiday/book-solar-terms-2.png', '【主題式國學常識】二十四節氣（二）秋季與冬季圖解')">
+              <img src="holiday/book-solar-terms-2.png" alt="主題式國學常識：二十四節氣（二）" loading="lazy">
+              <div class="diagram-zoom-tip"><i data-lucide="zoom-in" style="width:13px;"></i> 點擊放大（秋冬季）</div>
+            </div>
+          </div>
+          <p class="diagram-caption">📖 <b>教材參考：</b>《主題式國學常識》（小五南）｜ 完整收錄立春至穀雨、立夏至大暑、立秋至霜降、立冬至大寒之氣候物候、農事與生活意涵。</p>
+        </div>
+      </div>
+
+      <!-- 季節切換按鈕 -->
+      <div class="solar-season-nav">
+        <button class="season-btn spring active" onclick="filterTerms('spring', this)"><i data-lucide="flower-2"></i> 春季六氣 (立春~穀雨)</button>
+        <button class="season-btn summer" onclick="filterTerms('summer', this)"><i data-lucide="sun"></i> 夏季六氣 (立夏~大暑)</button>
+        <button class="season-btn autumn" onclick="filterTerms('autumn', this)"><i data-lucide="wind"></i> 秋季六氣 (立秋~霜降)</button>
+        <button class="season-btn winter" onclick="filterTerms('winter', this)"><i data-lucide="snowflake"></i> 冬季六氣 (立冬~大寒)</button>
+      </div>
+
+      <!-- 節氣卡片容器 -->
+      <div class="terms-grid" id="terms-container">
+        <!-- JS 動態生成 -->
+      </div>
+    </section>
+
+    <!-- 單元四：詩詞密碼獵手 (20 題) -->
+    <section id="hunter-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="key-round" style="color: var(--gold);"></i> 單元四：會考「詩詞密碼」破解獵手（20 題精選）</h2>
+          <p class="section-subtitle">點擊「查看白話語譯」可開啟翻譯；點擊「查看密碼解析」解鎖節日答案！</p>
+        </div>
+      </div>
+
+      <div class="hunter-container">
+        <p class="hunter-intro">
+          💡 <b>自主學習指引：</b>先閱讀原詩嘗試自我解讀，若有生詞可點擊<b>「📖 開啟語譯」</b>；思考答案後，再點擊<b>「🔑 密碼解析」</b>核對關鍵字！
+        </p>
+
+        <!-- 單元四快速篩選 -->
+        <div class="hunter-filter-bar">
+          <button class="h-chip active" onclick="filterHunter('all', this)">全部 20 題</button>
+          <button class="h-chip" onclick="filterHunter('spring', this)">🌸 春季・節日詩 (1-5)</button>
+          <button class="h-chip" onclick="filterHunter('summer', this)">☀️ 夏季・節日詩 (6-7)</button>
+          <button class="h-chip" onclick="filterHunter('autumn', this)">🍁 秋季・節日詩 (8-14)</button>
+          <button class="h-chip" onclick="filterHunter('winter', this)">❄️ 冬季・除夕詩 (15)</button>
+          <button class="h-chip" onclick="filterHunter('terms', this)">🌦️ 二十四節氣名句 (16-20)</button>
+        </div>
+
+        <div class="hunter-cards" id="hunter-container">
+          <!-- JS 動態生成 20 題 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元五：會考神射手 (10 題測驗) -->
+    <section id="quiz-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="award" style="color: var(--primary);"></i> 單元五：會考神射手（10 題跨科互動測驗）</h2>
+          <p class="section-subtitle">挑戰 10 題會考等級跨科精選試題，測試你的掌握度！</p>
+        </div>
+      </div>
+
+      <div class="quiz-container">
+        <!-- 進度條與資訊 -->
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="quiz-progress"></div>
+        </div>
+
+        <div id="quiz-active-view">
+          <div class="quiz-meta">
+            <span id="quiz-step">題目 1 / 10</span>
+            <span id="quiz-score-indicator"><i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：0</span>
+          </div>
+
+          <div class="quiz-question" id="quiz-question-text">
+            題目載入中...
+          </div>
+
+          <div class="quiz-options" id="quiz-options-box">
+            <!-- 選項按鈕 -->
+          </div>
+
+          <div class="quiz-feedback" id="quiz-feedback-box">
+            <div class="quiz-feedback-title" id="quiz-fb-title"></div>
+            <div class="quiz-feedback-desc" id="quiz-fb-desc"></div>
+          </div>
+
+          <div class="quiz-controls">
+            <button class="action-btn" id="quiz-next-btn" onclick="nextQuestion()" style="display:none;">
+              下一題 <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 結算畫面 -->
+        <div class="quiz-result-view" id="quiz-result-view">
+          <i data-lucide="trophy" style="width: 64px; height: 64px; color: var(--gold); margin: 0 auto;"></i>
+          <div class="result-title">測驗挑戰完成！</div>
+          <div class="result-score" id="result-final-score">100 分</div>
+          <div class="result-badge" id="result-badge-text">會考時序狀元 🌟</div>
+          <p id="result-comment" style="color: #64748b; margin-bottom: 2rem;">太厲害了！你已經徹底掌握了傳統節日與節氣的奧秘。</p>
+          <button class="action-btn" onclick="restartQuiz()">
+            <i data-lucide="rotate-ccw"></i> 再次挑戰測驗
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元六：時序之美練習神器 (內嵌 二十四節氣 與 節慶(詩詞句)) -->
+    <section id="practice-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="gamepad-2" style="color: var(--primary);"></i> 單元六：時序之美語文學習集練習神器</h2>
+          <p class="section-subtitle">二十四節氣記憶閃卡、經典節慶詩詞句測驗庫，支援自選模式、翻卡闖關與錯題自動診斷</p>
+        </div>
+        <div class="practice-actions">
+          <button class="secondary-btn" onclick="reloadPracticeIframe()" title="重新整理練習神器">
+            <i data-lucide="rotate-ccw"></i> 重新載入
+          </button>
+          <a id="practice-ext-link" href="holiday/24-solar-terms.html" target="_blank" class="action-btn" title="在新分頁開啟練習神器獨立視窗">
+            <i data-lucide="external-link"></i> 新分頁獨立開啟
+          </a>
+        </div>
+      </div>
+
+      <div class="practice-tabs">
+        <button class="practice-tab-btn active" id="tab-term" onclick="switchPracticeTool('term')">
+          <i data-lucide="leaf"></i> 🌿 二十四節氣
+        </button>
+        <button class="practice-tab-btn" id="tab-fest" onclick="switchPracticeTool('fest')">
+          <i data-lucide="sparkles"></i> 🏮 傳統節慶(詩詞句)
+        </button>
+        <button class="practice-tab-btn" id="tab-season-kw" onclick="switchPracticeTool('season_kw')">
+          <i data-lucide="key"></i> 🌸 季節(關鍵字詞)
+        </button>
+        <button class="practice-tab-btn" id="tab-season-poem" onclick="switchPracticeTool('season_poem')">
+          <i data-lucide="book-open"></i> 📜 季節(相關詞句)
+        </button>
+      </div>
+
+      <div class="practice-container">
+        <div class="practice-toolbar">
+          <div class="practice-info">
+            <span class="practice-badge" id="practice-badge-text">語文學習集・二十四節氣</span>
+            <span id="practice-desc-text" style="font-weight: 700; color: #334155; font-size: 0.95rem;">二十四節氣專屬閃卡測驗庫</span>
+          </div>
+          <div style="font-size: 0.85rem; color: #64748b;">
+            💡 提示：支援登入、自選模式、卡片翻轉與錯題本複習
+          </div>
+        </div>
+
+        <div class="practice-iframe-wrap">
+          <iframe id="practice-iframe" src="holiday/24-solar-terms.html" class="practice-iframe" allow="fullscreen"></iframe>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="footer-container">
+      <img src="icon/slogan-god-dark.png" alt="只要有心人人都是國文神" class="footer-banner-img">
+      
+      <div class="footer-credit serif">
+        𖤐本網頁由Gemini生成，黃于珊、王斐亭老師製作𖤐
+      </div>
+
+      <div class="footer-notes">
+        語文補給站・時序之美特輯｜傳統節日與二十四節氣跨科數位學習殿堂<br>
+        本系統具備節慶習俗全鑑、節氣物候圖解、詩詞密碼互動探究及會考跨科智慧診斷題庫。
+      </div>
+    </div>
+  </footer>
+
+  <!-- 互動腳本與完整資料庫 -->
+  <script>
+    // ==========================================
+    // 1. 傳統節日資料庫 (10大節日，含白話翻譯)
+    // ==========================================
+    const FESTIVALS = [
+      {
+        id: "cny",
+        name: "春節（元日、新年）",
+        season: "spring",
+        seasonText: "春季",
+        lunarTime: "農曆正月初一",
+        solarRule: "陽曆 1 月下旬至 2 月中旬變動",
+        customs: "貼春聯、放爆竹、飲屠蘇酒、換新桃符、拜年發壓歲錢。",
+        keywords: ["爆竹", "屠蘇", "桃符", "元日", "春風", "曈曈日"],
+        poemAuthor: "宋・王安石《元日》",
+        poemText: "爆竹聲中一歲除，春風送暖入屠蘇。<br>千門萬戶曈曈日，總把新桃換舊符。",
+        poemTrans: "【白話語譯】在熱鬧的爆竹聲中送走了舊的一年，溫暖的春風吹拂，人們歡欣飲著屠蘇藥酒。初升的太陽照耀著千家萬戶，大家紛紛取下舊桃符，換上嶄新的春聯。"
+      },
+      {
+        id: "yuanxiao",
+        name: "元宵節（上元節、燈節）",
+        season: "spring",
+        seasonText: "春季",
+        lunarTime: "農曆正月十五",
+        solarRule: "陽曆 2 月中旬至 3 月初變動",
+        customs: "吃元宵、賞花燈、猜燈謎、舞龍舞獅（此夜為新年第一個月圓望日）。",
+        keywords: ["花千樹", "星如雨", "元夕", "花燈", "燈火闌珊", "燈如晝"],
+        poemAuthor: "宋・辛棄疾《青玉案・元夕》",
+        poemText: "東風夜放花千樹，更吹落、星如雨。<br>眾裏尋他千百度，驀然回首，那人卻在，燈火闌珊處。",
+        poemTrans: "【白話語譯】東風吹拂的夜晚，滿城彩燈燦爛得像綻開了千樹繁花，又如流星雨般被吹落。在茫茫人海中尋找她千百次，突然不經意一回頭，伊人卻獨立在燈火零落稀疏的幽靜處。"
+      },
+      {
+        id: "hanshi",
+        name: "寒食節",
+        season: "spring",
+        seasonText: "春季",
+        lunarTime: "清明節前一、二日",
+        solarRule: "陽曆約 4 月 3 日～ 4 月 5 日",
+        customs: "禁煙火、吃冷食（紀念春秋時期晉國名臣介之推割股奉君之忠義）。",
+        keywords: ["禁火", "冷食", "改火", "御柳", "五侯家", "子推"],
+        poemAuthor: "唐・韓翃《寒食》",
+        poemText: "春城無處不飛花，寒食東風御柳斜。<br>日暮漢宮傳蠟燭，輕煙散入五侯家。",
+        poemTrans: "【白話語譯】暮春長安城裡到處落花飛舞，寒食節的東風吹拂著宮苑裡的垂柳。傍晚時分宮中特許分賜點燃的蠟燭（賜新火），一縷縷輕煙裊裊飄進了皇親貴族五侯的府邸。"
+      },
+      {
+        id: "qingming",
+        name: "清明節（節氣兼節日）",
+        season: "spring",
+        seasonText: "春季",
+        lunarTime: "農曆三月不固定（看太陽黃經）",
+        solarRule: "陽曆固定約 4 月 4 日～ 4 月 6 日",
+        customs: "掃墓祭祖、郊外踏青、插柳、放風箏、吃潤餅（春捲）。",
+        keywords: ["雨紛紛", "欲斷魂", "杏花村", "踏青", "掃墓", "折柳"],
+        poemAuthor: "唐・杜牧《清明》",
+        poemText: "清明時節雨紛紛，路上行人欲斷魂。<br>借問酒家何處有？牧童遙指杏花村。",
+        poemTrans: "【白話語譯】清明時節細雨綿綿飄灑不絕，路上的行人心裡充滿思親的憂傷與愁緒。借問哪裡有可以歇腳喝酒的酒家？放牛的牧童抬手遠遠指著前方的杏花村。"
+      },
+      {
+        id: "duanwu",
+        name: "端午節（端陽、重五）",
+        season: "summer",
+        seasonText: "夏季",
+        lunarTime: "農曆五月初五",
+        solarRule: "陽曆 5 月下旬至 6 月中旬變動",
+        customs: "划龍舟競渡、吃粽子（角黍）、插菖蒲與艾草、佩香包、飲雄黃酒避五毒。",
+        keywords: ["菖蒲", "艾草", "龍舟", "角黍", "雄黃", "屈原", "汨羅江"],
+        poemAuthor: "宋・文天祥《端午即事》",
+        poemText: "五月五日午，贈我一枝艾。<br>故人不可見，新知萬里外。<br>丹心照夙昔，鬢髮日已改。",
+        poemTrans: "【白話語譯】五月五日端午佳節，有人贈送我一枝避邪的艾草。昔日的老朋友已無法相見，新結識的知己又遠隔萬里之外。一片赤誠丹心一如往昔，只可惜兩鬢的頭髮已日漸蒼白。"
+      },
+      {
+        id: "qixi",
+        name: "七夕（乞巧節、七巧節）",
+        season: "autumn",
+        seasonText: "秋季",
+        lunarTime: "農曆七月初七",
+        solarRule: "陽曆 8 月初至 8 月下旬變動",
+        customs: "牛郎織女銀河相會、婦女穿針乞巧、看牽牛織女星。",
+        keywords: ["牽牛", "織女", "乞巧", "鵲橋", "銀河", "碧霄", "天階夜色涼如水"],
+        poemAuthor: "唐・杜牧《秋夕》",
+        poemText: "銀燭秋光冷畫屏，輕羅小扇撲流螢。<br>天階夜色涼如水，臥看牽牛織女星。",
+        poemTrans: "【白話語譯】銀白色的燭光映照著清冷的畫屏，宮女手拿輕羅小扇撲打著飛舞的螢火蟲。夜色中皇宮臺階冰涼如水，她靜靜躺坐著仰望夜空中隔著銀河相望的牽牛星與織女星。"
+      },
+      {
+        id: "zhongyuan",
+        name: "中元節（盂蘭盆節、鬼節）",
+        season: "autumn",
+        seasonText: "秋季",
+        lunarTime: "農曆七月十五",
+        solarRule: "陽曆 8 月中旬至 9 月初變動",
+        customs: "中元普度、祭祀祖先與孤魂野鬼、放水燈超渡、祈求平安。",
+        keywords: ["普度", "孤魂", "放水燈", "盂蘭盆", "飛螢"],
+        poemAuthor: "唐・令狐楚《中元日》",
+        poemText: "時見飛螢引步虛，碧紗窗外有清風。<br>不知玉宇無塵處，更有何人共此中。",
+        poemTrans: "【白話語譯】中元之夜時常看見點點螢火引導著道士步虛誦經的腳步，碧綠的紗窗外吹拂著陣陣清風。不知道在那高遠清淨無塵的天宮仙境中，還有誰能一同體會這份超然清淨的情境。"
+      },
+      {
+        id: "zhongqiu",
+        name: "中秋節（團圓節）",
+        season: "autumn",
+        seasonText: "秋季",
+        lunarTime: "農曆八月十五",
+        solarRule: "陽曆 9 月初至 10 月初變動",
+        customs: "賞滿月、吃月餅柚子、全家團聚、傳說嫦娥奔月、吳剛伐桂、玉兔搗藥。",
+        keywords: ["明月", "冰輪", "嬋娟", "嫦娥", "桂魄", "廣寒宮", "玉兔"],
+        poemAuthor: "宋・蘇軾《水調歌頭》",
+        poemText: "明月幾時有？把酒問青天。……<br>人有悲歡離合，月有陰晴圓缺，此事古難全。<br>但願人長久，千里共嬋娟。",
+        poemTrans: "【白話語譯】圓圓的明月從什麼時候開始有的呢？我端起酒杯仰問青天。人間總有悲歡離合，月亮也總有陰晴圓缺，這種遺憾自古以來就很難圓滿。只希望相愛與思念的人都能平安長久，即使相隔千里，也能共享這美好明月。"
+      },
+      {
+        id: "chongyang",
+        name: "重陽節（重九、敬老節）",
+        season: "autumn",
+        seasonText: "秋季",
+        lunarTime: "農曆九月初九",
+        solarRule: "陽曆 10 月初至 11 月初變動",
+        customs: "登高望遠、賞菊花、飲菊花酒、遍插茱萸辟邪、敬重長輩老人。",
+        keywords: ["茱萸", "登高", "菊花", "重九", "黃花", "白帝城"],
+        poemAuthor: "唐・王維《九月九日憶山東兄弟》",
+        poemText: "獨在異鄉為異客，每逢佳節倍思親。<br>遙知兄弟登高處，遍插茱萸少一人。",
+        poemTrans: "【白話語譯】我獨自遠離家鄉流落異地做客，每當遇到美好佳節時，對親人的思念就加倍強烈。遙想遠方家中兄弟們今日登高遠眺時，身上都插戴著茱萸，卻發現少了離鄉在外的我一人。"
+      },
+      {
+        id: "chuxi",
+        name: "除夕（歲除、年三十）",
+        season: "winter",
+        seasonText: "冬季",
+        lunarTime: "農曆十二月最後一日（臘月三十/廿九）",
+        solarRule: "陽曆 1 月中旬至 2 月中旬變動",
+        customs: "全家圍爐吃年夜飯、守歲迎新、長輩發壓歲錢、辭舊迎新。",
+        keywords: ["守歲", "圍爐", "年夜飯", "壓歲", "一歲除", "今夕"],
+        poemAuthor: "宋・蘇軾《守歲》",
+        poemText: "明年豈無年，心事恐蹉跎。<br>努力盡今夕，少年猶可誇。",
+        poemTrans: "【白話語譯】難道明年就沒有新的一年了嗎？只是擔心韶光易逝、心願虛度。在今夜除夕當下好好努力珍惜時光，青春年少之志依然值得讚許。"
+      }
+    ];
+
+    // ==========================================
+    // 2. 二十四節氣資料庫 (四季劃分，含白話翻譯)
+    // ==========================================
+    const SOLAR_TERMS = {
+      spring: [
+        { name: "立春", date: "2/3~2/5", degree: "太陽黃經 315°", desc: "春季之始，萬物復甦，東風解凍，生機萌動。", poem: "白居易《立春後五日》：春到人間草木知。", poemTrans: "【語譯】春天來到人間，就連草木也能最先感知到溫暖與生機。" },
+        { name: "雨水", date: "2/18~2/20", degree: "太陽黃經 330°", desc: "氣溫回升，冰雪融化，降水漸增，農田滋潤。", poem: "杜甫《春夜喜雨》：好雨知時節，當春乃發生。", poemTrans: "【語譯】及時的好雨彷彿懂得時節變換，一到春天需要滋潤時就應時降臨。" },
+        { name: "驚蟄", date: "3/5~3/7", degree: "太陽黃經 345°", desc: "春雷初響，驚醒冬眠之昆蟲蟄獸，農耕全面展開。", poem: "韋應物《觀田家》：微雨眾卉新，一雷驚蟄始。", poemTrans: "【語譯】細微春雨讓各種花草煥然一新，春雷初響，驚蟄節氣正式拉開序幕。" },
+        { name: "春分", date: "3/20~3/22", degree: "太陽黃經 0°（直射赤道）", desc: "太陽直射赤道，全球晝夜等長，春色正濃。", poem: "歐陽修《踏莎行》：雨霽風光，春分天氣。千花百卉爭明媚。", poemTrans: "【語譯】雨後初晴風光格外明麗，正逢春分時節，千百種花草競相爭奇鬥豔。" },
+        { name: "清明", date: "4/4~4/6", degree: "太陽黃經 15°", desc: "氣候清爽溫暖，草木萌茂，既是節氣也是重要祭祖掃墓節日。", poem: "杜牧《清明》：清明時節雨紛紛，路上行人欲斷魂。", poemTrans: "【語譯】清明時分細雨紛紛飄落，路上的行人心裡滿懷思親的悲痛。" },
+        { name: "穀雨", date: "4/19~4/21", degree: "太陽黃經 30°", desc: "「雨生百穀」，春季最後一個節氣，雨量充沛利於穀物生長。", poem: "鄭板橋《穀雨》：正好清明連穀雨，一杯香茗坐其間。", poemTrans: "【語譯】正巧清明連著穀雨時節，端著一杯香茶悠閒地品味春意。" }
+      ],
+      summer: [
+        { name: "立夏", date: "5/5~5/7", degree: "太陽黃經 45°", desc: "夏季開始，萬物繁茂生長，氣溫顯著升高。", poem: "趙友直《立夏》：綠陰鋪野換新樣，薰風翻動紫微花。", poemTrans: "【語譯】綠意濃蔭鋪滿田野展現全新景象，溫暖的夏風輕輕吹動著紫微花。" },
+        { name: "小滿", date: "5/20~5/22", degree: "太陽黃經 60°", desc: "麥類等夏熟作物籽粒開始飽滿，但尚未成熟（故稱小滿）。", poem: "歐陽修《小滿》：夜鶯啼綠柳，皓月醒長空。", poemTrans: "【語譯】夜鶯在翠綠柳樹間啼鳴，皎潔的明月照亮了整座長空。" },
+        { name: "芒種", date: "6/5~6/7", degree: "太陽黃經 75°", desc: "有「芒」之麥成熟搶收，夏播作物如稻穀開始播「種」，農家極為忙碌。", poem: "陸游《時雨》：時雨及芒種，四野皆插秧。", poemTrans: "【語譯】及時的雨水伴隨著芒種節氣到來，四方田野上的農夫都在忙著插秧。" },
+        { name: "夏至", date: "6/21~6/22", degree: "太陽黃經 90°（直射北回歸線）", desc: "直射北回歸線（23.5°N），北半球白晝最長、黑夜最短。", poem: "劉禹錫《竹枝詞》：東邊日出西邊雨，道是無晴卻有晴。", poemTrans: "【語譯】東邊出太陽西邊卻下著陣雨，說不是晴天吧，卻又分明透著晴朗。" },
+        { name: "小暑", date: "7/6~7/8", degree: "太陽黃經 105°", desc: "天氣開始炎熱，但尚未達到最熱的頂峰。", poem: "韓翃《小暑》：溫風始至，蟋蟀居壁。", poemTrans: "【語譯】溫熱的南風開始吹拂，蟋蟀紛紛離開田野躲進牆壁縫隙乘涼。" },
+        { name: "大暑", date: "7/22~7/24", degree: "太陽黃經 120°", desc: "一年中最炎熱的時期，常伴隨雷陣雨與颱風。", poem: "曾幾《大暑》：赤日幾時過，清風無處尋。", poemTrans: "【語譯】熾熱炎酷的烈日不知何時才能過去，想找尋一絲清涼微風都無處可尋。" }
+      ],
+      autumn: [
+        { name: "立秋", date: "8/7~8/9", degree: "太陽黃經 135°", desc: "秋季之始，暑去涼來，草木開始結子落葉（一葉知秋）。", poem: "劉翰《立秋》：睡起秋聲無覓處，滿階梧桐月明中。", poemTrans: "【語譯】睡醒後尋找秋天的聲音不知在何方，只見滿階飄落的梧桐葉沐浴在明月下。" },
+        { name: "處暑", date: "8/22~8/24", degree: "太陽黃經 150°", desc: "「處」有止也，表示炎熱暑氣即將結束退去。", poem: "蘇泂《處暑》：處暑無三日，新涼直萬金。", poemTrans: "【語譯】處暑節氣還不到三天，初秋送來的絲絲新涼簡直價值萬金。" },
+        { name: "白露", date: "9/7~9/9", degree: "太陽黃經 165°", desc: "天氣轉涼，早晚溫差大，夜間水氣在草木上凝成白色露珠。", poem: "《詩經・蒹葭》：蒹葭蒼蒼，白露為霜。", poemTrans: "【語譯】蘆葦長得茂盛繁密，夜間凝結的晶瑩露水漸漸化為白霜。" },
+        { name: "秋分", date: "9/22~9/24", degree: "太陽黃經 180°（直射赤道）", desc: "太陽再次直射赤道，全球晝夜均分，秋高氣爽。", poem: "賈島《秋分》：莫怪秋分景，清光正此時。", poemTrans: "【語譯】不要驚訝秋分時節的景致，天地間最清朗明澈的月色陽光正是在此時。" },
+        { name: "寒露", date: "10/7~10/9", degree: "太陽黃經 195°", desc: "氣溫更低，露水寒冷欲凝結，候鳥大批往南遷徙。", poem: "王安石《八月十五夜》：白露已過寒露來。", poemTrans: "【語譯】溫涼的白露已過去，寒意更濃的寒露節氣悄然到來。" },
+        { name: "霜降", date: "10/23~10/24", degree: "太陽黃經 210°", desc: "秋季最後一個節氣，天氣初霜，楓葉經霜轉紅。", poem: "杜牧《山行》：停車坐愛楓林晚，霜葉紅於二月花。", poemTrans: "【語譯】停下馬車只因喜愛這深秋楓林晚景，經霜打過的楓葉比二月春花還要艷紅。" }
+      ],
+      winter: [
+        { name: "立冬", date: "11/7~11/8", degree: "太陽黃經 225°", desc: "冬季開始，作物收割完畢收藏入庫，動物開始冬眠。", poem: "李白《立冬》：凍筆新詩懶寫，寒爐美酒時溫。", poemTrans: "【語譯】毛筆墨水凍結了懶得再寫新詩，圍著寒冬暖爐不時溫上一杯美酒。" },
+        { name: "小雪", date: "11/22~11/23", degree: "太陽黃經 240°", desc: "北方氣溫降至零度以下，開始降下初雪，但雪量尚小。", poem: "白居易《問劉十九》：晚來天欲雪，能飲一杯無。", poemTrans: "【語譯】天色向晚空中隱隱飄起雪花，能否停下腳步來跟我喝一杯暖酒呢？" },
+        { name: "大雪", date: "12/6~12/8", degree: "太陽黃經 255°", desc: "降雪範圍擴大、積雪漸深，天地一片銀裝素裹。", poem: "柳宗元《江雪》：千山鳥飛絕，萬徑人蹤滅。", poemTrans: "【語譯】千山之中所有的飛鳥都已絕跡，千萬條道路上也不見半點人影。" },
+        { name: "冬至", date: "12/21~12/23", degree: "太陽黃經 270°（直射南回歸線）", desc: "太陽直射南回歸線，北半球白晝最短、黑夜最長，俗吃湯圓長一歲。", poem: "白居易《邯鄲冬至夜思家》：邯鄲驛裏逢冬至，抱膝燈前影伴身。", poemTrans: "【語譯】在邯鄲客棧中正逢冬至之夜，孤單地在燈前抱著雙膝，只有自己的影子相伴。" },
+        { name: "小寒", date: "1/5~1/7", degree: "太陽黃經 285°", desc: "氣候嚴寒，進入一年中最冷的「三九天」時期。", poem: "元稹《小寒》：小寒連大呂，歡鵲壘新巢。", poemTrans: "【語譯】小寒節氣伴隨著冬日律呂，喜鵲已開始歡快地銜枝築起新巢。" },
+        { name: "大寒", date: "1/20~1/21", degree: "太陽黃經 300°", desc: "一年中最後一個節氣，寒冷至極，過後即將迎來新春立春。", poem: "陸游《大寒》：大寒雪未消，閉戶不能出。", poemTrans: "【語譯】大寒時節地上的積雪尚未融化，天氣冷得只能關緊門戶無法出門。" }
+      ]
+    };
+
+    // ==========================================
+    // 3. 詩詞密碼獵手完整 20 題資料庫 (點選開啟語譯與密碼)
+    // ==========================================
+    const HUNTER_DATA = [
+      {
+        id: 1,
+        category: "spring",
+        author: "宋・王安石《元日》",
+        poem: "爆竹聲中一歲除，春風送暖入屠蘇。千門萬戶曈曈日，總把新桃換舊符。",
+        trans: "【白話語譯】在爆竹聲中送走舊的一年，春風送暖，大家暢飲屠蘇酒。初升旭日照耀著千門萬戶，家家戶戶都把舊桃符取下換上新春聯。",
+        answer: "🎯 <b>春節（農曆正月初一）</b><br>🔑 <b>關鍵密碼：</b>「爆竹」（除歲驅邪）、「屠蘇」（新年防疾飲品）、「新桃換舊符」（掛新春聯換舊桃符）。"
+      },
+      {
+        id: 2,
+        category: "spring",
+        author: "宋・辛棄疾《青玉案・元夕》",
+        poem: "東風夜放花千樹，更吹落、星如雨。寶馬雕車香滿路。鳳簫聲動，玉壺光轉，一夜魚龍舞。",
+        trans: "【白話語譯】東風吹拂的夜晚，滿城繁華彩燈宛如花開千樹，更吹落如雨點般的璀璨煙火。豪華馬車香氣瀰漫街道，簫聲悠揚，如白玉壺般的明月流轉，徹夜舞動著魚龍花燈。",
+        answer: "🎯 <b>元宵節（農曆正月十五・上元節）</b><br>🔑 <b>關鍵密碼：</b>「元夕」（元宵節夜晚）、「花千樹／星如雨」（花燈與煙火）、「玉壺光轉」（圓月）、「魚龍舞」（舞龍舞獅舞魚燈）。"
+      },
+      {
+        id: 3,
+        category: "spring",
+        author: "宋・歐陽修《生查子・元夕》",
+        poem: "去年元夜時，花市燈如晝。月上柳梢頭，人約黃昏後。",
+        trans: "【白話語譯】去年元宵節的夜晚，花市彩燈照亮得如同白晝一樣。一輪明月升上柳樹枝頭，男女相約在黃昏之後相會。",
+        answer: "🎯 <b>元宵節（農曆正月十五）</b><br>🔑 <b>關鍵密碼：</b>「元夜」（正月十五夜）、「花市燈如晝」（賞花燈）、「月上柳梢頭」（此夜月圓）。"
+      },
+      {
+        id: 4,
+        category: "spring",
+        author: "唐・韓翃《寒食》",
+        poem: "春城無處不飛花，寒食東風御柳斜。日暮漢宮傳蠟燭，輕煙散入五侯家。",
+        trans: "【白話語譯】暮春的長安城中到處飄著落花，寒食節的東風輕拂著宮苑裡的柳枝。黃昏時宮廷傳遞特賜的蠟燭點火，裊裊輕煙飄進了皇親權貴的五侯府第。",
+        answer: "🎯 <b>寒食節（清明前一、二日）</b><br>🔑 <b>關鍵密碼：</b>「寒食」（禁火吃冷食以念介之推）、「傳蠟燭／散輕煙」（寒食禁火後，皇帝於傍晚分賜新火給貴戚）。"
+      },
+      {
+        id: 5,
+        category: "spring",
+        author: "唐・杜牧《清明》",
+        poem: "清明時節雨紛紛，路上行人欲斷魂。借問酒家何處有？牧童遙指杏花村。",
+        trans: "【白話語譯】清明時節細雨綿綿飄落，出門在外的行人和掃墓者內心淒涼如魂魄欲斷。請問附近哪裡有酒家可以借酒消愁？牧童抬手遠遠指向那杏花盛開的村莊。",
+        answer: "🎯 <b>清明節（陽曆 4/4~4/6 節氣兼節日）</b><br>🔑 <b>關鍵密碼：</b>「清明」（掃墓祭祖）、「雨紛紛」（春雨綿綿物候）、「欲斷魂」（悼念先祖感傷）、「杏花」（仲春標誌）。"
+      },
+      {
+        id: 6,
+        category: "summer",
+        author: "宋・文天祥《端午即事》",
+        poem: "五月五日午，贈我一枝艾。故人不可見，新知萬里外。丹心照夙昔，鬢髮日已改。",
+        trans: "【白話語譯】農曆五月五日端午節的正午，有人贈送我一枝避邪的艾草。老友已不得相見，新朋友又遠隔萬里之外。滿腔赤誠丹心依舊照耀往昔，可惜雙鬢已日漸斑白。",
+        answer: "🎯 <b>端午節（農曆五月初五・端陽）</b><br>🔑 <b>關鍵密碼：</b>「五月五日午」（重五端陽）、「艾」（門懸艾草、菖蒲以驅毒蟲避瘟疫）。"
+      },
+      {
+        id: 7,
+        category: "summer",
+        author: "宋・陸游《乙卯重五詩》",
+        poem: "粽包分兩髻，艾束著危冠。舊俗方儲藥，羸軀亦點丹。",
+        trans: "【白話語譯】煮熟的粽子形如古代幼童的雙髻，將束好的艾草插在高高的帽子上。依照古老風俗採集儲藏草藥，病弱的身體也點塗雄黃以避五毒。",
+        answer: "🎯 <b>端午節（農曆五月初五）</b><br>🔑 <b>關鍵密碼：</b>「重五」（五月初五）、「粽包」（吃粽子）、「艾束」（插艾草）、「點丹／儲藥」（雄黃點額防蚊蟲蛇毒）。"
+      },
+      {
+        id: 8,
+        category: "autumn",
+        author: "唐・杜牧《秋夕》",
+        poem: "銀燭秋光冷畫屏，輕羅小扇撲流螢。天階夜色涼如水，臥看牽牛織女星。",
+        trans: "【白話語譯】銀白的燭光映照著清冷的畫屏，宮女拿著輕羅小扇撲打著夜空中的螢火蟲。宮殿臺階在夜色中涼涼如水，她仰躺著凝望夜空中銀河兩端的牽牛星與織女星。",
+        answer: "🎯 <b>七夕（農曆七月初七・乞巧節）</b><br>🔑 <b>關鍵密碼：</b>「牽牛織女星」（牛郎織女銀河相會傳說）、「撲流螢／秋夕」（初秋夜晚涼爽）。"
+      },
+      {
+        id: 9,
+        category: "autumn",
+        author: "漢・佚名《古詩十九首・迢迢牽牛星》",
+        poem: "迢迢牽牛星，皎皎河漢女。纖纖擢素手，札札弄機杼。盈盈一水間，脈脈不得語。",
+        trans: "【白話語譯】在那遙遠之處有牽牛星，隔著明亮銀河遙望著織女星。織女伸出纖細白皙的玉手，札札作響地擺弄著織布機。兩人只隔著一汪清淺的銀河，卻只能含情脈脈相視而無法言語。",
+        answer: "🎯 <b>七夕（農曆七月初七）</b><br>🔑 <b>關鍵密碼：</b>「牽牛星」、「河漢女（織女）」、「弄機杼（織布）」、「盈盈一水間（銀河隔絕）」。"
+      },
+      {
+        id: 10,
+        category: "autumn",
+        author: "唐・令狐楚《中元日》",
+        poem: "時見飛螢引步虛，碧紗窗外有清風。不知玉宇無塵處，更有何人共此中。",
+        trans: "【白話語譯】中元之夜時常看見點點流螢伴隨著道士步虛念經的步伐，綠紗窗外吹著陣陣清爽微風。不知道在毫無塵俗的天宮之上，還有誰能一同感受這寧靜的超度時刻。",
+        answer: "🎯 <b>中元節（農曆七月十五・盂蘭盆節）</b><br>🔑 <b>關鍵密碼：</b>「中元日」（七月十五鬼節普度）、「步虛」（道教超度普度儀式誦經步虛）。"
+      },
+      {
+        id: 11,
+        category: "autumn",
+        author: "宋・蘇軾《水調歌頭》",
+        poem: "明月幾時有？把酒問青天。……人有悲歡離合，月有陰晴圓缺，此事古難全。但願人長久，千里共嬋娟。",
+        trans: "【白話語譯】明月何時就已經有了？我舉起酒杯詢問青天。人間總有悲歡離合，月相也總有陰晴圓缺，這遺憾自古以來就很難兩全。只願我們思念的人都能長久平安，即使相隔千里也能共享這美好的月光。",
+        answer: "🎯 <b>中秋節（農曆八月十五）</b><br>🔑 <b>關鍵密碼：</b>「明月」（八月十五滿月）、「陰晴圓缺」（月相變化）、「共嬋娟」（嬋娟指美好月色與嫦娥）。"
+      },
+      {
+        id: 12,
+        category: "autumn",
+        author: "唐・王建《十五夜望月》",
+        poem: "中庭地白樹棲鴉，冷露無聲濕桂花。今夜月明人盡望，不知秋思落誰家。",
+        trans: "【白話語譯】庭院地面被皎潔月光映照得一片雪白，樹枝上棲息著烏鴉，冰涼的夜露悄然無聲地浸濕了桂花。今晚普天之下大家都在仰望這一輪明月，不知這思鄉懷人之愁落在誰的身上。",
+        answer: "🎯 <b>中秋節（農曆八月十五）</b><br>🔑 <b>關鍵密碼：</b>「十五夜」（農曆八月十五）、「月明人盡望」（天下共賞中秋月）、「冷露濕桂花」（八月桂花香）。"
+      },
+      {
+        id: 13,
+        category: "autumn",
+        author: "唐・王維《九月九日憶山東兄弟》",
+        poem: "獨在異鄉為異客，每逢佳節倍思親。遙知兄弟登高處，遍插茱萸少一人。",
+        trans: "【白話語譯】我獨自一人在異鄉漂泊作客，每逢佳節就更加思念故鄉的親人。遙想兄弟們今天登上高處，人人身上都插滿茱萸，卻發現唯獨少了我一人。",
+        answer: "🎯 <b>重陽節（農曆九月初九）</b><br>🔑 <b>關鍵密碼：</b>「九月九日」（重九節）、「登高」（九九重陽登高避災）、「茱萸」（佩戴茱萸以辟邪驅瘴）。"
+      },
+      {
+        id: 14,
+        category: "autumn",
+        author: "唐・孟浩然《過故人莊》",
+        poem: "故人具雞黍，邀我至田家。綠樹村邊合，青山郭外斜。開軒面場圃，把酒話桑麻。待到重陽日，還來就菊花。",
+        trans: "【白話語譯】老朋友準備了豐盛的雞肉與黃米飯，邀請我到他田園家中做客。翠綠樹木圍繞村莊，蒼翠青山在城郭外橫斜。打開窗戶面對打穀場與菜園，舉起酒杯閒聊農桑作物的長勢。等到了重陽節那天，我一定再來與你一同賞菊飲酒！",
+        answer: "🎯 <b>重陽節（農曆九月初九）</b><br>🔑 <b>關鍵密碼：</b>「重陽日」、「菊花」（九月又稱菊月，重陽有賞菊、飲菊花酒習俗）。"
+      },
+      {
+        id: 15,
+        category: "winter",
+        author: "唐・高適《除夜作》",
+        poem: "旅館寒燈獨不眠，客心何事轉淒然。故鄉今夜思千里，霜鬢明朝又一年。",
+        trans: "【白話語譯】在旅館淒寒的孤燈下我獨自難以入眠，心中不知為何湧起無限淒涼。故鄉的親人今夜必定在千里之外思念著我，看著自己斑白的鬢角，到了明天清晨就又老了一歲。",
+        answer: "🎯 <b>除夕（臘月最後一天・年三十夜）</b><br>🔑 <b>關鍵密碼：</b>「除夜」（除夕之夜）、「今夜思千里」（圍爐思親）、「明朝又一年」（跨年新春第一天）。"
+      },
+      {
+        id: 16,
+        category: "terms",
+        author: "唐・韋應物《觀田家》",
+        poem: "微雨眾卉新，一雷驚蟄始。田家幾日閑，耕種從此起。",
+        trans: "【白話語譯】微細春雨讓各種花木煥然一新，春雷初響宣告驚蟄節氣到來。農家哪裡還有閒暇的日子？春耕農忙從此刻正式開始。",
+        answer: "🎯 <b>節氣：驚蟄（春季・陽曆 3/5~3/7）</b><br>🔑 <b>關鍵密碼：</b>「一雷驚蟄始」（春雷鳴響，驚醒土中冬眠昆蟲，象徵大地回春耕種起始）。"
+      },
+      {
+        id: 17,
+        category: "terms",
+        author: "宋・歐陽修《踏莎行》",
+        poem: "雨霽風光，春分天氣。千花百卉爭明媚。畫棟朝飛南眷鳥，玉欄暮捲西江水。",
+        trans: "【白話語譯】春雨剛停風光無限好，正是一年中春分的大好時光。萬紫千紅的花草爭相展現明媚色彩。彩繪屋樑上清晨飛回北歸的燕鳥，玉石欄杆邊傍晚捲起西江碧水。",
+        answer: "🎯 <b>節氣：春分（春季・陽曆 3/20~3/22）</b><br>🔑 <b>關鍵密碼：</b>「春分天氣」（晝夜平分，太陽直射赤道，氣候溫和，百花齊放）。"
+      },
+      {
+        id: 18,
+        category: "terms",
+        author: "宋・陸游《時雨》",
+        poem: "時雨及芒種，四野皆插秧。家家麥飯美，處處菱歌長。",
+        trans: "【白話語譯】及時的雨水隨著芒種節氣到來，田野四處所有的農民都在忙著插稻秧。家家戶戶品嘗著香甜的新麥飯，到處飄蕩著悠揚歡快的採菱歌聲。",
+        answer: "🎯 <b>節氣：芒種（夏季・陽曆 6/5~6/7）</b><br>🔑 <b>關鍵密碼：</b>「芒種」、「插秧」、「麥飯」（有芒之麥成熟收割，夏稻插秧播種，農忙極致）。"
+      },
+      {
+        id: 19,
+        category: "terms",
+        author: "《詩經・秦風・蒹葭》",
+        poem: "蒹葭蒼蒼，白露為霜。所謂伊人，在水一方。溯洄從之，道阻且長。溯游從之，宛在水中央。",
+        trans: "【白話語譯】河邊的蘆葦長得青翠茂密，夜間凝結的白露漸漸化成寒霜。我日夜思念的那個人，就站在河水的另一端。逆流而上去尋找她，道路艱險且漫長；順流而下去追隨她，她彷彿就在水流的中央。",
+        answer: "🎯 <b>節氣：白露（秋季・陽曆 9/7~9/9）</b><br>🔑 <b>關鍵密碼：</b>「白露為霜」（秋季早晚溫差變大，夜間水氣在草木蘆葦上凝結成白色露滴）。"
+      },
+      {
+        id: 20,
+        category: "terms",
+        author: "唐・杜牧《山行》",
+        poem: "遠上寒山石徑斜，白雲生處有人家。停車坐愛楓林晚，霜葉紅於二月花。",
+        trans: "【白話語譯】順著石子小路遠遠登上寒意漸濃的山峰，在那白雲升起繚繞的深處隱隱住著幾戶人家。停下馬車只因為深愛這暮色籠罩下的楓樹林，被秋霜打過的楓葉比二月盛開的春花還要火紅豔麗！",
+        answer: "🎯 <b>節氣：霜降（秋季最後節氣・陽曆 10/23~10/24）</b><br>🔑 <b>關鍵密碼：</b>「霜葉紅於二月花」（秋末寒霜降臨，楓葉經霜轉紅，是秋末暮秋的典型景象）。"
+      }
+    ];
+
+    // ==========================================
+    // 4. 會考神射手 10 題完整跨科題庫 (全附解析)
+    // ==========================================
+    const QUIZ_QUESTIONS = [
+      {
+        question: "小華在國文課讀到王維的名句：「遙知兄弟登高處，遍插茱萸少一人。」這首詩所描述的節日為農曆九月初九重陽節。若當天入夜後天氣晴朗，小華抬頭觀察夜空，此時月相最可能為何？",
+        options: [
+          "整夜看不到月亮的「新月／朔」（農曆初一）",
+          "亮面朝向西邊的半圓形「上弦月」（約農曆初七～初九）",
+          "圓滿明亮的「滿月／望」（約農曆十五～十六）",
+          "亮面朝向東邊的半圓形「下弦月」（約農曆廿二～廿三）"
+        ],
+        correct: 1,
+        explanation: "<b>【會考跨科詳解】</b><br>詩中「登高」、「插茱萸」為重陽節習俗，時間為<b>農曆九月初九</b>。<br>農曆初一為「朔（無月）」，初七、初八、初九為<b>「上弦月」</b>（正午升起，傍晚位於天頂，上半夜西方可見，亮面朝西）；十五為滿月。本題為國文文化常識結合自然科月相推算的經典跨科考題！"
+      },
+      {
+        question: "下列關於「二十四節氣」與「曆法運行」的敘述，哪一項是完全正確的？",
+        options: [
+          "二十四節氣是古代根據月亮繞地球公轉與月相盈虧制定的太陰曆",
+          "清明與冬至在每年的農曆日期都是完全固定不變的",
+          "二十四節氣是根據地球繞太陽公轉軌道（太陽黃經）制定，因此在國曆（陽曆）上的日期相對固定",
+          "端午節、七夕、中秋節在每年的國曆（陽曆）上都是固定在同一天"
+        ],
+        correct: 2,
+        explanation: "<b>【會考跨科詳解】</b><br>二十四節氣本質上是<b>太陽曆（陽曆）</b>，以太陽黃道每 15 度為一氣，因此在陽曆（國曆）上的日期每年幾乎完全固定（僅差 1~2 天）。反之，端午、中秋等傳統節日看農曆（月相），在陽曆上的日期每年都會浮動。"
+      },
+      {
+        question: "「爆竹聲中一歲除，春風送暖入屠蘇。千門萬戶曈曈日，總把新桃換舊符。」王安石這首詩描寫的節慶與習俗，下列何者正確？",
+        options: [
+          "清明節：家家戶戶換上新的柳枝祈求平安踏青",
+          "中秋節：全家團圓品嘗屠蘇美酒賞滿月",
+          "元宵節：提著爆竹與花燈走訪親友拜年",
+          "春節（元日）：放鞭炮、飲屠蘇酒以辟疫、取下舊桃符換貼新春聯"
+        ],
+        correct: 3,
+        explanation: "<b>【會考國文詳解】</b><br>詩中的「一歲除」（年歲交替）、「春風入屠蘇」（新年飲屠蘇藥酒）、「新桃換舊符」（掛新春聯）皆是<b>春節（農曆正月初一元日）</b>的代表習俗。"
+      },
+      {
+        question: "蘇軾《水調歌頭》中寫道：「但願人長久，千里共嬋娟。」這首詞描寫的是農曆八月十五中秋節。若當天前往台灣西部沿海觀海，此時最可能觀察到下列哪一種潮汐現象？",
+        options: [
+          "當天為滿月（望），太陽、地球與月球排成一直線，潮差達到最大，出現「大潮」",
+          "當天為上弦月，太陽與月球引潮力互相抵消，潮差達到最小，出現「小潮」",
+          "當天整天海水完全靜止，不會發生任何漲潮或退潮現象",
+          "當天為下弦月，滿潮時的水位為一個月中最低的一天"
+        ],
+        correct: 0,
+        explanation: "<b>【會考自然地科✕國文跨科詳解】</b><br>中秋節為<b>農曆八月十五（滿月・望日）</b>。<br>在朔（初一）與望（十五），太陽、月球與地球幾乎排列在同一直線上，兩者的引潮力相互疊加，使得海水滿潮水位最高、乾潮水位最低，潮差達到一個月中的最大值，稱為<b>「大潮」</b>！"
+      },
+      {
+        question: "古人常在夏至這一天立竿測影。在台灣嘉義（北緯 23.5 度北回歸線通過處），夏至正午時立竿見影的現象為何？",
+        options: [
+          "日影朝向正南方，且長度為一年中最長的一天",
+          "太陽直射頭頂天頂，地面上幾乎「立竿無影」",
+          "日影朝向正北方，且長度為一年中最長的一天",
+          "此時太陽直射南回歸線，晝短夜長，影子極長"
+        ],
+        correct: 1,
+        explanation: "<b>【會考自然地科詳解】</b><br>夏至當天太陽直射北回歸線（23.5°N）。嘉義正好位於北回歸線上，正午太陽仰角達到 90 度（天頂），因此會出現<b>「立竿無影」</b>的現象，此日也是北半球白晝最長、黑夜最短的一天。"
+      },
+      {
+        question: "辛棄疾《青玉案・元夕》中寫道「東風夜放花千樹，更吹落、星如雨。寶馬雕車香滿路……眾裏尋他千百度，驀然回首，那人卻在，燈火闌珊處。」這首詞描寫的節日所具備的民俗特點為何？",
+        options: [
+          "划龍舟、吃角黍、喝雄黃酒",
+          "登高望遠、賞菊、飲菊花酒",
+          "賞花燈、猜燈謎、吃元宵、月圓夜遊",
+          "插柳、踏青、掃墓祭祖"
+        ],
+        correct: 2,
+        explanation: "<b>【會考國文詳解】</b><br>詞題中的「元夕」即為農曆正月十五元宵節。詞中「花千樹」、「星如雨」比喻滿城燈火煙花，「燈火闌珊」描寫燈火稀疏處，皆為<b>元宵節賞花燈</b>之典型活動。"
+      },
+      {
+        question: "「天階夜色涼如水，臥看牽牛織女星。」杜牧《秋夕》所描寫的節日，相傳起源於牛郎與織女的古老傳說。古代女子在此節通常會舉行何種活動？",
+        options: [
+          "穿針乞巧以祈求心靈手巧、姻緣美滿",
+          "佩戴香包、在門口插艾草辟邪",
+          "全家圍爐分發壓歲錢",
+          "吃冷食、禁煙火三天"
+        ],
+        correct: 0,
+        explanation: "<b>【會考國文詳解】</b><br>詩中「牽牛織女星」指農曆七月初七七夕節（又稱乞巧節）。古時未婚少女與婦女會在此夜向織女星祈禱，進行<b>「穿針乞巧」</b>以求擁有靈巧的女紅手藝與良緣。"
+      },
+      {
+        question: "「五月五日午，贈我一枝艾。故人不可見，新知萬里外。」文天祥在詩中提到的節日為端午節，古人在這一天門前插艾草、菖蒲並飲雄黃酒，主要原創初衷為何？",
+        options: [
+          "祈求秋天稻麥五穀豐收",
+          "初夏氣候轉熱、蚊蟲疫病五毒滋生，藉由草藥驅邪消毒避疫",
+          "向天神祈求風調雨順、天降甘霖",
+          "紀念介之推不慕名利的忠貞操守"
+        ],
+        correct: 1,
+        explanation: "<b>【會考生活常識詳解】</b><br>農曆五月進入初夏，天氣濕熱，蛇蟲百腳等「五毒」出沒且傳染病好發。古人懸掛具揮發精油香氣的<b>艾草、菖蒲</b>，飲塗<b>雄黃</b>，目的是驅蟲滅菌、防病防疫。"
+      },
+      {
+        question: "下列各組古典詩句與其所對應的「節慶或季節」，何者配對<b>完全正確</b>？",
+        options: [
+          "「清明時節雨紛紛」—— 寒冬・除夕",
+          "「待到重陽日，還來就菊花」—— 暮秋・重陽節",
+          "「銀燭秋光冷畫屏，輕羅小扇撲流螢」—— 仲春・元宵節",
+          "「爆竹聲中一歲除，春風送暖入屠蘇」—— 盛夏・端午節"
+        ],
+        correct: 1,
+        explanation: "<b>【會考詩詞配對題】</b><br>A為仲春清明節；C為初秋七夕；D為新春春節。B選項「重陽日、菊花」為農曆九月初九重陽節（暮秋季節），配對完全正確！"
+      },
+      {
+        question: "每年陽曆 12 月 21 日至 23 日左右迎來「冬至」，在台灣民間有吃湯圓象徵增長一歲的傳統。就地球天文運行角度而言，下列敘述何者正確？",
+        options: [
+          "當天太陽直射赤道，全球晝夜等長",
+          "當天太陽直射北回歸線，北半球白晝為一年中最長",
+          "當天太陽直射南回歸線（23.5°S），北半球白晝最短、黑夜最長",
+          "當天北極圈內出現「永晝」（24小時都是白天）的現象"
+        ],
+        correct: 2,
+        explanation: "<b>【會考地科天文詳解】</b><br>冬至當天太陽直射南回歸線（23.5°S）。北半球傾斜遠離太陽，迎來一年中<b>白晝最短、黑夜最長</b>的一天；北極圈內則出現 24 小時無太陽升起的「永夜」現象。"
+      }
+    ];
+
+    // ==========================================
+    // 5. 迷思比較器切換邏輯 (安全無 bug)
+    // ==========================================
+    const simData = {
+      festival: {
+        title: "🏮 傳統節日（以中秋節為例）",
+        rule: "<b>依據：</b>農曆八月十五（看月球公轉／月相望日滿月）。<br>因為農曆配合月相，但國曆看太陽，每年農曆與公曆之間有 11 天落差（需靠閏月調節），所以<b>中秋節在國曆的日期每年都不一樣</b>！",
+        rows: [
+          { year: "2024 年中秋節", date: "陽曆 9 月 17 日（農曆八月十五）" },
+          { year: "2025 年中秋節", date: "陽曆 10 月 6 日（農曆八月十五）" },
+          { year: "2026 年中秋節", date: "陽曆 9 月 25 日（農曆八月十五）" }
+        ]
+      },
+      solar: {
+        title: "🌦️ 二十四節氣（以清明／冬至為例）",
+        rule: "<b>依據：</b>太陽黃經 15° 與 270°（看地球繞太陽公轉角度）。<br>節氣純粹由太陽照射角度決定，因此<b>在陽曆（國曆）上的日期每年幾乎完全固定</b>，反而在農曆上的日期年年不同！",
+        rows: [
+          { year: "2024 年清明節", date: "陽曆 4 月 4 日 ｜ 冬至：陽曆 12 月 21 日" },
+          { year: "2025 年清明節", date: "陽曆 4 月 4 日 ｜ 冬至：陽曆 12 月 21 日" },
+          { year: "2026 年清明節", date: "陽曆 4 月 5 日 ｜ 冬至：陽曆 12 月 22 日" }
+        ]
+      }
+    };
+
+    function switchSim(type, btnEl) {
+      document.querySelectorAll('.sim-tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnEl && btnEl.classList) {
+        btnEl.classList.add('active');
+      } else {
+        const defaultBtn = document.querySelector(`.sim-tab-btn[data-type="${type}"]`);
+        if (defaultBtn) defaultBtn.classList.add('active');
+      }
+
+      const data = simData[type];
+      const box = document.getElementById('sim-content');
+      if (box && data) {
+        box.innerHTML = `
+          <div class="sim-title">${data.title}</div>
+          <div class="sim-rule">${data.rule}</div>
+          <div class="sim-timeline">
+            ${data.rows.map(r => `
+              <div class="sim-row">
+                <span style="font-weight:700; color:#fde68a;">${r.year}</span>
+                <span style="color:#e2e8f0;">${r.date}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    // ==========================================
+    // 6. 節日卡片渲染與篩選
+    // ==========================================
+    function renderFestivals(filter = 'all') {
+      const container = document.getElementById('festivals-container');
+      if (!container) return;
+      const filtered = filter === 'all' ? FESTIVALS : FESTIVALS.filter(f => f.season === filter);
+
+      container.innerHTML = filtered.map(f => `
+        <div class="festival-card">
+          <div>
+            <div class="fest-badge-row">
+              <span class="fest-time">${f.lunarTime}</span>
+              <span class="fest-season-tag">${f.seasonText}</span>
+            </div>
+            <div class="fest-name serif">${f.name}</div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem;">
+              <i data-lucide="calendar" style="width:13px; display:inline; vertical-align:middle;"></i> ${f.solarRule}
+            </div>
+            <div class="fest-customs">
+              <b>【習俗特徵】</b>${f.customs}
+              <div class="custom-keywords">
+                ${f.keywords.map(kw => `<span class="kw-tag">#${kw}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div class="poem-box">
+            <div class="poem-author serif">${f.poemAuthor}</div>
+            <div class="poem-text serif">${f.poemText}</div>
+            <div class="poem-trans-box">${f.poemTrans}</div>
+          </div>
+        </div>
+      `).join('');
+
+      refreshIcons();
+    }
+
+    function filterFestivals(season, btnEl) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      if (btnEl && btnEl.classList) {
+        btnEl.classList.add('active');
+      }
+      renderFestivals(season);
+    }
+
+    // ==========================================
+    // 7. 二十四節氣卡片渲染
+    // ==========================================
+    function renderTerms(season = 'spring') {
+      const container = document.getElementById('terms-container');
+      if (!container) return;
+      const terms = SOLAR_TERMS[season] || [];
+
+      container.innerHTML = terms.map(t => `
+        <div class="term-card">
+          <div class="term-header">
+            <div class="term-name serif">${t.name}</div>
+            <div class="term-date">${t.date}</div>
+          </div>
+          <div class="term-degree">${t.degree}</div>
+          <div class="term-desc">${t.desc}</div>
+          <div class="term-poem serif">${t.poem}</div>
+          <div class="term-trans">${t.poemTrans}</div>
+        </div>
+      `).join('');
+    }
+
+    function filterTerms(season, btnEl) {
+      document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl && btnEl.classList) {
+        btnEl.classList.add('active');
+      }
+      renderTerms(season);
+    }
+
+    // ==========================================
+    // 8. 詩詞密碼獵手渲染 (20 題，點選展開語譯與密碼)
+    // ==========================================
+    function renderHunter(cat = 'all') {
+      const container = document.getElementById('hunter-container');
+      if (!container) return;
+      const filtered = cat === 'all' ? HUNTER_DATA : HUNTER_DATA.filter(h => h.category === cat);
+
+      container.innerHTML = filtered.map(h => `
+        <div class="hunter-card">
+          <div>
+            <div class="hunter-top-row">
+              <span class="hunter-idx-badge">第 ${h.id} 題</span>
+              <span class="hunter-author">${h.author}</span>
+            </div>
+            <div class="hunter-poem serif">「${h.poem}」</div>
+          </div>
+          <div>
+            <div class="hunter-btn-group">
+              <button class="h-action-btn h-trans-btn" onclick="toggleHunterTrans(${h.id}, this)">
+                <i data-lucide="book-open" style="width:14px;"></i> 查看白話語譯
+              </button>
+              <button class="h-action-btn h-clue-btn" onclick="toggleHunterAnswer(${h.id}, this)">
+                <i data-lucide="key-round" style="width:14px;"></i> 查看密碼解析
+              </button>
+            </div>
+            <div class="hunter-trans-box" id="hunter-trans-${h.id}">
+              ${h.trans}
+            </div>
+            <div class="hunter-answer-box" id="hunter-ans-${h.id}">
+              ${h.answer}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      refreshIcons();
+    }
+
+    function filterHunter(cat, btnEl) {
+      document.querySelectorAll('.h-chip').forEach(c => c.classList.remove('active'));
+      if (btnEl && btnEl.classList) {
+        btnEl.classList.add('active');
+      }
+      renderHunter(cat);
+    }
+
+    function toggleHunterTrans(id, btnEl) {
+      const box = document.getElementById(`hunter-trans-${id}`);
+      if (!box) return;
+      const isShowing = box.classList.toggle('show');
+      if (btnEl) {
+        btnEl.innerHTML = isShowing 
+          ? `<i data-lucide="book-open-check" style="width:14px;"></i> 收合白話語譯` 
+          : `<i data-lucide="book-open" style="width:14px;"></i> 查看白話語譯`;
+        refreshIcons();
+      }
+    }
+
+    function toggleHunterAnswer(id, btnEl) {
+      const box = document.getElementById(`hunter-ans-${id}`);
+      if (!box) return;
+      const isShowing = box.classList.toggle('show');
+      if (btnEl) {
+        btnEl.innerHTML = isShowing 
+          ? `<i data-lucide="sparkles" style="width:14px;"></i> 收合密碼解析` 
+          : `<i data-lucide="key-round" style="width:14px;"></i> 查看密碼解析`;
+        refreshIcons();
+      }
+    }
+
+    // ==========================================
+    // 9. 會考測驗互動邏輯 (10 題完整防呆)
+    // ==========================================
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let answeredCurrent = false;
+
+    function loadQuizQuestion(index) {
+      answeredCurrent = false;
+      const q = QUIZ_QUESTIONS[index];
+      if (!q) return;
+
+      const stepEl = document.getElementById('quiz-step');
+      const progressEl = document.getElementById('quiz-progress');
+      const qTextEl = document.getElementById('quiz-question-text');
+      const optionsBox = document.getElementById('quiz-options-box');
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const nextBtn = document.getElementById('quiz-next-btn');
+
+      if (stepEl) stepEl.innerText = `題目 ${index + 1} / ${QUIZ_QUESTIONS.length}`;
+      if (progressEl) progressEl.style.width = `${((index) / QUIZ_QUESTIONS.length) * 100}%`;
+      if (qTextEl) qTextEl.innerText = `${index + 1}. ${q.question}`;
+
+      if (optionsBox) {
+        optionsBox.innerHTML = q.options.map((opt, optIdx) => `
+          <button class="quiz-opt-btn" onclick="selectQuizOption(${optIdx})">
+            <span style="font-weight:700; width: 24px;">${['A', 'B', 'C', 'D'][optIdx]}.</span>
+            <span>${opt}</span>
+          </button>
+        `).join('');
+      }
+
+      if (fbBox) {
+        fbBox.className = 'quiz-feedback';
+        fbBox.style.display = 'none';
+      }
+      if (nextBtn) nextBtn.style.display = 'none';
+    }
+
+    function selectQuizOption(optIdx) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      const isCorrect = (optIdx === q.correct);
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add('correct');
+        } else if (idx === optIdx && !isCorrect) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-fb-title');
+      const fbDesc = document.getElementById('quiz-fb-desc');
+
+      if (isCorrect) {
+        quizScore += 10;
+        if (fbTitle) {
+          fbTitle.innerHTML = "✅ 答對了！太優秀了！";
+          fbTitle.style.color = "#16a34a";
+        }
+      } else {
+        if (fbTitle) {
+          fbTitle.innerHTML = "❌ 答錯囉！別氣餒，看看詳解：";
+          fbTitle.style.color = "#dc2626";
+        }
+      }
+
+      if (fbDesc) fbDesc.innerHTML = q.explanation;
+      if (fbBox) {
+        fbBox.classList.add('show');
+        fbBox.style.display = 'block';
+      }
+
+      const scoreInd = document.getElementById('quiz-score-indicator');
+      if (scoreInd) scoreInd.innerHTML = `<i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：${quizScore}`;
+      
+      const nextBtn = document.getElementById('quiz-next-btn');
+      if (nextBtn) nextBtn.style.display = 'inline-flex';
+      refreshIcons();
+    }
+
+    function nextQuestion() {
+      currentQuizIndex++;
+      if (currentQuizIndex < QUIZ_QUESTIONS.length) {
+        loadQuizQuestion(currentQuizIndex);
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      const progressEl = document.getElementById('quiz-progress');
+      if (progressEl) progressEl.style.width = '100%';
+
+      const activeView = document.getElementById('quiz-active-view');
+      if (activeView) activeView.style.display = 'none';
+
+      const resView = document.getElementById('quiz-result-view');
+      if (resView) resView.style.display = 'block';
+
+      const finalScoreEl = document.getElementById('result-final-score');
+      if (finalScoreEl) finalScoreEl.innerText = `${quizScore} 分`;
+
+      let badge = "會考時序狀元 🌟";
+      let comment = "太神了！所有跨領域國文、地科與節慶密碼全部滿分通關！";
+
+      if (quizScore <= 40) {
+        badge = "初出茅廬小書僮 📖";
+        comment = "別灰心！再多看幾次單元一的曆法大解密與單元二的關鍵字，保證成績大躍進！";
+      } else if (quizScore <= 80) {
+        badge = "博聞強記秀才郎 🎓";
+        comment = "表現相當優異！已經掌握了大部分的節氣與節日考點！";
+      }
+
+      const badgeEl = document.getElementById('result-badge-text');
+      const commentEl = document.getElementById('result-comment');
+      if (badgeEl) badgeEl.innerText = badge;
+      if (commentEl) commentEl.innerText = comment;
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      const scoreInd = document.getElementById('quiz-score-indicator');
+      if (scoreInd) scoreInd.innerHTML = `<i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：0`;
+      
+      const resView = document.getElementById('quiz-result-view');
+      if (resView) resView.style.display = 'none';
+
+      const activeView = document.getElementById('quiz-active-view');
+      if (activeView) activeView.style.display = 'block';
+
+      loadQuizQuestion(0);
+    }
+
+    // ==========================================
+    // 圖表切換與燈箱預覽功能
+    // ==========================================
+    function toggleDiagram(id, btnEl) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const isVisible = el.style.display !== 'none';
+      el.style.display = isVisible ? 'none' : 'block';
+      if (btnEl) {
+        btnEl.innerHTML = isVisible 
+          ? `<i data-lucide="chevron-down" style="width:14px;"></i> 展開教材圖表` 
+          : `<i data-lucide="chevron-up" style="width:14px;"></i> 收合教材圖表`;
+        refreshIcons();
+      }
+    }
+
+    function openLightbox(src, caption) {
+      const modal = document.getElementById('lightbox-modal');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      if (modal && img) {
+        img.src = src;
+        if (cap) cap.innerText = caption || '';
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        refreshIcons();
+      }
+    }
+
+    function closeLightbox(e) {
+      const modal = document.getElementById('lightbox-modal');
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+
+    function refreshIcons() {
+      try {
+        if (window.lucide && typeof lucide.createIcons === 'function') {
+          lucide.createIcons();
+        }
+      } catch (e) {
+        console.warn("Lucide icons init skipped:", e);
+      }
+    }
+
+    // ==========================================
+    // 練習神器切換邏輯 (完整整合4大題庫)
+    // ==========================================
+    const PRACTICE_TOOLS = {
+      term: {
+        title: "二十四節氣專屬閃卡測驗庫",
+        badge: "語文學習集・二十四節氣",
+        src: "holiday/24-solar-terms.html"
+      },
+      fest: {
+        title: "傳統節慶（詩詞句）專屬閃卡測驗庫",
+        badge: "語文學習集・節慶(詩詞句)",
+        src: "holiday/festival-poems.html"
+      },
+      season_kw: {
+        title: "四季物候與氣候（關鍵字詞）專屬閃卡測驗庫",
+        badge: "語文學習集・季節(關鍵字詞)",
+        src: "holiday/season-keywords.html"
+      },
+      season_poem: {
+        title: "四季景致與情懷（相關詞句）專屬閃卡測驗庫",
+        badge: "語文學習集・季節(相關詞句)",
+        src: "holiday/season-verses.html"
+      }
+    };
+
+    let currentPracticeKey = 'term';
+
+    function switchPracticeTool(key) {
+      currentPracticeKey = key;
+      const data = PRACTICE_TOOLS[key];
+      if (!data) return;
+
+      const keys = ['term', 'fest', 'season_kw', 'season_poem'];
+      keys.forEach(k => {
+        const btnId = k === 'season_kw' ? 'tab-season-kw' : (k === 'season_poem' ? 'tab-season-poem' : `tab-${k}`);
+        document.getElementById(btnId)?.classList.toggle('active', key === k);
+      });
+
+      const iframe = document.getElementById('practice-iframe');
+      if (iframe) iframe.src = data.src;
+
+      const extLink = document.getElementById('practice-ext-link');
+      if (extLink) extLink.href = data.src;
+
+      const badge = document.getElementById('practice-badge-text');
+      if (badge) badge.innerText = data.badge;
+
+      const desc = document.getElementById('practice-desc-text');
+      if (desc) desc.innerText = data.title;
+
+      refreshIcons();
+    }
+
+    function reloadPracticeIframe() {
+      const iframe = document.getElementById('practice-iframe');
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
+    }
+
+    // ==========================================
+    // 頁面初始化安全啟動
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        switchSim('festival', null);
+        renderFestivals('all');
+        renderTerms('spring');
+        renderHunter('all');
+        loadQuizQuestion(0);
+        refreshIcons();
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
+    });
+  </script>
+
+  <!-- 圖片燈箱 Lightbox Modal -->
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox(event)">
+    <div class="lightbox-container" onclick="event.stopPropagation()">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" title="關閉 (Esc)">✕</button>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="教材大圖">
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+  </div>
+</body>
+</html>

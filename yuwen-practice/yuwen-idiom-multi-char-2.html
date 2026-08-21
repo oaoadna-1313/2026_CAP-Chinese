@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[語文學習集練習神器]四字以上成語(中)</title>
+<style>
+/* CSS 樣式保持原樣，嚴格禁止修改 */
+:root { --primary: #3949ab; --primary-light: #e8eaf6; --accent: #ff4081; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: #e8eaf6; padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 16px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 15px; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.card-wrapper { width: 320px; height: 420px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.big-char { font-size: 28px; color: var(--primary); margin: 0; line-height: 1.5; letter-spacing: 1px; font-weight: 800; }
+.front-meaning-box { background-color: #fff9c4; color: #000000; padding: 12px 16px; border-radius: 8px; margin-top: 20px; font-size: 15px; font-weight: 500; border: 1px dashed #fbc02d; width: 90%; line-height: 1.5; box-sizing: border-box; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 30px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: left; justify-content: flex-start; cursor: pointer; border-top: 6px solid var(--primary); }
+.back-content { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+.back-header { border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+.back-char { font-size: 24px; font-weight: bold; color: var(--primary); letter-spacing: 1px; line-height: 1.4; }
+.section-title { font-size: 13px; color: #fff; background: var(--primary); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 15px; margin-bottom: 8px; }
+.meaning { font-size: 16px; line-height: 1.6; color: #333; font-weight: bold; }
+.sentence { font-size: 15px; line-height: 1.6; color: #546e7a; margin-top: 5px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 10px; }
+.hl { color: var(--accent); font-weight: bold; text-decoration: underline; }
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.capsule { background-color: var(--accent); color: white; padding: 4px 8px; border-radius: 15px; display: inline-block; margin: 2px 0; box-shadow: 0 2px 5px rgba(255,64,129,0.3); font-weight: bold; white-space: normal; line-height: 1.4;}
+.quiz-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; box-sizing: border-box;}
+.quiz-question { font-size: 18px; margin: 15px 0; font-weight: bold; color: #333; line-height: 1.6; min-height: 60px; display: flex; align-items: center; justify-content: flex-start; text-align: left; }
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+#mq-options { grid-template-columns: 1fr; }
+.option-btn { padding: 12px 15px; border: 2px solid #e8eaf6; background: white; border-radius: 10px; cursor: pointer; font-size: 16px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.4; }
+.option-btn:hover { background-color: #e8eaf6; border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.option-desc { font-size: 14px; font-weight: normal; color: #666; margin-top: 5px; line-height: 1.4; display: none; }
+.option-desc.show { display: block; animation: fadeIn 0.3s; }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; display: none; font-size: 16px; }
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; margin-top: 20px; cursor: pointer; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 錯題本專用新增樣式 */
+.wb-badge { background-color: #f44336; color: white; padding: 10px 20px; border-radius: 25px; font-size: 16px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2); text-align: center; }
+.wb-tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; max-width: 650px; margin-bottom: 15px; }
+@media (max-width: 600px) { .wb-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+.wb-tool-btn { border: none; padding: 12px 8px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.wb-tool-btn:hover { transform: translateY(-2px); }
+.wb-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.wb-btn-fc { background-color: #3f51b5; }
+.wb-btn-quiz { background-color: #ff4081; }
+.wb-btn-copy { background-color: #4caf50; }
+.wb-btn-download { background-color: #00acc1; }
+.wb-btn-clear { background-color: #f44336; }
+.wb-auto-remove-box { display: flex; align-items: center; gap: 8px; color: #546e7a; font-size: 15px; margin-bottom: 20px; font-weight: bold; }
+.wb-card-container { width: 100%; max-width: 650px; background: white; border-radius: 15px; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 150px; }
+.wb-empty-msg { color: #78909c; text-align: center; font-size: 18px; padding: 30px 0; font-weight: bold; }
+.wb-item-card { background: #f9fbe7; border-left: 5px solid #81c784; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-item-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-item-meaning { font-size: 14px; color: #37474f; line-height: 1.5; }
+.wb-item-count { font-size: 12px; background: #ffe0b2; color: #e65100; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
+.wb-del-btn { background: none; border: none; color: #ef5350; cursor: pointer; font-size: 18px; padding: 0 5px; }
+</style>
+</head>
+<body>
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title">📜 <span id="inst-title-text"></span> - 使用說明</div>
+<div class="inst-content">
+<p>歡迎來到<b>「<span id="welcome-title-text"></span>」</b>！</p>
+<ul>
+<li><b>第一步：翻卡記憶</b><br>點擊卡片可翻面，查看解釋與例句。請誠實標記熟悉度。</li>
+<li><b>第二步：釋義測驗</b><br>根據解釋選出正確的對應答案。</li>
+<li><b>第三步：填空挑戰</b><br>閱讀例句並填入最適合的答案。</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+</div>
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" onclick="switchMode('flashcard')">📖 翻卡記憶</button>
+<button class="nav-btn" onclick="switchMode('meaningQuiz')">📝 釋義測驗</button>
+<button class="nav-btn" onclick="switchMode('fillQuiz')">🧩 填空挑戰</button>
+<button class="nav-btn" id="nav-btn-wrongBook" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<h2 class="big-char" id="fc-char"></h2>
+<div class="front-meaning-box" id="fc-front-meaning"></div>
+<p class="hint" id="fc-hint">(點擊看原詞與例句)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-header"><span class="back-char" id="fc-back-char"></span></div>
+<div class="section-title">解釋</div><div class="meaning" id="fc-meaning"></div>
+<div class="section-title">例句</div><div class="sentence" id="fc-example"></div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<div id="meaningQuiz-mode" class="mode-container">
+<div id="mq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="mq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請選出對應的答案：</div>
+<div class="quiz-question" id="mq-question" style="display:block; text-align:left;"></div>
+<div class="options-grid" id="mq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="mq-feedback"></div>
+<button class="next-q-btn" id="mq-next-btn" onclick="nextQuiz('meaning')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="mq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="mq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="mq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<div id="fillQuiz-mode" class="mode-container">
+<div id="fq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="fq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請填入正確的成語：</div>
+<div class="quiz-question" id="fq-question" style="display:block; text-align:left;"></div>
+<div class="options-grid" id="fq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="fq-feedback"></div>
+<button class="next-q-btn" id="fq-next-btn" onclick="nextQuiz('fill')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="fq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="fq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 錯題本 Mode -->
+<div id="wrongBook-mode" class="mode-container">
+  <div id="wb-count-badge" class="wb-badge">目前單元共 0 個錯題 (累計全部單元共 0 個)</div>
+  
+  <div class="wb-tools-grid">
+    <button class="wb-tool-btn wb-btn-fc" id="wb-btn-fc" onclick="startWrongTraining('flashcard')">
+      <span>📖 錯題</span><span>翻卡特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-quiz" id="wb-btn-quiz" onclick="startWrongTraining('meaningQuiz')">
+      <span>📝 錯題</span><span>釋義特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-copy" onclick="copyWrongBook()">
+      <span>📋 複製</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-download" onclick="downloadWrongBook()">
+      <span>💾 下載</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-clear" onclick="clearCurrentWrongBook()">
+      <span>🧹 清空</span><span>錯題本</span>
+    </button>
+  </div>
+
+  <div class="wb-auto-remove-box">
+    <input type="checkbox" id="wb-auto-remove" checked>
+    <label for="wb-auto-remove">特訓中答對時，自動移出錯題本</label>
+  </div>
+
+  <div class="wb-card-container" id="wrong-list-container">
+    <div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>
+  </div>
+</div>
+
+<div id="summary-area" style="display: none;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+
+<script>
+// ==========================================
+// 🔴 設定區
+const QUIZ_TITLE = "[語文學習集練習神器]四字以上成語(中)"; 
+// ==========================================
+
+// 資料區 
+const vocabData = [
+  {"idiom": "顧左右而言他", "meaning": "閃避主題而談論別的事情。", "sentence": "當被問到經費流向時，他總是顧左右而言他，不肯正面回答。"},
+  {"idiom": "口袋名單", "meaning": "指平時留意收攬的人才，或當權者的親信。", "sentence": "這次的人事異動，聽說他早就有自己的口袋名單了。"},
+  {"idiom": "口惠而實不至", "meaning": "在口頭上答應給人好處，卻沒有付諸實踐。", "sentence": "那家公司經常對員工口惠而實不至，導致人才不斷流失。"},
+  {"idiom": "可一不可再", "meaning": "比喻事情無法重來", "sentence": "這種取巧的方法可一不可再，下次絕對行不通。"},
+  {"idiom": "可望而不可即", "meaning": "只能遠望却不能接近。比喻目前還不能實現的事物。", "sentence": "他的成就對我來說簡直是可望而不可即。"},
+  {"idiom": "空口說白話", "meaning": "光說不做，沒有實際的行動表現。", "sentence": "經理只會空口說白話，從不見他動手幫忙。"},
+  {"idiom": "空心大老官", "meaning": "比喻虛有其表，不務實際的人。", "sentence": "別看他穿得西裝筆挺，其實只是個沒錢的空心大老官。"},
+  {"idiom": "苛政猛於虎", "meaning": "比喻繁苛殘酷政令比老虎凶猛可怕。", "sentence": "在那個動盪的年代，人民深切體會到苛政猛於虎的悲哀。"},
+  {"idiom": "開門七件事", "meaning": "指柴、米、油、鹽、醬、醋、茶等七種日常生活必需品。比喻每天的必需開支。", "sentence": "每天為了開門七件事奔波，這就是小老百姓的真實生活。"},
+  {"idiom": "慷他人之慨", "meaning": "利用他人的財物，為自己做人情。", "sentence": "他拿公家的資源來做公關，根本是慷他人之慨。"},
+  {"idiom": "化干戈為玉帛", "meaning": "比喻將戰爭轉變為和平。", "sentence": "雙方經過談判，終於化干戈為玉帛，簽訂了和平協定。"},
+  {"idiom": "化腐朽為神奇", "meaning": "比喻將廢物加以妥善利用。", "sentence": "這位藝術家能把廢棄物做成精美的雕塑，真是化腐朽為神奇。"},
+  {"idiom": "火得薪而熾", "meaning": "火上加木柴，則火燒得更猛烈。比喻處在優越的情勢或地位。", "sentence": "這家公司獲得資金挹注後，更是火得薪而熾，業績蒸蒸日上。"},
+  {"idiom": "好馬不吃回頭草", "meaning": "有志氣的人，即使遭遇挫折也不走回頭路。", "sentence": "既然已經辭職了，就好馬不吃回頭草，勇敢去找新工作吧。"},
+  {"idiom": "好漢不吃眼前虧", "meaning": "聰明的人能識時務，暫時躲開不利的處境，免得吃虧受辱。", "sentence": "對方人多勢眾，我們還是好漢不吃眼前虧，先撤退再說。"},
+  {"idiom": "好漢不怕出身低", "meaning": "有志氣的人不怕出身低微，只要肯奮發向上，終能有所成就。", "sentence": "雖然家境貧寒，但他深信好漢不怕出身低，憑努力定能出人頭地。"},
+  {"idiom": "行行鄙夫志", "meaning": "見識淺薄的人，老想做到剛強的樣子。", "sentence": "他那種動不動就跟人起衝突的態度，真是行行鄙夫志。"},
+  {"idiom": "行行出狀元", "meaning": "各種行業中皆會有傑出人物。", "sentence": "只要肯努力，行行出狀元，任何工作都能有傑出表現。"},
+  {"idiom": "何樂而不為", "meaning": "為什麼不意做呢？反問語氣，表示願意、同意。", "sentence": "既能助人又能積德，這種事我們何樂而不為呢？"},
+  {"idiom": "忽忽如有所失", "meaning": "好像丟失了什麼似的。形容心神不安的樣子，也形容心裡感到空虛。", "sentence": "聽到好友即將移民的消息，他心裡忽忽如有所失。"},
+  {"idiom": "河海不擇細流", "meaning": "大海、大河不排斥細小的水流。比喻寛宏容眾。", "sentence": "身為主管應該有河海不擇細流的雅量，廣納各種意見。"},
+  {"idiom": "虎毒不食子", "meaning": "比喻人不論如何狠毒，也不會傷害自己的孩子。", "sentence": "大家都說虎毒不食子，沒想到他竟會對親生孩子痛下毒手。"},
+  {"idiom": "虎落平陽被犬欺", "meaning": "比喻英雄失勢时，容易遭到小人欺侮。", "sentence": "昔日的黑道大哥如今淪落街頭，真是虎落平陽被犬欺。"},
+  {"idiom": "侯門深似海", "meaning": "指原本相識之人因地位懸殊而隔絕疏遠。也指富貴人家門禁森嚴，進出不容易。", "sentence": "她嫁入豪門後就鮮少與我們聯絡，真是侯門深似海啊。"},
+  {"idiom": "後浪推前浪", "meaning": "比喻人事更迭，不斷前進。", "sentence": "科技發展迅速，長江後浪推前浪，舊產品很快就被淘汰了。"},
+  {"idiom": "恨不相逢未嫁時", "meaning": "遺憾不能在婚前相識。", "sentence": "他們相見恨晚，只能感嘆恨不相逢未嫁時。"},
+  {"idiom": "恨鐵不成鋼", "meaning": "對期望的人不成器，感到焦急不滿。有所責求、惋惜之意。", "sentence": "教練對隊員們的嚴厲訓斥，其實是出於恨鐵不成鋼的心理。"},
+  {"idiom": "皇天不負苦心人", "meaning": "形容老天有眼，絕不會辜負意志堅強與刻苦耐勞的人。", "sentence": "經過多年的苦讀，皇天不負苦心人，他終於考上了理想的大學。"},
+  {"idiom": "海內存知己", "meaning": "四海之內皆有知心的朋友。", "sentence": "即使分隔兩地，只要海內存知己，天涯若比鄰。"},
+  {"idiom": "海畔有逐臭之夫", "meaning": "比喻有怪僻，與眾不同的人。", "sentence": "這種冷門的收藏品居然也有人花大錢買，真是海畔有逐臭之夫。"},
+  {"idiom": "惶惶不可终日", "meaning": "驚慌得一天都過不下去。形容驚恐到了極點。", "sentence": "犯罪嫌疑人逃亡期間，每天都惶惶不可终日，深怕被警察抓到。"},
+  {"idiom": "換湯不換藥", "meaning": "比喻只改變形式，而內容和本質不變.", "sentence": "這項新政策只是換湯不換藥，根本沒有解決實質問題。"},
+  {"idiom": "畫虎不成反類狗(犬)", "meaning": "比喻人好高騖遠，但能力不足，模仿不到家，反而不倫不類。", "sentence": "他的模仿太過拙劣，結果畫虎不成反類狗(犬)，惹得大家哄堂大笑。"},
+  {"idiom": "畫虎畫皮難畫骨", "meaning": "人只能描繪出老虎外表，卻無法表現老虎的精神。比喻認識一個人容易，了解一個人的內心卻難。", "sentence": "雖然我們認識很久，但畫虎畫皮難畫骨，我還是不清楚他真正的想法。"},
+  {"idiom": "黑雲壓城城欲摧", "meaning": "比喻戰事危急猶如烏雲蓋頂，幾乎要把城頭壓垮。也引喻為因惡勢力造成緊張的局面。", "sentence": "大戰前夕，邊關的氣氛宛如黑雲壓城城欲摧般令人窒息。"},
+  {"idiom": "猢猻入布袋", "meaning": "比喻山野之性受到拘束。", "sentence": "他向來自由慣了，現在被綁在辦公室裡，簡直像猢猻入布袋一樣難受。"},
+  {"idiom": "話不投機半句多", "meaning": "談話時彼此意見不合，無法繼續交談，連說半句都嫌太多。", "sentence": "他們兩人的價值觀差異太大，常常是話不投機半句多。"},
+  {"idiom": "慧眼識英雄", "meaning": "具有獨特眼光的人，能辨識英才。", "sentence": "當初多虧有伯樂慧眼識英雄，他才能有今天的成就。"},
+  {"idiom": "慧劍斬情絲", "meaning": "以理智、果決的態度，割捨糾結不清的情感。", "sentence": "為了專心發展事業，他決定慧劍斬情絲，結束了這段感情。"},
+  {"idiom": "蟪蛄不知春秋", "meaning": "蟪蛄夏生秋死，所以不知春秋。比喻生命短促，或見識短淺。", "sentence": "那些目光短淺的人，就像蟪蛄不知春秋一樣，無法理解長遠的規畫。"},
+  {"idiom": "歡娛嫌夜短", "meaning": "歡樂的時候，覺得時間過得特別快。", "sentence": "和老朋友聚會時總是歡娛嫌夜短，不知不覺就天亮了。"},
+  {"idiom": "九牛二虎之力", "meaning": "比喻非常大的力量。", "sentence": "我們費了九牛二虎之力，才把這台沉重的鋼琴搬上樓。"},
+  {"idiom": "久旱逢甘霖", "meaning": "比喻宿願得償，欣喜若狂。", "sentence": "公司面臨財務危機時接到這筆大訂單，簡直是久旱逢甘霖。"},
+  {"idiom": "井水不犯河水", "meaning": "比喻界限分明，互不干犯。", "sentence": "我們兩個部門向來是井水不犯河水，各司其職。"},
+  {"idiom": "今宵(朝)有酒今宵(朝)醉", "meaning": "今天有酒則今天痛飲到醉方休。比喻只顧眼前，不想以後。", "sentence": "他的理財觀念很差，總是今宵(朝)有酒今宵(朝)醉，沒有任何積蓄。"},
+  {"idiom": "尖擔兩頭脫", "meaning": "比喻兩頭落空。", "sentence": "他想同時兼顧兩份工作，結果尖擔兩頭脫，哪邊都沒做好。"},
+  {"idiom": "君子之交淡如水", "meaning": "君子志同道合，不求私利，其交情看起來像水一樣淡。", "sentence": "他們的友誼建立在互相尊重的基礎上，正是君子之交淡如水。"},
+  {"idiom": "君子成人之美", "meaning": "君子應該有幫助別人、成全他人的美德。", "sentence": "既然你們兩情相悅，我就君子成人之美，幫你們撮合吧。"},
+  {"idiom": "拒人於千里之外", "meaning": "指在千里之外就把人擋住。比喻態度高傲，毫無商量轉圜的餘地。", "sentence": "他的態度總是冷冰冰的，給人一種拒人於千里之外的感覺。"},
+  {"idiom": "金剛不壞之身", "meaning": "比喻身體強健硬朗。", "sentence": "即使工作再怎麼勞累，他也像有金剛不壞之身一樣，從不生病。"},
+  {"idiom": "侷促如轅下駒", "meaning": "比喻人受束縛而促不安，不能施展。", "sentence": "剛到新環境，他顯得侷促如轅下駒，不知道該如何是好。"},
+  {"idiom": "急來抱佛腳", "meaning": "比喻平時不準備，事到臨頭才匆忙應付。", "sentence": "平時不用功，考試前才急來抱佛腳，哪裡來得及？"},
+  {"idiom": "急急如律令", "meaning": "本是漢代公文用語，後來道士或巫師也用於符咒的末尾。比喻情勢緊急，應如同法律命令一般火速辦理。", "sentence": "收到總公司的公文，經理立刻急急如律令地召開緊急會議。"},
+  {"idiom": "急急如喪家之犬", "meaning": "形容情形狼狽，像無家可歸的狗。", "sentence": "戰敗的軍隊急急如喪家之犬，狼狽地向後方撤退。"},
+  {"idiom": "急驚風碰上(撞著)慢郎中", "meaning": "比喻有急事相求，偏偏遇上慢性子的人。", "sentence": "我急著要出門，他卻還在慢吞吞地穿鞋，真是急驚風碰上(撞著)慢郎中。"},
+  {"idiom": "家書抵萬金", "meaning": "比喻家信珍貴。", "sentence": "在戰火紛飛的年代，一封平安的家書抵萬金。"},
+  {"idiom": "家醜不可外揚", "meaning": "家中的醜事不可以向外宣揚。", "sentence": "這件事我們自己私下解決就好，畢竟家醜不可外揚。"},
+  {"idiom": "疾風知勁草", "meaning": "比喻在艱困的環境下，才能考驗出堅強的意志和節操。", "sentence": "經過這次的金融風暴，我們才看出誰是真正有實力的企業，真是疾風知勁草。"},
+  {"idiom": "疾雷不及掩耳", "meaning": "比喻行動迅速，令人措手不及。", "sentence": "警方以疾雷不及掩耳的速度，將歹徒一網打盡。"},
+  {"idiom": "酒逢知己千杯少", "meaning": "形容性情相投的人聚在一起總不厭倦。", "sentence": "和老朋友相聚，真是酒逢知己千杯少，聊個痛快。"},
+  {"idiom": "飢者易為食", "meaning": "飢餓的人，不苛擇食物，什麼都可以吃。", "sentence": "在難民營裡，大家飢者易為食，哪裡還顧得上食物的味道好壞。"},
+  {"idiom": "蛟龍得雲雨", "meaning": "比喻有才幹的人得到施展本領的機會。", "sentence": "換了新老闆後，他彷彿蛟龍得雲雨，將自己的才華充分展現出來。"},
+  {"idiom": "腳踏兩條船", "meaning": "比喻人投機取巧，兩方討好。或心意不決、猶疑難定。", "sentence": "他在感情上總是腳踏兩條船，最後落得兩頭落空的下場。"},
+  {"idiom": "解鈴還須繫鈴人", "meaning": "比喻誰惹出來的麻煩，還得由誰去解決。", "sentence": "這場誤會是因為你而起的，解鈴還須繫鈴人，還是你去向他解釋清楚吧。"},
+  {"idiom": "盡信書不如無書", "meaning": "指讀書不可拘泥於書上所載，一味盲從。", "sentence": "學習知識要懂得獨立思考，畢竟盡信書不如無書。"},
+  {"idiom": "舊書不厭百回讀", "meaning": "多讀舊書，自然會有新的領悟。", "sentence": "這本經典小說我已經看過好幾次了，真的是舊書不厭百回讀。"},
+  {"idiom": "舊瓶裝新酒", "meaning": "比喻雖力求革新，但仍無法掙脫桎梏，只能拘泥在舊有的模式裡表現新意。", "sentence": "這個企劃案雖然包裝得很漂亮，但骨子裡還是舊瓶裝新酒，缺乏創意。"},
+  {"idiom": "雞蛋裡挑骨頭", "meaning": "比喻故意挑剔、刁難。", "sentence": "他這個人就是喜歡雞蛋裡挑骨頭，別人的工作他總能找出毛病。"},
+  {"idiom": "千里送鵝毛", "meaning": "自遠方贈送輕微的禮物。有禮輕情意重的意思，也用作贈人禮物的謙辭。", "sentence": "雖然這份禮物不貴重的，但千里送鵝毛，代表了我滿滿的心意。"},
+  {"idiom": "巧婦難為無米之炊", "meaning": "比喻即使非常靈巧的人，做事缺乏必要條件，也難以完成。", "sentence": "公司不給任何經費，要我怎麼辦活動？真是巧婦難為無米之炊啊。"},
+  {"idiom": "曲肱而枕之", "meaning": "形容生活恬淡，無憂無慮。", "sentence": "退休後，他過著曲肱而枕之的悠閒生活，不再過問世事。"},
+  {"idiom": "求人不如求已", "meaning": "請求別人不如依靠自己。指人做事不要依賴他人。", "sentence": "遇到困難時，求人不如求已，自己想辦法解決最實在。"},
+  {"idiom": "秋風掃落葉", "meaning": "比喻強大的力量掃蕩衰敗的勢力。", "sentence": "執法單位以秋風掃落葉之勢，徹底瓦解了這個犯罪集團。"},
+  {"idiom": "棄之如敝屣", "meaning": "像扔掉破鞋一樣的拋棄。比喻一點也不可惜。", "sentence": "對於前男友送的禮物，她毫不留情地棄之如敝屣。"},
+  {"idiom": "強(能)將手下無弱兵", "meaning": "比喻強者的手下沒有怯弱之人。", "sentence": "在他的帶領下，這個團隊的表現越來越出色，真的是強(能)將手下無弱兵。"},
+  {"idiom": "強中更有強中手", "meaning": "高手中還有更明者。比喻技能永無止境。", "sentence": "不要以為自己天下無敵了，要知道強中更有強中手，一山還比一山高。"},
+  {"idiom": "強龍不壓地頭蛇", "meaning": "比喻即使強大有力者也不能壓制地方上蠻橫凶惡的人。", "sentence": "我們初來乍到，還是低調點好，畢竟強龍不壓地頭蛇。"},
+  {"idiom": "情人眼裡出西施", "meaning": "對於心愛或欣賞的人，覺得他無處不完美。", "sentence": "在他看來，妻子的任何小缺點都是可愛的，真是情人眼裡出西施。"},
+  {"idiom": "清官難斷家務事", "meaning": "家庭糾紛繁瑣複雜，即使是公正廉潔的官吏也難以論斷是非。", "sentence": "他們夫妻倆吵架，我們外人還是別插手了，畢竟清官難斷家務事。"},
+  {"idiom": "牽一髮而動全身", "meaning": "比喻更動一小部分，就會影響全局。", "sentence": "這個決策牽一髮而動全身，必須謹慎評估所有可能的影響。"},
+  {"idiom": "群起而攻之", "meaning": "眾人合力攻擊排斥。", "sentence": "他那番歧視性的言論，立刻引來網友們的群起而攻之。"},
+  {"idiom": "輕塵棲弱草", "meaning": "比喻人生短促無常。", "sentence": "人生短暫如輕塵棲弱草，我們更應該珍惜當下的每一刻。"},
+  {"idiom": "確乎其不可拔", "meaning": "剛強堅決，不可動搖。", "sentence": "他對這項事業的信念確乎其不可拔，無論遇到什麼困難都不會放棄。"},
+  {"idiom": "擒賊先擒王", "meaning": "比喻打擊敵人必須先攻擊带頭的，或做事要先把握關鍵。", "sentence": "要瓦解這個組織，必須擒賊先擒王，先抓到他們的首腦。"},
+  {"idiom": "下筆如有神", "meaning": "形容寫起文章來，文思泉湧，如有神助。", "sentence": "他平時閱讀了大量的書籍，所以寫起作來下筆如有神。"},
+  {"idiom": "小人之交甘若醴", "meaning": "小人交朋友往往親密得像醇酒一樣甘甜。", "sentence": "那些只為了利益而結交的朋友，往往是小人之交甘若醴，無法長久。"},
+  {"idiom": "小人閒居為不善", "meaning": "小人獨處的時候不會做善事。", "sentence": "無所事事容易讓人誤入歧途，正所謂小人閒居為不善。"},
+  {"idiom": "小不忍則亂大謀", "meaning": "小細節上不能忍耐，就容易壞了全盤大計。", "sentence": "遇到挫折要冷靜應對，千萬記住小不忍則亂大謀。"},
+  {"idiom": "小巫見大巫", "meaning": "表示兩者之間相差甚遠。", "sentence": "他這點財富跟那些億萬富翁相比，簡直是小巫見大巫。"},
+  {"idiom": "心有餘而力不足", "meaning": "心裡想做，但因能力或力量不夠而無法做到。", "sentence": "我很想幫你這個忙，但我實在是心有餘而力不足啊。"},
+  {"idiom": "心有靈犀一點通", "meaning": "比喻心靈相，意念相契合。", "sentence": "他們夫妻倆不用言語，光靠一個眼神就能了解彼此的想法，真是心有靈犀一點通。"},
+  {"idiom": "心病還須心藥醫", "meaning": "心病須由造成心病的人事物來醫治。", "sentence": "他的憂鬱症是因為感情創傷引起的，心病還須心藥醫，必須從心理層面去開導。"},
+  {"idiom": "心搖搖如懸旌", "meaning": "心裡不安定，如懸掛的旗子隨風飄蕩。形容憂慮重重。", "sentence": "聽到考試成績即將公布，她心搖搖如懸旌，緊張得不得了。"},
+  {"idiom": "先下手為強", "meaning": "比別人先掌握時機而占優勢。", "sentence": "在商場上競爭激烈，必須先下手為強，才能搶得先機。"},
+  {"idiom": "先小人後君子", "meaning": "比喻雙方商談事情時，先言明具體條件和嚴格約定，以免日後難以開口。", "sentence": "為了避免日後的糾紛，我們還是先小人後君子，把合約條款寫清楚吧。"},
+  {"idiom": "朽木不可雕", "meaning": "比喻資質低劣，不堪造就。", "sentence": "他上課從來不聽講，老師也無奈地感嘆真是朽木不可雕也。"},
+  {"idiom": "朽索馭六馬", "meaning": "比喻極為危險，或指不堪重任。", "sentence": "讓一個毫無經驗的新人來帶領這麼大的團隊，簡直是朽索馭六馬，太危險了。"},
+  {"idiom": "行不得也哥哥", "meaning": "比喻路程艱難，勸人不要再前進。", "sentence": "這條路太危險了，行不得也哥哥，我們還是繞道而行吧。"},
+  {"idiom": "行百里者半九十", "meaning": "比喻事情愈接近完成就愈困難，不可因小成就而自滿。", "sentence": "越接近成功就越不能鬆懈，所謂行百里者半九十，堅持到底才是贏家。"},
+  {"idiom": "行行重行行", "meaning": "形容走個不停。", "sentence": "為了尋找失散的親人，他行行重行行，走遍了大江南北。"},
+  {"idiom": "孝子不諛親", "meaning": "孝子不用花言巧語哄騙父母。", "sentence": "真正的孝道在於誠心奉養，正所謂孝子不諛親，用不著說些好聽的話來討好父母。"},
+  {"idiom": "迅雷不及掩耳", "meaning": "比喻行動迅速，令人來不及防備。", "sentence": "敵軍以迅雷不及掩耳的攻勢，迅速占領了這座城市。"},
+  {"idiom": "夏蟲不可語冰", "meaning": "比喻人見識短淺，不能和他談論大道理。", "sentence": "跟他談論這麼深奧的哲學問題，簡直是夏蟲不可語冰，完全對牛彈琴。"},
+  {"idiom": "笑罵由他笑罵", "meaning": "形容對於他人的譏笑辱骂無動於衷。", "sentence": "只要自己問心無愧，外界的批評就笑罵由他笑罵吧。"},
+  {"idiom": "挾天子以令諸侯", "meaning": "比喻借重權勢者的名義發施令。", "sentence": "曹操挾天子以令諸侯，掌握了當時的政治實權。"},
+  {"idiom": "挾泰山以超北海", "meaning": "比喻進行不可能做到的事。", "sentence": "要他在這麼短的時間內完成這項艱鉅的任務，簡直是挾泰山以超北海。"},
+  {"idiom": "習慣成自然", "meaning": "一旦養成習慣，便像天然生成一般。", "sentence": "他每天早上都會去公園慢跑，久而久之就習慣成自然了。"},
+  {"idiom": "喜怒不形於色", "meaning": "喜怒的情緒，不表露在臉上。", "sentence": "他是一個城府很深的人，總是喜怒不形於色，讓人摸不透他的想法。"},
+  {"idiom": "惺惺惜惺惺", "meaning": "聰慧的人彼此愛惜、尊重。", "sentence": "兩位棋逢敵手的高手在賽後互相交流，頗有惺惺惜惺惺之感。"},
+  {"idiom": "學然後知不足", "meaning": "入門學習之後，才發現自己的知識還不夠完備。", "sentence": "讀的書越多，越能體會到學然後知不足的道理。"},
+  {"idiom": "薰猶不同器", "meaning": "香草和臭草不能放在同一器具裡。比喻君子與小人，或好人與壞人不可同處。", "sentence": "由於理念不合，他們最終還是分道揚鑣了，正所謂薰猶不同器。"},
+  {"idiom": "止謗莫如自修", "meaning": "要使別人停止毀謗，最好的方法就是修養自身。", "sentence": "面對流言蜚語，止謗莫如自修，用實際行動來證明自己的清白。"},
+  {"idiom": "直待雨淋頭", "meaning": "比喻直到災禍來臨時才領悟。", "sentence": "你總是把別人的勸告當耳邊風，難道要直待雨淋頭才肯後悔嗎？"},
+  {"idiom": "知人知面不知心", "meaning": "只看到人的表面，不能洞察人的真心。指難以真正了解一個人。", "sentence": "交朋友要小心謹慎，畢竟知人知面不知心。"},
+  {"idiom": "知其一不知其二", "meaning": "只知事物的一部分，而不知其他的部分。指對事情缺乏澈底了解，沒有全面認識。", "sentence": "他對這件事情的了解只是皮毛，知其一不知其二，就妄下定論。"},
+  {"idiom": "知恥近乎勇", "meaning": "知道羞恥，是一種接近勇敢的表現。", "sentence": "只要肯承認錯誤並加以改正，知恥近乎勇，大家還是會原諒你的。"},
+  {"idiom": "真金不怕火煉", "meaning": "比喻真實或堅强的人或物，經得起各種考驗。", "sentence": "這家公司的產品品質優良，真金不怕火煉，絕對經得起市場的考驗。"},
+  {"idiom": "紙包不住火", "meaning": "比喻醜陋的事情，終究會被揭露，就像紙張無法包住火一樣。", "sentence": "他作弊的事情最終還是敗露了，畢竟紙包不住火。"},
+  {"idiom": "執干戈以衛社稷", "meaning": "指從軍報國。", "sentence": "為了保衛國家，無數的熱血青年執干戈以衛社稷，投身軍旅。"},
+  {"idiom": "張公吃酒李公醉", "meaning": "比喻一方取得實質利益，一方空有虛名。也可比喻一人作惡，由他人代為受罪。", "sentence": "這件事明明是他做錯的，結果卻怪罪到我頭上，真是張公吃酒李公醉。"},
+  {"idiom": "眾人拾柴火焰高", "meaning": "比喻大家同心協力，就能產生大力量。", "sentence": "只要大家團結一致，眾人拾柴火焰高，沒有克服不了的困難。"},
+  {"idiom": "眾人皆醉我獨醒", "meaning": "大家都沉醉了，只有我獨自清醒著。比喻能分辨是非善惡，不隨俗浮沉。", "sentence": "在這個充滿功利主義的社會裡，他依然保持著清高的節操，宛如眾人皆醉我獨醒。"},
+  {"idiom": "終非池中物", "meaning": "比喻有才能謀略者必有大作為。", "sentence": "以他的才華和抱負，終非池中物，遲早會有一番大作為。"},
+  {"idiom": "著三不著兩", "meaning": "行事或說话思慮不周，輕重失宜。", "sentence": "他做事總是著三不著兩的，常常丟三落四，讓人很不放心。"},
+  {"idiom": "置之死地而後生", "meaning": "形容置身於沒有退路的境地，勢必能死向前，求得生存。", "sentence": "在面臨破產的邊緣，他們決定放手一搏，希望能置之死地而後生。"},
+  {"idiom": "置之死地而後快", "meaning": "把人逼到死亡地步才覺得痛快。", "sentence": "那些不肖商人為了牟取暴利，不惜犧牲消費者的健康，真是置之死地而後快。"},
+  {"idiom": "擲地作金石聲", "meaning": "形容文章辭句工巧華美、調鏗鏘悅耳。", "sentence": "他的演講慷慨激昂，字字句句擲地作金石聲，深深打動了在場的每一個人。"},
+  {"idiom": "出師未捷身先死", "meaning": "出兵征討尚未獲勝，就已經犧牲生命。形容將士還沒有立大功，便不幸身亡了。", "sentence": "諸葛亮為了蜀漢鞠躬盡瘁，最終卻出師未捷身先死，令人惋惜。"},
+  {"idiom": "出淤泥而不染", "meaning": "比喻一個人的言行有自己的原則，不會受壞環境的影響。", "sentence": "周敦頤的愛蓮說讚美蓮花出淤泥而不染的高尚品格。"},
+  {"idiom": "吃力不討好", "meaning": "費了許多力氣，不但得不到回報，反而遭人嫌棄。", "sentence": "這項專案吃力不討好，不僅要加班熬夜，還常常被客戶挑剔。"},
+  {"idiom": "吃不完兜著走", "meaning": "東西吃不完，打包带走。多用作警告他人做事別太過分，否則將予以不利的用語。", "sentence": "你要是再敢惹事生非，我保證讓你吃不完兜著走！"},
+  {"idiom": "成敗在此一舉", "meaning": "成功或失敗全看在這次行動。", "sentence": "這是我們最後的機會了，成敗在此一舉，大家一定要全力以赴。"},
+  {"idiom": "吹皺一池春水", "meaning": "比喻事不關己而好管閒事。", "sentence": "你這番話真是無風起浪，吹皺一池春水，讓原本平靜的辦公室又熱鬧了起來。"},
+  {"idiom": "床頭捉刀人", "meaning": "指代人作文章或做事的人。", "sentence": "這篇文章寫得這麼好，恐怕是請了床頭捉刀人代筆的吧。"},
+  {"idiom": "初生之犢不畏虎", "meaning": "剛出生的小牛不怕老虎。比喻年輕人思想單純，敢想敢做，絲毫不畏懼。", "sentence": "這位新進員工初生之犢不畏虎，在會議上勇敢地提出了自己的見解。"},
+  {"idiom": "長安居大不易", "meaning": "长安物價昂貴，生活非常不易。比喻居住在大城市裡，生活不容易。", "sentence": "在台北租房子的壓力真的很大，讓人深刻體會到長安居大不易。"},
+  {"idiom": "長江後浪推前浪", "meaning": "比喻事物的不斷前進。多指新人、新事代替舊人、舊事。", "sentence": "看到許多年輕一代的優秀人才輩出，不禁讓人感嘆長江後浪推前浪。"},
+  {"idiom": "春秋責備賢者", "meaning": "指對人或事物要求十全十，毫無缺點。", "sentence": "對於他這樣一位德高望重的前輩，我們不應該用春秋責備賢者的標準來要求他。"},
+  {"idiom": "春宵一刻值千金", "meaning": "比喻春夜的歡樂時光美好可貴。", "sentence": "新婚之夜，新郎新娘深感春宵一刻值千金。"},
+  {"idiom": "春無三日晴", "meaning": "描述春天多雨的情況。", "sentence": "最近的天氣真是春無三日晴，動不動就下雨。"},
+  {"idiom": "乘車入鼠穴", "meaning": "想乘坐大车進入小小的老鼠洞中。比喻不可能的事情。", "sentence": "想用這種簡單的方法解決這麼複雜的問題，無異於乘車入鼠穴，根本是不可能的。"},
+  {"idiom": "柴米油鹽醬醋茶", "meaning": "日常生活必備的七樣東西。", "sentence": "結了婚之後，才體會到柴米油鹽醬醋茶等生活瑣事的繁雜。"},
+  {"idiom": "十八重(層)地獄", "meaning": "比喻最悲慘的報應。", "sentence": "那些做盡壞事的人，死後一定會被打入十八重(層)地獄，永不超生。"},
+  {"idiom": "十八般武藝", "meaning": "比喻多種武藝或技能。", "sentence": "為了應付各種挑戰，他練就了十八般武藝，真是多才多藝。"},
+  {"idiom": "十年一覺揚州夢", "meaning": "比喻猛然省悟過去漫長歲月的虛度。", "sentence": "回首過去的荒唐歲月，猶如十年一覺揚州夢，現在想來真是不勝唏噓。"},
+  {"idiom": "十年磨一劍", "meaning": "說明長期努力地鑽研某種學問的精神。", "sentence": "經過十年磨一劍的苦練，他終於在國際大賽上奪得金牌。"},
+  {"idiom": "上梁不正下梁歪", "meaning": "比喻在上位的人或長輩行為不正，在下位的人或晚輩受其影響，也會跟著行為不正。", "sentence": "既然老闆自己都常遲到早退，員工當然也有樣學樣，真是上梁不正下梁歪。"},
+  {"idiom": "上窮碧落下黃泉", "meaning": "比喻上天下地，到處尋找。", "sentence": "為了尋找失蹤的孩子，他們夫妻倆上窮碧落下黃泉，不放棄任何一絲希望。"},
+  {"idiom": "士可殺不可辱", "meaning": "形容人有骨氣、志節高尚。", "sentence": "這位寧死不屈的將軍，展現了士可殺不可辱的英雄氣概。"},
+  {"idiom": "士為知己者死", "meaning": "甘願為賞識自己、栽培自己的人犧牲生命表示願全力幫助朋友。", "sentence": "為了報答老闆的知遇之恩，他甘願士為知己者死，效犬馬之勞。"},
+  {"idiom": "山不轉路轉", "meaning": "比喻解決問題應知變通。", "sentence": "既然這個方法行不通，那我們就換個方式吧，山不轉路轉嘛。"},
+  {"idiom": "山雨欲來風滿樓", "meaning": "比喻重大事件發生前的徵兆或緊張氣氛。", "sentence": "最近股市動盪不安，給人一種山雨欲來風滿樓的感覺，投資人應該謹慎應對。"},
+  {"idiom": "手無縛雞之力", "meaning": "形容人文弱沒有氣力。", "sentence": "這個書生手無縛雞之力，連提個水桶都嫌重。"},
+  {"idiom": "水火不相容", "meaning": "比喻互相對立，不能相容。", "sentence": "這兩個黨派的政治理念水火不相容，經常在議會上爆發激烈的衝突。"},
+  {"idiom": "水至清則無魚", "meaning": "比喻對人或事不能過於苛察，求全責備。", "sentence": "對待下屬不能過於苛刻，要懂得水至清則無魚的道理，給他們一些彈性空間。"},
+  {"idiom": "水清石自見", "meaning": "比喻事情真相大白。", "sentence": "只要我們耐心等待，事情的真相總有一天會水清石自見的。"},
+  {"idiom": "生米煮(做)成熟飯", "meaning": "比喻事情成了定局，無法再挽回。", "sentence": "現在合約都已經簽了，生米煮(做)成熟飯，想反悔也來不及了。"},
+  {"idiom": "伸手不見五指", "meaning": "比喻非常黑暗。", "sentence": "停電後，屋子裡一片漆黑，伸手不見五指。"},
+  {"idiom": "身在曹營心在漢", "meaning": "比喻堅守節操，忠於故主。", "sentence": "他雖然被迫在對手公司上班，但依然身在曹營心在漢，暗中幫助我們。"},
+  {"idiom": "事無不可對人言", "meaning": "形容心胸坦蕩磊落，沒有不可告人之事。", "sentence": "他為人光明磊落，事無不可對人言，從不做虧心事。"}
+];
+
+let appState = { currentMode: 'flashcard', deck: [], nextRoundDeck: [], currentIndex: 0, stats: { good: 0, bad: 0 }, isQuizAnswered: false, hasVisitedBack: false, round: 1, startTime: null, isWrongTraining: false };
+let modeStates = {};
+
+function startApp() { document.getElementById('instruction-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; initGame('flashcard'); }
+
+// 洗牌函式
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+/* --- 錯題本 LocalStorage 核心模組 --- */
+function getWrongBook() {
+  try {
+    const data = localStorage.getItem('idiom_wrong_pool');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWrongBook(pool) {
+  try {
+    localStorage.setItem('idiom_wrong_pool', JSON.stringify(pool));
+  } catch (e) {}
+  renderWrongBook();
+}
+
+function addToWrongBook(item) {
+  if (!item) return;
+  const word = item.idiom || item.key || item.word || item.question || item.char || "";
+  let meaningStr = item.meaning || item.answer || item.translation || item.explanation || "";
+  let sentenceStr = item.sentence || item.question || item.original || "";
+  let pool = getWrongBook();
+  let exist = pool.find(x => (x.idiom || x.key || x.word || x.question || x.char) === word);
+
+  if (exist) {
+    exist.wrongCount = (exist.wrongCount || 1) + 1;
+    exist.lastWrongTime = new Date().getTime();
+  } else {
+    pool.push({
+      idiom: word,
+      meaning: meaningStr,
+      sentence: sentenceStr,
+      wrongCount: 1,
+      lastWrongTime: new Date().getTime(),
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(pool);
+}
+
+function removeFromWrongBook(word) {
+  let pool = getWrongBook();
+  pool = pool.filter(x => (x.idiom || x.key || x.word || x.question || x.char) !== word);
+  saveWrongBook(pool);
+}
+
+function renderWrongBook() {
+  const pool = getWrongBook();
+  const currentPool = pool.filter(x => x.chapter === QUIZ_TITLE);
+  
+  const countBadge = document.getElementById('wb-count-badge');
+  if (countBadge) {
+    countBadge.innerText = `目前單元共 ${currentPool.length} 個錯題 (累計全部單元共 ${pool.length} 個)`;
+  }
+
+  const btnFc = document.getElementById('wb-btn-fc');
+  const btnQuiz = document.getElementById('wb-btn-quiz');
+  if (btnFc) btnFc.disabled = currentPool.length === 0;
+  if (btnQuiz) btnQuiz.disabled = currentPool.length === 0;
+
+  const container = document.getElementById('wrong-list-container');
+  if (!container) return;
+
+  if (currentPool.length === 0) {
+    container.innerHTML = `<div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>`;
+    return;
+  }
+
+  let html = '';
+  currentPool.forEach(item => {
+    html += `
+      <div class="wb-item-card">
+        <div>
+          <div class="wb-item-title">
+            ${item.idiom}
+            <span class="wb-item-count">錯 ${item.wrongCount || 1} 次</span>
+          </div>
+          <div class="wb-item-meaning">${item.meaning}</div>
+        </div>
+        <button class="wb-del-btn" title="移出錯題本" onclick="removeFromWrongBook('${(item.idiom || '').replace(/'/g, "\\'")}');">🗑️</button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function clearCurrentWrongBook() {
+  if (!confirm("確定要清空『本單元』的所有錯題紀錄嗎？")) return;
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.chapter !== QUIZ_TITLE);
+  saveWrongBook(pool);
+}
+
+function copyWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可複製！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}`).join('\n');
+  navigator.clipboard.writeText(text).then(() => alert("已複製本單元錯題至剪貼簿！"));
+}
+
+function downloadWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可下載！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}${x.sentence ? '\n例句/題目：' + x.sentence : ''}`).join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${QUIZ_TITLE}_錯題本.txt`;
+  a.click();
+}
+
+function startWrongTraining(mode) {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可以進行特訓喔！"); return; }
+  
+  appState.isWrongTraining = true;
+  appState.currentMode = mode;
+  
+  const mainData = (typeof vocabData !== 'undefined') ? vocabData : (typeof quizData !== 'undefined' ? quizData : (typeof rawData !== 'undefined' ? rawData : []));
+  
+  appState.deck = pool.map(p => {
+    let found = mainData.find(v => (v.idiom || v.word || v.key || v.question) === p.idiom);
+    return found || p;
+  });
+
+  if (mode !== 'flashcard') {
+    shuffleArray(appState.deck);
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${mode}`) || document.querySelector(`.nav-btn[onclick*="${mode}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetModeDiv = document.getElementById(`${mode}-mode`);
+  if (targetModeDiv) targetModeDiv.classList.add('active');
+
+  appState.nextRoundDeck = []; 
+  appState.currentIndex = 0; 
+  appState.stats = { good: 0, bad: 0 }; 
+  appState.isQuizAnswered = false; 
+  appState.hasVisitedBack = false;
+  appState.startTime = new Date();
+
+  document.getElementById('summary-area').style.display = 'none';
+
+  const prefix = mode === 'flashcard' ? 'fc' : (mode === 'meaningQuiz' ? 'mq' : 'fq');
+  const badge = document.getElementById(`${prefix}-round-badge`);
+  if (badge) {
+    badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+    badge.style.backgroundColor = "var(--accent)";
+  }
+
+  updateStatsUI();
+  const cardEl = document.getElementById('card');
+  if (cardEl) cardEl.classList.remove('flipped');
+  
+  if (mode === 'flashcard') {
+    loadFlashcard();
+  } else if (mode === 'meaningQuiz') {
+    loadQuiz('meaning');
+  } else if (mode === 'fillQuiz') {
+    loadQuiz('fill');
+  }
+}
+
+function initGame(mode, isRetry = false) { 
+   appState.isWrongTraining = false;
+   if (mode === 'wrongBook') {
+     document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+     const wbMode = document.getElementById('wrongBook-mode');
+     if (wbMode) wbMode.classList.add('active');
+     renderWrongBook();
+     return;
+   } 
+   appState.currentMode = mode; 
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (isRetry && appState.nextRoundDeck.length > 0) { 
+       appState.deck = [...appState.nextRoundDeck]; 
+       appState.round++; 
+   } else { 
+       appState.deck = [...vocabData]; 
+       appState.round = 1; 
+   }
+   
+   // 隨機題號邏輯
+   if (mode === 'meaningQuiz' || mode === 'fillQuiz') {
+       shuffleArray(appState.deck);
+   }
+
+   appState.nextRoundDeck = []; appState.currentIndex = 0; appState.stats = { good: 0, bad: 0 }; appState.isQuizAnswered = false; appState.hasVisitedBack = false; 
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   const prefix = mode === 'flashcard' ? 'fc' : mode === 'meaningQuiz' ? 'mq' : 'fq'; 
+   const badge = document.getElementById(`${prefix}-round-badge`); 
+   if (badge) {
+     badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`; 
+     badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+   }
+   updateStatsUI(); 
+   const cardEl = document.getElementById('card');
+   if (cardEl) cardEl.classList.remove('flipped'); 
+   if (mode === 'flashcard') loadFlashcard(); else if (mode === 'meaningQuiz') loadQuiz('meaning'); else if (mode === 'fillQuiz') loadQuiz('fill'); 
+}
+
+function switchMode(newMode) {
+  const oldMode = appState.currentMode;
+  
+  // 1. 備份舊模式狀態
+  if (oldMode && oldMode !== 'wrongBook') {
+    const summaryVisible = document.getElementById('summary-area').style.display === 'block';
+    modeStates[oldMode] = {
+      deck: [...appState.deck],
+      nextRoundDeck: [...appState.nextRoundDeck],
+      currentIndex: appState.currentIndex,
+      stats: { ...appState.stats },
+      isQuizAnswered: appState.isQuizAnswered,
+      hasVisitedBack: appState.hasVisitedBack,
+      round: appState.round,
+      startTime: appState.startTime,
+      isWrongTraining: appState.isWrongTraining,
+      summaryVisible: summaryVisible
+    };
+  }
+
+  // 2. 切換按鈕與容器 UI
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  if (event && event.target) {
+    event.target.classList.add('active');
+  } else {
+    const btn = document.getElementById(`nav-btn-${newMode}`) || document.querySelector(`.nav-btn[onclick*="${newMode}"]`);
+    if (btn) btn.classList.add('active');
+  }
+
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  
+  if (newMode === 'wrongBook') {
+    appState.currentMode = 'wrongBook';
+    document.getElementById('wrongBook-mode').classList.add('active');
+    document.getElementById('summary-area').style.display = 'none';
+    renderWrongBook();
+    return;
+  }
+
+  document.getElementById(`${newMode}-mode`).classList.add('active');
+  appState.currentMode = newMode;
+
+  // 3. 恢復或初始化新模式狀態
+  if (modeStates[newMode]) {
+    const saved = modeStates[newMode];
+    appState.deck = [...saved.deck];
+    appState.nextRoundDeck = [...saved.nextRoundDeck];
+    appState.currentIndex = saved.currentIndex;
+    appState.stats = { ...saved.stats };
+    appState.isQuizAnswered = saved.isQuizAnswered;
+    appState.hasVisitedBack = saved.hasVisitedBack;
+    appState.round = saved.round;
+    appState.startTime = saved.startTime;
+    appState.isWrongTraining = saved.isWrongTraining;
+
+    if (saved.summaryVisible) {
+      document.getElementById('summary-area').style.display = 'block';
+      const prefix = newMode === 'flashcard' ? 'fc' : newMode === 'meaningQuiz' ? 'mq' : 'fq';
+      document.getElementById(`${prefix}-game-area`).style.display = 'none';
+    } else {
+      document.getElementById('summary-area').style.display = 'none';
+      const prefix = newMode === 'flashcard' ? 'fc' : newMode === 'meaningQuiz' ? 'mq' : 'fq';
+      document.getElementById(`${prefix}-game-area`).style.display = 'block';
+      
+      if (newMode === 'flashcard') loadFlashcard();
+      else if (newMode === 'meaningQuiz') loadQuiz('meaning');
+      else if (newMode === 'fillQuiz') loadQuiz('fill');
+    }
+    updateStatsUI();
+  } else {
+    initGame(newMode, false);
+  }
+}
+
+function updateStatsUI() { 
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : appState.currentMode === 'meaningQuiz' ? 'mq' : 'fq'; 
+  if (appState.currentMode === 'flashcard') { 
+    const knownEl = document.getElementById(`${prefix}-known-count`);
+    const unknownEl = document.getElementById(`${prefix}-unknown-count`);
+    if (knownEl) knownEl.innerText = appState.stats.good; 
+    if (unknownEl) unknownEl.innerText = appState.stats.bad; 
+  } else { 
+    const correctEl = document.getElementById(`${prefix}-correct-count`);
+    const wrongEl = document.getElementById(`${prefix}-wrong-count`);
+    if (correctEl) correctEl.innerText = appState.stats.good; 
+    if (wrongEl) wrongEl.innerText = appState.stats.bad; 
+  } 
+  const left = appState.deck.length - appState.currentIndex; 
+  const leftEl = document.getElementById(`${prefix}-left-count`);
+  if (leftEl) leftEl.innerText = left > 0 ? left : 0; 
+}
+
+// 🔴 動態處理長字串挖空邏輯：將中文轉為▢，保留標點符號
+const getMaskedInfo = (idiom) => {
+    let masked = idiom.replace(/[\u4e00-\u9fa5]/g, "▢");
+    return { masked: masked, target: idiom };
+};
+
+const getHighlightedIdiom = (idiom) => {
+    return '<span class="capsule">' + idiom + '</span>';
+};
+
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; if(!card) return; 
+  
+  const maskedIdiom = getMaskedInfo(card.idiom).masked;
+  const charEl = document.getElementById('fc-char');
+  charEl.innerText = maskedIdiom; 
+  charEl.style.fontSize = maskedIdiom.length > 8 ? '22px' : '28px';
+
+  document.getElementById('front-actions').classList.remove('visible'); 
+  document.getElementById('fc-hint').style.opacity = '1'; 
+  document.getElementById('fc-front-meaning').innerText = card.meaning; 
+  
+  const highlightedIdiom = getHighlightedIdiom(card.idiom);
+  document.getElementById('fc-back-char').innerHTML = highlightedIdiom; 
+  document.getElementById('fc-meaning').innerText = card.meaning; 
+  document.getElementById('fc-example').innerHTML = card.sentence.replace(card.idiom, `<span class="hl">${card.idiom}</span>`); 
+  document.getElementById('card').classList.remove('flipped'); 
+  appState.hasVisitedBack = false; 
+  document.getElementById('fc-game-area').style.display = 'flex'; 
+  updateStatsUI();
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); 
+  const isFlippingToBack = !cardEl.classList.contains('flipped'); 
+  cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) appState.hasVisitedBack = true; 
+  else if (appState.hasVisitedBack) { 
+    document.getElementById('front-actions').classList.add('visible'); 
+    document.getElementById('fc-hint').style.opacity = '0'; 
+  } 
+}
+
+function rateCard(isKnown) { 
+  const currentItem = appState.deck[appState.currentIndex];
+  const autoRemove = document.getElementById('wb-auto-remove')?.checked;
+
+  if (isKnown) {
+    appState.stats.good++;
+    if (appState.isWrongTraining && autoRemove && currentItem) {
+      removeFromWrongBook(currentItem.idiom || currentItem.word || currentItem.key);
+    }
+  } else { 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentItem); 
+    addToWrongBook(currentItem);
+  } 
+  appState.currentIndex++; 
+  updateStatsUI(); 
+  if (appState.currentIndex < appState.deck.length) setTimeout(() => loadFlashcard(), 200); 
+  else showSummary(); 
+}
+
+function loadQuiz(type) { 
+  const currentItem = appState.deck[appState.currentIndex]; 
+  if (!currentItem) return;
+  const prefix = type === 'meaning' ? 'mq' : 'fq'; 
+  appState.isQuizAnswered = false; 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'none'; 
+  document.getElementById(`${prefix}-feedback`).innerText = ''; 
+  
+  if (type === 'meaning') { 
+      document.getElementById('mq-question').innerText = currentItem.meaning; 
+  } else { 
+      document.getElementById('fq-question').innerHTML = currentItem.sentence.replace(currentItem.idiom, "________________"); 
+  } 
+  
+  let options = [currentItem]; 
+  let optionIdioms = [currentItem.idiom];
+  
+  let targetLength = currentItem.idiom.length;
+  let sameLengthVocab = vocabData.filter(item => item.idiom.length === targetLength && item.idiom !== currentItem.idiom);
+  sameLengthVocab.sort(() => Math.random() - 0.5);
+
+  while(options.length < 4) { 
+      let random;
+      if (sameLengthVocab.length > 0) {
+          random = sameLengthVocab.pop(); 
+      } else {
+          random = vocabData[Math.floor(Math.random() * vocabData.length)]; 
+      }
+
+      if (!optionIdioms.includes(random.idiom)) {
+          options.push(random); 
+          optionIdioms.push(random.idiom);
+      }
+  } 
+  
+  options.sort(() => Math.random() - 0.5); 
+  const container = document.getElementById(`${prefix}-options`); 
+  container.innerHTML = ''; 
+  options.forEach(opt => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'option-btn'; 
+    btn.dataset.idiom = opt.idiom;
+    
+    if (type === 'meaning') {
+        btn.innerHTML = `<div style="font-size: 16px; letter-spacing: 1px;">${getMaskedInfo(opt.idiom).target}</div>`; 
+    } else {
+        btn.innerHTML = `<div>${opt.idiom}</div><div class="option-desc">(${opt.meaning})</div>`; 
+    }
+    
+    btn.onclick = () => checkAnswer(btn, opt, currentItem, type); 
+    container.appendChild(btn); 
+  }); 
+  document.getElementById(`${prefix}-game-area`).style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selected, correct, type) { 
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const prefix = type === 'meaning' ? 'mq' : 'fq'; 
+  const isCorrect = selected.idiom === correct.idiom; 
+  const autoRemove = document.getElementById('wb-auto-remove')?.checked;
+
+  if (isCorrect) { 
+      btn.classList.add('correct'); 
+      document.getElementById(`${prefix}-feedback`).innerText = "✅ 答對了！"; 
+      document.getElementById(`${prefix}-feedback`).style.color = "var(--success)"; 
+      appState.stats.good++; 
+      
+      if (appState.isWrongTraining && autoRemove) {
+        removeFromWrongBook(correct.idiom || correct.word || correct.key);
+      }
+
+      if (type === 'fill') { 
+          document.getElementById('fq-question').innerHTML = correct.sentence.replace(correct.idiom, `<span class="hl">${correct.idiom}</span>`); 
+      } else if (type === 'meaning') {
+          const highlightedIdiom = getHighlightedIdiom(correct.idiom);
+          document.getElementById('mq-question').innerHTML = `${highlightedIdiom}：${correct.meaning}`;
+      }
+  } else { 
+      btn.classList.add('wrong'); 
+      document.getElementById(`${prefix}-feedback`).innerText = `❌ 答錯了。正確答案是：${correct.idiom}`; 
+      document.getElementById(`${prefix}-feedback`).style.color = "var(--danger)"; 
+      appState.stats.bad++; 
+      appState.nextRoundDeck.push(correct); 
+      addToWrongBook(correct);
+
+      if (type === 'meaning') {
+          const highlightedIdiom = getHighlightedIdiom(correct.idiom);
+          document.getElementById('mq-question').innerHTML = `${highlightedIdiom}：${correct.meaning}`;
+      }
+  } 
+  
+  const container = document.getElementById(`${prefix}-options`); 
+  Array.from(container.children).forEach(child => { 
+      const desc = child.querySelector('.option-desc'); 
+      if(desc) desc.classList.add('show'); 
+      if (child.dataset.idiom === correct.idiom) { child.classList.add('correct'); } 
+  }); 
+  
+  updateStatsUI(); 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'block'; 
+}
+
+function nextQuiz(type) { 
+  appState.currentIndex++; 
+  if (appState.currentIndex < appState.deck.length) loadQuiz(type); 
+  else showSummary(); 
+}
+
+function showSummary() { 
+   const prefix = appState.currentMode === 'flashcard' ? 'fc' : appState.currentMode === 'meaningQuiz' ? 'mq' : 'fq'; 
+   document.getElementById(`${prefix}-game-area`).style.display = 'none'; 
+   document.getElementById('summary-area').style.display = 'block'; 
+   window.scrollTo(0, 0); 
+   
+   const endTime = new Date(); 
+   const durationSeconds = Math.floor((endTime - appState.startTime) / 1000); 
+   const minutes = Math.floor(durationSeconds / 60); 
+   const seconds = durationSeconds % 60; 
+   const durationStr = `${minutes}分${seconds}秒`;
+
+   const summaryText = document.getElementById('summary-text'); 
+   const restartBtn = document.getElementById('btn-retry'); 
+   let msg = ""; 
+   msg += `<div style="margin-bottom:15px; font-size:16px; color:#78909c;">⏱️ 本次練習時間：${durationStr}</div>`;
+   
+   if (appState.currentMode === 'flashcard') { 
+     msg += `本輪掌握：<b style="color:var(--success)">${appState.stats.good}</b> 個<br>需複習：<b style="color:var(--warning)">${appState.stats.bad}</b> 個`; 
+   } else { 
+     msg += `答對：<b style="color:var(--success)">${appState.stats.good}</b><br>答錯：<b style="color:var(--danger)">${appState.stats.bad}</b>`; 
+   } 
+
+   if (appState.nextRoundDeck.length === 0) { 
+     msg += `<br><br><b>✨ 太棒了！全部通過！✨</b>`; 
+     restartBtn.innerText = "🏆 重新開始全部"; 
+     restartBtn.onclick = resetAll; 
+   } else { 
+     msg += `<br><br>還有 <b>${appState.nextRoundDeck.length}</b> 個不熟，繼續特訓！`; 
+     restartBtn.innerText = "🔄 複習不熟的內容"; 
+     restartBtn.onclick = restartRound; 
+   } 
+   summaryText.innerHTML = msg; 
+}
+
+
+
+function restartRound() { initGame(appState.currentMode, true); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+// 設置標題顯示 (在 DOM 載入後)
+document.addEventListener('DOMContentLoaded', () => {
+   document.title = QUIZ_TITLE;
+   document.querySelector('h1').innerText = QUIZ_TITLE;
+   document.getElementById('inst-title-text').innerText = QUIZ_TITLE;
+   document.getElementById('welcome-title-text').innerText = QUIZ_TITLE;
+});
+</script>
+</body>
+</html>

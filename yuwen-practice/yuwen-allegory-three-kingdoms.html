@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[語文學習集練習神器]三國演義相關歇後語</title>
+<style>
+/* CSS 樣式保持原樣，嚴格禁止修改 */
+:root { --primary: #3949ab; --primary-light: #e8eaf6; --accent: #ff4081; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: #e8eaf6; padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 16px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 15px; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* 卡片加大：加寬為 400px，加高為 650px，並使用 max-width 避免手機破版 */
+.card-wrapper { width: 400px; max-width: 95vw; height: 650px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.big-char { font-size: 32px; color: var(--primary); margin: 0; line-height: 1.4; letter-spacing: 1px; font-weight: 800; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 40px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: left; justify-content: flex-start; cursor: pointer; border-top: 6px solid var(--primary); }
+.back-content { flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+.back-content::-webkit-scrollbar { width: 6px; }
+.back-content::-webkit-scrollbar-thumb { background-color: #cfd8dc; border-radius: 10px; }
+.back-header { border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+.back-char { font-size: 24px; font-weight: bold; color: var(--primary); letter-spacing: 1px; }
+.section-title { font-size: 13px; color: #fff; background: var(--primary); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 15px; margin-bottom: 8px; }
+.meaning { font-size: 16px; line-height: 1.6; color: #333; font-weight: bold; }
+.sentence { font-size: 16px; line-height: 1.6; color: #546e7a; margin-top: 5px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 15px; padding-bottom: 5px;}
+.hl { color: var(--accent); font-weight: bold; text-decoration: underline; }
+.source-box { background: #f0f4f8; border-left: 4px solid var(--accent); padding: 12px; margin-top: 5px; margin-bottom: 10px; border-radius: 0 8px 8px 0; text-align: left; }
+.source-tag { font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 6px; }
+.source-original { font-size: 15px; color: #263238; font-weight: bold; margin-bottom: 6px; line-height: 1.5; }
+.source-translation { font-size: 14px; color: #546e7a; line-height: 1.5; }
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.quiz-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+.quiz-question { font-size: 22px; margin: 15px 0; font-weight: bold; color: #333; line-height: 1.5; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.option-btn { padding: 15px; border: 2px solid #e8eaf6; background: white; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.option-btn:hover { background-color: #e8eaf6; border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.option-desc { font-size: 14px; font-weight: normal; color: #666; margin-top: 5px; line-height: 1.4; display: none; }
+.option-desc.show { display: block; animation: fadeIn 0.3s; }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; display: none; font-size: 16px; }
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 錯題本專用樣式 */
+.wb-badge { background-color: #f44336; color: white; padding: 10px 20px; border-radius: 25px; font-size: 16px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2); }
+.wb-tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; max-width: 650px; margin-bottom: 15px; }
+@media (max-width: 600px) { .wb-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+.wb-tool-btn { border: none; padding: 12px 8px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.wb-tool-btn:hover { transform: translateY(-2px); }
+.wb-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.wb-btn-fc { background-color: #3f51b5; }
+.wb-btn-quiz { background-color: #ff4081; }
+.wb-btn-copy { background-color: #4caf50; }
+.wb-btn-download { background-color: #00acc1; }
+.wb-btn-clear { background-color: #f44336; }
+.wb-auto-remove-box { display: flex; align-items: center; gap: 8px; color: #546e7a; font-size: 15px; margin-bottom: 20px; font-weight: bold; }
+.wb-card-container { width: 100%; max-width: 650px; background: white; border-radius: 15px; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 150px; }
+.wb-empty-msg { color: #78909c; text-align: center; font-size: 18px; padding: 30px 0; font-weight: bold; }
+.wb-item-card { background: #f9fbe7; border-left: 5px solid #81c784; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-item-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-item-meaning { font-size: 14px; color: #37474f; line-height: 1.5; }
+.wb-item-count { font-size: 12px; background: #ffe0b2; color: #e65100; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
+.wb-del-btn { background: none; border: none; color: #ef5350; cursor: pointer; font-size: 18px; padding: 0 5px; }
+</style>
+</head>
+<body>
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title">📜 <span id="inst-title-text"></span> - 使用說明</div>
+<div class="inst-content">
+<p>歡迎來到<b>「<span id="welcome-title-text"></span>」</b>！</p>
+<ul>
+<li><b>第一步：翻卡記憶</b><br>正面呈現歇後語前半句，點擊卡片可翻面查看後半句、釋義與典故。請誠實標記熟悉度。</li>
+<li><b>第二步：歇後語測驗</b><br>題目將出示前半句，請在四個選項中選出最正確的後半句！</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+</div>
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" onclick="switchMode('flashcard')">📖 翻卡記憶</button>
+<button class="nav-btn" onclick="switchMode('meaningQuiz')">📝 歇後語測驗</button>
+<button class="nav-btn" id="nav-btn-wrongBook" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<h2 class="big-char" id="fc-char"></h2>
+<p class="hint" id="fc-hint">(點擊看後半句、解釋與例句)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-header"><span class="back-char" id="fc-back-char"></span></div>
+<div class="section-title">完整歇後語與釋義</div>
+<div class="meaning" id="fc-meaning"></div>
+
+<div class="section-title">典故出處</div>
+<div class="source-box">
+  <div class="source-tag" id="fc-source-text"></div>
+  <div class="source-original" id="fc-original"></div>
+  <div class="source-translation" id="fc-translation"></div>
+</div>
+
+<div class="section-title">生活例句</div>
+<div class="sentence" id="fc-example"></div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<div id="meaningQuiz-mode" class="mode-container">
+<div id="mq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="mq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請選出對應的後半句答案：</div>
+<div class="quiz-question" id="mq-question"></div>
+<div class="options-grid" id="mq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="mq-feedback"></div>
+<button class="next-q-btn" id="mq-next-btn" onclick="nextQuiz('meaning')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="mq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="mq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="mq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<!-- 錯題本 Mode -->
+<div id="wrongBook-mode" class="mode-container">
+  <div id="wb-count-badge" class="wb-badge">目前單元共 0 個錯題 (累計全部單元共 0 個)</div>
+  
+  <div class="wb-tools-grid">
+    <button class="wb-tool-btn wb-btn-fc" id="wb-btn-fc" onclick="startWrongTraining('flashcard')">
+      <span>📖 錯題</span><span>翻卡特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-quiz" id="wb-btn-quiz" onclick="startWrongTraining('meaningQuiz')">
+      <span>📝 錯題</span><span>測驗特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-copy" onclick="copyWrongBook()">
+      <span>📋 複製</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-download" onclick="downloadWrongBook()">
+      <span>💾 下載</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-clear" onclick="clearCurrentWrongBook()">
+      <span>🧹 清空</span><span>錯題本</span>
+    </button>
+  </div>
+
+  <div class="wb-auto-remove-box">
+    <input type="checkbox" id="wb-auto-remove" checked>
+    <label for="wb-auto-remove">特訓中答對時，自動移出錯題本</label>
+  </div>
+
+  <div class="wb-card-container" id="wrong-list-container">
+    <div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>
+  </div>
+</div>
+<div id="summary-area" style="display: none;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+<script>
+const QUIZ_TITLE = "[語文學習集練習神器]三國演義相關歇後語"; 
+
+const vocabData = [
+  {"idiom": "三個臭皮匠——賽過諸葛亮", "front": "三個臭皮匠", "back": "賽過諸葛亮", "meaning": "比喻集思廣益，大家團結思考就能想出超越聰明人的好計策。", "source_text": "民間歇後語 / 三國人物傳說", "original": "三個臭皮匠，頂個諸葛亮。", "translation": "三個平凡的皮匠聚在一起商量，智慧往往勝過一位神機妙算的諸葛亮。", "sentence": "面對這個複雜的難題，我們三個臭皮匠——賽過諸葛亮，一定能想出解決辦法。"},
+  {"idiom": "司馬昭之心——路人皆知", "front": "司馬昭之心", "back": "路人皆知", "meaning": "比喻人盡皆知的野心、意圖或陰謀，藏都藏不住。", "source_text": "《三國志·魏書·高貴鄉公傳》裴注引《漢晉春秋》", "original": "司馬昭之心，路人所知也。", "translation": "司馬昭想要篡奪曹魏皇位的野心，連路上的百姓都知道得清清楚楚。", "sentence": "他表面上假裝熱心幫忙，其實是司馬昭之心——路人皆知，大家早已看穿。"},
+  {"idiom": "過五關斬六將——過關斬將", "front": "過五關斬六將", "back": "過關斬將", "meaning": "形容克服重重險阻與難關，接連取得勝利。", "source_text": "《三國演義》第二十七回", "original": "關公千里走單騎，連過曹操五處關隘，斬其六員守將。", "translation": "關羽護送兩位嫂嫂尋兄，連闖五道關卡並斬殺了曹營六名守將。", "sentence": "他在這次全國演說競賽中過五關斬六將——過關斬將，終於捧回總冠軍。"},
+  {"idiom": "周瑜打黃蓋——一個願打一個願挨", "front": "周瑜打黃蓋", "back": "一個願打一個願挨", "meaning": "比喻雙方出於共同目的而心甘情願配合，外人無須插手或抱不平。", "source_text": "《三國演義》第四十六回", "original": "周瑜與黃蓋共設苦肉計，黃蓋受杖刑以詐降曹操。", "translation": "周瑜假意責打老將黃蓋，黃蓋甘心受罰以騙取曹操信任。", "sentence": "這筆買賣是周瑜打黃蓋——一個願打一個願挨，旁人何必替他們爭論？"},
+  {"idiom": "周瑜謀荊州——賠了夫人又折兵", "front": "周瑜謀荊州", "back": "賠了夫人又折兵", "meaning": "比喻想佔便宜卻反而遭受雙重損失，得不償失。", "source_text": "《三國演義》第五十五回", "original": "周郎妙計安天下，賠了夫人又折兵！", "translation": "周瑜本想以孫權之妹為誘餌奪回荊州，結果劉備順利娶親並逃回荊州。", "sentence": "他想用投機取巧的手段賺快錢，結果周瑜謀荊州——賠了夫人又折兵，連本金都賠光了。"},
+  {"idiom": "徐庶進曹營——一言不發", "front": "徐庶進曹營", "back": "一言不發", "meaning": "比喻被迫置身於不喜歡的環境中，始終保持沉默、不表態。", "source_text": "《三國演義》第三十六回", "original": "徐庶感念劉備知遇之恩，入曹營後立誓不為曹操設一謀。", "translation": "徐庶被逼進入曹營後，終生不替曹操獻任何一條計策。", "sentence": "開會時他對不合理的決策極度反對，整場會議徐庶進曹營——一言不發。"},
+  {"idiom": "諸葛亮皺眉頭——計上心來", "front": "諸葛亮皺眉頭", "back": "計上心來", "meaning": "形容才智卓越之人只要稍加思索，立刻能想出精妙的對策。", "source_text": "《三國演義》多處孔明用計場景", "original": "孔明撫琴沉思，眉頭一蹙，已有良策。", "translation": "諸葛亮沉思片刻，眉頭一皺，心中立刻有了奇妙的應對良策。", "sentence": "別慌張，只要給他五分鐘思考，諸葛亮皺眉頭——計上心來，馬上就有辦法。"},
+  {"idiom": "魯肅上了孔明的船——糊裡糊塗", "front": "魯肅上了孔明的船", "back": "糊裡糊塗", "meaning": "比喻在不知情的情況下被別人牽著走，完全處於被動或迷惘狀態。", "source_text": "《三國演義》第四十六回「草船借箭」", "original": "魯肅隨孔明登船索箭，途中大霧迷江，不知孔明欲往何處。", "translation": "魯肅跟著諸葛亮上船借箭，完全不知道諸葛亮要如何空手取得十萬支箭。", "sentence": "他今天莫名其妙被朋友拉去參加相親會，真是魯肅上了孔明的船——糊裡糊塗。"},
+  {"idiom": "關公面前舞大刀——獻醜", "front": "關公面前舞大刀", "back": "獻醜", "meaning": "比喻在技藝精湛的行家或權威面前賣弄自己微不足道的本領，自不量力。", "source_text": "民間歇後語 / 關羽青龍偃月刀典故", "original": "關雲長手提青龍偃月刀，勇冠三軍。", "translation": "在武藝超群的關公面前揮舞大刀，只是自取其辱、自顯淺薄。", "sentence": "你在這位世界鋼琴大師面前彈琴，豈不是關公面前舞大刀——獻醜嗎？"},
+  {"idiom": "諸葛亮大擺空城計——化險為夷", "front": "諸葛亮大擺空城計", "back": "化險為夷", "meaning": "形容在極度凶險的危局中運用大智慧與膽識，成功化解危機、轉危為安。", "source_text": "《三國演義》第九十五回", "original": "孔明大開四門，引二小童攜琴撫琴於城樓上，退司馬懿十五萬大軍。", "translation": "諸葛亮在無兵守城的情況下大開城門焚香彈琴，嚇退司馬懿大軍。", "sentence": "面對突如其來的公關危機，執行長諸葛亮大擺空城計——化險為夷，穩住了公司股價。"},
+  {"idiom": "曹操敗走華容道——不出所料", "front": "曹操敗走華容道", "back": "不出所料", "meaning": "比喻事態發展完全在預料之中，絲毫不差。", "source_text": "《三國演義》第五十回", "original": "孔明算定曹操必走華容道，預先派關羽在此埋伏等候。", "translation": "諸葛亮精準預料曹操赤壁戰敗後的逃跑路線，果然完全不出所料。", "sentence": "這場球賽的走向正如專家所言，曹操敗走華容道——不出所料。"},
+  {"idiom": "看三國掉淚——替古人擔憂", "front": "看三國掉淚", "back": "替古人擔憂", "meaning": "比喻為遙遠或與自己毫無關聯的人事物白白操心，徒增煩惱。", "source_text": "民間歇後語 / 讀三國演義感慨", "original": "讀三國志演義，為古人之悲歡離合而感傷落淚。", "translation": "看著數百年前歷史小說的悲歡離合而傷心流淚，純屬替古人白擔心。", "sentence": "他們夫妻倆吵架明天就和好了，你何必看三國掉淚——替古人擔憂呢？"},
+  {"idiom": "曹操下江南——來得凶敗得慘", "front": "曹操下江南", "back": "來得凶敗得慘", "meaning": "形容起初氣勢洶洶、不可一世，最後卻落得慘重的大敗仗。", "source_text": "《三國演義》赤壁之戰典故", "original": "曹操率八十三萬大軍南下欲平江南，赤壁一役全軍覆沒。", "translation": "曹操聲勢浩大地發動大軍進攻江南，最終在赤壁火攻中慘敗潰退。", "sentence": "對手賽前放話要橫掃全場，結果曹操下江南——來得凶敗得慘，第一輪就被淘汰。"},
+  {"idiom": "張飛扔雞毛——有勁難使", "front": "張飛扔雞毛", "back": "有勁難使", "meaning": "比喻空有一身強大力量或本領，卻因為對象或方法不合適而使不上力。", "source_text": "民間歇後語 / 張飛勇力傳奇", "original": "雞毛輕微無重，空有千鈞之力亦難擲遠。", "translation": "羽毛輕飄飄沒有重量，就算力大無窮的張飛也無法將其用力投遠。", "sentence": "面對這種需要細膩溝通的家庭紛爭，他一個大男人真是張飛扔雞毛——有勁難使。"},
+  {"idiom": "關公赴會——單刀直入", "front": "關公赴會", "back": "單刀直入", "meaning": "原指關羽只帶一口大刀赴宴；後比喻說話或辦事直截了當，不繞圈子。", "source_text": "《三國演義》第六十六回", "original": "雲長手提青龍刀，引隨從乘單舟赴魯肅之宴。", "translation": "關羽手提大刀隻身赴宴，展現英勇豪邁氣概。", "sentence": "我們今天開會就關公赴會——單刀直入，直接討論最重要的核心問題。"},
+  {"idiom": "諸葛亮征孟獲——收收放放", "front": "諸葛亮征孟獲", "back": "收收放放", "meaning": "比喻善用心理謀略與彈性手腕，時鬆時緊以達到讓對方徹底心服的目的。", "source_text": "《三國演義》第八十七至九十回", "original": "諸葛亮七擒七縱孟獲，終使南撫夷越。", "translation": "諸葛亮征伐南中，七次生擒孟獲又七次釋放，最終使其心服口服歸順漢室。", "sentence": "老師管教叛逆學生採取諸葛亮征孟獲——收收放放的策略，逐步引導他步入正軌。"},
+  {"idiom": "曹操吃雞肋——食之無味棄之可惜", "front": "曹操吃雞肋", "back": "食之無味棄之可惜", "meaning": "比喻事情或物品價值不高、沒多大意義，但又捨不得放棄，處境極為尷尬。", "source_text": "《三國志·魏書·武帝紀》裴注引《九州春秋》/《三國演義》第七十二回", "original": "夫雞肋，食之則無所得，棄之則可惜，公歸意決矣。", "translation": "雞肋肉少骨多，吃起來沒什麼滋味，丟掉又覺得可惜，比喻進退兩難的處境。", "sentence": "這份工作薪水低又沒有升遷機會，對他來說簡直是曹操吃雞肋——食之無味棄之可惜。"},
+  {"idiom": "張飛使計謀——粗中有細", "front": "張飛使計謀", "back": "粗中有細", "meaning": "形容外表看似粗豪魯莽，其實內心極具智慧、處事精明周密。", "source_text": "《三國演義》第六十三回「張飛義釋嚴顏」", "original": "張飛用疑兵計誘出嚴顏生擒之，並以義氣感化嚴顏降伏。", "translation": "張飛不僅勇猛過人，在進攻巴郡時巧妙用計智擒嚴顏，展現精妙謀略。", "sentence": "別看他平常不拘小節，做起專案分析可是張飛使計謀——粗中有細，毫無破綻。"},
+  {"idiom": "諸葛亮彈琴——計上心來", "front": "諸葛亮彈琴", "back": "計上心來", "meaning": "形容在表面悠閒鎮定的舉止背後，心中早已布下精妙周密的計謀。", "source_text": "《三國演義》第九十五回", "original": "孔明端坐城樓撫琴，琴音悠揚，心已定退兵之策。", "translation": "諸葛亮端坐在城樓上撫琴奏樂，心中早已算定敵軍心理與退兵之計。", "sentence": "他表面上不動聲色地喝茶，其實是諸葛亮彈琴——計上心來，正等待對手露出破綻。"},
+  {"idiom": "曹操遇蔣干——倒了大霉", "front": "曹操遇蔣干", "back": "倒了大霉", "meaning": "比喻遇到成事不足、敗事有餘的笨蛋，帶來連串的大災難或損失。", "source_text": "《三國演義》第四十五回", "original": "蔣干自告奮勇往東吳說降周瑜，卻盜回假信使曹操誤殺蔡瑁、張允二將。", "translation": "蔣干自作聰明盜回假信，促使曹操中了反間計自斷水軍大將。", "sentence": "這次找他當合夥人真是曹操遇蔣干——倒了大霉，專案全被他搞砸了。"},
+  {"idiom": "張飛販私鹽——誰敢檢查", "front": "張飛販私鹽", "back": "誰敢檢查", "meaning": "形容仗著威猛霸道的氣勢或強大權勢，令人望而生畏、無人敢去干涉質疑。", "source_text": "民間歇後語 / 張飛性情傳說", "original": "張飛性如烈火，勇冠三軍，人皆畏懼。", "translation": "性格暴烈的張飛若販賣私鹽，尋常人誰敢上前盤問檢查？", "sentence": "他是董事長的掌上明珠，在公司裡橫衝直撞，真是張飛販私鹽——誰敢檢查。"},
+  {"idiom": "諸葛亮的鵝毛扇——神妙莫測", "front": "諸葛亮的鵝毛扇", "back": "神妙莫測", "meaning": "比喻智謀高深莫測，手段變化多端，令人捉摸不透。", "source_text": "《三國演義》諸葛亮形象描寫", "original": "孔明手搖羽扇，羽扇輕搖間神機妙算自成。", "translation": "諸葛亮手持白羽扇輕輕搖動，其腹中智謀深奧無窮、令人難以預料。", "sentence": "他的商業策略宛如諸葛亮的鵝毛扇——神妙莫測，對手永遠猜不透下一步。"},
+  {"idiom": "曹操作事——乾乾淨淨", "front": "曹操作事", "back": "乾乾淨淨", "meaning": "形容行事手段極為果斷俐落、斬草除根，絕不拖泥帶水或留下後患。", "source_text": "《三國演義》曹操行事風格", "original": "操行事果決，除患必盡，不留餘地。", "translation": "曹操為人行事果斷凶狠，鏟除異己時絕不留半點後患。", "sentence": "新主管重組部門流程，雷厲風行，真是曹操作事——乾乾淨淨。"},
+  {"idiom": "張飛賣秤錘——人強貨硬", "front": "張飛賣秤錘", "back": "人強貨硬", "meaning": "比喻人和商品/實力都極為過硬、堅定有力，毫無退讓餘地。", "source_text": "民間歇後語 / 張飛剛毅性格", "original": "張飛為人剛烈勇武，秤錘實心生鐵堅硬無比。", "translation": "勇猛無比的張飛賣著實心鐵秤錘，形容人剛硬、品質也無可挑剔。", "sentence": "我們公司的研發團隊和產品品質是張飛賣秤錘——人強貨硬，絕對禁得起考驗。"},
+  {"idiom": "諸葛亮三氣周瑜——略施小技", "front": "諸葛亮三氣周瑜", "back": "略施小技", "meaning": "比喻稍微展現一點微不足道的技巧或智慧，就能輕鬆勝過對手。", "source_text": "《三國演義》第五十六回", "original": "孔明數次料敵機先，使周瑜計謀盡失。", "translation": "諸葛亮稍微運用軍事謀略，便讓心高氣傲的周瑜無計可施。", "sentence": "這道難題對資深工程師而言，不過是諸葛亮三氣周瑜——略施小技罷了。"},
+  {"idiom": "曹操殺華佗——諱疾忌醫", "front": "曹操殺華佗", "back": "諱疾忌醫", "meaning": "比喻自己有缺點或錯誤卻害怕批評，拒絕接受忠告或正確醫治，終致大禍。", "source_text": "《三國志·魏書·華佗傳》/《三國演義》第七十八回", "original": "佗欲以利斧劈開腦袋取出風涎，操疑其謀害，下獄殺之。", "translation": "神醫華佗欲為曹操開顱治頭痛，曹操疑心病重將其殺害，自己終因病身亡。", "sentence": "發現管理上的弊端就要立即改進，切莫曹操殺華佗——諱疾忌醫。"},
+  {"idiom": "張飛賣肉——光說不割", "front": "張飛賣肉", "back": "光說不割", "meaning": "比喻口頭上說得天花亂墜或答應得很好，但實際上根本不採取具體行動。", "source_text": "民間歇後語 / 張飛屠戶出身典故", "original": "張飛未遇劉備前在涿郡以賣酒屠豬為業。", "translation": "張飛賣豬肉時口中不停吆喝招攬，手裡卻遲遲不割肉給顧客。", "sentence": "他答應要提供贊助款，結果過了三個月仍是張飛賣肉——光說不割。"},
+  {"idiom": "諸葛亮借箭——有借無還", "front": "諸葛亮借箭", "back": "有借無還", "meaning": "比喻拿了別人的東西就據為己有，根本沒有歸還的打算。", "source_text": "《三國演義》第四十六回「草船借箭」", "original": "孔明向曹營借得十萬餘箭，乘風回江東，曹軍白損箭支。", "translation": "諸葛亮用草船引誘曹軍射箭射滿船身，白白得了十幾萬支箭，絕不會歸還。", "sentence": "他向你借書通常都是諸葛亮借箭——有借無還，你最好有心理準備。"},
+  {"idiom": "曹操用計——又奸又滑", "front": "曹操用計", "back": "又奸又滑", "meaning": "形容為人處事謀略極多，狡詐多變、奸險狡猾。", "source_text": "《三國演義》曹操人物形象", "original": "治世之能臣，亂世之奸雄。", "translation": "曹操在小說中被塑造為智謀非凡但性格極度奸詐狡黠的梟雄形象。", "sentence": "那個狡詐的商人在合約裡設下陷阱，真是曹操用計——又奸又滑。"},
+  {"idiom": "張飛戰關公——忘了舊情", "front": "張飛戰關公", "back": "忘了舊情", "meaning": "比喻因誤會或競爭而撕破臉皮，完全不顧及過去深厚的情誼。", "source_text": "《三國演義》第二十八回「古城會」", "original": "張飛疑關羽降曹背義，見關羽至，挺丈八蛇矛直取關羽。", "translation": "張飛誤會關羽背叛桃園誓言投降曹操，在古城相遇時拔矛相向。", "sentence": "為了爭奪家族遺產，他們兄弟倆張飛戰關公——忘了舊情，鬧上法庭。"},
+  {"idiom": "諸葛亮揮淚斬馬謖——顧全大局", "front": "諸葛亮揮淚斬馬謖", "back": "顧全大局", "meaning": "比喻為了嚴明紀律與維護整體大局利益，不得不忍痛割愛懲處心腹之人。", "source_text": "《三國演義》第九十六回", "original": "馬謖失街亭，孔明雖深愛其才，然軍法如山，揮淚斬之以謝三軍。", "translation": "諸葛亮雖視馬謖如親弟，但因其違令失街亭，為嚴明軍紀只得流淚將其斬首。", "sentence": "執行長為了整肅公司內部風氣，諸葛亮揮淚斬馬謖——顧全大局，開除了違規的老臣。"},
+  {"idiom": "曹操戰宛城——大敗而逃", "front": "曹操戰宛城", "back": "大敗而逃", "meaning": "形容因過於自滿或輕敵大意而遭遇慘烈失敗，落荒而逃。", "source_text": "《三國演義》第十六回", "original": "張繡夜襲曹操軍營，曹操折損大將典韋、長子曹昂，狼狽逃脫。", "translation": "曹操在宛城因納張濟之妻激怒張繡遭夜襲，精銳盡失、狼狽逃亡。", "sentence": "這支常勝軍因賽前輕敵，比賽中曹操戰宛城——大敗而逃，爆出大冷門。"},
+  {"idiom": "張飛吃豆芽——一盤小菜", "front": "張飛吃豆芽", "back": "一盤小菜", "meaning": "比喻事情非常簡單容易，如同吃一小碟開胃小菜一樣，毫不費力。", "source_text": "民間歇後語 / 飲食借喻", "original": "以張飛豪飲大食之概，一小盤豆芽菜微不足道。", "translation": "對於勇猛大食的張飛而言，吃一盤豆芽菜簡直是微不足道的小事（小菜一碟）。", "sentence": "這點電腦修復技術對他這個資深工程師而言，不過是張飛吃豆芽——一盤小菜。"},
+  {"idiom": "諸葛亮要丑妻——為事業著想", "front": "諸葛亮要丑妻", "back": "為事業著想", "meaning": "比喻注重內在才華與實際助益，不追求表面虛榮或外貌。", "source_text": "《三國志·蜀書·諸葛亮傳》裴注引《襄陽記》", "original": "黃承彥謂諸葛孔明曰：『聞卿擇婦，身有醜女，黃頭黑色，而才堪相配。』孔明遂迎之。", "translation": "黃承彥將才智過人的醜女黃月英嫁給諸葛亮，成為諸葛亮事業上的賢內助。", "sentence": "他挑選合作夥伴只看重專業實力與品德，正是諸葛亮要丑妻——為事業著想。"},
+  {"idiom": "曹操殺呂伯奢——將錯就錯", "front": "曹操殺呂伯奢", "back": "將錯就錯", "meaning": "比喻發現自己犯了錯誤卻不願認錯改過，反而順著錯誤繼續蠻幹到底。", "source_text": "《三國演義》第四回", "original": "操曰：『寧教我負天下人，休教天下人負我！』遂殺呂伯奢而去。", "translation": "曹操誤殺呂伯奢家人後得知真相，為防後患反將呂伯奢也殺害以掩蓋錯誤。", "sentence": "他明知這份報表計算有誤，卻曹操殺呂伯奢——將錯就錯直接交了上去。"},
+  {"idiom": "張飛媽媽姓吳——無事生非", "front": "張飛媽媽姓吳", "back": "無事生非", "meaning": "諧音歇後語。「吳氏」諧音「無事」，比喻故意無端製造麻煩、惹事生非。", "source_text": "民間諧音歇後語", "original": "吳氏（無事）所生之子，故曰『無事（吳氏）生非』。", "translation": "取張飛母親姓吳的民間戲謔說法，用『吳氏生非』諧音『無事生非』。", "sentence": "大家本來相安無事，你何必張飛媽媽姓吳——無事生非去挑起爭端？"},
+  {"idiom": "諸葛亮招親——才重於貌", "front": "諸葛亮招親", "back": "才重於貌", "meaning": "比喻看重一個人的真才實學與品格，遠遠超過其外表相貌。", "source_text": "《三國志·蜀書·諸葛亮傳》", "original": "鄉里為之諺曰：『莫作孔明擇婦，正得阿承醜女。』", "translation": "諸葛亮看中黃月英的絕頂才華而娶其為妻，成為歷史上才重於貌的佳話。", "sentence": "企業在招募核心骨幹時，應當諸葛亮招親——才重於貌，以專業能力為優先考量。"},
+  {"idiom": "後主降魏——不知羞恥", "front": "後主降魏", "back": "不知羞恥", "meaning": "比喻毫無骨氣與尊嚴，投降認輸後還心安理得，不知羞慚恥辱。", "source_text": "《三國演義》第一百一十九回", "original": "劉禪舉邦歸命魏國，在洛陽樂不思蜀。", "translation": "蜀漢後主劉禪投降魏國後樂不思蜀，毫無亡國之恥與哀痛之情。", "sentence": "身為團隊幹部卻私下向對手投誠出賣機密，真是後主降魏——不知羞恥。"},
+  {"idiom": "張飛抓耗子——大眼瞪小眼", "front": "張飛抓耗子", "back": "大眼瞪小眼", "meaning": "形容兩人或雙方互相對視，感到無奈、發愣或不知該如何是好。", "source_text": "民間歇後語 / 張飛圓眼特徵", "original": "張飛豹頭環眼雙目圓睜，面對靈巧微小的耗子無可奈何。", "translation": "張飛瞪著一對大眼睛看著小老鼠，大眼對小眼毫無辦法。", "sentence": "停電之後電腦全關了，大家坐在辦公室裡張飛抓耗子——大眼瞪小眼。"},
+  {"idiom": "諸葛亮用兵——神出鬼沒", "front": "諸葛亮用兵", "back": "神出鬼沒", "meaning": "形容兵法謀略靈活多變，行動極為迅速隱蔽，使敵方難以捉摸與防範。", "source_text": "《三國演義》諸葛亮南征北伐戰役", "original": "孔明用兵，出其不意，攻其不備，如天降神兵。", "translation": "諸葛亮帶兵打仗出奇制勝、神妙莫測，令敵軍摸不著頭緒。", "sentence": "這支特種部隊作戰如同諸葛亮用兵——神出鬼沒，迅速瓦解了敵方防線。"},
+  {"idiom": "曹操敗走華容道——走對了路子", "front": "曹操敗走華容道", "back": "走對了路子", "meaning": "比喻在絕境中做出了正確的抉擇，因而死裡逃生、化險為夷。", "source_text": "《三國演義》第五十回", "original": "操雖在華容道遇關羽，然因關羽義重放其過關，曹操終得保全性命。", "translation": "曹操雖然在華容道遇到埋伏，但因看準關羽念舊義而得以逃出生天。", "sentence": "他在危機時刻果斷轉型投入綠能產業，真是曹操敗走華容道——走對了路子。"},
+  {"idiom": "張飛繡花——粗中有細", "front": "張飛繡花", "back": "粗中有細", "meaning": "比喻外表粗獷豪放的人，在處理特定精細事務時卻異常細心周密。", "source_text": "民間歇後語 / 形象對比", "original": "張飛一介赳赳武夫，若執針繡花，別有一番細膩功夫。", "translation": "粗豪孔武的張飛拿著細針繡花，形容粗獷豪邁中蘊含著極致的細心。", "sentence": "那位粗獷的主廚雕刻水果的刀工極其精湛，真是張飛繡花——粗中有細。"},
+  {"idiom": "諸葛亮的錦囊——神機妙算", "front": "諸葛亮的錦囊", "back": "神機妙算", "meaning": "形容預先準備好精妙絕倫的策略妙計，能及時解決突發的重大危機。", "source_text": "《三國演義》第五十四回", "original": "孔明以三個錦囊授趙雲，雲依計而行，保玄德自東吳全身而退。", "translation": "諸葛亮將預防危機的計策寫在三個錦囊中交給趙雲，果然招招奏效。", "sentence": "老顧問臨走前留下的應變手冊宛如諸葛亮的錦囊——神機妙算，幫團隊度過了難關。"},
+  {"idiom": "曹操諸葛亮——脾氣不一樣", "front": "曹操諸葛亮", "back": "脾氣不一樣", "meaning": "比喻兩個人的性格、作風或價值觀截然不同，完全無法混為一談。", "source_text": "《三國演義》兩大核心主角對比", "original": "操為人奸猾果決多疑，亮為人謹慎鞠躬盡瘁，二人性格殊異。", "translation": "曹操多疑狠絕，諸葛亮謹慎忠誠，兩人的品格與處世原則完全相反。", "sentence": "這兩位主管的管理風格是曹操諸葛亮——脾氣不一樣，一個嚴厲一個溫和。"},
+  {"idiom": "張飛穿針——粗中有細", "front": "張飛穿針", "back": "粗中有細", "meaning": "形容看似粗手粗腳或魯莽之人，做起細緻繁瑣的事情來卻非常有耐心與條理。", "source_text": "民間歇後語 / 趣味譬喻", "original": "壯碩剛猛之將執纖細繡針，穿引細線展現細微心性。", "translation": "勇武高大的張飛拿著極細的針線穿引，展現粗豪外表下的細膩。", "sentence": "他平常豪爽大方，但做起財務查帳卻是張飛穿針——粗中有細。"},
+  {"idiom": "諸葛亮隆中對策——有先見之明", "front": "諸葛亮隆中對策", "back": "有先見之明", "meaning": "形容極具遠見卓識，在事情發生之前就早已準確預見未來的局勢走向。", "source_text": "《三國志·蜀書·諸葛亮傳》/《三國演義》第三十八回", "original": "孔明未出茅廬，已知三分天下。", "translation": "諸葛亮隱居隆中時便向劉備提出了天下三分的宏偉戰略構想。", "sentence": "他在十年前就佈局人工智慧產業，真是諸葛亮隆中對策——有先見之明。"},
+  {"idiom": "張飛穿針——大眼瞪小眼", "front": "張飛穿針", "back": "大眼瞪小眼", "meaning": "形容因遇到棘手或難以處理的事情而愣在原地，彼此乾瞪眼、無從下手。", "source_text": "民間歇後語 / 形象描寫", "original": "張飛圓睜雙目對著極細的針孔，難以將線穿過。", "translation": "張飛一雙大眼睛盯著微小的針孔發愣，不知如何把線穿進去。", "sentence": "面對這套全是外文的組裝家具，我們全家人張飛穿針——大眼瞪小眼。"},
+  {"idiom": "草船借箭——多多益善", "front": "草船借箭", "back": "多多益善", "meaning": "形容接收或獲得物資、援助、成果時越多越好，絕不嫌多。", "source_text": "《三國演義》第四十六回", "original": "曹軍亂箭如雨，孔明草船盡受其箭，越多越喜。", "translation": "諸葛亮利用草船誘使曹軍射箭，箭矢射得越多對蜀吳聯軍越有利。", "sentence": "這次愛心賑災物資捐贈如同草船借箭——多多益善，希望能幫助更多災民。"},
+  {"idiom": "阿斗當皇帝——軟弱無能", "front": "阿斗當皇帝", "back": "軟弱無能", "meaning": "比喻居於領導高位卻性格懦弱無能、昏庸平庸，毫無主見與作為。", "source_text": "《三國演義》蜀後主劉禪歷史形象", "original": "後主暗弱，不能任賢用能，終致國破。", "translation": "劉禪繼位後昏庸怯弱，朝政全賴諸葛亮維繫，後世常譏為昏弱之主。", "sentence": "一個沒有擔當的主管就如同阿斗當皇帝——軟弱無能，只會讓部門士氣渙散。"},
+  {"idiom": "關公開鳳眼——要殺人", "front": "關公開鳳眼", "back": "要殺人", "meaning": "比喻平時面帶威嚴、神情肅穆之人一旦動真格或發怒，必有嚴重的後果。", "source_text": "民間傳說 / 關公京劇舞台扮相", "original": "梨園相傳關聖帝君平日微閉丹鳳眼，開眼則威震四方斬將立威。", "translation": "民間傳言關羽平日丹鳳眼微闔，一旦怒目圓睜開眼，必將斬敵立威。", "sentence": "總經理今天臉色鐵青，簡直是關公開鳳眼——要殺人，沒人敢去惹他。"},
+  {"idiom": "草船借箭——坐享其成", "front": "草船借箭", "back": "坐享其成", "meaning": "比喻不用自己耗費力氣去辛苦籌備，而是藉助他人的力量白白獲得豐碩成果。", "source_text": "《三國演義》第四十六回", "original": "孔明不費江東半點鐵料人工，受曹操十萬餘箭。", "translation": "諸葛亮不花東吳一文錢一兩鐵，直接從曹操那裡拿到了十幾萬支神箭。", "sentence": "他不勞而獲，拿著同事辛苦的研究數據去邀功，真想草船借箭——坐享其成。"},
+  {"idiom": "董卓戲貂蟬——死在花下", "front": "董卓戲貂蟬", "back": "死在花下", "meaning": "比喻沉迷於美色女色，最終招致滅頂之災、喪失性命。", "source_text": "《三國演義》第九回「連環計」", "original": "董卓迷戀貂蟬，引發呂布反目，終被呂布刺殺於朝堂。", "translation": "董卓因沉溺於貂蟬的美色，引發與義子呂布爭風吃醋，最終命喪呂布之手。", "sentence": "他為討紅顏歡心挪用公款被捕，真是董卓戲貂蟬——死在花下。"},
+  {"idiom": "關羽賣肉——沒人敢來", "front": "關羽賣肉", "back": "沒人敢來", "meaning": "比喻威嚴過盛或態度兇悍，令人望而卻步、不敢輕易靠近。", "source_text": "民間歇後語 / 關公威武形象", "original": "關公赤面美髯手提大刀，凜凜威風令人敬畏。", "translation": "關羽若在市場擺攤賣肉，滿身威嚴殺氣，尋常百姓誰敢上前買肉？", "sentence": "教官在校門口板著一張臉巡視，簡直是關羽賣肉——沒人敢來。"},
+  {"idiom": "草船借箭——滿載而歸", "front": "草船借箭", "back": "滿載而歸", "meaning": "形容收穫極其豐富，成果大大超出了最初的預期。", "source_text": "《三國演義》第四十六回", "original": "船兩邊束草上排滿箭枝，孔明令士卒齊聲高呼謝丞相箭，滿載回營。", "translation": "二十艘草船兩側插滿了十餘萬支箭，諸葛亮率船隊滿載而歸。", "sentence": "這支創業團隊在國際創新發明展上草船借箭——滿載而歸，囊括所有大獎。"},
+  {"idiom": "貂蟬唱歌——有聲有色", "front": "貂蟬唱歌", "back": "有聲有色", "meaning": "形容表現或演出極其精彩動人、生動活潑，令人賞心悅目。", "source_text": "《三國演義》第八回「貂蟬歌舞」", "original": "貂蟬於後堂輕啟朱唇、展現舞姿，歌喉婉轉動聽，色藝雙絕。", "translation": "三國絕代佳人貂蟬在席間載歌載舞，歌聲優美容貌秀麗，兼具聲與色。", "sentence": "這場校園文藝晚會節目精彩紛呈，辦得是貂蟬唱歌——有聲有色。"},
+  {"idiom": "關雲長賣豆腐——人硬貨不硬", "front": "關雲長賣豆腐", "back": "人硬貨不硬", "meaning": "形容人性格剛烈要強，但自身的貨品、底氣或客觀條件卻偏軟脆弱。", "source_text": "民間歇後語 / 剛烈性情與柔軟豆腐之對比", "original": "關公鐵骨錚錚剛硬無比，但豆腐質地鬆軟脆弱易碎。", "translation": "關公脾氣剛烈堅硬，但他賣的豆腐卻是軟嫩脆弱的，比喻人強底虛。", "sentence": "他嘴上講得天花亂墜，但產品測試一碰就壞，真是關雲長賣豆腐——人硬貨不硬。"},
+  {"idiom": "孔明練琴——老生常談", "front": "孔明練琴", "back": "老生常談", "meaning": "比喻常常講起的話題或反覆彈奏的老調，毫無新意。", "source_text": "民間歇後語 / 諧音借喻", "original": "孔明撫琴多奏古曲，『老琴譜』轉化為『老生常談』之諧意。", "translation": "諸葛亮在空城上彈琴撫古調，後人戲稱為老生常談。", "sentence": "主管每週開會講的都是那些老規矩，真是孔明練琴——老生常談。"},
+  {"idiom": "司馬炎廢魏主——襲用老譜", "front": "司馬炎廢魏主", "back": "襲用老譜", "meaning": "比喻全盤抄襲或完全沿用前人的老把戲、舊套路，沒有任何新意。", "source_text": "《三國演義》第一百二十回", "original": "司馬炎效法當年曹丕代漢之故事，迫使魏帝曹奐禪讓帝位。", "translation": "司馬炎廢魏立晉的儀式與手段，完全照搬當年曹丕廢漢獻帝的那一套舊把戲。", "sentence": "這家廠商推出的促銷手法，不過是司馬炎廢魏主——襲用老譜罷了。"},
+  {"idiom": "對著張飛罵劉備——找氣惹", "front": "對著張飛罵劉備", "back": "找氣惹", "meaning": "比喻故意去冒犯極具脾氣且護短之人，自討苦吃、自惹麻煩。", "source_text": "《三國演義》桃園兄弟情誼", "original": "張飛極其敬愛長兄劉備，若聞人辱罵劉備，必暴跳如雷提矛刺人。", "translation": "張飛視劉備如命，當著張飛的面侮辱劉備，純屬自尋死路惹人生氣。", "sentence": "你去挑釁他的偶像，豈不是對著張飛罵劉備——找氣惹嗎？"},
+  {"idiom": "關帝廟求子——踏錯了門", "front": "關帝廟求子", "back": "踏錯了門", "meaning": "比喻求錯了對象或走錯了方向，找了不具備該專業能力的人幫忙。", "source_text": "民間信仰文化", "original": "關公為武聖、武財神，司掌忠義與守護；求子應拜送子觀音或註生娘娘。", "translation": "到主司武勇與正義的關帝廟去祈求添丁生子，完全是拜錯神明進錯了門。", "sentence": "你請軟體工程師來修理水電管線，簡直是關帝廟求子——踏錯了門。"},
+  {"idiom": "諸葛亮草船借箭——有把握", "front": "諸葛亮草船借箭", "back": "有把握", "meaning": "形容事前早已深思熟慮、算無遺策，對事情的成功具有百分之百的信心。", "source_text": "《三國演義》第四十六回", "original": "孔明夜觀天象知長江必起大霧，算準曹操疑心重，故自信滿滿。", "translation": "諸葛亮算準了天候與曹操的性格，對順利借到箭胸有成竹、十拿九穩。", "sentence": "他既然敢接下這項艱鉅的任務，必然是諸葛亮草船借箭——有把握。"},
+  {"idiom": "蔣干盜書——上了大當", "front": "蔣干盜書", "back": "上了大當", "meaning": "比喻自以為聰明得計，結果卻落入別人精心設計的反間圈套中，吃了大虧。", "source_text": "《三國演義》第四十五回", "original": "蔣干在周瑜營帳盜得偽造蔡瑁張允降書，獻與曹操，操中計斬將。", "translation": "蔣干以為偷到了重要軍事情報，實際上徹底中了周瑜的反間計。", "sentence": "他輕信了網路上的假投資訊息，結果蔣干盜書——上了大當，損失慘重。"},
+  {"idiom": "諸葛亮弔孝——裝模作樣", "front": "諸葛亮弔孝", "back": "裝模作樣", "meaning": "比喻表面上裝得極其悲傷或客氣，實際上是在演戲做做樣子給別人看。", "source_text": "《三國演義》第五十七回", "original": "孔明親往柴桑弔祭周瑜，席上伏地痛哭，周瑜舊將皆為之感念動容。", "translation": "諸葛亮赴東吳弔唁周瑜，痛哭流涕，後人戲稱其在政治上裝模作樣以安東吳人心。", "sentence": "他平常最排擠同仁，今天卻在長官面前熱情慰問，真是諸葛亮弔孝——裝模作樣。"},
+  {"idiom": "黃忠射關公——手下留情", "front": "黃忠射關公", "back": "手下留情", "meaning": "比喻在完全有能力打擊或懲罰對方的情況下，出於道義情面刻意放過對方一馬。", "source_text": "《三國演義》第五十三回", "original": "黃忠為報關羽不殺之恩，百步穿楊卻只射關羽盔纓，不傷其性命。", "translation": "老將黃忠感念前日關羽放過自己，作戰時只一箭射中關羽頭盔上的紅纓。", "sentence": "裁判在最後關頭並未重罰選手，算是黃忠射關公——手下留情了。"},
+  {"idiom": "魯肅宴請關雲長——暗藏殺機", "front": "魯肅宴請關雲長", "back": "暗藏殺機", "meaning": "比喻表面上是熱情周到的宴請接待，暗地裡卻佈滿了陰謀陷阱與殺招。", "source_text": "《三國演義》第六十六回", "original": "魯肅設宴於臨江亭欲索荊州，四周預先埋伏刀斧手準備伺機誅殺關羽。", "translation": "魯肅邀請關羽赴宴，背後卻埋伏伏兵試圖逼迫其歸還荊州。", "sentence": "對手突然主動邀請我們餐敘，看似和善，恐怕是魯肅宴請關雲長——暗藏殺機。"},
+  {"idiom": "關公照鏡子——自覺臉紅", "front": "關公照鏡子", "back": "自覺臉紅", "meaning": "比喻自己做錯了事或表現不佳，內心感到極度慚愧與羞赧。", "source_text": "民間歇後語 / 關羽面如重棗形象", "original": "關公面色天生赤紅，照鏡自觀猶如羞慚臉紅。", "translation": "關羽臉色赤紅，看著鏡子裡的自己宛如因羞愧而臉紅，引申為自知慚愧。", "sentence": "想到自己昨天對長輩無禮的態度，他不禁關公照鏡子——自覺臉紅。"},
+  {"idiom": "關公喝酒——不怕臉紅", "front": "關公喝酒", "back": "不怕臉紅", "meaning": "比喻天生臉皮厚，做錯了事或說謊時面不改色，絲毫不覺得羞愧。", "source_text": "民間歇後語 / 雙關語", "original": "關羽天生紅臉，即使多飲美酒滿面通紅，旁人亦看不出異狀。", "translation": "關羽面色本就赤紅，飲酒面紅也毫無差別，借喻為厚臉皮不怕羞。", "sentence": "他公然在眾人面前說謊推卸責任，真是關公喝酒——不怕臉紅。"},
+  {"idiom": "諸葛亮用空城計——不得已", "front": "諸葛亮用空城計", "back": "不得已", "meaning": "比喻在毫無其他退路或援兵的極度絕境下，迫於無奈才採取冒險的下策。", "source_text": "《三國演義》第九十五回", "original": "孔明身邊無將無兵，司馬懿大軍逼近，無奈冒險設空城之計以退敵。", "translation": "諸葛亮並非自誇弄險，實在是因身邊兵力空虛才無可奈何行此險招。", "sentence": "向銀行借高利貸周轉是諸葛亮用空城計——不得已的決定。"},
+  {"idiom": "東吳招親——弄假成真", "front": "東吳招親", "back": "弄假成真", "meaning": "比喻原本只是設局演戲或開個玩笑，最後卻陰錯陽差變成了真正的現實。", "source_text": "《三國演義》第五十四回", "original": "孫權與周瑜假意許配孫夫人誘劉備入吳，經吳國太認可終成真正夫妻。", "translation": "東吳本想藉假聯姻扣留劉備，不料吳國太做主成婚，假戲演成真事。", "sentence": "他們倆本來只是假扮情侶應付父母，沒想到東吳招親——弄假成真，下個月要結婚了。"},
+  {"idiom": "關雲長走麥城——大難臨頭", "front": "關雲長走麥城", "back": "大難臨頭", "meaning": "比喻英雄末路，陷入重重包圍的絕境之中，面臨極其嚴重的致命危機。", "source_text": "《三國演義》第七十六回", "original": "關羽失荊州退守麥城，東吳大軍四面圍困，終遇害身亡。", "translation": "關羽兵敗困守麥城，無糧無援，迎來了人生中最險惡的生死絕境。", "sentence": "這家金融集團債務全面引爆，如今已是關雲長走麥城——大難臨頭。"},
+  {"idiom": "諸葛亮唱空城計——沒辦法", "front": "諸葛亮唱空城計", "back": "沒辦法", "meaning": "形容在毫無外援與退路的情況下，萬般無奈之下只能鋌而走險碰運氣。", "source_text": "《三國演義》第九十五回", "original": "街亭失守後西城兵力微薄，孔明撫琴弄險實屬被逼無奈之舉。", "translation": "諸葛亮擺出空城計也是因為手頭無兵可用，純屬逼不得已的賭博。", "sentence": "公司資金週轉失靈，老闆只好諸葛亮唱空城計——沒辦法，硬著頭皮撐場面。"},
+  {"idiom": "司馬懿破八卦陣——不懂裝懂", "front": "司馬懿破八卦陣", "back": "不懂裝懂", "meaning": "比喻自己對某項專業或事物一竅不通，卻偏要在人前裝作很在行、很精通。", "source_text": "《三國演義》第一百回", "original": "司馬懿不識孔明八卦陣之奧妙，妄言識得並派兵入陣，結果全軍覆沒。", "translation": "司馬懿自稱認得孔明八卦陣法，逞強破陣結果遭蜀軍生擒大批人馬。", "sentence": "不懂編程就別瞎指揮，免得像司馬懿破八卦陣——不懂裝懂鬧笑話。"},
+  {"idiom": "關羽赴宴——有膽有魄", "front": "關羽赴宴", "back": "有膽有魄", "meaning": "形容人極具大無畏的英雄氣概與勇氣魄力，臨危不懼、膽識過人。", "source_text": "《三國演義》第六十六回", "original": "雲長單刀赴會，談笑自若，東吳諸將皆被其英雄氣概所懾服。", "translation": "關羽明知東吳設下鴻門宴，仍攜刀坦然赴約，展現絕頂膽識。", "sentence": "他隻身深入敵對陣營展開談判，真是關羽赴宴——有膽有魄。"},
+  {"idiom": "諸葛亮當軍師——名副其實", "front": "諸葛亮當軍師", "back": "名副其實", "meaning": "形容名稱與實際才華完全相符，實至名歸，絕無半點虛假。", "source_text": "《三國演義》第三十九回", "original": "孔明自任蜀漢軍師，運籌帷幄決勝千里，功勳卓著。", "translation": "諸葛亮出任軍師首戰即破曹軍，其才華與職位完全相稱、實至名歸。", "sentence": "他以頂尖的技術奪得國際金牌，被稱為業界泰斗真是諸葛亮當軍師——名副其實。"},
+  {"idiom": "周瑜討荊州——費力不討好", "front": "周瑜討荊州", "back": "費力不討好", "meaning": "比喻耗費了極大的心思與精力去爭取，結果卻一無所獲，反而徒惹煩惱與嘲弄。", "source_text": "《三國演義》第五十一至五十六回", "original": "周瑜屢次用計圖取荊州，皆被孔明料破阻截，氣得吐血而亡。", "translation": "周瑜為了收回荊州用盡心機勞民傷財，每次都被諸葛亮化解，毫無所得。", "sentence": "去介入別人家的遺產爭奪只會周瑜討荊州——費力不討好，何苦自找麻煩？"},
+  {"idiom": "關帝廟裡拜觀音——找錯了門", "front": "關帝廟裡拜觀音", "back": "找錯了門", "meaning": "比喻做事摸不清方向、找錯了對象或走錯了求助管道。", "source_text": "民間信仰文化歇後語", "original": "關帝廟奉祀關聖帝君，若欲參拜救苦救難之觀音大士則應至佛寺或觀音殿。", "translation": "在武財神關帝廟裡祈拜大慈大悲觀世音菩薩，比喻拜錯神、找錯門道。", "sentence": "你找英文老師幫你批改數學作業，真是關帝廟裡拜觀音——找錯了門。"},
+  {"idiom": "關帝廟裡掛觀音像——名不符實", "front": "關帝廟裡掛觀音像", "back": "名不符實", "meaning": "比喻表面掛著的招牌、名稱與內部實際供奉或實質內容完全不相稱。", "source_text": "民間歇後語", "original": "關帝廟主殿懸掛佛教觀世音菩薩畫像，名實不一。", "translation": "明明是關公的神廟卻掛上觀音菩薩的畫像，比喻名稱與實質不符。", "sentence": "這家標榜五星級的飯店設施陳舊不堪，簡直是關帝廟裡掛觀音像——名不符實。"},
+  {"idiom": "諸葛亮當軍師——辦法多", "front": "諸葛亮當軍師", "back": "辦法多", "meaning": "形容人足智多謀、腦筋靈活，不管遇到什麼疑難雜症都有妙計可解。", "source_text": "《三國演義》諸葛亮用計故事", "original": "孔明一生神機妙算，遇難呈祥，計謀百出。", "translation": "諸葛亮擔任軍師，肚子裡裝滿了各種奇謀妙策，解決問題的方法多不勝數。", "sentence": "只要請教這位資深顧問，他是諸葛亮當軍師——辦法多，一定有解決方案。"},
+  {"idiom": "魯肅討荊州——空手而去空手而回", "front": "魯肅討荊州", "back": "空手而去空手而回", "meaning": "比喻白跑了一趟，原本設定的目的完全沒有達成，兩手空空而回。", "source_text": "《三國演義》第五十四回", "original": "魯肅受孫權之託三番四次赴荊州索要地盤，皆被劉備諸葛亮言辭推託空手而歸。", "translation": "魯肅多次渡江前往荊州索地，每次都被諸葛亮巧妙推延，一無所獲。", "sentence": "他今天跑了一整天去拉贊助，結果魯肅討荊州——空手而去空手而回。"},
+  {"idiom": "吃曹操的飯想劉備的事——人在心不在", "front": "吃曹操的飯想劉備的事", "back": "人在心不在", "meaning": "比喻身體雖然留在這裡，但心思、忠誠或感情卻早已飄向了另一邊。", "source_text": "《三國演義》徐庶、關羽身在曹營典故", "original": "關羽、徐庶身在曹營享厚祿，然心中始終眷戀劉備與漢室。", "translation": "身在曹營享受曹操的優厚待遇，內心卻時時刻刻思念著玄德與漢室天下。", "sentence": "他上課時老盯著窗外發呆，完全是吃曹操的飯想劉備的事——人在心不在。"},
+  {"idiom": "三個臭皮匠——頂個諸葛亮", "front": "三個臭皮匠", "back": "頂個諸葛亮", "meaning": "比喻即便個人能力平庸，只要大家齊心協力共同商討，也能產生非凡的大智慧。", "source_text": "民間俗諺 / 三國傳奇", "original": "集眾人之智慧，合力謀劃，功力不遜於大賢軍師。", "translation": "聚集三個平民皮匠的智慧共同出謀劃策，抵得上一位聰慧的諸葛孔明。", "sentence": "大家不要灰心，三個臭皮匠——頂個諸葛亮，我們分工合作一定能解決！"},
+  {"idiom": "關公戰李逵——大刀闊斧", "front": "關公戰李逵", "back": "大刀闊斧", "meaning": "跨時空演繹歇後語。比喻辦事果斷大膽、氣魄雄偉，毫不猶豫拘泥。", "source_text": "民間跨作品民間歇後語（三國關羽大刀對水滸李逵雙斧）", "original": "關雲長揮舞八十二斤青龍偃月刀，李逵手持雙板斧，皆以威猛剛烈著稱。", "translation": "三國關羽的大刀對上水滸李逵的雙斧，比喻大刀闊斧、雷厲風行的大動作。", "sentence": "新任總經理一上任就關公戰李逵——大刀闊斧進行組織革新。"},
+  {"idiom": "關雲長刮骨療毒——全無痛苦之色", "front": "關雲長刮骨療毒", "back": "全無痛苦之色", "meaning": "形容人意志堅定、性格堅毅如鐵，在面臨極大劇痛或折磨時依然面不改色。", "source_text": "《三國志·蜀書·關羽傳》/《三國演義》第七十五回", "original": "佗乃下刀，割其皮肉，骨上悉有毒血，佗刮骨悉悉有聲，羽飲酒食肉，談笑弈棋，全無痛苦之色。", "translation": "華佗用刀割開皮肉刮除骨上之毒，關羽在劇痛中一邊下棋喝酒，神情毫無痛苦。", "sentence": "他經歷骨折手術復健時咬緊牙關，展現出關雲長刮骨療毒——全無痛苦之色的毅力。"},
+  {"idiom": "董卓進京——來者不善", "front": "董卓進京", "back": "來者不善", "meaning": "比喻來訪者居心叵測、心懷歹意，帶有威脅或破壞的目的前來。", "source_text": "《三國演義》第三回", "original": "董卓提西涼重兵入洛陽，廢少帝立獻帝，弒太后暴虐朝綱。", "translation": "董卓率領西涼鐵騎進駐京師洛陽，隨即行廢立之事專權亂政，意圖不軌。", "sentence": "看對手今天氣勢洶洶地帶律師上門，真是董卓進京——來者不善。"},
+  {"idiom": "關雲長刮骨療毒——若無其事", "front": "關雲長刮骨療毒", "back": "若無其事", "meaning": "形容在遭遇重大變故、痛苦或危難時，態度極其沉著鎮定，如同平常一樣。", "source_text": "《三國演義》第七十五回", "original": "華佗刮骨流血盈盆，關公飲酒下棋，神色泰然，若無其事。", "translation": "關羽手臂刮骨療毒劇痛難忍，他卻能談笑風生弈棋自若，彷彿什麼事也沒發生。", "sentence": "遭遇重大挫折後他依然關雲長刮骨療毒——若無其事地處理公務，令人佩服。"},
+  {"idiom": "劉備三上臥龍崗——就請你這個諸葛亮", "front": "劉備三上臥龍崗", "back": "就請你這個諸葛亮", "meaning": "比喻真心誠意、千方百計只為了聘請或求助於某位具有真才實學的特定專家。", "source_text": "《三國演義》第三十七回「三顧茅廬」", "original": "玄德風雪三訪草廬，志在必得臥龍先生以匡扶天下漢室。", "translation": "劉備三次冒著嚴寒風雪前往草廬拜訪，一心一意專程為了求得諸葛孔明出山輔佐。", "sentence": "董事長親自登門拜訪三次，是劉備三上臥龍崗——就請你這個諸葛亮來主持專案。"},
+  {"idiom": "董卓進京——不懷好意", "front": "董卓進京", "back": "不懷好意", "meaning": "形容別有用心、包藏禍心，抱著惡意或自私奪權的目的而來。", "source_text": "《三國演義》第三回", "original": "何進召董卓引兵入京以誅宦官，反引狼入室致天下大亂。", "translation": "董卓以救駕清君側為幌子進入京城，實質是為了謀奪朝政大權。", "sentence": "他突然主動獻殷勤送大禮，大家心知肚明他是董卓進京——不懷好意。"},
+  {"idiom": "關雲長刮骨下棋——若無其事", "front": "關雲長刮骨下棋", "back": "若無其事", "meaning": "比喻在承受巨大身心壓力或疼痛的情況下，依然保持冷靜從容的平常心態。", "source_text": "《三國演義》第七十五回", "original": "關公伸臂令佗割之，刀割骨聲令人掩面，關公弈棋神色不變。", "translation": "關羽在華佗開刀刮骨時與馬良下圍棋，神情自若如同平常下棋一般平靜。", "sentence": "面對對手激烈的質詢與攻訐，發言人關雲長刮骨下棋——若無其事，冷靜應對。"},
+  {"idiom": "關雲長放屁——不知臉紅", "front": "關雲長放屁", "back": "不知臉紅", "meaning": "諧音幽默歇後語。比喻厚顏無恥、不知羞愧，做了丟臉的事還理直氣壯。", "source_text": "民間俗諺歇後語 / 關公紅臉形象", "original": "關公臉色天生通紅，排氣出醜亦不顯臉色變化。", "translation": "關公臉龐天生就是通紅的，就算做了尷尬事也看不出臉紅，諷刺不知廉恥。", "sentence": "他抄襲別人的作品被抓包還大言不慚，真是關雲長放屁——不知臉紅。"},
+  {"idiom": "劉備編草鞋——內行", "front": "劉備編草鞋", "back": "內行", "meaning": "比喻對某項工作或業務非常熟練、經驗老到，是地地道道的行家老手。", "source_text": "《三國演義》第一回", "original": "劉備少孤，與母販履織蓆為業。", "translation": "劉備早年家貧，與母親以編織販賣草鞋草席為生，對編草鞋手藝極為精通。", "sentence": "修理這種古董機械他是劉備編草鞋——內行，交給他準沒錯！"},
+  {"idiom": "周瑜打黃蓋——兩相情願", "front": "周瑜打黃蓋", "back": "兩相情願", "meaning": "比喻雙方都完全出於自願配合，沒有任何一方是被強迫的。", "source_text": "《三國演義》第四十六回", "original": "瑜與黃蓋密謀苦肉之計，一人願施杖責一人願受苦刑，以破曹公。", "translation": "周瑜和黃蓋共同密謀苦肉計，雙方心甘情願配合施計詐降曹操。", "sentence": "這項買賣協議是周瑜打黃蓋——兩相情願，簽約後就不能反悔。"},
+  {"idiom": "關公進曹營——單刀直入", "front": "關公進曹營", "back": "單刀直入", "meaning": "比喻說話、寫文章或辦事開門見山、直接切入主題，不拖泥帶水。", "source_text": "《三國演義》第二十五回 / 關羽投曹典故", "original": "關羽約三事後坦蕩入曹營，其忠義之心耿耿直言無隱。", "translation": "關羽進駐曹營時直陳條件與心意，後世引申為說話直截了當。", "sentence": "我們時間緊迫，今天就關公進曹營——單刀直入，直接討論解決方案。"},
+  {"idiom": "劉備的江山——哭出來的", "front": "劉備的江山", "back": "哭出來的", "meaning": "民間評三國幽默語。比喻善於運用情感、眼淚與真誠去打動人心以成大事。", "source_text": "《三國演義》劉備性格描寫與民間評話", "original": "玄德善哭，哭別徐庶、哭請諸葛、哭託孤白帝城，仁德感動士民。", "translation": "劉備在小說中常以仁德之淚感動天下英雄與百姓，成就蜀漢帝業。", "sentence": "他藉著在鏡頭前一把鼻涕一把眼淚博取同情，真是劉備的江山——哭出來的。"},
+  {"idiom": "周瑜打黃蓋——裝樣子", "front": "周瑜打黃蓋", "back": "裝樣子", "meaning": "比喻表面上吵得不可開交或打得凶狠，實際上是在演戲給外人看。", "source_text": "《三國演義》第四十六回「苦肉計」", "original": "周瑜怒責黃蓋五十脊杖，實為演給曹操奸細蔡中、蔡和觀看之戲碼。", "translation": "周瑜假意嚴懲黃蓋，純屬演戲給曹營間諜看以促成詐降火攻。", "sentence": "他們兩家公司表面上在媒體前互嗆，其實是周瑜打黃蓋——裝樣子炒作話題。"},
+  {"idiom": "張飛討債——聲勢凶", "front": "張飛討債", "back": "聲勢凶", "meaning": "形容氣勢洶洶、嗓門極大、聲威驚人，讓人聞之生畏。", "source_text": "民間歇後語 / 張飛咆哮形象", "original": "張翼德長坂橋頭一聲大喝，聲如巨雷，嚇退曹操數萬大軍。", "translation": "張飛性格暴烈、嗓門如雷鳴般宏亮，上門討債更是聲勢浩大。", "sentence": "對方一進門就拍桌大吼，真是張飛討債——聲勢凶。"},
+  {"idiom": "諸葛亮草船借箭——用的是疑兵計", "front": "諸葛亮草船借箭", "back": "用的是疑兵計", "meaning": "形容巧妙利用對手的多疑心理布下假象，以虛代實達到自己預期的目的。", "source_text": "《三國演義》第四十六回", "original": "孔明借長江大霧以草人擂鼓吶喊，曹操疑有大軍伏擊只命亂箭射之。", "translation": "諸葛亮利用迷霧與草人製造大軍進攻的假象，誘使多疑的曹操狂射十萬支箭。", "sentence": "他在商業談判中故弄玄虛，諸葛亮草船借箭——用的是疑兵計，迫使對手讓步。"},
+  {"idiom": "許褚斗馬超——赤膊上陣", "front": "許褚斗馬超", "back": "赤膊上陣", "meaning": "比喻徹底卸下一切偽裝或顧慮，毫無保留地親自投入激烈的戰鬥與競爭中。", "source_text": "《三國演義》第五十九回", "original": "許褚戰馬超百餘合不分勝負，褚性起飛回陣中，脫去盔甲赤體提刀來戰。", "translation": "虎痴許褚與錦馬超大戰，激戰之際許褚脫光上身鎧甲赤身搏殺。", "sentence": "為了挽救公司業績，董事長許褚斗馬超——赤膊上陣親自跑第一線推銷。"},
+  {"idiom": "張飛上陣——橫衝直撞", "front": "張飛上陣", "back": "橫衝直撞", "meaning": "形容作戰勇猛剛強，勇往直前猛打猛衝；亦比喻行事魯莽衝動不按規矩。", "source_text": "《三國演義》張飛戰場描寫", "original": "張飛挺丈八鋼矛，拍馬直衝敵陣，如入無人之境。", "translation": "張飛作戰勇猛過人，持丈八蛇矛在萬馬軍中左衝右突無可阻擋。", "sentence": "這名年輕球員在球場上像張飛上陣——橫衝直撞，徹底打亂了對手的防守節奏。"},
+  {"idiom": "張飛戴口罩——顯大眼", "front": "張飛戴口罩", "back": "顯大眼", "meaning": "幽默歇後語。比喻某個原本就極為突出的特徵，在遮掩其他部分後顯得更加醒目突出。", "source_text": "民間趣味歇後語 / 張飛容貌特徵", "original": "張飛豹頭環眼雙目圓睜，若遮蔽面孔口鼻，唯見一雙銅鈴大眼。", "translation": "張飛一雙眼睛本就奇大，戴上面罩後更凸顯出大眼睛的特點。", "sentence": "穿上全黑的衣服，更顯得他皮膚白皙，真是張飛戴口罩——顯大眼。"},
+  {"idiom": "張飛賣秤砣——人強貨硬", "front": "張飛賣秤砣", "back": "人強貨硬", "meaning": "比喻人品堅毅剛強，所生產的貨品或技術實力也絕對堅固過硬。", "source_text": "民間歇後語", "original": "張飛勇猛無敵，秤砣生鐵鑄成堅實無比。", "translation": "形容賣主為人強硬剛正，賣的鐵秤砣貨真價實堅硬無比。", "sentence": "我們團隊秉持張飛賣秤砣——人強貨硬的原則，每一件產品都經過嚴格質檢。"},
+  {"idiom": "阿斗的江山——白送", "front": "阿斗的江山", "back": "白送", "meaning": "比喻不費吹灰之力就輕易把珍貴的財產、江山或權益拱手讓給他人。", "source_text": "《三國演義》第一百一十九回", "original": "蜀漢後主劉禪開門出降，將昭烈帝辛苦開創之蜀漢基業拱手送給司馬昭。", "translation": "蜀後主劉禪不戰而降，將益州山河大好江山白白奉送給曹魏晉朝。", "sentence": "辛苦創業的成果被他揮霍一空，簡直是阿斗的江山——白送給競爭對手。"},
+  {"idiom": "隔門縫瞧諸葛亮——瞧扁了英雄", "front": "隔門縫瞧諸葛亮", "back": "瞧扁了英雄", "meaning": "比喻從狹隘狹隘的門縫中看人，把真正偉大的英雄豪傑給看扁、低估了。", "source_text": "民間歇後語 / 狹隘視角比喻", "original": "自狹窄門縫中視人身形狹長如扁，比喻短視之人低估了大英雄諸葛孔明。", "translation": "透過門縫看人會把人看扁，比喻目光短淺的人輕視了真正的天下奇才。", "sentence": "你以為他只是個普通工讀生？你真是隔門縫瞧諸葛亮——瞧扁了英雄。"},
+  {"idiom": "司馬夸諸葛——甘拜下風", "front": "司馬夸諸葛", "back": "甘拜下風", "meaning": "形容心服口服地承認技不如人，真誠地佩服對方的卓越才華。", "source_text": "《三國演義》第一百零四回", "original": "司馬懿見死諸葛木雕像而退兵，後感嘆曰：『吾能料其生，不能料其死也！天下奇才也！』", "translation": "司馬懿見識諸葛亮退兵妙計後由衷讚嘆諸葛亮為天下奇才，自認不如。", "sentence": "看完了他精彩絕倫的企劃案，在場所有的行銷專家都司馬夸諸葛——甘拜下風。"},
+  {"idiom": "關羽看《春秋》——一目了然", "front": "關羽看《春秋》", "back": "一目了然", "meaning": "比喻事物條理非常清晰分明，一看就清清楚楚、完全明白。", "source_text": "《三國演義》第二十五回 / 關公夜讀春秋", "original": "關公秉燭夜讀《春秋》，深諳大義，一目了然。", "translation": "關羽夜晚在曹營點燭讀《春秋》大義，條理分明、洞若觀火。", "sentence": "這份財務報表整理得非常清楚，關羽看《春秋》——一目了然。"},
+  {"idiom": "黃忠交朋友——人老心不老", "front": "黃忠交朋友", "back": "人老心不老", "meaning": "形容年紀雖大，但心態依然年輕熱情、充滿活力與志向。", "source_text": "《三國演義》第七十回「老將黃忠計奪天蕩山」", "original": "黃忠年近七旬，勇力不減當年，常言老將亦能立功。", "translation": "老將黃忠年歲已高但豪氣不減當年，心境依然年輕熱情。", "sentence": "爺爺退休後還報名登山社結交年輕山友，真是黃忠交朋友——人老心不老。"},
+  {"idiom": "黃忠掄大錘——老當益壯", "front": "黃忠掄大錘", "back": "老當益壯", "meaning": "形容老年人依然身體健壯、豪氣幹雲，在事業或行動上表現得毫不遜色於年輕人。", "source_text": "《三國演義》黃忠陣前斬夏侯淵典故", "original": "黃忠雖老，開二石之弓，使百斤重錘，勇猛絕倫。", "translation": "老將黃忠年過六十依然能揮動重錘斬將破敵，形容老年勇猛剛健。", "sentence": "老教授七十歲依然站在講台上精神矍鑠，真是黃忠掄大錘——老當益壯。"},
+  {"idiom": "諸葛亮玩狗——聰明一世糊塗一時", "front": "諸葛亮玩狗", "back": "聰明一世糊塗一時", "meaning": "比喻極其聰明卓越之人，偶爾也會做出一兩件糊塗、失算或令人發笑的蠢事。", "source_text": "民間傳奇歇後語 / 諧趣雜談", "original": "諸葛亮一生神機妙算，民間戲謔其偶有閒情玩物喪志之失。", "translation": "形容大智慧者偶爾也會有失誤或做傻事的時候。", "sentence": "他這個理財大師居然會點進釣魚簡訊受騙，真是諸葛亮玩狗——聰明一世糊塗一時。"},
+  {"idiom": "黃忠射箭——百發百中", "front": "黃忠射箭", "back": "百發百中", "meaning": "形容射擊或預測極其精準，每次出手必定命中目標、無一失手。", "source_text": "《三國演義》第五十三回", "original": "黃忠能開三石之弓，百步穿楊，箭無虛發。", "translation": "五虎大將黃忠精於箭術，百步之外射物無不命中。", "sentence": "他對市場趨勢的預測向來是黃忠射箭——百發百中，投資從未失手過。"},
+  {"idiom": "關羽打噴嚏——自我吹噓", "front": "關羽打噴嚏", "back": "自我吹噓", "meaning": "諧音幽默歇後語。比喻自吹自擂、自己誇耀自己、自賣自誇。", "source_text": "民間歇後語 / 關公美髯打噴嚏氣息聲諧意", "original": "關羽美髯公拂鬚呵氣打噴嚏，民間諧音為自己吹氣、自我吹噓。", "translation": "形容關羽打噴嚏大聲吹氣，諧音借喻為自吹自擂、自我吹噓。", "sentence": "聽他在台上講得天花亂墜，其實大半都是關羽打噴嚏——自我吹噓。"},
+  {"idiom": "關羽流鼻血——紅上加紅", "front": "關羽流鼻血", "back": "紅上加紅", "meaning": "比喻在原本就很紅火、順遂或熱鬧的基礎上，更加火紅吉利或事業倍增。", "source_text": "民間歇後語 / 關公赤面雙關語", "original": "關雲長面如重棗天生通紅，若鼻孔流紅血，更是紅潤疊加。", "translation": "關羽本來就臉紅，流出鮮血更是紅上加紅，借喻為極為吉利火紅。", "sentence": "新店開幕首日請到天王巨星代言，業績更是關羽流鼻血——紅上加紅。"},
+  {"idiom": "龐統當知縣——大材小用", "front": "龐統當知縣", "back": "大材小用", "meaning": "比喻把具有治國安邦大才的人安排在極其微小的基層職位上，浪費了非凡的才能。", "source_text": "《三國志·蜀書·龐統傳》/《三國演義》第五十七回", "original": "鳳雛龐統投劉備，備令其任耒陽令，統不理縣事，魯肅薦其非百里之才。", "translation": "身懷大謀略的龐統被派去當小小縣令，後經諸葛亮與魯肅推薦始得重用。", "sentence": "讓這位博士級的人工智慧科學家去處理公文打字，簡直是龐統當知縣——大材小用。"},
+  {"idiom": "劉備摔孩子——收買人心", "front": "劉備摔孩子", "back": "收買人心", "meaning": "比喻故意做出極度誇張或感人至深的舉動，以博取他人的忠誠與感激歸附。", "source_text": "《三國演義》第四十二回", "original": "趙雲血戰長坂坡救出阿斗，玄德接過阿斗擲之於地曰：『為汝這孺子，幾損我一員大將！』趙雲泣拜誓死效忠。", "translation": "劉備當著趙雲的面將親生兒子扔在地上，成功使趙雲感恩戴德誓死效命。", "sentence": "長官在年終晚會上發紅包慰勞大家，有人私下議論這是劉備摔孩子——收買人心。"},
+  {"idiom": "張飛睡覺——不閉眼", "front": "張飛睡覺", "back": "不閉眼", "meaning": "形容警惕性極高、時刻保持戒備；亦形容睜著眼睛睡覺的外貌特徵。", "source_text": "《三國演義》第八十一回", "original": "張飛每睡不合眼，部將范疆、張達夜入帳中刺飛，見飛怒目圓睜以為未睡。", "translation": "張飛天生睡覺時雙眼微睜，後世用以形容保持高度戒備或特異睡相。", "sentence": "身處戰亂邊境的前線哨兵必須時刻保持張飛睡覺——不閉眼的警覺性。"},
+  {"idiom": "張飛擺屠案——凶神惡煞", "front": "張飛擺屠案", "back": "凶神惡煞", "meaning": "形容面貌猙獰凶悍、神情極度兇暴威猛，令人望之生畏、不寒而慄。", "source_text": "民間歇後語 / 張飛屠戶出身形象", "original": "張飛未遇明主前擺案宰豬，手持尖刀滿面殺氣凶神惡煞。", "translation": "張飛在肉舖案板前操刀屠宰，怒目虯髯，模樣威猛凶悍無比。", "sentence": "那群黑衣保鏢站在門口，個個都是張飛擺屠案——凶神惡煞。"},
+  {"idiom": "張飛拆橋——有勇無謀", "front": "張飛拆橋", "back": "有勇無謀", "meaning": "比喻只知道憑藉一時勇力衝動行事，卻缺乏長遠周密的計謀，反而露出了破綻。", "source_text": "《三國演義》第四十二回「大鬧長坂橋」", "original": "張飛喝退曹兵後令拆斷長坂橋，曹操聞橋斷知張飛心虛必無伏兵，遂引大軍復追。", "translation": "張飛一聲大喝退曹軍後急忙拆橋，反而讓曹操識破其虛張聲勢。", "sentence": "處理這項危機不能只憑衝勁，免得張飛拆橋——有勇無謀，自斷後路。"},
+  {"idiom": "關公面前耍大刀——自不量力", "front": "關公面前耍大刀", "back": "自不量力", "meaning": "比喻在技藝精湛的大師或行家面前賣弄自己的淺薄本領，不知天高地厚。", "source_text": "民間俗諺 / 關公刀法第一", "original": "關公青龍偃月刀威震華夏，尋常武夫在關公面前舞刀只是自取其辱。", "translation": "在武聖關公面前揮舞大刀，比喻自不量力、不知自省。", "sentence": "你在國家代表隊教練面前賣弄基本動作，真是關公面前耍大刀——自不量力。"},
+  {"idiom": "孔明彈琴退仲達——臨危不亂", "front": "孔明彈琴退仲達", "back": "臨危不亂", "meaning": "形容在面臨生死存亡的極度凶險關頭，依然能保持鎮定自若、從容不迫的大將之風。", "source_text": "《三國演義》第九十五回「空城計」", "original": "孔明引二小童攜琴撫琴於城樓上，談笑自若，退司馬懿大軍。", "translation": "諸葛亮在空城上面對司馬懿十五萬鐵騎從容彈琴，展現極高超的定力。", "sentence": "火警響起時指揮官孔明彈琴退仲達——臨危不亂，迅速引導大家安全疏散。"},
+  {"idiom": "曹操轉胎——疑心重", "front": "曹操轉胎", "back": "疑心重", "meaning": "比喻生性多疑、防備心極強，總是懷疑別人在算計或背叛自己。", "source_text": "《三國演義》曹操性格描寫", "original": "操生性多疑，常言：『寧我負人，毋人負我。』夢中亦能殺人。", "translation": "曹操性格極度多疑敏感，後世形容天生多疑之人為曹操轉世轉胎。", "sentence": "他對身邊的每個朋友都處處防範，簡直是曹操轉胎——疑心重。"}
+];
+
+let appState = { currentMode: 'flashcard', deck: [], nextRoundDeck: [], currentIndex: 0, stats: { good: 0, bad: 0 }, isQuizAnswered: false, hasVisitedBack: false, round: 1, startTime: null, isWrongTraining: false };
+
+let modeStates = {};
+
+function startApp() { document.getElementById('instruction-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; initGame('flashcard'); }
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+/* --- 錯題本 LocalStorage 核心模組 --- */
+function getWrongBook() {
+  try {
+    const data = localStorage.getItem('idiom_wrong_pool');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWrongBook(pool) {
+  try {
+    localStorage.setItem('idiom_wrong_pool', JSON.stringify(pool));
+  } catch (e) {}
+  renderWrongBook();
+}
+
+function addToWrongBook(item) {
+  if (!item) return;
+  const word = item.idiom || item.front || "";
+  let meaningStr = `【${item.back}】${item.meaning}`;
+  let sentenceStr = item.sentence || "";
+  let pool = getWrongBook();
+  let exist = pool.find(x => x.idiom === word);
+
+  if (exist) {
+    exist.wrongCount = (exist.wrongCount || 1) + 1;
+    exist.lastWrongTime = new Date().getTime();
+  } else {
+    pool.push({
+      idiom: word,
+      meaning: meaningStr,
+      sentence: sentenceStr,
+      wrongCount: 1,
+      lastWrongTime: new Date().getTime(),
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(pool);
+}
+
+function removeFromWrongBook(word) {
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.idiom !== word);
+  saveWrongBook(pool);
+}
+
+function renderWrongBook() {
+  const pool = getWrongBook();
+  const currentPool = pool.filter(x => x.chapter === QUIZ_TITLE);
+  
+  const countBadge = document.getElementById('wb-count-badge');
+  if (countBadge) {
+    countBadge.innerText = `目前單元共 ${currentPool.length} 個錯題 (累計全部單元共 ${pool.length} 個)`;
+  }
+
+  const btnFc = document.getElementById('wb-btn-fc');
+  const btnQuiz = document.getElementById('wb-btn-quiz');
+  if (btnFc) btnFc.disabled = currentPool.length === 0;
+  if (btnQuiz) btnQuiz.disabled = currentPool.length === 0;
+
+  const container = document.getElementById('wrong-list-container');
+  if (!container) return;
+
+  if (currentPool.length === 0) {
+    container.innerHTML = `<div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>`;
+    return;
+  }
+
+  let html = '';
+  currentPool.forEach(item => {
+    html += `
+      <div class="wb-item-card">
+        <div>
+          <div class="wb-item-title">
+            ${item.idiom}
+            <span class="wb-item-count">錯 ${item.wrongCount || 1} 次</span>
+          </div>
+          <div class="wb-item-meaning">${item.meaning}</div>
+        </div>
+        <button class="wb-del-btn" title="移出錯題本" onclick="removeFromWrongBook('${(item.idiom || '').replace(/'/g, "\\'")}');">🗑️</button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function clearCurrentWrongBook() {
+  if (!confirm("確定要清空『本單元』的所有錯題紀錄嗎？")) return;
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.chapter !== QUIZ_TITLE);
+  saveWrongBook(pool);
+}
+
+function copyWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可複製！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}`).join('\n');
+  navigator.clipboard.writeText(text).then(() => alert("已複製本單元錯題至剪貼簿！"));
+}
+
+function downloadWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可下載！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}${x.sentence ? '\n例句：' + x.sentence : ''}`).join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${QUIZ_TITLE}_錯題本.txt`;
+  a.click();
+}
+
+function startWrongTraining(mode) {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可以進行特訓喔！"); return; }
+  
+  appState.isWrongTraining = true;
+  appState.currentMode = mode;
+  
+  const mainData = (typeof vocabData !== 'undefined') ? vocabData : [];
+  
+  appState.deck = pool.map(p => {
+    let found = mainData.find(v => v.idiom === p.idiom);
+    return found || p;
+  });
+
+  if (mode !== 'flashcard') {
+    shuffleArray(appState.deck);
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${mode}`) || document.querySelector(`.nav-btn[onclick*="${mode}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetModeDiv = document.getElementById(`${mode}-mode`);
+  if (targetModeDiv) targetModeDiv.classList.add('active');
+
+  appState.nextRoundDeck = []; 
+  appState.currentIndex = 0; 
+  appState.stats = { good: 0, bad: 0 }; 
+  appState.isQuizAnswered = false; 
+  appState.hasVisitedBack = false;
+  appState.startTime = new Date();
+
+  document.getElementById('summary-area').style.display = 'none';
+
+  const prefix = mode === 'flashcard' ? 'fc' : 'mq';
+  const badge = document.getElementById(`${prefix}-round-badge`);
+  if (badge) {
+    badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+    badge.style.backgroundColor = "var(--accent)";
+  }
+
+  updateStatsUI();
+  const cardEl = document.getElementById('card');
+  if (cardEl) cardEl.classList.remove('flipped');
+  
+  if (mode === 'flashcard') {
+    loadFlashcard();
+  } else if (mode === 'meaningQuiz') {
+    loadQuiz('meaning');
+  }
+}
+
+function initGame(mode, isRetry = false) { 
+   appState.isWrongTraining = false;
+   if (mode === 'wrongBook') {
+     document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+     const wbMode = document.getElementById('wrongBook-mode');
+     if (wbMode) wbMode.classList.add('active');
+     renderWrongBook();
+     return;
+   } 
+   appState.currentMode = mode; 
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (isRetry && appState.nextRoundDeck.length > 0) { 
+        appState.deck = [...appState.nextRoundDeck]; 
+        appState.round++; 
+   } else { 
+        appState.deck = [...vocabData]; 
+        appState.round = 1; 
+   }
+   
+   if (mode === 'meaningQuiz') {
+        shuffleArray(appState.deck);
+   }
+
+   appState.nextRoundDeck = []; appState.currentIndex = 0; appState.stats = { good: 0, bad: 0 }; appState.isQuizAnswered = false; appState.hasVisitedBack = false; 
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   const prefix = mode === 'flashcard' ? 'fc' : 'mq'; 
+   const badge = document.getElementById(`${prefix}-round-badge`); 
+   badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部 ${appState.deck.length} 題)`; 
+   badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+   updateStatsUI(); 
+   const cardEl = document.getElementById('card');
+   if (cardEl) cardEl.classList.remove('flipped'); 
+   if (mode === 'flashcard') loadFlashcard(); else if (mode === 'meaningQuiz') loadQuiz('meaning'); 
+}
+
+function switchMode(newMode) {
+  const oldMode = appState.currentMode;
+  
+  modeStates[oldMode] = {
+    deck: [...appState.deck],
+    nextRoundDeck: [...appState.nextRoundDeck],
+    currentIndex: appState.currentIndex,
+    stats: { ...appState.stats },
+    isWrongTraining: appState.isWrongTraining,
+    summaryVisible: document.getElementById('summary-area').style.display,
+    round: appState.round,
+    startTime: appState.startTime
+  };
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const clickedBtn = event ? event.target : document.querySelector(`.nav-btn[onclick*="${newMode}"]`);
+  if (clickedBtn) clickedBtn.classList.add('active');
+
+  if (modeStates[newMode]) {
+    const state = modeStates[newMode];
+    appState.currentMode = newMode;
+    appState.deck = [...state.deck];
+    appState.nextRoundDeck = [...state.nextRoundDeck];
+    appState.currentIndex = state.currentIndex;
+    appState.stats = { ...state.stats };
+    appState.isWrongTraining = state.isWrongTraining;
+    appState.round = state.round;
+    appState.startTime = state.startTime;
+
+    document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+    document.getElementById(`${newMode}-mode`).classList.add('active');
+    document.getElementById('summary-area').style.display = state.summaryVisible;
+
+    updateStatsUI();
+
+    if (newMode === 'wrongBook') {
+      renderWrongBook();
+    } else if (newMode === 'flashcard') {
+      loadFlashcard();
+    } else if (newMode === 'meaningQuiz') {
+      loadQuiz('meaning');
+    }
+  } else {
+    initGame(newMode, false);
+  }
+}
+
+function updateStatsUI() { 
+  if (appState.currentMode === 'wrongBook') return;
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+  if (appState.currentMode === 'flashcard') { 
+    document.getElementById(`${prefix}-known-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-unknown-count`).innerText = appState.stats.bad; 
+  } else { 
+    document.getElementById(`${prefix}-correct-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-wrong-count`).innerText = appState.stats.bad; 
+  } 
+  const left = appState.deck.length - appState.currentIndex; 
+  const leftEl = document.getElementById(`${prefix}-left-count`);
+  if (leftEl) leftEl.innerText = left > 0 ? left : 0; 
+}
+
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; if(!card) return; 
+
+  document.getElementById('fc-char').innerText = card.front; 
+  document.getElementById('front-actions').classList.remove('visible'); 
+  document.getElementById('fc-hint').style.opacity = '1'; 
+  
+  document.getElementById('fc-back-char').innerText = card.idiom; 
+  document.getElementById('fc-meaning').innerText = card.meaning; 
+  
+  document.getElementById('fc-source-text').innerText = "【" + card.source_text + "】";
+  document.getElementById('fc-original').innerText = card.original !== "-" ? card.original : "";
+  document.getElementById('fc-translation').innerText = card.translation !== "-" ? card.translation : "";
+  
+  document.getElementById('fc-example').innerHTML = card.sentence.replace(card.idiom, `<span class="hl">${card.idiom}</span>`); 
+  
+  document.getElementById('card').classList.remove('flipped'); 
+  appState.hasVisitedBack = false; 
+  document.getElementById('fc-game-area').style.display = 'block'; 
+  updateStatsUI();
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); const isFlippingToBack = !cardEl.classList.contains('flipped'); cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) appState.hasVisitedBack = true; else if (appState.hasVisitedBack) { document.getElementById('front-actions').classList.add('visible'); document.getElementById('fc-hint').style.opacity = '0'; } 
+}
+
+function rateCard(isKnown) { 
+  const currentCard = appState.deck[appState.currentIndex];
+  if (isKnown) {
+    appState.stats.good++;
+    if (appState.isWrongTraining && document.getElementById('wb-auto-remove').checked) {
+      removeFromWrongBook(currentCard.idiom);
+    }
+  } else {
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentCard);
+    addToWrongBook(currentCard);
+  } 
+  appState.currentIndex++; 
+  updateStatsUI(); 
+  if (appState.currentIndex < appState.deck.length) {
+    setTimeout(() => loadFlashcard(), 200);
+  } else {
+    showSummary();
+  }
+}
+
+function loadQuiz(type) { 
+  const currentItem = appState.deck[appState.currentIndex]; 
+  const prefix = 'mq'; 
+  appState.isQuizAnswered = false; 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'none'; 
+  document.getElementById(`${prefix}-feedback`).innerText = ''; 
+  
+  // 題目出前半句
+  document.getElementById('mq-question').innerHTML = `
+    <div style="font-size:24px; color:var(--primary); margin-bottom:6px;">「${currentItem.front}」</div>
+    <div style="font-size:15px; color:#78909c; font-weight:normal;">請選出正確的後半句歇後語：</div>
+  `;
+  
+  let options = [currentItem]; 
+  // 隨機選取3個不重複的干擾選項
+  let pool = vocabData.filter(v => v.back !== currentItem.back);
+  shuffleArray(pool);
+  for (let i = 0; i < pool.length && options.length < 4; i++) {
+    if (!options.some(o => o.back === pool[i].back)) {
+      options.push(pool[i]);
+    }
+  }
+  
+  options.sort(() => Math.random() - 0.5); 
+  const container = document.getElementById(`${prefix}-options`); 
+  container.innerHTML = ''; 
+  
+  options.forEach(opt => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'option-btn'; 
+    btn.innerHTML = `<div>${opt.back}</div><div class="option-desc">(${opt.meaning})</div>`; 
+    btn.onclick = () => checkAnswer(btn, opt, currentItem, type); 
+    container.appendChild(btn); 
+  }); 
+  document.getElementById(`${prefix}-game-area`).style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selected, correct, type) { 
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const prefix = 'mq'; 
+  const isCorrect = selected.back === correct.back; 
+  
+  if (isCorrect) { 
+    btn.classList.add('correct'); 
+    document.getElementById(`${prefix}-feedback`).innerText = `✅ 答對了！完整歇後語：${correct.idiom}`; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--success)"; 
+    appState.stats.good++; 
+    if (appState.isWrongTraining && document.getElementById('wb-auto-remove').checked) {
+      removeFromWrongBook(correct.idiom);
+    }
+  } else { 
+    btn.classList.add('wrong'); 
+    document.getElementById(`${prefix}-feedback`).innerText = `❌ 答錯了。正確後半句是：【${correct.back}】`; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--danger)"; 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(correct); 
+    addToWrongBook(correct);
+  } 
+  
+  const container = document.getElementById(`${prefix}-options`); 
+  Array.from(container.children).forEach(child => { 
+    const desc = child.querySelector('.option-desc'); 
+    if(desc) desc.classList.add('show'); 
+    if (child.firstChild.innerText === correct.back) { 
+      child.classList.add('correct'); 
+    } 
+  }); 
+  updateStatsUI(); 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'block'; 
+}
+
+function nextQuiz(type) { 
+  appState.currentIndex++; 
+  if (appState.currentIndex < appState.deck.length) loadQuiz(type); 
+  else showSummary(); 
+}
+
+function showSummary() { 
+   const prefix = appState.currentMode === 'flashcard' ? 'fc' : 'mq'; 
+   document.getElementById(`${prefix}-game-area`).style.display = 'none'; 
+   document.getElementById('summary-area').style.display = 'block'; 
+   window.scrollTo(0, 0); 
+   const endTime = new Date(); 
+   const durationSeconds = Math.floor((endTime - appState.startTime) / 1000); 
+   const minutes = Math.floor(durationSeconds / 60); 
+   const seconds = durationSeconds % 60; 
+   const durationStr = `${minutes}分${seconds}秒`;
+   const summaryText = document.getElementById('summary-text'); 
+   const restartBtn = document.getElementById('btn-retry'); 
+   let msg = ""; 
+   msg += `<div style="margin-bottom:15px; font-size:16px; color:#78909c;">⏱️ 本次練習時間：${durationStr}</div>`;
+   if (appState.currentMode === 'flashcard') { 
+     msg += `本輪掌握：<b style="color:var(--success)">${appState.stats.good}</b> 個<br>需複習：<b style="color:var(--warning)">${appState.stats.bad}</b> 個`; 
+   } else { 
+     msg += `答對：<b style="color:var(--success)">${appState.stats.good}</b><br>答錯：<b style="color:var(--danger)">${appState.stats.bad}</b>`; 
+   } 
+   if (appState.nextRoundDeck.length === 0) { 
+     msg += `<br><br><b>✨ 太棒了！全部通過！✨</b>`; 
+     restartBtn.innerText = "🏆 重新開始全部"; 
+     restartBtn.onclick = resetAll; 
+   } else { 
+     msg += `<br><br>還有 <b>${appState.nextRoundDeck.length}</b> 個不熟，繼續特訓！`; 
+     restartBtn.innerText = "🔄 複習不熟的內容"; 
+     restartBtn.onclick = restartRound; 
+   } 
+   summaryText.innerHTML = msg; 
+}
+
+function restartRound() { initGame(appState.currentMode, true); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+document.addEventListener('DOMContentLoaded', () => {
+   document.title = QUIZ_TITLE;
+   document.querySelector('h1').innerText = QUIZ_TITLE;
+   document.getElementById('inst-title-text').innerText = QUIZ_TITLE;
+   document.getElementById('welcome-title-text').innerText = QUIZ_TITLE;
+});
+</script>
+</body>
+</html>

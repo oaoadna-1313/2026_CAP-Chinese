@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[語文學習集練習神器]節慶(詩詞句)</title>
+<style>
+/* CSS 樣式整合：包含主介面與登入介面樣式 */
+:root { --primary: #3949AB; --primary-light: #E8EAF6; --accent: #F57C00; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: var(--primary-light); padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(245, 124, 0, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(245, 124, 0, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 20px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* Card Styles */
+.card-wrapper { width: 400px; max-width: 92vw; height: 560px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.poem-text { font-size: 20px; color: var(--primary); margin: 0; line-height: 1.8; letter-spacing: 1px; font-weight: 700; text-align: left; width: 100%; overflow-y: auto; max-height: 300px; padding: 10px; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 20px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: center; justify-content: center; cursor: pointer; border-top: 6px solid var(--primary); padding: 20px; }
+.back-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; overflow-y: auto; padding-right: 5px; }
+.back-char { font-size: 24px; font-weight: bold; color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; flex-shrink: 0; }
+.back-poem-ref { font-size: 15px; color: #000; line-height: 1.6; padding: 12px; background: #f5f7fa; border-radius: 10px; width: 100%; text-align: left; box-sizing: border-box; flex-shrink: 0; }
+.back-translation { font-size: 14px; color: #1b5e20; margin-top: 8px; padding: 10px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px; text-align: left; width: 100%; box-sizing: border-box; flex-shrink: 0; }
+.back-keywords { font-size: 14px; width: 100%; text-align: left; box-sizing: border-box; padding: 10px; margin-top: 8px; margin-bottom: 10px; flex-shrink: 0; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 4px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 10px; }
+.kw-blue-hl { background-color: #b3e5fc; color: #0056b3; font-weight: 900; padding: 2px 4px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.kw-magenta { color: #e91e63; font-weight: 900; }
+
+/* Stats & General Quiz Styles */
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; box-sizing: border-box; border-top: 6px solid var(--primary); }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 40px; border-radius: 30px; cursor: pointer; display: none; font-size: 18px; font-weight: bold; box-shadow: 0 4px 10px rgba(57, 73, 171, 0.3); transition: 0.2s; }
+.next-q-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(57, 73, 171, 0.4); }
+
+/* Mode 2: Keyword Quiz Styles */
+.kw-question-title { color: #90a4ae; font-size: 16px; margin-bottom: 20px; }
+.kw-question-text { font-size: 22px; margin-bottom: 30px; font-weight: bold; color: #263238; line-height: 1.6; text-align: center; }
+.kw-options-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.kw-option-btn { border: 2px solid var(--primary-light); background: white; border-radius: 10px; padding: 18px; cursor: pointer; text-align: center; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.kw-option-btn:hover { border-color: var(--primary); background-color: var(--primary-light); }
+.kw-option-title { font-size: 20px; color: var(--primary); font-weight: bold; }
+.kw-option-subtext { font-size: 15px; color: #757575; margin-top: 8px; display: none; }
+.kw-option-btn.revealed .kw-option-subtext { display: block; }
+.kw-option-btn.correct-ans { border-color: var(--success); background-color: #e8f5e9; }
+.kw-option-btn.correct-ans .kw-option-title, .kw-option-btn.correct-ans .kw-option-subtext { color: var(--success); }
+.kw-option-btn.wrong-ans { border-color: var(--danger); background-color: #ffebee; }
+.kw-option-btn.wrong-ans .kw-option-title, .kw-option-btn.wrong-ans .kw-option-subtext { color: var(--danger); }
+
+/* Mode 3: Traditional Quiz Styles */
+.quiz-question { font-size: 20px; margin: 15px 0 25px 0; font-weight: bold; color: #333; line-height: 1.8; text-align: left; padding: 15px; background: #f5f7fa; border-left: 5px solid var(--primary); border-radius: 0 10px 10px 0; }
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.option-btn { padding: 15px; border: 2px solid var(--primary-light); background: white; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; }
+.option-btn:hover { background-color: var(--primary-light); border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+.slogan { color: var(--warning); font-weight: bold; text-align: center; margin-top: 20px; font-size: 16px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 錯題本專用新增樣式 */
+.wb-badge { background-color: #f44336; color: white; padding: 10px 20px; border-radius: 25px; font-size: 16px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2); }
+.wb-tools-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; width: 100%; max-width: 650px; margin-bottom: 15px; }
+@media (max-width: 600px) { .wb-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+.wb-tool-btn { border: none; padding: 12px 8px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); transition: transform 0.2s; }
+.wb-tool-btn:hover { transform: translateY(-2px); }
+.wb-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.wb-btn-fc { background-color: #3f51b5; }
+.wb-btn-quiz { background-color: #ff4081; }
+.wb-btn-copy { background-color: #4caf50; }
+.wb-btn-download { background-color: #00acc1; }
+.wb-btn-clear { background-color: #f44336; }
+.wb-auto-remove-box { display: flex; align-items: center; gap: 8px; color: #546e7a; font-size: 15px; margin-bottom: 20px; font-weight: bold; }
+.wb-card-container { width: 100%; max-width: 650px; background: white; border-radius: 15px; padding: 25px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.05); min-height: 150px; }
+.wb-empty-msg { color: #78909c; text-align: center; font-size: 18px; padding: 30px 0; font-weight: bold; }
+.wb-item-card { background: #f9fbe7; border-left: 5px solid #81c784; padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-item-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-item-meaning { font-size: 14px; color: #37474f; line-height: 1.5; }
+.wb-item-count { font-size: 12px; background: #ffe0b2; color: #e65100; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
+.wb-del-btn { background: none; border: none; color: #ef5350; cursor: pointer; font-size: 18px; padding: 0 5px; }
+</style>
+</head>
+<body>
+
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title" id="inst-title-text">[語文學習集練習神器]節慶(詩詞句)</div>
+<div class="inst-content">
+<p>歡迎來到 <b id="welcome-title-text">[語文學習集練習神器]節慶</b>！</p>
+<p>本單元精選了常見的「節慶與傳統節日」詩詞句，請遵循以下步驟進行特訓：</p>
+<ul>
+<li><b>第一步：📖 詩詞翻卡</b><br>仔細閱讀卡片上的詩句，思考這是在描述哪一個傳統節日。點擊卡片翻面即可核對答案。</li>
+<li><b>第二步：🔍 關鍵字判斷</b><br>透過特徵關鍵字，直接辨識節慶對象，建立直覺聯想！答對答錯都會幫您統整出各選項的關鍵字。</li>
+<li><b>第三步：📝 測驗挑戰</b><br>進入最終實戰！根據題目顯示的詩句，從四個選項中選出正確的節慶答案。</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="slogan">只要有心，人人都是國文神！</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+</div>
+
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" id="nav-btn-flashcard" onclick="switchMode('flashcard')">📖 詩詞翻卡</button>
+<button class="nav-btn" id="nav-btn-keyword" onclick="switchMode('keyword')">🔍 關鍵字判斷</button>
+<button class="nav-btn" id="nav-btn-quiz" onclick="switchMode('quiz')">📝 測驗挑戰</button>
+
+<button class="nav-btn" id="nav-btn-wrongBook" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+
+<!-- 模式一：詩詞翻卡 -->
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<div class="poem-text" id="fc-front-text"></div>
+<p class="hint" id="fc-hint">(點擊卡片看解答)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-char" id="fc-back-char"></div>
+<div class="back-poem-ref" id="fc-back-ref"></div>
+<div class="back-translation">
+  <div style="font-weight:bold; margin-bottom:4px; color:#2e7d32;">【語譯】</div>
+  <div id="fc-back-literal" style="margin-bottom:8px;"></div>
+  <div style="font-weight:bold; margin-bottom:4px; color:#2e7d32; border-top: 1px dashed #4caf50; padding-top: 8px;">【解析】</div>
+  <div id="fc-back-analysis"></div>
+</div>
+<div class="back-keywords" id="fc-back-keywords"></div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 模式二：關鍵字判斷 -->
+<div id="keyword-mode" class="mode-container">
+<div id="kw-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="kw-game-area" style="width:100%;">
+<div class="quiz-card">
+<div class="kw-question-title">請選出對應的節慶：</div>
+<div class="kw-question-text" id="kw-question"></div>
+<div class="kw-options-list" id="kw-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold; width: 100%;" id="kw-feedback"></div>
+<button class="next-q-btn" id="kw-next-btn" onclick="nextKeywordQuiz()">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="kw-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="kw-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="kw-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 模式三：選擇測驗 -->
+<div id="quiz-mode" class="mode-container">
+<div id="qz-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="qz-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:15px; font-weight:bold;">請問以下詩詞句是在描述哪一個節慶？</div>
+<div class="quiz-question" id="qz-question"></div>
+<div class="options-grid" id="qz-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold; width: 100%;" id="qz-feedback"></div>
+<button class="next-q-btn" id="qz-next-btn" onclick="nextQuiz()">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="qz-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="qz-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="qz-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 錯題本 Mode -->
+<div id="wrongBook-mode" class="mode-container">
+  <div id="wb-count-badge" class="wb-badge">目前單元共 0 個錯題 (累計全部單元共 0 個)</div>
+  
+  <div class="wb-tools-grid">
+    <button class="wb-tool-btn wb-btn-fc" id="wb-btn-fc" onclick="startWrongTraining('flashcard')">
+      <span>📖 錯題</span><span>翻卡特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-quiz" id="wb-btn-quiz" onclick="startWrongTraining('quiz')">
+      <span>📝 錯題</span><span>釋義特訓</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-copy" onclick="copyWrongBook()">
+      <span>📋 複製</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-download" onclick="downloadWrongBook()">
+      <span>💾 下載</span><span>全部錯題</span>
+    </button>
+    <button class="wb-tool-btn wb-btn-clear" onclick="clearCurrentWrongBook()">
+      <span>🧹 清空</span><span>錯題本</span>
+    </button>
+  </div>
+
+  <div class="wb-auto-remove-box">
+    <input type="checkbox" id="wb-auto-remove" checked>
+    <label for="wb-auto-remove">特訓中答對時，自動移出錯題本</label>
+  </div>
+
+  <div class="wb-card-container" id="wrong-list-container">
+    <div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>
+  </div>
+</div>
+
+<div id="summary-area" style="display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+
+<div class="slogan">只要有心，人人都是國文神！</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+
+<script>
+// ==========================================
+// 🔴 設定區
+const QUIZ_TITLE = "[語文學習集練習神器]節慶詩詞"; 
+// ==========================================
+
+const keywordMap = {
+  "七夕（農曆7月7日）": "牽牛、織女、鵲橋、乞巧、穿針、銀漢、雙星、河鼓",
+  "中秋（農曆8月15日）": "明月、嫦娥(姮娥)、蟾宮、玉盤、嬋娟、丹桂、賞月、桂花",
+  "元宵（農曆1月15日）": "燈、湯元(圓)、火樹銀花、星橋、觀燈、猜燈謎、上元",
+  "冬至（國曆12月21或22日）": "陽生、添弱線、吹葭、亞歲、長至、湯圓",
+  "春節（農曆1月1日）": "爆竹、屠蘇、桃符、守歲、拜年、迎新、元日、新歲",
+  "重陽（農曆9月9日）": "登高、茱萸、菊花(黃花)、九日、九月九、落帽",
+  "除夕（農曆12月最後一天）": "守歲、更闌、賣癡呆、年夜、歲除、除夜",
+  "清明（國曆4月5日或6日）": "掃墓、踏青、杏花村、雨紛紛、秋千、新煙、紙錢",
+  "寒食（清明節前一兩天）": "禁煙、冷食、傳蠟燭、東風御柳、無新火",
+  "端午（農曆5月5日）": "屈原、艾草、菖蒲、龍舟(兩龍躍出)、雄黃酒、楚江、角黍(粽子)"
+};
+
+const extraHighlightMap = {
+  "七夕（農曆7月7日）": ["牛郎", "織女", "乞巧", "雙星", "河漢女", "牽牛星", "金風玉露", "機杼", "河鼓星", "鵲橋", "銀漢", "牽牛", "穿針"],
+  "中秋（農曆8月15日）": ["嫦娥", "廣寒", "桂花", "寶鏡", "姮娥", "明月", "玉盤", "嬋娟", "丹桂", "冰輪", "中秋", "秋影", "銀河"],
+  "元宵（農曆1月15日）": ["上元", "燈市", "猜謎", "紫姑", "寶馬香車", "元宵", "元夕", "元夜", "火樹", "銀花", "星橋", "湯元", "試燈", "看燈", "花燈", "燈山", "燈"],
+  "冬至（國曆12月21或22日）": ["飛灰", "一陽生", "冬至", "添弱線", "吹葭", "陽生"],
+  "春節（農曆1月1日）": ["元日", "新歲", "換舊符", "新年", "春錢", "桃符", "爆竹", "屠蘇", "守歲", "拜新年", "買春錢", "春風"],
+  "重陽（農曆9月9日）": ["九日", "重九", "白衣送酒", "黃花", "登高處", "菊", "菊蕊", "紫菊", "萸枝", "金花酒", "登高", "茱萸", "菊花", "重陽", "九月九日"],
+  "除夕（農曆12月最後一天）": ["更闌", "癡呆", "歲除", "厭禳", "除夕", "守歲", "除夜", "年夜"],
+  "清明（國曆4月5日或6日）": ["紙錢", "掃墓", "踏青", "斷魂", "杏花村", "梨花", "清明", "禁煙", "秋千", "新煙", "新火", "雨紛紛"],
+  "寒食（清明節前一兩天）": ["禁煙", "冷食", "傳蠟燭", "御柳", "寒食", "禦柳", "無新火"],
+  "端午（農曆5月5日）": ["角黍", "粽", "楚江", "雄黃", "艾符", "蒲酒", "兩龍躍出", "端午", "屈原", "艾草", "菖蒲", "龍舟", "競渡", "標", "雄黃酒"]
+};
+
+// 資料區 (節慶詩詞題庫：包含語譯與解析)
+const quizData = [
+  // 七夕
+  { question: "迢迢牽牛星，皎皎河漢女。 纖纖摸素手，札札弄機杼。終日不成章，泣涕零如雨。 河漢清且淺，相去復幾許。盈盈一水間，脈脈不得語。", answer: "七夕（農曆7月7日）", literal: "遙遠的牽牛星，明亮的分織女星。纖細的雙手擺弄著織機，札札地織著布。一整天也織不成布，眼淚像雨一樣落下。銀河清澈且淺，相距又有多遠呢？只隔著一條清澈的銀河，只能含情脈脈相望而無法交談。", analysis: "📝 描寫天上遙遠的牽牛星與織女星（河漢女），隔著清淺的銀河相望卻無法言語，帶出七夕牛郎織女的神話。" },
+  { question: "未會牽牛意若何，須邀織女弄金梭。年年乞與人間巧，不道人間巧已多。", answer: "七夕（農曆7月7日）", literal: "不知道牽牛星心裡怎麼想，總要邀請織女星擺弄金梭織布。年年都讓人間向她乞求靈巧的手藝，卻不知道人間的機巧已經夠多了。", analysis: "📝 提到「牽牛」、「織女」以及民間在七夕時「乞巧」（祈求女紅手藝靈巧）的習俗。" },
+  { question: "今日雲駢渡鵲橋，應非脈脈與迢迢。家人竟喜開妝鏡，月下穿針拜九宵。", answer: "七夕（農曆7月7日）", literal: "今天牛郎織女乘著雲車渡過鵲橋相會，應該不再是只能含情脈脈遙遠相望了。家中的婦女們竟也歡喜地打開梳妝鏡，在月光下穿針引線，向著九霄天空祭拜。", analysis: "📝 點出「鵲橋」相會，以及民間女子在月下「穿針」乞巧的七夕傳統習俗。" },
+  { question: "一道鵲橋橫渺渺，千聲玉佩過玲玲。別離還有經年客，悵望不如河鼓星。", answer: "七夕（農曆7月7日）", literal: "一道鵲橋橫跨在浩渺的銀河上，仙人們經過時玉佩發出清脆的玲玲聲。人間還有長年在外無法回家的離客，他們惆悵遠望，感嘆自己連一年能相見一次的河鼓星（牛郎星）都不如。", analysis: "📝 描寫「鵲橋」橫跨天際，以及代表牛郎的「河鼓星」，感嘆人間離別有時還不如牛郎織女每年能相見一次。" },
+  { question: "纖雲弄巧，飛星傳恨，銀漢迢迢暗渡。 金風玉露一相逢，便勝卻人間無數。柔情似水，佳期如夢，忍顧鵲橋歸路！", answer: "七夕（農曆7月7日）", literal: "纖薄的雲彩變幻出精巧的形狀，流星傳遞著牛郎織女的離愁，他們悄悄渡過遙遠的銀河相會。在這秋風白露的七夕佳節相逢，勝過了人間無數平凡的相聚。柔情像水一般綿長，美好的相會卻像夢一樣短暫，怎麼忍心回頭看那鵲橋的歸路！", analysis: "📝 北宋秦觀的名作，描寫牛郎織女在秋天（金風玉露）藉由「鵲橋」跨越銀漢相會，表達超越時間與空間的深情。" },
+  // 中秋
+  { question: "皓魄當空寶鏡升，雲間仙籟寂無聲； 平分秋色一輪滿，長伴雲衢千裏明。", answer: "中秋（農曆8月15日）", literal: "明亮的分月亮像寶鏡一樣升上夜空，雲間的仙樂寂靜無聲；在這平分秋色的中秋佳節，一輪滿月長久地伴隨著雲路，照亮千里。", analysis: "📝 描寫「平分秋色」的中秋佳節，天上猶如升起一面寶鏡般圓滿明亮的月亮。" },
+  { question: "天將今夜月，一遍洗寰瀛。 暑退九霄凈，秋澄萬景清。", answer: "中秋（農曆8月15日）", literal: "上天用今夜的明月，將整個世界洗滌了一遍。暑氣消退，天空純淨，秋色清明，萬物都顯得無比清晰。", analysis: "📝 描寫秋天暑氣消退、秋高氣爽，今夜的明月特別清朗，照拂著整個世界。" },
+  { question: "明月幾時有？把酒問青天。 不知天上宮闕，今夕是何年？我欲乘風歸去，又恐瓊樓玉宇， 高處不勝寒！", answer: "中秋（農曆8月15日）", literal: "什麼時候才有明月？我端起酒杯詢問青天。不知道天上的神仙宮殿，今晚是哪一年？我想要乘風飛回天上去，又怕那用美玉建成的宮殿太高，讓人承受不住寒冷！", analysis: "📝 蘇軾著名的《水調歌頭》，在中秋夜飲酒賞「明月」，遙想天上的宮闕與神仙世界。" },
+  { question: "人有悲歡離合，月有陰晴圓缺，此事古難全。但願人長久，千裏共嬋娟。", answer: "中秋（農曆8月15日）", literal: "人生有悲傷、歡樂、離別、重聚，月亮有陰暗、晴朗、圓滿、殘缺，這種事自古以來就很難十全十美。只希望我們都能平安長壽，即使相隔千里，也能共同欣賞這美麗的月光。", analysis: "📝 蘇軾《水調歌頭》名句，藉由「月」的圓缺比喻人生的離合，祝願親人平安，即使相隔千里也能共賞中秋明月（嬋娟）。" },
+  { question: "暮雲收盡溢清寒，銀漢無聲轉玉盤，此生此夜不長好，明月明年何處看。", answer: "中秋（農曆8月15日）", literal: "傍晚的雲彩散盡，散發出清冷的寒意，銀河靜默無聲，明月像玉盤一樣在夜空中轉動。這一生中這樣美好的夜晚不會長久，不知道明年的明月，我會在哪裡觀賞呢？", analysis: "📝 蘇軾《中秋月》，將中秋滿月比喻為「玉盤」，感嘆良宵美景難以長久，不知明年中秋又將在哪裡賞月。" },
+  { question: "一輪秋影轉金波，飛鏡又重磨。 把酒問姮娥：被白發欺人奈何！", answer: "中秋（農曆8月15日）", literal: "秋天的滿月灑下金色的光波，就像重新打磨過飛上天的銅鏡。我端起酒杯問月宮裡的嫦娥：對於無情白髮催人老去，我們能有什麼辦法呢！", analysis: "📝 描寫秋夜明月如飛鏡般明亮，詩人飲酒對月感嘆，甚至問起月宮中的「姮娥」（嫦娥）關於人會衰老的無奈。" },
+  { question: "孤影看分雁，千金念弊貂；故鄉秋憶月，異國夜驚潮。手未攀丹桂，以猶卷緣蕉；登樓悲作賦，西望海天遙。", answer: "中秋（農曆8月15日）", literal: "孤單的身影看著離群的大雁，雖然身無分文依然懷念著破舊的貂皮大衣。秋天在異鄉思念故鄉的明月，夜晚被異國的潮水聲驚醒。科舉還未考中（未攀丹桂），連芭蕉葉都還沒舒展；登樓悲傷地作詩，向西望去只見海天遙遠。", analysis: "📝 描寫身在異國，在秋夜看見明月而思念故鄉，並提到「攀丹桂」（古代比喻科舉高中，桂花也與中秋相關）。" },
+  { question: "星稀月冷逸銀河，萬籟無聲自嘯歌；何處關山家萬裏，夜來棖觸客愁多。", answer: "中秋（農曆8月15日）", literal: "星星稀少、月光清冷，銀河橫跨天際，萬物寂靜無聲，我獨自吟唱著歌。不知在哪裡的關山之外，距離故鄉有萬里之遙，夜晚的月色觸動了遊子無盡的愁緒。", analysis: "📝 描繪月明星稀的秋夜（星稀月冷），引發遠方遊子濃濃的思鄉客愁。" },
+  { question: "夜深沈，明月高掛天正中，寂無聲；睡眼朦朧，恍若夢中；生臥徘徊以不寧，故國家園縈腦中；苦煎熬，歸去成空，如焚王衷。", answer: "中秋（農曆8月15日）", literal: "夜色深沉，明月高高掛在天空正中央，寂靜無聲。睡眼朦朧間，彷彿在夢中；躺在床上翻來覆去不得安寧，故鄉的家園縈繞在腦海裡。內心痛苦煎熬，回家的願望落空，心急如焚。", analysis: "📝 描寫深夜「明月高掛天正中」，觸動了對故國家園的深切思念與煎熬。" },
+  // 元宵
+  { question: "法輪天上轉，梵聲天上來； 燈樹千光照，花焰七枝開。月影疑流水，春風含夜梅； 燔動黃金地，鐘發琉璃臺。", answer: "元宵（農曆1月15日）", literal: "宛如法輪在天上轉動，佛音從天而降；萬千燈火照亮了燈樹，煙花像盛開的七枝花。月光倒影看起來像流動的水，春風中夾帶著夜晚梅花的香氣；燈火閃耀著大地，鐘聲從琉璃台傳來。", analysis: "📝 描寫元宵節燈會的盛況，「燈樹千光照」展現了節日當晚繁華絢麗的燈火。" },
+  { question: "火樹銀花合，星橋鐵鎖開， 燈樹千光照。明月逐人來。遊妓皆穠李，行歌盡落梅。 金吾不禁夜，玉漏莫相催。", answer: "元宵（農曆1月15日）", literal: "絢麗的燈火像火樹銀花一樣交織，星橋上的鐵鎖也打開了。燈火照亮了千棵樹，明月彷彿跟著人們走來。出遊的女子們打扮得像桃花李花般嬌豔，邊走邊唱著《梅花落》的歌曲。今晚京城沒有宵禁，只希望計時的玉漏不要催促著天明。", analysis: "📝 蘇味道《正月十五夜》，提到「火樹銀花」、「星橋」、「金吾不禁夜」（元宵節特別解除宵禁），是描寫元宵盛景的名作。" },
+  { question: "玉漏銅壺且莫催，鐵關金鎖徹夜開; 誰家見月能閑坐，何處聞燈不看來。", answer: "元宵（農曆1月15日）", literal: "計時的漏壺請不要催促著時間流逝，城門的鐵鎖今晚徹夜敞開。在這樣美好的月色下，有哪家的人能安坐家中？聽說哪裡有熱鬧的燈會，誰不趕緊跑來看呢？", analysis: "📝 崔液《上元夜》，描寫元宵節（上元）京城徹夜開城門，家家戶戶都出門賞月、「看燈」的熱鬧景象。" },
+  { question: "千門開鎖萬燈明，正月中旬動地京。 三百內人連袖舞，一進天上著詞聲。", answer: "元宵（農曆1月15日）", literal: "千家萬戶打開大門，萬盞花燈明亮，正月中旬的元宵節驚動了整個京城。三百名宮女手牽著手跳舞，歌聲彷彿傳到了天上。", analysis: "📝 張祜《正月十五夜燈》，明確點出「正月中旬」（農曆正月十五）萬燈齊明的元宵節盛況。" },
+  { question: "月色燈山滿帝都，香車寶蓋隘通衢。 身閑不睹中興盛，羞逐鄉人賽紫姑。", answer: "元宵（農曆1月15日）", literal: "皎潔的月色與如山的燈火充滿了整個長安城，華麗的馬車擁擠在寬闊的街道上。我身處閒職，沒能親眼目睹國家中興的盛況，只好慚愧地跟著鄉下人去參與迎紫姑（廁神）的習俗。", analysis: "📝 李商隱《觀燈》，描寫帝都長安元宵節「燈山」與車馬喧囂，以及民間「賽紫姑」（迎廁神）的元宵習俗。" },
+  { question: "元宵爭看采蓮船，寶馬香車拾墜鈿；風雨夜深人散盡，孤燈猶喚賣湯元。", answer: "元宵（農曆1月15日）", literal: "元宵節大家爭相觀看採蓮船的花燈，寶馬香車經過後，地上還遺留著女子掉落的首飾。直到深夜風雨交加、人群散盡後，還能聽到孤燈下傳來叫賣湯圓的聲音。", analysis: "📝 姜白石詩，不僅直接點出「元宵」，還生動描寫了燈會散去後，深夜裡還有叫賣「湯元」的聲音。" },
+  { question: "東風夜放花千樹，更吹落，星如雨。寶馬雕車香滿路，鳳蕭聲動，壺光轉，一夜魚龍舞 。", answer: "元宵（農曆1月15日）", literal: "春風在夜晚彷彿吹開了千樹繁花（指花燈），又把煙火吹落得像流星雨一般。華麗的馬車在路上留下陣陣香氣，悠揚的簫聲傳來，月光隨著時間流轉，魚龍形狀的花燈整夜舞動著。", analysis: "📝 辛棄疾著名的《青玉案·元夕》，描寫元宵節（元夕）燈火輝煌如花千樹、煙火如星雨，以及魚龍花燈飛舞的極盛景象。" },
+  { question: "去年元夜時，花市燈如晝。 月到柳梢頭，人約黃昏後。今年元夜時，月與燈依舊。 不見去年人，淚濕春衫袖。", answer: "元宵（農曆1月15日）", literal: "去年元宵夜時，花市的燈火明亮得像白天一樣。當月亮升上柳樹梢頭時，我們相約在黃昏後見面。今年的元宵夜，月亮和花燈還和去年一樣。卻再也見不到去年相約的那個人，淚水打濕了我的春衫衣袖。", analysis: "📝 歐陽修《生查子·元夕》，透過「元夜」（元宵夜）的「花市燈如晝」，對比去年與今年的人事全非。" },
+  { question: "袨服華妝著處逢 ，六街燈火鬧兒童 。 長衫我亦何為者 ，也在遊人笑語中。", answer: "元宵（農曆1月15日）", literal: "到處都可以遇到穿著華麗服裝的人們，大街小巷的燈火中孩童們正在嬉鬧。穿著長衫的我又是來做什麼的呢？其實我也正沉浸在遊客們的歡聲笑語之中。", analysis: "📝 元好問《京都元夕》，描寫人們穿著華麗的服裝，在「六街燈火」中熱鬧遊玩過元宵的景象。" },
+  { question: "月滿冰輪，燈燒陸海，人踏春陽。三美事方堪勝賞，四無情可恨難長。怕的是燈暗光芒，人靜荒涼，角品南樓，月下西廂。", answer: "元宵（農曆1月15日）", literal: "滿月像冰輪一樣高懸，大地的花燈像火海般燃燒，人們在春光中踏青。這三件美好的事才稱得上絕佳的賞玩，可惜時光無情，美好的事物難以長久。最怕的就是燈光漸暗、人潮散去後的荒涼，只聽見南樓吹起號角，月光照著西廂房。", analysis: "📝 描寫元宵節有滿月（冰輪）、滿地花燈（燈燒陸海）、以及踏春遊玩的三件美事。" },
+  { question: "有燈無月不娛人，有月無燈不算春。 春到人間人似玉， 燈燒月下月如銀。", answer: "元宵（農曆1月15日）", literal: "如果只有花燈而沒有明月，就無法讓人盡興；如果有明月卻沒有花燈，也算不上真正的春節。春天來到人間，人們的面貌像玉一樣美好，燈火在月光下燃燒，月色像白銀一樣皎潔。", analysis: "📝 唐寅《元宵》，點出元宵節必須同時具備「明月」與「花燈」才算完美，燈月交輝正是元宵特色。" },
+  { question: "百枝火樹千金屧，寶馬香塵不絕。飛瓊結伴試燈來，忍把檀郎輕別。", answer: "元宵（農曆1月15日）", literal: "點燃無數的火樹銀花，穿著珍貴鞋子的女子們走在街上，華麗的馬車帶起陣陣香塵。美麗的仙女們結伴來看「試燈」，怎麼忍心輕易與情郎道別呢。", analysis: "📝 描寫元宵節前夕「試燈」的習俗，火樹銀花、寶馬香車絡繹不絕的熱鬧景象。" },
+  { question: "桂花香餡裹胡桃，江米如珠井水淘。見說馬家滴粉好，試燈風裏賣元宵。", answer: "元宵（農曆1月15日）", literal: "用桂花香氣的餡料包裹著胡桃，把像珍珠般的糯米用井水淘洗。聽說馬家製作的湯圓粉質特別好，就在試燈的微風中賣起了元宵。", analysis: "📝 符曾《上元竹枝詞》，非常寫實地描寫了製作與販賣「元宵」（湯圓）的材料與情景。" },
+  { question: "正憐火樹千春妍，忽見清輝映月闌。 出海鮫珠猶帶水，滿堂羅袖欲生寒。", answer: "元宵（農曆1月15日）", literal: "正欣賞著火樹銀花般的燈火多麼美麗，忽然看見清朗的月光映照在欄杆上。月亮就像剛出海的珍珠還帶著水氣，讓滿堂穿著絲綢衣袖的人們感到一絲寒意。", analysis: "📝 描寫元宵節賞「火樹」花燈時，同時也看見清朗的滿月清輝灑落的優美畫面。" },
+  // 冬至
+  { question: "天時人事日相催，冬至陽生春又來。 刺繡五紋添弱線，吹葭六管動飛灰。岸容待臘將舒柳，山意衝寒欲放梅。", answer: "冬至（國曆12月21或22日）", literal: "大自然與人間的事物每天都在互相催促，冬至到來，陽氣萌生，春天又要來臨了。白天漸長，婦女們刺繡可以多添幾根線；吹動蘆葦管裡的飛灰，用來預測節氣。江岸等待著臘月的到來，即將舒展柳葉；山中的寒意正濃，梅花卻已準備綻放。", analysis: "📝 杜甫《小至》，明確點出「冬至陽生」，並提到古代冬至「添弱線」（女工日長）與「吹葭動灰」（測氣候）的習俗。" },
+  { question: "邯鄲驛裏逢冬至，抱膝燈前影伴身。想得家中夜深坐，還應說著遠行人。", answer: "冬至（國曆12月21或22日）", literal: "在邯鄲的驛站裡正好遇上了冬至節，我只能抱著膝蓋坐在燈前，只有影子陪伴著我。想必家裡的人今夜也會坐到很晚，而且應該正在談論著我這個遠行在外的人吧。", analysis: "📝 白居易《邯鄲冬至夜思家》，詩題與內容皆點明「冬至」，表達在冬至佳節獨自客居異鄉、思念家人的孤寂。" },
+  // 春節/除夕
+  { question: "事關休戚已成空，萬裏相思一夜中。愁到曉雞聲絕後，又將憔悴見春風。", answer: "春節（農曆1月1日）", literal: "關乎禍福的事都已經落空，萬里的相思之情都集中在這一夜。一直發愁到破曉的雞鳴聲停止後，又將拖著憔悴的面容去迎接春風（新年）。", analysis: "📝 描寫跨年之夜（除夕到春節）萬里相思，熬過一夜直到破曉雞鳴，又迎來了新的一年（見春風）。" },
+  { question: "爆竹聲中一歲除，春風送暖入屠蘇；千門萬戶瞳瞳日，總把新桃換舊符。", answer: "春節（農曆1月1日）", literal: "在爆竹聲中舊的一年過去了，春風送來了溫暖，人們喝著屠蘇酒。初升的太陽照耀著千家萬戶，大家總會把舊的春聯取下，換上新的桃符。", analysis: "📝 王安石《元日》，描寫春節的經典習俗：放爆竹、喝屠蘇酒、將舊的桃符換成新的春聯（新桃換舊符）。" },
+  { question: "一年滴盡蓮花漏，碧井屠蘇沈凍酒。 曉寒料峭尚欺人，春態苗條先到柳。", answer: "春節（農曆1月1日）", literal: "計時的蓮花漏滴盡了最後一滴，代表一年已經結束，井水冷冽，屠蘇酒浸泡在寒冷的井中。清晨的微寒依舊刺骨逼人，但春天輕盈的姿態已經先一步來到了柳樹的枝頭上。", analysis: "📝 毛滂《玉樓春》，提到一年到了盡頭，過年時飲「屠蘇酒」，並感受到春天已悄悄來到柳樹梢。" },
+  { question: "乾坤空落落，歲月去堂堂； 末路驚風雨，窮邊飽雪霜。命隨年欲盡，身與世俱忘； 無復屠蘇夢，挑燈夜未央。", answer: "春節（農曆1月1日）", literal: "天地間空空蕩蕩，歲月卻無情地流逝。走到窮途末路經歷了驚風駭雨，在荒涼的邊疆飽受冰雪嚴寒。生命隨著這一年即將走到盡頭，我的身體和這世界彷彿都被遺忘了。再也不會有過年喝屠蘇酒的閒情，只能在漫長的冬夜裡挑著油燈。", analysis: "📝 文天祥《除夜》，描寫年關將盡、挑燈夜伴，感嘆自己流落邊疆，再也沒有過年喝「屠蘇」酒的閒情。" },
+  { question: "天地風霜盡，乾坤氣象和； 歷添新歲月，春滿舊山河。梅柳芳容徲，松篁老態多； 屠蘇成醉飲，歡笑白雲窩。", answer: "春節（農曆1月1日）", literal: "天地間的風霜已經散盡，大自然的氣象變得溫和。日曆上又增添了新的歲月，春天佈滿了這片舊有的山河。梅花與柳樹展現出美麗的姿態，松竹卻顯得有些蒼老。人們醉飲著屠蘇酒，在如白雲般美好的家園中歡笑。", analysis: "📝 葉顒《已酉新正》，描繪過年時風霜散盡、氣象和暖，人們歡慶「添新歲月」並醉飲「屠蘇」酒。" },
+  { question: "巧裁幡勝試新羅，畫彩描金作鬧蛾；從此剪刀閑一月，閨中針線歲前多。", answer: "春節（農曆1月1日）", literal: "巧妙地剪裁出各種頭飾，試穿著新做的絲羅衣裳；在紙上畫彩描金做成鬧蛾狀的裝飾品。過完年後剪刀將會閒置一整個月，所以婦女們在過年前趕製針線活特別多。", analysis: "📝 查慎行《鳳城新年詞》，描寫過年前閨中婦女忙著趕製新衣、裝飾（歲前多），過年後一個月就不動針線的習俗。" },
+  { question: "蕭疏白發不盈顛，守歲圍爐竟廢眠。 剪燭催幹消夜酒，傾囊分遍買春錢。", answer: "春節（農曆1月1日）", literal: "稀疏的白髮已經長不滿頭頂了，除夕夜守歲圍爐竟然完全不想睡。剪亮燭芯，催促著喝乾宵夜的酒，把口袋裡的錢全都倒出來，分給大家當作壓歲錢（買春錢）。", analysis: "📝 描寫除夕跨越春節的習俗，包括「守歲」、「圍爐」不眠，以及分發「買春錢」（壓歲錢）。" },
+  { question: "聽燒爆竹童心在，看換桃符老興偏。鼓角梅花添一部，五更歡笑拜新年。", answer: "春節（農曆1月1日）", literal: "聽見燒爆竹的聲音，我的童心依然還在；看著大家換上新的桃符，老年人的興致也特別高。軍營傳來吹奏《梅花落》的鼓角聲，到了五更天亮時，大家歡笑著互相拜新年。", analysis: "📝 孔尚任《甲午元旦》，具體描繪了春節的歡樂氣氛：燒爆竹、換桃符，到了五更天亮大家歡笑著「拜新年」。" },
+  { question: "共慶新年笑語嘩，紅巖士女贈梅花； 舉杯互敬屠蘇酒，散席分嘗勝利茶。", answer: "春節（農曆1月1日）", literal: "大家一起歡慶新年，笑語喧嘩，紅巖的男男女女互相贈送梅花。舉起酒杯互相敬飲屠蘇酒，散席後大家分享著勝利的茶水。", analysis: "📝 董必武《元旦口占用柳亞子懷人韻》，描寫大家共慶新年、互敬「屠蘇酒」的熱鬧聚會。" },
+  // 重陽
+  { question: "人生易老天難老，歲歲▢▢， 今又▢▢，戰地黃花分外香。一年一度秋風勁，不似春光， 勝似春光，寥廓江天萬裏霜。", answer: "重陽（農曆9月9日）", literal: "人生容易衰老，但大自然卻不會老去；每年都有重陽節，今天又迎來了重陽，戰地裡盛開的菊花顯得格外芬芳。一年一度的秋風吹得強勁，雖然不像春天的風光，卻勝過春天的風光，廣闊的江面與天空覆蓋著萬里的秋霜。", analysis: "📝 毛澤東《採桑子》，原詞為「歲歲重陽，今又重陽」。描寫秋天重陽節時，戰地盛開的菊花（黃花）特別芳香。" },
+  { question: "獨在異鄉為異客，每逢佳節倍思親。遙知兄弟登高處，遍插茱萸少一人。", answer: "重陽（農曆9月9日）", literal: "我獨自一個人在外地作客，每當遇到佳節就更加思念親人。我在遠方想到，兄弟們今天登高望遠的時候，大家頭上都插戴了茱萸，卻唯獨少了我一個人。", analysis: "📝 王維《九月九日憶山東兄弟》，點出重陽節最重要的兩大習俗：「登高」與「插茱萸」。" },
+  { question: "江涵秋影雁初飛，與客攜壺上翠微。 塵世難逢開口笑，菊花須插滿頭歸。但將酩酊酬佳節，不作登臨恨落暉。", answer: "重陽（農曆9月9日）", literal: "江水倒映著秋天的景色，大雁剛剛開始南飛。我帶著客人提著酒壺登上翠綠的山丘。人世間很難有開懷大笑的時刻，今天一定要把菊花插滿頭才回去。我們只管喝得大醉來慶祝佳節，不要在登高時感嘆夕陽的落下。", analysis: "📝 杜牧《九日齊山登高》，描寫重陽節秋高氣爽時，帶酒「上翠微」（登高），並把「菊花」插滿頭的狂放。" },
+  { question: "昨日登高罷，今朝再舉觴。 菊花何太苦，遭此兩▢▢。", answer: "重陽（農曆9月9日）", literal: "昨天才剛登高完畢，今天早晨又再次舉起酒杯。菊花有多麼辛苦啊，竟然要遭遇兩次重陽節的採摘。", analysis: "📝 李白《九月十日即事》，原詩為「遭此兩重陽」。因為閏月的關係過了兩次重陽節，詩人感嘆菊花要被採摘兩次。" },
+  { question: "九月九日眺山川，歸心望積風煙。他鄉共酌金花酒，萬裏同悲鴻雁天。", answer: "重陽（農曆9月9日）", literal: "在九月九日重陽節這天眺望山川景色，想回家的心意積聚在風煙之中。在異鄉與人共同飲著菊花酒，萬里之外的遊子們，看著滿天南飛的大雁，都同樣感到悲傷。", analysis: "📝 盧照鄰《九月九日玄武山旅眺》，點明「九月九日」重陽節，他鄉遊子登高眺望、共飲菊花酒（金花酒）抒發鄉愁。" },
+  { question: "九月九日望鄉臺，他席他鄉送客杯。人情已厭南中苦，鴻雁那從北地來。", answer: "重陽（農曆9月9日）", literal: "九月九日登上望鄉台，在異地他鄉的酒席上舉杯送別客人。我的心裡已經厭倦了在南方吃苦的日子，北方的鴻雁為何又要從故鄉飛來這裡呢。", analysis: "📝 王勃《蜀中九日》，也是在「九月九日」重陽節，登高望鄉、送別客人，見秋雁南飛而感傷。" },
+  { question: "莫將邊地比京都，八月嚴霜草已枯。今日登高樽酒裏，不知能有菊花無。", answer: "重陽（農曆9月9日）", literal: "不要把邊疆地區和京城相比，這裡八月就下了嚴霜，草木早已枯黃。今天登高飲酒的時候，不知道還能不能找到菊花來欣賞。", analysis: "📝 王之渙《九日送別》，在邊塞度過重陽節，感嘆北方天寒草枯，今日「登高」飲酒，卻不知道有沒有「菊花」可賞。" },
+  { question: "黃花紫菊傍籬落，摘菊泛酒愛芳新。不堪今日望鄉意，強插茱萸隨眾人。 ", answer: "重陽（農曆9月9日）", literal: "黃色與紫色的菊花開在籬笆旁，摘下菊花泡在酒裡，喜愛它新鮮的芳香。今天實在難以忍受望鄉的悲愁，只能勉強跟隨眾人一起在頭上插上茱萸。", analysis: "📝 楊衡《九日》，描寫重陽節摘「菊花」泡酒，並跟隨眾人強顏歡笑「插茱萸」的思鄉之情。" },
+  { question: "▢▢開秋節，得一動宸儀。 金風飄菊蕊，玉露泣萸枝。睿覽八紘外，天文七曜披。 臨深應在即，居高豈忘危。", answer: "重陽（農曆9月9日）", literal: "重陽節開啟了秋季的佳節，皇帝也為此出遊。秋風吹拂著菊花的花蕊，露水滴在茱萸的枝條上就像在哭泣。皇帝的目光遍及天下八方，天文與日月星辰都展露無遺。雖然身處安定的環境，居於高位又怎麼能忘記危險呢。", analysis: "📝 韋安石《奉和九日幸臨渭亭登高》，原詩為「重九開秋節」。詩中描寫了秋風吹拂「菊蕊」與沾滿露水的「萸枝」（茱萸）。" },
+  { question: "薄霧濃雲愁永晝，瑞腦銷金獸。 佳節又▢▢，玉枕紗櫥，半夜涼初透。東籬把酒黃昏後，有暗香盈袖。莫道不銷魂，簾卷西風，人比黃花瘦！ ", answer: "重陽（農曆9月9日）", literal: "薄霧與濃雲讓人為了漫長的白天而發愁，金獸香爐裡的瑞腦香快要燒完了。又到了重陽佳節，睡在玉枕和紗帳裡，半夜剛開始感覺到秋涼穿透。黃昏時在東邊籬笆旁飲酒，菊花的暗香盈滿了衣袖。不要說這不會讓人黯然神傷，當西風捲起珠簾，裡面的人兒已經消瘦得比菊花還要單薄了！", analysis: "📝 李清照《醉花陰》，原詞為「佳節又重陽」。描寫重陽節在東籬飲酒賞菊，思念丈夫以至於「人比黃花瘦」。" },
+  { question: "心逐南雲逝，形隨北雁來。 故鄉籬下菊，今日幾花開？", answer: "重陽（農曆9月9日）", literal: "我的心追逐著南飛的雲朵遠去，身體卻隨著北方的鴻雁來到此地。故鄉籬笆下種的菊花，今天又開了多少朵呢？", analysis: "📝 江總《於長安歸還揚州九月九日行薇山亭賦韻》，在秋天大雁紛飛時節思鄉，惦記著故鄉籬笆下的「菊花」開了多少。" },
+  { question: "題紅葉清流禦溝，賞黃花人醉歌樓。 天長雁影稀，月落山容瘦。冷清清暮秋時候，衰柳寒蟬一片愁， 誰肯教白衣送酒。", answer: "重陽（農曆9月9日）", literal: "把詩題在紅葉上讓它順著皇宮的清流漂走，在歌樓上賞著菊花喝得大醉。天空遼闊，大雁的身影稀少，月亮落下後山顯得更瘦削了。在這冷冷清清的晚秋時節，衰敗的柳樹和寒蟬惹起一片愁緒，有誰會像陶淵明的朋友那樣派個穿白衣的人來送酒呢？", analysis: "📝 白樸《沉醉東風》，描寫暮秋時賞「黃花」（菊花），並用到陶淵明重陽節「白衣送酒」的著名典故。" },
+  { question: "三載▢▢菊，開時不在家。 何期今日酒，忽對故園花。野曠雲連樹，天寒雁聚沙。 登臨無限意，何處望京華。", answer: "重陽（農曆9月9日）", literal: "連續三年的重陽節菊花盛開時，我都不在家裡。沒想到今天的這杯酒，竟然能對著故鄉的花朵來喝。原野空曠，雲彩連接著遠處的樹木，天氣寒冷，大雁聚集在沙灘上。今天登高有著無限的感慨，不知要向哪裡去眺望京城呢。", analysis: "📝 文天祥《重陽》，原詩為「三載重陽菊」。感嘆連續三年重陽菊花開時都不在家，今年登臨遠望，無限感慨。" },
+  // 除夕
+  { question: "除夕更闌人不睡，厭禳鈍滯迫新歲；小兒呼叫走長街，雲有癡呆召人賣。", answer: "除夕（農曆12月最後一天）", literal: "除夕夜深了，人們都不睡覺，為了驅除晦氣迎接新的一年。小孩子們在長長的街道上奔跑呼喊著，說要把自己的「痴呆」賣給別人。", analysis: "📝 范成大《賣癡呆詞》，非常具體地描寫「除夕更闌」人們守歲不睡，以及吳地小孩在街上呼叫「賣癡呆」的傳統趣俗。" },
+  // 清明
+  { question: "滿衣血淚與塵埃，亂後還鄉亦可哀。風雨梨花寒食過，幾家墳上子孫來？", answer: "清明（國曆4月5日或6日）", literal: "衣服上沾滿了血淚與塵土，經歷戰亂後回到故鄉也令人感到悲哀。在風雨打落梨花的寒食節過去後，不知道還有幾戶人家的墳前會有子孫來祭拜掃墓？", analysis: "📝 高翥《秋日即事》，在寒食節過後（即清明節），感嘆戰亂過後，不知道還有幾戶人家能有子孫來「掃墓」。" },
+  { question: "問西樓禁煙何處好？ 綠野晴天道。 馬穿楊柳嘶，人倚秋千笑，探鶯花總教春醉倒。", answer: "清明（國曆4月5日或6日）", literal: "請問西樓附近寒食禁煙時哪裡的風景最好？就是那綠野晴天的道路上。馬兒穿梭在楊柳間嘶鳴，人們倚靠在鞦韆上歡笑，尋找黃鶯與春花，這春天的美景總讓人沉醉。", analysis: "📝 張可久《清江引·清明日出遊》，雖提到「禁煙」（寒食），但也描寫了人們在風和日麗的春天出外踏青、盪「秋千」的清明遊玩景致。" },
+  { question: "▢▢時節雨紛紛，路上行人欲斷魂。借問酒家何處有？牧童遙指杏花村。", answer: "清明（國曆4月5日或6日）", literal: "清明時節春雨連綿不斷，路上的行人因為傷春思親而愁苦得彷彿失去靈魂。請問哪裡可以找到酒家喝酒解愁呢？牧童遠遠地指著前方的杏花村。", analysis: "📝 杜牧《清明》，原詩為「清明時節雨紛紛」。是描寫清明節春雨綿綿、行人感傷掃墓最著名的詩作。" },
+  { question: "耕夫召募愛樓船，春草青青萬項田；試上吳門窺郡郭，清明幾處有新煙。", answer: "清明（國曆4月5日或6日）", literal: "農夫們被招募去喜愛的水軍樓船上服役，春天的青草長滿了萬頃農田。試著登上吳地的城門眺望城郭，清明節時分，有幾處人家生起了新火冒出新煙呢？", analysis: "📝 張繼《閶門即事》，直接點出「清明」時節，觀察城郭有幾處升起了代表寒食解禁後的「新煙」。" },
+  { question: "無花無酒過清明，興味蕭然似野僧。昨日鄰家乞新火，曉窗分與讀書燈。", answer: "清明（國曆4月5日或6日）", literal: "沒有花也沒有酒就這樣度過清明節，興致索然就像個山野僧人。昨天向鄰居討來寒食過後新點燃的火種，清晨在窗邊分出火光來點亮讀書的燈。", analysis: "📝 王禹偁《清明》，感嘆自己清明節過得清貧，並提到向鄰居乞求寒食過後所生的「新火」來點讀書燈。" },
+  { question: "梨花風起正清明，遊子尋春半出城。日暮笙歌收拾去，萬株楊柳屬流鶯。", answer: "清明（國曆4月5日或6日）", literal: "春風吹起梨花的時候正好是清明節，出門尋春踏青的遊客幾乎佔了半個城。到了傍晚，奏樂唱歌的人們收拾東西離去，這萬株楊柳又歸還給飛舞的流鶯了。", analysis: "📝 吳惟信《蘇堤清明即事》，描寫「清明」時節梨花盛開，人們紛紛出城「尋春」（踏青）的熱鬧景象。" },
+  { question: "宿草春風又，新阡去歲無。 梨花自寒食，進節只愁余。", answer: "清明（國曆4月5日或6日）", literal: "春風又吹綠了墳上的舊草，這座新墳在去年還是沒有的。梨花在寒食節裡自顧自地開著，每逢過節只會讓我感到無比愁苦。", analysis: "📝 楊萬里《寒食上塚》，描寫寒食、清明時節梨花盛開，來到新墳（新阡）前為逝去的親人掃墓的哀愁。" },
+  { question: "莫辭盞酒十分勸，只恐風花一片紅；況是▢▢好天氣，不妨遊衍莫忘歸。", answer: "清明（國曆4月5日或6日）", literal: "請不要推辭我頻頻勸你喝下的這杯酒，只怕一陣風吹過，紅花就落滿地了。更何況今天是清明節的晴朗好天氣，不妨多在外面遊玩，但也別忘了早點回家。", analysis: "📝 程顥《郊行即事》，原詩為「況是清明好天氣」。描繪清明時節天氣晴朗，勸人趁著春光出外遊玩（踏青）。" },
+  // 寒食
+  { question: "馬上逢寒食，途中屬暮春。 可憐江浦望，不見洛橋人。北極懷明主，南溟作逐臣。 故園腸斷處，日夜柳條新。", answer: "寒食（清明節前一兩天）", literal: "在騎馬趕路途中遇上了寒食節，這個時節已經到了晚春。可憐我望著長江的岸邊，卻看不到故鄉洛陽橋上的人。我身在遙遠的南方，心裡仍懷念著北方的聖明君主，如今我卻是個被流放的臣子。想到故鄉就讓我肝腸寸斷，看著日夜生長出的新柳條更是傷感。", analysis: "📝 宋之問《途中寒食》，在暮春時節的旅途中遇到「寒食節」，看著日夜生長的新柳，引發被貶謫的斷腸鄉愁。" },
+  { question: "春城無處不飛花，寒食東風禦柳斜。日暮漢宮傳蠟燭，輕煙散入五侯家。", answer: "寒食（清明節前一兩天）", literal: "暮春的長安城裡到處都飄飛著落花，寒食節的東風吹斜了皇宮裡的柳樹。傍晚時分，皇宮裡傳賜著點燃的蠟燭，裊裊輕煙散入了那些權貴五侯的家中。", analysis: "📝 韓翃《寒食》，描寫長安城春花飛舞，「寒食」節當天皇帝破例賞賜燭火（傳蠟燭）給權貴（五侯）的特權現象。" },
+  // 端午
+  { question: "節分▢▢自誰言，萬古傳聞為屈原；堪笑楚江空渺渺，不能洗得直臣冤。", answer: "端午（農曆5月5日）", literal: "端午這個節日是從誰開始說起的呢？千古以來大家都傳說這一天是為了紀念屈原。可笑那汨羅江水白白地浩渺流淌，卻洗不清這位正直臣子蒙受的冤屈。", analysis: "📝 文秀《端午》，原詩為「節分端午」。明確指出端午節是為了紀念在楚江（汨羅江）投水殉國的忠臣「屈原」。" },
+  { question: "少年佳節倍多情，老去誰知感慨生； 不效艾符趨習俗，但祈蒲酒話升平。", answer: "端午（農曆5月5日）", literal: "年輕時遇到佳節總是特別多情，老了之後誰知道只會生出無限的感慨。我不再仿效別人掛艾草和符咒去迎合習俗，只祈求喝杯菖蒲酒，聊聊太平盛世。", analysis: "📝 殷堯藩《端午日》，提到端午節的民間習俗：懸掛「艾符」（艾草與符咒辟邪），以及飲用「蒲酒」（菖蒲酒）。" },
+  { question: "五月五日天晴明，楊花繞江啼曉鷹； 使君未出郡齋外，江上早聞齊和聲；", answer: "端午（農曆5月5日）", literal: "五月五日端午節這天天氣晴朗，江邊楊花飛舞，清晨老鷹在啼叫。太守大人還沒走出州府衙門，就已經聽到江上傳來龍舟競渡時整齊的呼喊聲了。", analysis: "📝 張建封《競渡歌》，點出「五月五日」端午節，官員還沒出門，就聽到江上傳來龍舟競渡的整齊呼喊聲。" },
+  { question: "鼓聲三下紅旗開，兩龍躍出浮水來；棹影斡波飛萬劍，鼓聲劈浪鳴千雷；", answer: "端午（農曆5月5日）", literal: "鼓聲敲了三下，紅旗一揮，兩條龍舟就像從水裡躍出來一樣。船槳在水波中翻轉，倒影就像千萬把利劍在飛舞，鼓聲劈開波浪，就像響起千陣雷聲。", analysis: "📝 張建封《競渡歌》，生動描繪了端午節賽龍舟（兩龍躍出）的激烈場面，鼓聲震天、水花如劍。" },
+  { question: "鼓聲漸急標將近，兩龍望標目如瞬； 坡上人呼霹靂驚，竿頭彩掛虹霓暈；前船搶水已得標，後船失勢空揮撓。", answer: "端午（農曆5月5日）", literal: "鼓聲越來越急促，眼看就要接近終點標杆了，兩艘龍舟的選手們都緊盯著目標目不轉睛。岸邊坡上的觀眾歡呼聲像霹靂般驚人，標杆上掛著的彩帶就像彩虹的光暈。前面的船搶得水勢已經奪得了錦標，後面的船失去優勢，只能徒勞地揮舞著船槳。", analysis: "📝 描寫端午龍舟競渡接近終點（奪標）時最緊張刺激的時刻，兩船爭先恐後，岸上觀眾歡呼如雷。" },
+  { question: "櫻桃桑椹與菖蒲，更買雄黃酒一壺。門外高懸黃紙帖，卻疑賬主怕靈符。", answer: "端午（農曆5月5日）", literal: "準備了櫻桃、桑椹和菖蒲，還買了一壺雄黃酒。大門外高高掛著畫上符咒的黃紙帖，不禁讓人懷疑討債的人是不是會怕這張靈符呢？", analysis: "📝 李靜山《節間初度》，列舉了豐富的端午習俗物品：菖蒲、雄黃酒，以及門外高懸辟邪的黃紙靈符。" },
+  { question: "端午偏逢風雨狂，村童仍著舊衣裳；相邀情重攜蓑笠，敢為泥深戀草堂。", answer: "端午（農曆5月5日）", literal: "端午節偏偏遇上狂風暴雨，村裡的孩子們依然穿著舊衣裳。因為互相邀約的情誼深厚，所以帶著蓑衣和斗笠也要出門，怎能因為泥巴太深就躲在茅草房裡不出來呢。", analysis: "📝 丘逢甲《竹枝詞》，描述雖然「端午」節碰上狂風暴雨，村童們仍不畏泥濘，穿著蓑衣斗笠互相邀約過節。" }
+];
+
+let appState = { currentMode: 'flashcard', deck: [], nextRoundDeck: [], currentIndex: 0, stats: { good: 0, bad: 0 }, isQuizAnswered: false, hasVisitedBack: false, round: 1, startTime: null, isWrongTraining: false };
+let modeStates = {};
+
+
+function startApp() { document.getElementById('instruction-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; initGame('flashcard'); }
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function formatPoem(text) { return text.replace(/\//g, '<br>'); }
+
+function highlightKeywords(text, answer, className = 'kw-blue-hl') {
+  if (!text) return "";
+  let result = text;
+  let highlightWords = keywordMap[answer] ? keywordMap[answer].split('、') : [];
+  if (extraHighlightMap[answer]) highlightWords = highlightWords.concat(extraHighlightMap[answer]);
+  
+  let cleanWords = [];
+  highlightWords.forEach(w => {
+      let clean = w.replace(/\(.*\)/g, '').trim();
+      if (clean) cleanWords.push(clean);
+      let match = w.match(/\((.*?)\)/);
+      if (match && match[1]) cleanWords.push(match[1].trim());
+      cleanWords.push(w.trim());
+  });
+  
+  cleanWords = [...new Set(cleanWords)].filter(Boolean);
+  cleanWords.sort((a, b) => b.length - a.length);
+
+  if (cleanWords.length > 0) {
+      const escapedWords = cleanWords.map(kw => kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      const regex = new RegExp(`(${escapedWords.join('|')})`, 'g');
+      result = result.replace(regex, `<span class="${className}">$1</span>`);
+  }
+  return result;
+}
+
+/* --- 錯題本 LocalStorage 核心模組 --- */
+function getWrongBook() {
+  try {
+    const data = localStorage.getItem('idiom_wrong_pool');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWrongBook(pool) {
+  try {
+    localStorage.setItem('idiom_wrong_pool', JSON.stringify(pool));
+  } catch (e) {}
+  renderWrongBook();
+}
+
+function addToWrongBook(item) {
+  if (!item) return;
+  const word = item.idiom || item.key || item.word || item.question || item.char || "";
+  let meaningStr = item.meaning || item.answer || item.translation || item.explanation || "";
+  let sentenceStr = item.sentence || item.question || item.original || "";
+  let pool = getWrongBook();
+  let exist = pool.find(x => (x.idiom || x.key || x.word || x.question || x.char) === word);
+
+  if (exist) {
+    exist.wrongCount = (exist.wrongCount || 1) + 1;
+    exist.lastWrongTime = new Date().getTime();
+  } else {
+    pool.push({
+      idiom: word,
+      meaning: meaningStr,
+      sentence: sentenceStr,
+      wrongCount: 1,
+      lastWrongTime: new Date().getTime(),
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(pool);
+}
+
+function removeFromWrongBook(word) {
+  let pool = getWrongBook();
+  pool = pool.filter(x => (x.idiom || x.key || x.word || x.question || x.char) !== word);
+  saveWrongBook(pool);
+}
+
+function renderWrongBook() {
+  const pool = getWrongBook();
+  const currentPool = pool.filter(x => x.chapter === QUIZ_TITLE);
+  
+  const countBadge = document.getElementById('wb-count-badge');
+  if (countBadge) {
+    countBadge.innerText = `目前單元共 ${currentPool.length} 個錯題 (累計全部單元共 ${pool.length} 個)`;
+  }
+
+  const btnFc = document.getElementById('wb-btn-fc');
+  const btnQuiz = document.getElementById('wb-btn-quiz');
+  if (btnFc) btnFc.disabled = currentPool.length === 0;
+  if (btnQuiz) btnQuiz.disabled = currentPool.length === 0;
+
+  const container = document.getElementById('wrong-list-container');
+  if (!container) return;
+
+  if (currentPool.length === 0) {
+    container.innerHTML = `<div class="wb-empty-msg">✨ 太棒了！本單元目前沒有任何錯題記錄。繼續保持！</div>`;
+    return;
+  }
+
+  let html = '';
+  currentPool.forEach(item => {
+    html += `
+      <div class="wb-item-card">
+        <div>
+          <div class="wb-item-title">
+            ${item.idiom}
+            <span class="wb-item-count">錯 ${item.wrongCount || 1} 次</span>
+          </div>
+          <div class="wb-item-meaning">${item.meaning}</div>
+        </div>
+        <button class="wb-del-btn" title="移出錯題本" onclick="removeFromWrongBook('${(item.idiom || '').replace(/'/g, "\\'")}');">🗑️</button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function clearCurrentWrongBook() {
+  if (!confirm("確定要清空『本單元』的所有錯題紀錄嗎？")) return;
+  let pool = getWrongBook();
+  pool = pool.filter(x => x.chapter !== QUIZ_TITLE);
+  saveWrongBook(pool);
+}
+
+function copyWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可複製！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}`).join('\n');
+  navigator.clipboard.writeText(text).then(() => alert("已複製本單元錯題至剪貼簿！"));
+}
+
+function downloadWrongBook() {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可下載！"); return; }
+  const text = pool.map((x, i) => `${i + 1}. ${x.idiom}：${x.meaning}${x.sentence ? '\n例句/題目：' + x.sentence : ''}`).join('\n\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${QUIZ_TITLE}_錯題本.txt`;
+  a.click();
+}
+
+function startWrongTraining(mode) {
+  const pool = getWrongBook().filter(x => x.chapter === QUIZ_TITLE);
+  if (pool.length === 0) { alert("目前沒有錯題可以進行特訓喔！"); return; }
+  
+  appState.isWrongTraining = true;
+  appState.currentMode = mode;
+  
+  const mainData = quizData;
+  appState.deck = pool.map(p => {
+    let found = mainData.find(v => (v.question || v.answer) === p.idiom);
+    return found || { question: p.sentence || p.idiom, answer: p.meaning || p.idiom };
+  });
+
+  if (mode !== 'flashcard') {
+    shuffleArray(appState.deck);
+  }
+
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`nav-btn-${mode}`) || document.querySelector(`.nav-btn[onclick*="${mode}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+  const targetModeDiv = document.getElementById(`${mode}-mode`);
+  if (targetModeDiv) targetModeDiv.classList.add('active');
+
+  appState.nextRoundDeck = []; 
+  appState.currentIndex = 0; 
+  appState.stats = { good: 0, bad: 0 }; 
+  appState.isQuizAnswered = false; 
+  appState.hasVisitedBack = false;
+  appState.startTime = new Date();
+
+  document.getElementById('summary-area').style.display = 'none';
+
+  const prefix = getPrefix(mode);
+  const badge = document.getElementById(`${prefix}-round-badge`);
+  if (badge) {
+    badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+    badge.style.backgroundColor = "var(--accent)";
+  }
+
+  updateStatsUI();
+  const cardEl = document.getElementById('card');
+  if (cardEl) cardEl.classList.remove('flipped');
+  
+  if (mode === 'flashcard') {
+    loadFlashcard();
+  } else if (mode === 'keyword') {
+    loadKeywordQuiz();
+  } else if (mode === 'quiz') {
+    loadQuiz();
+  }
+}
+
+function initGame(mode, isRetry = false) { 
+   appState.isWrongTraining = false;
+   if (mode === 'wrongBook') {
+     document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active'));
+     const wbMode = document.getElementById('wrongBook-mode');
+     if (wbMode) wbMode.classList.add('active');
+     renderWrongBook();
+     return;
+   } 
+   appState.currentMode = mode; 
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (isRetry && appState.nextRoundDeck.length > 0) { 
+       appState.deck = [...appState.nextRoundDeck]; 
+       appState.round++; 
+   } else { 
+       if (mode === 'keyword') {
+           appState.deck = Object.keys(keywordMap).map(key => ({ answer: key, type: 'keyword' }));
+       } else {
+           appState.deck = [...quizData]; 
+       }
+       appState.round = 1; 
+   }
+   
+   shuffleArray(appState.deck);
+   appState.nextRoundDeck = []; appState.currentIndex = 0; appState.stats = { good: 0, bad: 0 }; appState.isQuizAnswered = false; appState.hasVisitedBack = false; 
+   
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   
+   const prefix = getPrefix(mode);
+   const badge = document.getElementById(`${prefix}-round-badge`); 
+   if (badge) {
+     badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`; 
+     badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+   }
+   
+   updateStatsUI(); 
+   
+   if (mode === 'flashcard') {
+       const cardEl = document.getElementById('card');
+       if (cardEl) cardEl.classList.remove('flipped'); 
+       loadFlashcard();
+   } else if (mode === 'keyword') {
+       loadKeywordQuiz();
+   } else {
+       loadQuiz(); 
+   }
+}
+
+/* --- 跨模式進度保留的核心實現 (switchMode) --- */
+function switchMode(newMode) { 
+    const oldMode = appState.currentMode;
+    
+    // 1. 備份舊模式進度
+    if (oldMode && oldMode !== 'wrongBook') {
+        const summaryArea = document.getElementById('summary-area');
+        const summaryVisible = summaryArea ? summaryArea.style.display !== 'none' : false;
+        
+        modeStates[oldMode] = {
+            appState: JSON.parse(JSON.stringify(appState)),
+            summaryVisible: summaryVisible,
+            summaryText: summaryVisible ? document.getElementById('summary-text').innerHTML : '',
+            sendingStatusText: summaryVisible ? document.getElementById('sending-status').innerText : ''
+        };
+    }
+
+    // 更新導覽按鈕 UI
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active')); 
+    const targetNav = document.getElementById(`nav-btn-${newMode}`) || (event && event.target && event.target.classList.contains('nav-btn') ? event.target : null);
+    if (targetNav) targetNav.classList.add('active');
+
+    // 切換頁面容器
+    document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+
+    if (newMode === 'wrongBook') {
+        appState.currentMode = 'wrongBook';
+        const wbMode = document.getElementById('wrongBook-mode');
+        if (wbMode) wbMode.classList.add('active');
+        document.getElementById('summary-area').style.display = 'none';
+        renderWrongBook();
+        return;
+    }
+
+    const newContainer = document.getElementById(`${newMode}-mode`);
+    if (newContainer) newContainer.classList.add('active');
+
+    // 2. 恢復新模式進度或初始化
+    if (modeStates[newMode]) {
+        const saved = modeStates[newMode];
+        appState = JSON.parse(JSON.stringify(saved.appState));
+        appState.startTime = new Date(appState.startTime); // 還原 Date 物件
+
+        if (saved.summaryVisible) {
+            document.getElementById(`${getPrefix(newMode)}-game-area`).style.display = 'none';
+            document.getElementById('summary-text').innerHTML = saved.summaryText;
+            document.getElementById('sending-status').innerText = saved.sendingStatusText;
+            document.getElementById('summary-area').style.display = 'flex';
+        } else {
+            document.getElementById('summary-area').style.display = 'none';
+            document.getElementById(`${getPrefix(newMode)}-game-area`).style.display = 'block';
+            
+            if (newMode === 'flashcard') loadFlashcard();
+            else if (newMode === 'keyword') loadKeywordQuiz();
+            else if (newMode === 'quiz') loadQuiz();
+        }
+        updateStatsUI();
+    } else {
+        initGame(newMode, false);
+    }
+}
+
+function getPrefix(mode) {
+    if (mode === 'flashcard') return 'fc';
+    if (mode === 'keyword') return 'kw';
+    return 'qz';
+}
+
+function updateStatsUI() { 
+  const prefix = getPrefix(appState.currentMode);
+  if (appState.currentMode === 'flashcard') { 
+      const knownEl = document.getElementById(`${prefix}-known-count`);
+      const unknownEl = document.getElementById(`${prefix}-unknown-count`);
+      if (knownEl) knownEl.innerText = appState.stats.good; 
+      if (unknownEl) unknownEl.innerText = appState.stats.bad; 
+  } else { 
+      const correctEl = document.getElementById(`${prefix}-correct-count`);
+      const wrongEl = document.getElementById(`${prefix}-wrong-count`);
+      if (correctEl) correctEl.innerText = appState.stats.good; 
+      if (wrongEl) wrongEl.innerText = appState.stats.bad; 
+  } 
+  const left = appState.deck.length - appState.currentIndex; 
+  const leftEl = document.getElementById(`${prefix}-left-count`);
+  if (leftEl) leftEl.innerText = left > 0 ? left : 0; 
+}
+
+// ============== 模式一：翻卡 ==============
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; 
+  if(!card) return; 
+  
+  document.getElementById('fc-front-text').innerHTML = formatPoem(card.question || card.idiom); 
+  document.getElementById('front-actions').classList.remove('visible'); 
+  document.getElementById('fc-hint').style.opacity = '1'; 
+  
+  document.getElementById('fc-back-char').innerText = card.answer || card.meaning; 
+  document.getElementById('fc-back-ref').innerHTML = highlightKeywords(formatPoem(card.question || card.idiom), card.answer || card.meaning);
+  
+  let literalText = card.literal || "暫無翻譯";
+  let analysisText = card.analysis || "暫無解析";
+  document.getElementById('fc-back-literal').innerHTML = highlightKeywords(literalText, card.answer || card.meaning, 'kw-magenta');
+  document.getElementById('fc-back-analysis').innerHTML = highlightKeywords(analysisText, card.answer || card.meaning, 'kw-magenta');
+  
+  const keywords = keywordMap[card.answer || card.meaning] || "無對應關鍵字";
+  document.getElementById('fc-back-keywords').innerHTML = `<div style="font-size:13px; color:#90a4ae; margin-bottom:4px;">💡 相關關鍵字：</div><div style="color:#e91e63; font-weight:900; line-height:1.6;">${keywords}</div>`;
+  
+  document.getElementById('card').classList.remove('flipped'); 
+  appState.hasVisitedBack = false; 
+  document.getElementById('fc-game-area').style.display = 'flex'; 
+  updateStatsUI();
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); 
+  const isFlippingToBack = !cardEl.classList.contains('flipped'); 
+  cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) {
+      appState.hasVisitedBack = true; 
+  } else if (appState.hasVisitedBack) { 
+      document.getElementById('front-actions').classList.add('visible'); 
+      document.getElementById('fc-hint').style.opacity = '0'; 
+  } 
+}
+
+function rateCard(isKnown) { 
+  const currentItem = appState.deck[appState.currentIndex];
+  const autoRemove = document.getElementById('wb-auto-remove')?.checked;
+
+  if (isKnown) {
+    appState.stats.good++;
+    if (appState.isWrongTraining && autoRemove) {
+      removeFromWrongBook(currentItem.question || currentItem.idiom);
+    }
+  } else { 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentItem); 
+    addToWrongBook(currentItem);
+  } 
+  
+  appState.currentIndex++; updateStatsUI(); 
+  if (appState.currentIndex < appState.deck.length) setTimeout(() => loadFlashcard(), 200); 
+  else showSummary(); 
+}
+
+// ============== 模式二：關鍵字判斷 ==============
+function loadKeywordQuiz() {
+  const currentItem = appState.deck[appState.currentIndex]; 
+  appState.isQuizAnswered = false; 
+  
+  document.getElementById('kw-next-btn').style.display = 'none'; 
+  document.getElementById('kw-feedback').innerText = ''; 
+  
+  const keywords = keywordMap[currentItem.answer];
+  document.getElementById('kw-question').innerHTML = `關鍵字：${keywords}`; 
+  
+  let allAnswers = Object.keys(keywordMap);
+  let distractors = allAnswers.filter(a => a !== currentItem.answer);
+  shuffleArray(distractors);
+  let displayOptions = [currentItem.answer, distractors[0], distractors[1], distractors[2]];
+  shuffleArray(displayOptions);
+  
+  const container = document.getElementById('kw-options'); 
+  container.innerHTML = ''; 
+  
+  displayOptions.forEach(opt => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'kw-option-btn'; 
+    btn.innerHTML = `
+        <div class="kw-option-title">${opt}</div>
+        <div class="kw-option-subtext">(關鍵字：${keywordMap[opt]})</div>
+    `; 
+    btn.onclick = () => checkKeywordAnswer(btn, opt, currentItem.answer, currentItem); 
+    container.appendChild(btn); 
+  }); 
+  
+  document.getElementById('kw-game-area').style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkKeywordAnswer(btn, selectedOpt, correctAns, currentItem) {
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const isCorrect = selectedOpt === correctAns; 
+  const autoRemove = document.getElementById('wb-auto-remove')?.checked;
+
+  let statusHTML = "";
+  if (isCorrect) { 
+      statusHTML = `<div style="color: var(--success); font-size: 20px; text-align: center;">✅ 答對了！正確答案是：${correctAns}</div>`;
+      appState.stats.good++; 
+      if (appState.isWrongTraining && autoRemove) {
+        removeFromWrongBook(currentItem.answer);
+      }
+  } else { 
+      statusHTML = `<div style="color: var(--danger); font-size: 20px; text-align: center;">❌ 答錯了。正確答案是：${correctAns}</div>`;
+      appState.stats.bad++; 
+      appState.nextRoundDeck.push(currentItem); 
+      addToWrongBook(currentItem);
+  } 
+  
+  document.getElementById('kw-feedback').innerHTML = statusHTML; 
+  
+  const container = document.getElementById('kw-options'); 
+  Array.from(container.children).forEach(child => { 
+      child.classList.add('revealed'); 
+      const titleText = child.querySelector('.kw-option-title').innerText.trim();
+      
+      if (titleText === correctAns) { 
+          child.classList.add('correct-ans'); 
+      } else if (titleText === selectedOpt && !isCorrect) {
+          child.classList.add('wrong-ans');
+      }
+  }); 
+  
+  updateStatsUI(); 
+  document.getElementById('kw-next-btn').style.display = 'block'; 
+}
+
+function nextKeywordQuiz() {
+    appState.currentIndex++; 
+    if (appState.currentIndex < appState.deck.length) loadKeywordQuiz(); 
+    else showSummary(); 
+}
+
+// ============== 模式三：測驗挑戰 ==============
+function loadQuiz() { 
+  const currentItem = appState.deck[appState.currentIndex]; 
+  appState.isQuizAnswered = false; 
+  
+  document.getElementById('qz-next-btn').style.display = 'none'; 
+  document.getElementById('qz-feedback').innerText = ''; 
+  document.getElementById('qz-question').innerHTML = formatPoem(currentItem.question || currentItem.idiom); 
+  
+  let allAnswers = Object.keys(keywordMap);
+  let distractors = allAnswers.filter(a => a !== (currentItem.answer || currentItem.meaning));
+  shuffleArray(distractors);
+  let displayOptions = [currentItem.answer || currentItem.meaning, distractors[0], distractors[1], distractors[2]];
+  shuffleArray(displayOptions);
+  
+  const container = document.getElementById('qz-options'); 
+  container.innerHTML = ''; 
+  
+  displayOptions.forEach(opt => { 
+    const btn = document.createElement('div'); 
+    btn.className = 'option-btn'; 
+    btn.innerHTML = `<div>${opt}</div>`; 
+    btn.onclick = () => checkAnswer(btn, opt, currentItem.answer || currentItem.meaning, currentItem); 
+    container.appendChild(btn); 
+  }); 
+  
+  document.getElementById('qz-game-area').style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selectedOpt, correctAns, currentItem) { 
+  if (appState.isQuizAnswered) return; 
+  appState.isQuizAnswered = true; 
+  const isCorrect = selectedOpt === correctAns; 
+  const keywords = keywordMap[correctAns] || "無對應關鍵字";
+  const autoRemove = document.getElementById('wb-auto-remove')?.checked;
+
+  let literalText = currentItem.literal || "暫無翻譯";
+  let analysisText = currentItem.analysis || "暫無解析";
+
+  const explanationHTML = `
+    <div style="font-size: 15px; color: #1b5e20; margin-top: 15px; padding: 12px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px; text-align: left; width: 100%; box-sizing: border-box; font-weight: normal; line-height: 1.6;">
+      <div style="font-weight:bold; margin-bottom:4px; color:#2e7d32;">【語譯】</div>
+      <div style="margin-bottom:8px;">${highlightKeywords(literalText, correctAns, 'kw-magenta')}</div>
+      <div style="font-weight:bold; margin-bottom:4px; color:#2e7d32; border-top: 1px dashed #4caf50; padding-top: 8px;">【解析】</div>
+      <div>${highlightKeywords(analysisText, correctAns, 'kw-magenta')}</div>
+    </div>
+    <div style="font-size: 15px; margin-top: 8px; padding: 12px; background: #fffde7; border-left: 4px solid #fbc02d; border-radius: 4px; text-align: left; width: 100%; box-sizing: border-box; font-weight: normal; line-height: 1.6;">
+      <div style="font-size:13px; color:#90a4ae; margin-bottom:4px;">💡 相關關鍵字：</div>
+      <div style="color:#e91e63; font-weight:900;">${keywords}</div>
+    </div>
+  `;
+
+  let statusHTML = "";
+  if (isCorrect) { 
+      btn.classList.add('correct'); 
+      statusHTML = `<div style="color: var(--success); font-size: 20px; text-align: center;">✅ 答對了！</div>`;
+      appState.stats.good++; 
+      if (appState.isWrongTraining && autoRemove) {
+        removeFromWrongBook(currentItem.question || currentItem.idiom);
+      }
+  } else { 
+      btn.classList.add('wrong'); 
+      statusHTML = `<div style="color: var(--danger); font-size: 20px; text-align: center;">❌ 答錯了。正確答案是：${correctAns}</div>`;
+      appState.stats.bad++; 
+      appState.nextRoundDeck.push(currentItem); 
+      addToWrongBook(currentItem);
+  } 
+  
+  document.getElementById('qz-feedback').innerHTML = statusHTML + explanationHTML; 
+  
+  const container = document.getElementById('qz-options'); 
+  Array.from(container.children).forEach(child => { 
+      if (child.innerText.trim() === correctAns) { 
+          child.classList.add('correct'); 
+      } 
+  }); 
+  
+  updateStatsUI(); 
+  document.getElementById('qz-next-btn').style.display = 'block'; 
+}
+
+function nextQuiz() { 
+    appState.currentIndex++; 
+    if (appState.currentIndex < appState.deck.length) loadQuiz(); 
+    else showSummary(); 
+}
+
+// ============== 結算與共用 ==============
+function showSummary() { 
+   const prefix = getPrefix(appState.currentMode);
+   document.getElementById(`${prefix}-game-area`).style.display = 'none'; 
+   document.getElementById('summary-area').style.display = 'flex'; 
+   window.scrollTo(0, 0); 
+   
+   const endTime = new Date(); 
+   const durationSeconds = Math.floor((endTime - appState.startTime) / 1000); 
+   const minutes = Math.floor(durationSeconds / 60); 
+   const seconds = durationSeconds % 60; 
+   const durationStr = `${minutes}分${seconds}秒`;
+   
+   const summaryText = document.getElementById('summary-text'); 
+   const restartBtn = document.getElementById('btn-retry'); 
+   let msg = `<div style="margin-bottom:15px; font-size:16px; color:#78909c;">⏱️ 本次練習時間：${durationStr}</div>`;
+   
+   if (appState.currentMode === 'flashcard') { 
+       msg += `本輪掌握：<b style="color:var(--success)">${appState.stats.good}</b> 個<br>需複習：<b style="color:var(--warning)">${appState.stats.bad}</b> 個`; 
+   } else { 
+       msg += `答對：<b style="color:var(--success)">${appState.stats.good}</b><br>答錯：<b style="color:var(--danger)">${appState.stats.bad}</b>`; 
+   } 
+   
+   if (appState.nextRoundDeck.length === 0) { 
+       msg += `<br><br><b>✨ 太棒了！全部通過！✨</b>`; 
+       restartBtn.innerText = "🏆 重新開始全部"; 
+       restartBtn.onclick = resetAll; 
+   } else { 
+       msg += `<br><br>還有 <b>${appState.nextRoundDeck.length}</b> 題不熟，繼續特訓！`; 
+       restartBtn.innerText = "🔄 複習不熟的內容"; 
+       restartBtn.onclick = restartRound; 
+   } 
+   summaryText.innerHTML = msg; 
+}
+
+
+
+function restartRound() { initGame(appState.currentMode, true); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+// 設置標題顯示 (在 DOM 載入後)
+document.addEventListener('DOMContentLoaded', () => {
+   document.title = QUIZ_TITLE;
+   const mainTitle = document.getElementById('main-title-text');
+   if(mainTitle) mainTitle.innerText = QUIZ_TITLE;
+   
+   const instTitle = document.getElementById('inst-title-text');
+   if(instTitle) instTitle.innerText = QUIZ_TITLE;
+   
+   const welcomeTitle = document.getElementById('welcome-title-text');
+   if(welcomeTitle) welcomeTitle.innerText = QUIZ_TITLE;
+});
+</script>
+</body>
+</html>

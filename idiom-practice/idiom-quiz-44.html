@@ -1,0 +1,691 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成語週考第44回 p.355-p.362 練功坊練習神器</title>
+<style>
+/* CSS 樣式保持原樣，嚴格禁止修改 */
+:root { --primary: #3949ab; --primary-light: #e8eaf6; --accent: #ff4081; --success: #4caf50; --warning: #ff9800; --danger: #f44336; --bg: #f5f7fa; --card-bg: #ffffff; --text: #263238; }
+body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text); }
+#login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+.login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--primary); text-align: center; }
+.login-title { font-size: 24px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #546e7a; font-weight: bold; }
+.input-group input { width: 100%; padding: 12px; border: 2px solid #cfd8dc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+.input-group input:focus { border-color: var(--primary); outline: none; }
+.login-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 5px 15px rgba(57, 73, 171, 0.3); }
+.login-btn:hover { background: #283593; transform: translateY(-2px); }
+#instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); animation: fadeIn 0.5s ease; }
+.instruction-card { background: white; padding: 40px; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-top: 8px solid var(--accent); }
+.inst-title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px dashed #e0e0e0; padding-bottom: 15px; }
+.inst-content p { line-height: 1.8; font-size: 16px; margin-bottom: 15px; color: #455a64; }
+.inst-content ul { padding-left: 20px; margin-bottom: 20px; }
+.inst-content li { margin-bottom: 12px; line-height: 1.6; color: #37474f; }
+.inst-content b { color: var(--primary); }
+.highlight-box { background: #e8eaf6; padding: 15px; border-radius: 10px; border-left: 5px solid var(--primary); margin: 20px 0; font-size: 15px; color: #283593; }
+.start-btn { background: var(--accent); color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 20px; width: 100%; box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3); }
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 64, 129, 0.4); }
+.start-btn:active { transform: translateY(1px); }
+#main-app { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+h1 { color: var(--primary); margin-bottom: 20px; text-align: center; font-size: 24px; line-height: 1.4; }
+.nav-buttons { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 8px 16px; border: none; border-radius: 20px; background-color: #cfd8dc; cursor: pointer; font-size: 15px; transition: 0.3s; color: #455a64; }
+.nav-btn.active { background-color: var(--primary); color: white; }
+.mode-container { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; position: relative; }
+.mode-container.active { display: flex; }
+.round-badge { background-color: var(--primary); color: white; padding: 6px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.card-wrapper { width: 320px; height: 420px; perspective: 1000px; margin-bottom: 20px; position: relative; }
+.card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 15px; background-color: var(--card-bg); }
+.card-wrapper.flipped .card-inner { transform: rotateY(180deg); }
+.card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; padding: 30px; box-sizing: border-box; border: 1px solid #e0e0e0; background: #fff; }
+.card-front { justify-content: center; align-items: center; cursor: pointer; border-bottom: 6px solid var(--accent); background-image: radial-gradient(#f0f0f0 1px, transparent 1px); background-size: 20px 20px; }
+.big-char { font-size: 48px; color: var(--primary); margin: 0; line-height: 1.4; letter-spacing: 2px; font-weight: 800; }
+.hint { color: #90a4ae; font-size: 14px; margin-top: 40px; transition: opacity 0.3s; }
+.front-actions { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; justify-content: center; gap: 15px; padding: 0 30px; box-sizing: border-box; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+.front-actions.visible { opacity: 1; pointer-events: auto; }
+.action-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transform: translateY(0); transition: 0.2s; }
+.btn-know { background-color: var(--success); }
+.btn-unknow { background-color: var(--warning); }
+.action-btn:active { transform: translateY(2px); }
+.card-back { transform: rotateY(180deg); text-align: left; justify-content: flex-start; cursor: pointer; border-top: 6px solid var(--primary); }
+.back-content { flex-grow: 1; overflow-y: auto; }
+.back-header { border-bottom: 2px solid #e8eaf6; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+.back-char { font-size: 32px; font-weight: bold; color: var(--primary); letter-spacing: 2px; }
+.section-title { font-size: 13px; color: #fff; background: var(--primary); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 15px; margin-bottom: 8px; }
+.meaning { font-size: 18px; line-height: 1.6; color: #333; font-weight: bold; }
+.sentence { font-size: 16px; line-height: 1.6; color: #546e7a; margin-top: 5px; }
+.back-hint { margin-top: auto; text-align: center; color: #b0bec5; font-size: 12px; padding-top: 10px; }
+.hl { color: var(--accent); font-weight: bold; text-decoration: underline; }
+.stats-bar { margin-top: 15px; display: flex; gap: 20px; font-size: 15px; font-weight: bold; background: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #546e7a; }
+.stat-val { font-size: 18px; margin-left: 5px; }
+.c-green { color: var(--success); }
+.c-orange { color: var(--warning); }
+.c-red { color: var(--danger); }
+.quiz-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+.quiz-question { font-size: 20px; margin: 15px 0; font-weight: bold; color: #333; line-height: 1.5; min-height: 60px; display: flex; align-items: center; justify-content: center;}
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.option-btn { padding: 15px; border: 2px solid #e8eaf6; background: white; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.2s; color: var(--primary); font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.option-btn:hover { background-color: #e8eaf6; border-color: var(--primary); }
+.option-btn.correct { background-color: #e8f5e9; border-color: var(--success); color: #1b5e20; }
+.option-btn.wrong { background-color: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.option-desc { font-size: 14px; font-weight: normal; color: #666; margin-top: 5px; line-height: 1.4; display: none; }
+.option-desc.show { display: block; animation: fadeIn 0.3s; }
+.quiz-footer { margin-top: 20px; min-height: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.next-q-btn { background: var(--primary); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; display: none; font-size: 16px; }
+.summary-card { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 400px; border-top: 6px solid var(--accent); }
+.restart-btn { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+.footer-credit { margin-top: 40px; margin-bottom: 20px; font-size: 14px; color: #90a4ae; font-weight: 500; text-align: center; letter-spacing: 1px; }
+#sending-status { font-size: 14px; color: #78909c; margin-top: 10px; min-height: 20px; }
+
+/* 錯題本專用追加樣式 */
+.wb-toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; margin-bottom: 15px; }
+.wb-btn { padding: 8px 14px; border: none; border-radius: 8px; background-color: var(--primary); color: white; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.2s; }
+.wb-btn:hover { background-color: #283593; }
+.wb-btn.danger { background-color: var(--danger); }
+.wb-btn.danger:hover { background-color: #c62828; }
+.wb-settings { margin: 10px 0 15px 0; font-size: 14px; color: #455a64; display: flex; align-items: center; gap: 6px; }
+.wb-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.wb-card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--warning); display: flex; justify-content: space-between; align-items: flex-start; }
+.wb-card-content { flex: 1; text-align: left; padding-right: 10px; }
+.wb-card-title { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+.wb-card-sub { font-size: 14px; color: #333; margin-bottom: 5px; line-height: 1.4; }
+.wb-card-meta { font-size: 12px; color: #90a4ae; }
+.wb-del-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--danger); padding: 2px 6px; border-radius: 4px; }
+.wb-del-btn:hover { background: #ffebee; }
+.wb-empty { text-align: center; color: #90a4ae; padding: 40px 0; font-size: 16px; width: 100%; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<a href="../idiom-hub.html" class="home-nav-btn" title="返回學思軒成語教學資源網站" style="position: fixed; top: 12px; left: 12px; z-index: 10001; background: rgba(255,255,255,0.95); color: #1b4d3e; border: 1px solid #c5cae9; padding: 7px 15px; border-radius: 24px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); backdrop-filter: blur(6px); transition: all 0.2s; font-family: sans-serif;"><span style="font-size: 15px;">🏠</span> 返回成語首頁</a>
+<div id="instruction-overlay">
+<div class="instruction-card">
+<div class="inst-title">📜 <span id="inst-title-text"></span> - 使用說明</div>
+<div class="inst-content">
+<p>歡迎來到<b>「<span id="welcome-title-text"></span>」</b>！</p>
+<ul>
+<li><b>第一步：翻卡記憶</b><br>點擊卡片可翻面，查看解釋與例句。請誠實標記熟悉度。</li>
+<li><b>第二步：釋義測驗</b><br>根據解釋選出正確的對應答案。</li>
+<li><b>第三步：填空挑戰</b><br>閱讀例句並填入最適合的答案。</li>
+</ul>
+</div>
+<button class="start-btn" onclick="startApp()">我了解了，進入特訓！</button>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+</div>
+<div id="main-app">
+<h1 id="main-title-text"></h1>
+<div class="nav-buttons">
+<button class="nav-btn active" onclick="switchMode('flashcard')">📖 翻卡記憶</button>
+<button class="nav-btn" onclick="switchMode('meaningQuiz')">📝 釋義測驗</button>
+<button class="nav-btn" onclick="switchMode('fillQuiz')">🧩 填空挑戰</button>
+<button class="nav-btn" onclick="switchMode('wrongBook')">📓 錯題本</button>
+</div>
+<div id="flashcard-mode" class="mode-container active">
+<div id="fc-round-badge" class="round-badge">第 1 輪學習</div>
+<div id="fc-game-area">
+<div class="card-wrapper" id="card">
+<div class="card-inner">
+<div class="card-face card-front" onclick="flipCard()">
+<h2 class="big-char" id="fc-char"></h2>
+<p class="hint" id="fc-hint">(點擊看解釋與例句)</p>
+<div class="front-actions" id="front-actions">
+<button class="action-btn btn-unknow" onclick="event.stopPropagation(); rateCard(false)">🤔 還不熟</button>
+<button class="action-btn btn-know" onclick="event.stopPropagation(); rateCard(true)">😎 學會了</button>
+</div>
+</div>
+<div class="card-face card-back" onclick="flipCard()">
+<div class="back-content">
+<div class="back-header"><span class="back-char" id="fc-back-char"></span></div>
+<div class="section-title">解釋</div><div class="meaning" id="fc-meaning"></div>
+<div class="section-title">例句</div><div class="sentence" id="fc-example"></div>
+</div>
+<div class="back-hint">(點擊翻回正面確認)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>學會 <span class="stat-val c-green" id="fc-known-count">0</span></span>
+<span>待練 <span class="stat-val c-orange" id="fc-unknown-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fc-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<div id="meaningQuiz-mode" class="mode-container">
+<div id="mq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="mq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請選出對應的答案：</div>
+<div class="quiz-question" id="mq-question"></div>
+<div class="options-grid" id="mq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="mq-feedback"></div>
+<button class="next-q-btn" id="mq-next-btn" onclick="nextQuiz('meaning')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="mq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="mq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="mq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+<div id="fillQuiz-mode" class="mode-container">
+<div id="fq-round-badge" class="round-badge">第 1 輪測驗</div>
+<div id="fq-game-area" style="width:100%;">
+<div class="quiz-card">
+<div style="color:#90a4ae; margin-bottom:5px; font-size:14px;">請填入正確的答案：</div>
+<div class="quiz-question" id="fq-question" style="display:block; text-align:left;"></div>
+<div class="options-grid" id="fq-options"></div>
+<div class="quiz-footer">
+<div style="font-size:18px; font-weight:bold;" id="fq-feedback"></div>
+<button class="next-q-btn" id="fq-next-btn" onclick="nextQuiz('fill')">下一題</button>
+</div>
+</div>
+</div>
+<div class="stats-bar">
+<span>答對 <span class="stat-val c-green" id="fq-correct-count">0</span></span>
+<span>答錯 <span class="stat-val c-red" id="fq-wrong-count">0</span></span>
+<span>剩餘 <span class="stat-val" id="fq-left-count" style="color:#999;">0</span></span>
+</div>
+</div>
+
+<!-- 錯題本模式 UI -->
+<div id="wrongBook-mode" class="mode-container">
+<div id="wb-badge" class="round-badge" style="background-color: var(--warning);">📓 錯題特訓中心</div>
+<div class="stats-bar" style="margin-top:0; margin-bottom:15px;">
+  <span id="wb-stats-text">目前單元 0 個錯題 (累計全部單元 0 個)</span>
+</div>
+<div class="wb-toolbar">
+  <button class="wb-btn" onclick="startWrongTraining('flashcard')">📖 錯題翻卡特訓</button>
+  <button class="wb-btn" onclick="startWrongTraining('meaningQuiz')">📝 錯題釋義特訓</button>
+  <button class="wb-btn" onclick="copyWrongBook()">📋 複製全部錯題</button>
+  <button class="wb-btn" onclick="downloadWrongBook()">💾 下載全部錯題</button>
+  <button class="wb-btn danger" onclick="clearWrongBookUI()">🧹 清空錯題本</button>
+</div>
+<div class="wb-settings">
+  <input type="checkbox" id="auto-remove-cb" checked>
+  <label for="auto-remove-cb">特訓中答對時，自動移出錯題本</label>
+</div>
+<div class="wb-list" id="wb-list-container"></div>
+</div>
+
+<div id="summary-area" style="display: none;">
+<div class="summary-card">
+<h2 style="color:var(--primary); margin-bottom:10px;">🎉 本輪結束！</h2>
+<div id="summary-text" style="font-size:18px; line-height:1.8; color:#546e7a;"></div>
+<button class="restart-btn" id="btn-retry" onclick="restartRound()">🔄 複習不熟的內容</button>
+<br>
+<button onclick="resetAll()" style="background:none; border:none; color:#b0bec5; cursor:pointer; text-decoration:underline; margin-top:15px;">全部重置</button>
+</div>
+</div>
+<div class="footer-credit">𖤐本網頁由Gemini生成，龍門國中黃于珊老師製作𖤐</div>
+</div>
+<script>
+// ==========================================
+// 🔴 設定區
+// 2. 設定本回測驗的標題
+const QUIZ_TITLE = "成語週考第44回 p.355-p.362 練功坊練習神器"; 
+const WRONG_BOOK_KEY = 'idiom_wrong_pool';
+// ==========================================
+
+// 3. 資料區 (由 AI 生成替換)
+const vocabData = [
+  {"idiom": "螳臂當車", "meaning": "形容人高估自己的能力去做不可能達成的事情，今多用來譏諷人不自量力", "sentence": "對方是國會議員，你開的店要跟他打對台，無異是螳臂當車。"},
+  {"idiom": "謙沖自牧", "meaning": "表示以謙虛和順的態度來修養自我的品德。", "sentence": "黃教授是一位博學多聞，謙沖自牧的學者。"},
+  {"idiom": "謙謙君子", "meaning": "指謙虛又能嚴以律己的人。", "sentence": "了解老陳的人都知道，他是一個謙謙君子，足為「嚴以律己寬以待人」的典範。"},
+  {"idiom": "豁然開朗", "meaning": "比喻狹窄幽暗頓時變成開闊明亮。", "sentence": "走出狹窄昏暗的山洞後，映入眼簾的是一個豁然開朗的小村莊。"},
+  {"idiom": "豁然開朗", "meaning": "形容心境忽然變得豁達開朗。", "sentence": "經過張老師的協助後，他終於走出感情創傷，豁然開朗起來。"},
+  {"idiom": "豁然開朗", "meaning": "比喻對問題突然領悟過來。", "sentence": "經過老師的指示後，我終於豁然開朗，知道如何解題了。"},
+  {"idiom": "豁達大度", "meaning": "形容人度量寬宏，能容人。", "sentence": "身為國家的領導人，一定要有豁達大度的寬廣胸懷。"},
+  {"idiom": "趨之若鶩", "meaning": "比喻很多人爭著追逐某項事務。", "sentence": "愛漂亮的東方女性，對於美白保養品總是趨之若鶩。"},
+  {"idiom": "趨炎附勢", "meaning": "形容依附和巴結有權勢的人。", "sentence": "小陳能有今日的身分地位，全是靠趨炎附勢得來的。"},
+  {"idiom": "輾轉反側", "meaning": "形容有所思念或心事重重而難以入眠。", "sentence": "我整晚惦記著明天的期末考，所以輾轉反側，徹夜未眠。"},
+  {"idiom": "避重就輕", "meaning": "指避開繁雜的工作，只挑選輕鬆容易的來做。", "sentence": "做事老是避重就輕的人，是不會有責任感的。"},
+  {"idiom": "避重就輕", "meaning": "比喻避開主要問題，而談一些無關緊要的事。", "sentence": "每次問及感情對象，張小姐的回答總是避重就輕。"},
+  {"idiom": "鍥而不舍", "meaning": "比喻做事有恆心，能堅持到底。", "sentence": "在警方鍥而不舍的追查緝捕下，這起擄人勒索案終於在今天宣告偵破了。"},
+  {"idiom": "隱姓埋名", "meaning": "形容人隱瞞真實身分，不讓別人知道自己的底細。", "sentence": "那個政治犯被捕之前，已經在這裡隱姓埋名生活了很多年。"},
+  {"idiom": "隱約其辭", "meaning": "形容說話躲躲閃閃，不願直言。", "sentence": "嫌犯總是隱約其辭，不肯將犯案動機交代清楚。"},
+  {"idiom": "鞠躬盡瘁", "meaning": "比喻恭敬謹慎，不辭勞苦地為公事盡心盡力。", "sentence": "董事長交代的事，我一定鞠躬盡瘁，盡力去完成。"},
+  {"idiom": "鴻鵠之志", "meaning": "比喻遠大的志向。", "sentence": "他從小立下鴻鵠之志，長大要當一位懸壺濟世的無國界醫生。"},
+  {"idiom": "篳路藍縷", "meaning": "形容最初創業的艱苦。", "sentence": "如果沒有先民們篳路藍縷的艱苦奮鬥，今天我們如何能享受這富庶的生活。"},
+  {"idiom": "擲地有聲", "meaning": "比喻文辭優美，語言鏗鏘有力。", "sentence": "這幾篇擲地有聲的文章，都是我嘔心瀝血之作。"},
+  {"idiom": "斷章取義", "meaning": "指引用他人的詩文或談話，不顧本義，只是截取其中的一段或一句，以為自己使用。", "sentence": "這一則新聞是記者斷章取義的報導，令受訪的當事人非常錯愕。"},
+  {"idiom": "歸心似箭", "meaning": "形容想回家的心意十分急切。", "sentence": "火車站裡擠滿了歸心似箭、等著回家過年的旅客。"},
+  {"idiom": "甕中捉鱉", "meaning": "比喻手到擒來，很容易就可以得到。", "sentence": "警方在歹徒出沒頻繁的地點布線埋伏，等著甕中捉鱉。"},
+  {"idiom": "瞻前顧後", "meaning": "形容做事的態度周密謹慎，能夠前後兼顧。", "sentence": "國家領導人做任何決策之前，一定要瞻前顧後，謹小慎微。"},
+  {"idiom": "瞻前顧後", "meaning": "形容做事的態度猶豫不決，顧慮太多。", "sentence": "做事總是瞻前顧後、畏畏縮縮的人，成就不了大事業。"},
+  {"idiom": "穠纖合度", "meaning": "形容身材不胖不瘦，恰到好處。", "sentence": "參加選美的佳麗，個個都擁有穠纖合度的體態，走起臺步來，曲線婀娜多姿。"},
+  {"idiom": "簞食瓢飲", "meaning": "形容清苦的生活。", "sentence": "即使目前過著簞食瓢飲的生活，未曾使他們喪失鬥志。"},
+  {"idiom": "簞瓢屢空", "meaning": "形容生活窮困，經常沒有食物可吃。", "sentence": "他雖然過著簞瓢屢空的生活，卻能安貧樂道，處之泰然。"},
+  {"idiom": "繞梁三日", "meaning": "形容歌聲或音樂美妙動聽，令人回味無窮。", "sentence": "他那繞梁三日的優美歌聲，多年來一直都深受歌迷喜愛。"},
+  {"idiom": "繡花枕頭", "meaning": "比喻空有華麗外表而無真才實學的人。", "sentence": "本公司要招募的是具有真才實學的人才，而不是外表光鮮亮麗的繡花枕頭"},
+  {"idiom": "翻江倒海", "meaning": "形容水勢浩大。", "sentence": "水庫洩洪時，大水如翻江倒海般的從閘門湧出。"},
+  {"idiom": "翻江倒海", "meaning": "比喻力量或氣勢很大。", "sentence": "當他唱完最後一首詩時，掌聲如翻江倒海般的湧來。"},
+  {"idiom": "翻來覆去", "meaning": "形容身體不斷翻轉，難以入睡。", "sentence": "我徹夜在床上翻來覆去，完全沒有睡意。"},
+  {"idiom": "翻來覆去", "meaning": "形容一次又一次。", "sentence": "阿水伯將這泡茶翻來覆去的品茗後，讚不絕口的說：「真是好茶」。"},
+  {"idiom": "翻來覆去", "meaning": "比喻多變。", "sentence": "你常常說話翻來覆去又前後不一的，教我如何相信你呢？"},
+  {"idiom": "翻箱倒篋", "meaning": "形容澈底查找東西。", "sentence": "警方在竊賊的住所翻箱倒篋，搜出許多贓物來。"},
+  {"idiom": "舊雨新知", "meaning": "指新舊朋友或顧客。", "sentence": "真好味餐廳即將重新開張，歡迎舊雨新知繼續惠顧捧場。"},
+  {"idiom": "覆亡無日", "meaning": "形容很快就會滅亡。", "sentence": "面對內憂外患的局勢，當權者如果再不勵精圖治，國家一定會覆亡無日。"},
+  {"idiom": "覆水難收", "meaning": "比喻夫妻已經恩斷義絕。", "sentence": "王大哥的婚姻已經覆水難收，不可能再和他太太復合了。"},
+  {"idiom": "覆水難收", "meaning": "比喻事情已成定局，難以挽回或改變。", "sentence": "說出口的話，就像潑出去的水一樣，覆水難收，怎能不小心謹慎呢。"},
+  {"idiom": "豐衣足食", "meaning": "形容生活富裕，衣食不缺。", "sentence": "國家一旦發生戰亂，人民便無法過著豐衣足食的生活。"},
+  {"idiom": "轉危為安", "meaning": "形容局勢或病情脫離險境，轉為平安。", "sentence": "那位昏迷的傷患，經過醫生全力的搶救，已經轉危為安了。"},
+  {"idiom": "轉敗為功", "meaning": "形容扭轉危敗局勢，獲得成功勝利。", "sentence": "這支球隊能夠轉敗為功，獲取最後勝利，憑的就是全隊的士氣。"},
+  {"idiom": "轉悲為喜", "meaning": "形容人由悲傷轉為喜悅。", "sentence": "王媽媽一聽說兒子平安無事，馬上轉悲為喜，破涕為笑。"},
+  {"idiom": "轉禍為福", "meaning": "形容將不好的事變成好事。", "sentence": "經常行善積德的人，可以轉禍為福，避開一切災難。"},
+  {"idiom": "轉瞬之間", "meaning": "形容很短的時間。", "sentence": "劃過夜空的流星，轉瞬之間就消失得無影無蹤。"},
+  {"idiom": "雙宿雙飛", "meaning": "比喻男女親密相守，形影不離。", "sentence": "他們兩人已經雙宿雙飛多年，卻一直沒有結婚的打算。"},
+  {"idiom": "雙管齊下", "meaning": "比喻兩件事同時進行，或同事採用兩種方法來辦事。", "sentence": "靠著規律的運動與節制的飲食雙管齊下，我已經成功甩掉了五公斤的肥肉。"},
+  {"idiom": "雞毛蒜皮", "meaning": "比喻微不足道的事情。", "sentence": "這一對情侶經常為了雞毛蒜皮的小事而爭吵。"},
+  {"idiom": "雞犬不留", "meaning": "形容斬盡殺絕，連牲畜都不放過。", "sentence": "我軍決定夜襲敵營，將來犯的外敵殺個雞犬不留。"},
+  {"idiom": "雞犬不寧", "meaning": "比喻被嚴重的騷擾。", "sentence": "SARS病毒的肆虐，曾經把台灣社會搞的雞犬不寧。"},
+  {"idiom": "雞犬升天", "meaning": "比喻一個人發達得勢後，和他有關係的人也跟著獲利沾光。", "sentence": "他當任市長後，家族成員都入主市府，堪稱是「一人得道，雞犬升天」。"}
+];
+
+let appState = { currentMode: 'flashcard', deck: [], nextRoundDeck: [], currentIndex: 0, stats: { good: 0, bad: 0 }, isQuizAnswered: false, hasVisitedBack: false, round: 1, startTime: null, isWrongTraining: false };
+
+// 全域保留各模式進度狀態
+let modeStates = {};
+
+// ================= LocalStorage 錯題本機制 =================
+function getWrongBook() {
+  try {
+    return JSON.parse(localStorage.getItem(WRONG_BOOK_KEY)) || [];
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveWrongBook(list) {
+  localStorage.setItem(WRONG_BOOK_KEY, JSON.stringify(list));
+}
+
+function addToWrongBook(item) {
+  if(!item) return;
+  let list = getWrongBook();
+  let key = item.idiom || item.word;
+  let existIndex = list.findIndex(x => (x.idiom || x.word) === key);
+  let now = new Date().toLocaleString();
+  if(existIndex >= 0) {
+    list[existIndex].wrongCount = (list[existIndex].wrongCount || 1) + 1;
+    list[existIndex].lastWrongTime = now;
+    list[existIndex].meaning = item.meaning || list[existIndex].meaning;
+    list[existIndex].sentence = item.sentence || list[existIndex].sentence;
+    list[existIndex].source_text = item.source_text || list[existIndex].source_text || "";
+    list[existIndex].original = item.original || list[existIndex].original || "";
+    list[existIndex].translation = item.translation || list[existIndex].translation || "";
+    list[existIndex].chapter = QUIZ_TITLE;
+  } else {
+    list.push({
+      idiom: key,
+      meaning: item.meaning || "",
+      sentence: item.sentence || "",
+      source_text: item.source_text || "",
+      original: item.original || "",
+      translation: item.translation || "",
+      wrongCount: 1,
+      lastWrongTime: now,
+      chapter: QUIZ_TITLE
+    });
+  }
+  saveWrongBook(list);
+}
+
+function removeFromWrongBook(word) {
+  let list = getWrongBook();
+  list = list.filter(x => (x.idiom || x.word) !== word);
+  saveWrongBook(list);
+}
+
+function clearWrongBookUI() {
+  if(confirm("確定要清空所有錯題本資料嗎？此操作無法復原！")) {
+    saveWrongBook([]);
+    renderWrongBookUI();
+  }
+}
+
+function deleteSingleWrong(word) {
+  removeFromWrongBook(word);
+  renderWrongBookUI();
+}
+
+function renderWrongBookUI() {
+  const list = getWrongBook();
+  const currentChapterList = list.filter(x => x.chapter === QUIZ_TITLE);
+  document.getElementById('wb-stats-text').innerText = `目前單元 ${currentChapterList.length} 個錯題 (累計全部單元 ${list.length} 個)`;
+  
+  const container = document.getElementById('wb-list-container');
+  container.innerHTML = '';
+  
+  if(list.length === 0) {
+    container.innerHTML = `<div class="wb-empty">🎉 太棒了！錯題本內目前沒有任何記錄喔！</div>`;
+    return;
+  }
+  
+  list.forEach(item => {
+    const word = item.idiom || item.word;
+    const card = document.createElement('div');
+    card.className = 'wb-card';
+    card.innerHTML = `
+      <div class="wb-card-content">
+        <div class="wb-card-title">${word} <span style="font-size:12px; color:var(--danger); font-weight:normal;">(錯 ${item.wrongCount || 1} 次)</span></div>
+        <div class="wb-card-sub"><b>釋義：</b>${item.meaning || '無'}</div>
+        <div class="wb-card-sub"><b>例句：</b>${item.sentence || '無'}</div>
+        <div class="wb-card-meta">單元: ${item.chapter || '未分類'} | 最後錯誤: ${item.lastWrongTime || '未紀錄'}</div>
+      </div>
+      <button class="wb-del-btn" title="刪除此錯題" onclick="deleteSingleWrong('${word}')">🗑️</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function copyWrongBook() {
+  const list = getWrongBook();
+  if(list.length === 0) { alert("目前沒有錯題可以複製！"); return; }
+  let text = `--- 錯題本匯出 (${new Date().toLocaleDateString()}) ---\n\n`;
+  list.forEach((x, i) => {
+    text += `${i + 1}. 【${x.idiom || x.word}】\n   釋義：${x.meaning}\n   例句：${x.sentence}\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    alert("已複製所有錯題內容至剪貼簿！");
+  }).catch(() => {
+    alert("複製失敗，請手動複製。");
+  });
+}
+
+function downloadWrongBook() {
+  const list = getWrongBook();
+  if(list.length === 0) { alert("目前沒有錯題可以下載！"); return; }
+  let text = `--- 錯題本匯出 (${new Date().toLocaleDateString()}) ---\n\n`;
+  list.forEach((x, i) => {
+    text += `${i + 1}. 【${x.idiom || x.word}】\n   釋義：${x.meaning}\n   例句：${x.sentence}\n\n`;
+  });
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `錯題本_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+}
+
+function startWrongTraining(targetMode) {
+  const list = getWrongBook();
+  if(list.length === 0) { alert("目前錯題本沒有任何題目，無法進行特訓喔！"); return; }
+  
+  const customDeck = list.map(x => ({
+    idiom: x.idiom || x.word,
+    meaning: x.meaning || "",
+    sentence: x.sentence || "",
+    source_text: x.source_text || "",
+    original: x.original || "",
+    translation: x.translation || ""
+  }));
+  
+  delete modeStates[targetMode];
+  
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  const navBtns = document.querySelectorAll('.nav-btn');
+  if(targetMode === 'flashcard') navBtns[0].classList.add('active');
+  if(targetMode === 'meaningQuiz') navBtns[1].classList.add('active');
+  
+  initGame(targetMode, false, customDeck, true);
+}
+
+// ================= 登入與流程控制 =================
+function startApp() { document.getElementById('instruction-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'flex'; initGame('flashcard'); }
+
+// 洗牌函式
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function initGame(mode, isRetry = false, customDeck = null, isWrongTraining = false) { 
+   appState.currentMode = mode; 
+   appState.isWrongTraining = isWrongTraining;
+   window.scrollTo(0, 0); 
+   appState.startTime = new Date();
+   
+   if (customDeck) {
+       appState.deck = [...customDeck];
+       appState.round = 1;
+   } else if (isRetry && appState.nextRoundDeck.length > 0) { 
+       appState.deck = [...appState.nextRoundDeck]; 
+       appState.round++; 
+   } else { 
+       appState.deck = [...vocabData]; 
+       appState.round = 1; 
+   }
+   
+   if (mode === 'meaningQuiz' || mode === 'fillQuiz') {
+       shuffleArray(appState.deck);
+   }
+
+   appState.nextRoundDeck = []; appState.currentIndex = 0; appState.stats = { good: 0, bad: 0 }; appState.isQuizAnswered = false; appState.hasVisitedBack = false; 
+   document.getElementById('summary-area').style.display = 'none'; 
+   document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+   document.getElementById(`${mode}-mode`).classList.add('active'); 
+   
+   if(mode !== 'wrongBook') {
+     const prefix = mode === 'flashcard' ? 'fc' : mode === 'meaningQuiz' ? 'mq' : 'fq'; 
+     const badge = document.getElementById(`${prefix}-round-badge`); 
+     if(isWrongTraining) {
+       badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+       badge.style.backgroundColor = "var(--danger)";
+     } else {
+       badge.innerText = isRetry ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`; 
+       badge.style.backgroundColor = isRetry ? "var(--warning)" : "var(--primary)"; 
+     }
+   }
+   
+   updateStatsUI(); document.getElementById('card').classList.remove('flipped'); 
+   if (mode === 'flashcard') loadFlashcard(); 
+   else if (mode === 'meaningQuiz') loadQuiz('meaning'); 
+   else if (mode === 'fillQuiz') loadQuiz('fill'); 
+   else if (mode === 'wrongBook') renderWrongBookUI();
+}
+
+// 跨模式進度保留 switchMode
+function switchMode(newMode) { 
+  const oldMode = appState.currentMode;
+  
+  // 1. 備份舊模式狀態
+  if(oldMode) {
+    const isSummaryVisible = document.getElementById('summary-area').style.display === 'block';
+    modeStates[oldMode] = {
+      deck: [...appState.deck],
+      nextRoundDeck: [...appState.nextRoundDeck],
+      currentIndex: appState.currentIndex,
+      stats: { ...appState.stats },
+      isQuizAnswered: appState.isQuizAnswered,
+      hasVisitedBack: appState.hasVisitedBack,
+      round: appState.round,
+      startTime: appState.startTime,
+      isWrongTraining: appState.isWrongTraining,
+      summaryVisible: isSummaryVisible,
+      summaryHTML: document.getElementById('summary-text').innerHTML,
+      retryBtnText: document.getElementById('btn-retry').innerText,
+      retryBtnOnClick: document.getElementById('btn-retry').onclick
+    };
+  }
+
+  // 更新 Nav Button UI
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active')); 
+  if (event && event.target && event.target.classList.contains('nav-btn')) {
+    event.target.classList.add('active');
+  } else {
+    const btnIndex = newMode === 'flashcard' ? 0 : newMode === 'meaningQuiz' ? 1 : newMode === 'fillQuiz' ? 2 : 3;
+    document.querySelectorAll('.nav-btn')[btnIndex].classList.add('active');
+  }
+
+  document.querySelectorAll('.mode-container').forEach(div => div.classList.remove('active')); 
+  document.getElementById(`${newMode}-mode`).classList.add('active'); 
+  appState.currentMode = newMode;
+
+  // 2. 還原或初始化新模式
+  if(newMode === 'wrongBook') {
+    document.getElementById('summary-area').style.display = 'none';
+    renderWrongBookUI();
+  } else if(modeStates[newMode]) {
+    const state = modeStates[newMode];
+    appState.deck = [...state.deck];
+    appState.nextRoundDeck = [...state.nextRoundDeck];
+    appState.currentIndex = state.currentIndex;
+    appState.stats = { ...state.stats };
+    appState.isQuizAnswered = state.isQuizAnswered;
+    appState.hasVisitedBack = state.hasVisitedBack;
+    appState.round = state.round;
+    appState.startTime = state.startTime;
+    appState.isWrongTraining = state.isWrongTraining;
+
+    const prefix = newMode === 'flashcard' ? 'fc' : newMode === 'meaningQuiz' ? 'mq' : 'fq';
+    const badge = document.getElementById(`${prefix}-round-badge`);
+    if(appState.isWrongTraining) {
+      badge.innerText = `🔥 錯題特訓模式 (${appState.deck.length} 題)`;
+      badge.style.backgroundColor = "var(--danger)";
+    } else {
+      badge.innerText = appState.round > 1 ? `🎯 第 ${appState.round} 輪複習 (只練不熟的)` : `📚 第 1 輪學習 (全部)`; 
+      badge.style.backgroundColor = appState.round > 1 ? "var(--warning)" : "var(--primary)"; 
+    }
+
+    if(state.summaryVisible) {
+      document.getElementById(`${prefix}-game-area`).style.display = 'none';
+      document.getElementById('summary-area').style.display = 'block';
+      document.getElementById('summary-text').innerHTML = state.summaryHTML;
+      document.getElementById('btn-retry').innerText = state.retryBtnText;
+      document.getElementById('btn-retry').onclick = state.retryBtnOnClick;
+    } else {
+      document.getElementById('summary-area').style.display = 'none';
+      if(newMode === 'flashcard') loadFlashcard();
+      else if(newMode === 'meaningQuiz') loadQuiz('meaning');
+      else if(newMode === 'fillQuiz') loadQuiz('fill');
+    }
+  } else {
+    initGame(newMode, false);
+  }
+  updateStatsUI();
+}
+
+function updateStatsUI() { 
+  if(appState.currentMode === 'wrongBook') return;
+  const prefix = appState.currentMode === 'flashcard' ? 'fc' : appState.currentMode === 'meaningQuiz' ? 'mq' : 'fq'; 
+  if (appState.currentMode === 'flashcard') { 
+    document.getElementById(`${prefix}-known-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-unknown-count`).innerText = appState.stats.bad; 
+  } else { 
+    document.getElementById(`${prefix}-correct-count`).innerText = appState.stats.good; 
+    document.getElementById(`${prefix}-wrong-count`).innerText = appState.stats.bad; 
+  } 
+  const left = appState.deck.length - appState.currentIndex; 
+  document.getElementById(`${prefix}-left-count`).innerText = left > 0 ? left : 0; 
+}
+
+function loadFlashcard() { 
+  const card = appState.deck[appState.currentIndex]; if(!card) return; 
+  document.getElementById('fc-char').innerText = card.idiom; document.getElementById('front-actions').classList.remove('visible'); document.getElementById('fc-hint').style.opacity = '1'; 
+  document.getElementById('fc-back-char').innerText = card.idiom; document.getElementById('fc-meaning').innerText = card.meaning; 
+  document.getElementById('fc-example').innerHTML = card.sentence.replace(card.idiom, `<span class="hl">${card.idiom}</span>`); 
+  document.getElementById('card').classList.remove('flipped'); appState.hasVisitedBack = false; document.getElementById('fc-game-area').style.display = 'block'; 
+  updateStatsUI();
+}
+
+function flipCard() { 
+  const cardEl = document.getElementById('card'); const isFlippingToBack = !cardEl.classList.contains('flipped'); cardEl.classList.toggle('flipped'); 
+  if (isFlippingToBack) appState.hasVisitedBack = true; else if (appState.hasVisitedBack) { document.getElementById('front-actions').classList.add('visible'); document.getElementById('fc-hint').style.opacity = '0'; } 
+}
+
+function rateCard(isKnown) { 
+  const currentItem = appState.deck[appState.currentIndex];
+  const autoRemove = document.getElementById('auto-remove-cb').checked;
+
+  if (isKnown) {
+    appState.stats.good++;
+    if(appState.isWrongTraining && autoRemove) {
+      removeFromWrongBook(currentItem.idiom);
+    }
+  } else { 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(currentItem);
+    addToWrongBook(currentItem);
+  } 
+  appState.currentIndex++; updateStatsUI(); if (appState.currentIndex < appState.deck.length) setTimeout(() => loadFlashcard(), 200); else showSummary(); 
+}
+
+function loadQuiz(type) { 
+  const currentItem = appState.deck[appState.currentIndex]; const prefix = type === 'meaning' ? 'mq' : 'fq'; appState.isQuizAnswered = false; 
+  document.getElementById(`${prefix}-next-btn`).style.display = 'none'; document.getElementById(`${prefix}-feedback`).innerText = ''; 
+  if (type === 'meaning') { document.getElementById('mq-question').innerText = currentItem.meaning; } 
+  else { document.getElementById('fq-question').innerHTML = currentItem.sentence.replace(currentItem.idiom, "________"); } 
+  let options = [currentItem]; while(options.length < 4) { let random = vocabData[Math.floor(Math.random() * vocabData.length)]; if (!options.includes(random)) options.push(random); } 
+  options.sort(() => Math.random() - 0.5); const container = document.getElementById(`${prefix}-options`); container.innerHTML = ''; 
+  options.forEach(opt => { 
+    const btn = document.createElement('div'); btn.className = 'option-btn'; 
+    btn.innerHTML = `<div>${opt.idiom}</div><div class="option-desc">(${opt.meaning})</div>`; btn.onclick = () => checkAnswer(btn, opt, currentItem, type); container.appendChild(btn); 
+  }); 
+  document.getElementById(`${prefix}-game-area`).style.display = 'block'; 
+  updateStatsUI();
+}
+
+function checkAnswer(btn, selected, correct, type) { 
+  if (appState.isQuizAnswered) return; appState.isQuizAnswered = true; const prefix = type === 'meaning' ? 'mq' : 'fq'; const isCorrect = selected.idiom === correct.idiom; 
+  const autoRemove = document.getElementById('auto-remove-cb').checked;
+
+  if (isCorrect) { 
+    btn.classList.add('correct'); 
+    document.getElementById(`${prefix}-feedback`).innerText = "✅ 答對了！"; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--success)"; 
+    appState.stats.good++; 
+    if (type === 'fill') { document.getElementById('fq-question').innerHTML = correct.sentence.replace(correct.idiom, `<span class="hl">${correct.idiom}</span>`); } 
+    if(appState.isWrongTraining && autoRemove) {
+      removeFromWrongBook(correct.idiom);
+    }
+  } else { 
+    btn.classList.add('wrong'); 
+    document.getElementById(`${prefix}-feedback`).innerText = `❌ 答錯了。正確答案是：${correct.idiom}`; 
+    document.getElementById(`${prefix}-feedback`).style.color = "var(--danger)"; 
+    appState.stats.bad++; 
+    appState.nextRoundDeck.push(correct); 
+    addToWrongBook(correct);
+  } 
+  const container = document.getElementById(`${prefix}-options`); Array.from(container.children).forEach(child => { const desc = child.querySelector('.option-desc'); if(desc) desc.classList.add('show'); if (child.firstChild.innerText === correct.idiom) { child.classList.add('correct'); } }); 
+  updateStatsUI(); document.getElementById(`${prefix}-next-btn`).style.display = 'block'; 
+}
+
+function nextQuiz(type) { appState.currentIndex++; if (appState.currentIndex < appState.deck.length) loadQuiz(type); else showSummary(); }
+
+function showSummary() { 
+   const prefix = appState.currentMode === 'flashcard' ? 'fc' : appState.currentMode === 'meaningQuiz' ? 'mq' : 'fq'; 
+   document.getElementById(`${prefix}-game-area`).style.display = 'none'; document.getElementById('summary-area').style.display = 'block'; window.scrollTo(0, 0); 
+   const endTime = new Date(); const durationSeconds = Math.floor((endTime - appState.startTime) / 1000); const minutes = Math.floor(durationSeconds / 60); const seconds = durationSeconds % 60; const durationStr = `${minutes}分${seconds}秒`;
+
+   const summaryText = document.getElementById('summary-text'); const restartBtn = document.getElementById('btn-retry'); let msg = ""; 
+   msg += `<div style="margin-bottom:15px; font-size:16px; color:#78909c;">⏱️ 本次練習時間：${durationStr}</div>`;
+   if (appState.currentMode === 'flashcard') { msg += `本輪掌握：<b style="color:var(--success)">${appState.stats.good}</b> 個<br>需複習：<b style="color:var(--warning)">${appState.stats.bad}</b> 個`; } 
+   else { msg += `答對：<b style="color:var(--success)">${appState.stats.good}</b><br>答錯：<b style="color:var(--danger)">${appState.stats.bad}</b>`; } 
+   if (appState.nextRoundDeck.length === 0) { msg += `<br><br><b>✨ 太棒了！全部通過！✨</b>`; restartBtn.innerText = "🏆 重新開始全部"; restartBtn.onclick = resetAll; } 
+   else { msg += `<br><br>還有 <b>${appState.nextRoundDeck.length}</b> 個不熟，繼續特訓！`; restartBtn.innerText = "🔄 複習不熟的內容"; restartBtn.onclick = restartRound; } 
+   summaryText.innerHTML = msg; 
+}
+
+
+function restartRound() { initGame(appState.currentMode, true, null, appState.isWrongTraining); }
+function resetAll() { initGame(appState.currentMode, false); }
+
+// 設置標題顯示 (在 DOM 載入後)
+document.addEventListener('DOMContentLoaded', () => {
+   document.title = QUIZ_TITLE;
+   document.querySelector('h1').innerText = QUIZ_TITLE;
+   document.getElementById('inst-title-text').innerText = QUIZ_TITLE;
+   document.getElementById('welcome-title-text').innerText = QUIZ_TITLE;
+});
+</script>
+</body>
+</html>
+

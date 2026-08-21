@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>語文補給站｜移覺（通感）修辭互動學習殿堂</title>
+  <!-- Google Fonts for Chinese Calligraphy & Modern Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-dark: #6d28d9;
+      --primary-light: #ede9fe;
+      --primary-hover: #7c3aed;
+      
+      --visual: #2563eb;
+      --visual-bg: #eff6ff;
+      --visual-border: #bfdbfe;
+      
+      --audio: #059669;
+      --audio-bg: #ecfdf5;
+      --audio-border: #a7f3d0;
+      
+      --smell: #d97706;
+      --smell-bg: #fffbeb;
+      --smell-border: #fde68a;
+      
+      --taste: #db2777;
+      --taste-bg: #fdf2f8;
+      --taste-border: #fbcfe8;
+      
+      --touch: #0891b2;
+      --touch-bg: #ecfeff;
+      --touch-border: #a5f3fc;
+      
+      --gold: #d97706;
+      --dark: #1e1b4b;
+      --dark-card: #0f172a;
+      --gray: #64748b;
+      --light-bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --border: #e2e8f0;
+      --radius: 18px;
+      --shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 20px 30px -10px rgba(139, 92, 246, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark);
+      line-height: 1.65;
+      background-image: 
+        radial-gradient(circle at 5% 10%, rgba(139, 92, 246, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 95% 85%, rgba(236, 72, 153, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    .serif {
+      font-family: 'Noto Serif TC', serif;
+    }
+    
+    .calligraphy {
+      font-family: 'Ma Shan Zheng', 'Noto Serif TC', cursive;
+    }
+
+    /* 頂部導覽列 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+    }
+
+    .brand-seal-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .brand-seal-img:hover {
+      transform: rotate(5deg) scale(1.08);
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .brand-badge {
+      font-size: 0.72rem;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+      width: fit-content;
+      margin-top: 2px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 0.4rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--primary-dark);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .secondary-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.28);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(139, 92, 246, 0.38);
+    }
+
+    /* 主容器 */
+    main {
+      max-width: 1300px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero 旗艦標題區 (大氣全幅置中風格) */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 50%, #ecfeff 100%);
+      border-radius: 28px;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      padding: 3.5rem 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero::after {
+      content: "移覺・通感";
+      position: absolute;
+      right: 2%;
+      bottom: -25px;
+      font-size: 8rem;
+      font-family: 'Ma Shan Zheng', cursive;
+      color: rgba(139, 92, 246, 0.04);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .hero-content {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 1.1rem;
+      line-height: 1.25;
+    }
+
+    .hero-content h1 span {
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      font-size: 1.18rem;
+      color: #475569;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .hero-tag {
+      background: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .sense-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      animation: fadeIn 0.25s ease;
+      cursor: pointer;
+    }
+
+    .sense-pill.visual { background: var(--visual-bg); color: var(--visual); border: 1px solid var(--visual-border); }
+    .sense-pill.audio { background: var(--audio-bg); color: var(--audio); border: 1px solid var(--audio-border); }
+    .sense-pill.smell { background: var(--smell-bg); color: var(--smell); border: 1px solid var(--smell-border); }
+    .sense-pill.taste { background: var(--taste-bg); color: var(--taste); border: 1px solid var(--taste-border); }
+    .sense-pill.touch { background: var(--touch-bg); color: var(--touch); border: 1px solid var(--touch-border); }
+
+    /* 通用區塊 */
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 5.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.85rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    /* 教材解說圖卡片 */
+    .textbook-diagram-box {
+      background: white;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.8rem 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .diagram-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .diagram-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .diagram-img-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .diagram-img-wrap:hover {
+      box-shadow: 0 12px 30px rgba(139, 92, 246, 0.18);
+      border-color: var(--primary);
+    }
+
+    .diagram-img {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      transition: transform 0.3s ease;
+    }
+
+    .diagram-img-wrap:hover .diagram-img {
+      transform: scale(1.01);
+    }
+
+    .diagram-hint {
+      position: absolute;
+      bottom: 14px;
+      right: 18px;
+      background: rgba(30, 27, 75, 0.85);
+      color: white;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* 單元一：核心觀念 */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .concept-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
+    }
+
+    .concept-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .concept-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .concept-card-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .concept-body {
+      font-size: 1rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #fdf4ff, #fae8ff);
+      border-left: 4px solid #c084fc;
+      padding: 1rem 1.2rem;
+      border-radius: 0 12px 12px 0;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      color: #581c87;
+    }
+
+    .formula-banner {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      color: white;
+      border-radius: 22px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 15px 35px -10px rgba(30, 27, 75, 0.4);
+      margin-bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .formula-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fde047;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .formula-equation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .formula-part {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.5rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .formula-part.highlight {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      border-color: #f472b6;
+    }
+
+    .formula-part.target {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-color: #60a5fa;
+    }
+
+    /* 五感羅盤矩陣 */
+    .matrix-container {
+      background: white;
+      border-radius: var(--radius);
+      padding: 2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .senses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .sense-card {
+      border-radius: 14px;
+      padding: 1.2rem;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      text-align: left;
+    }
+
+    .sense-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .sense-card.visual { background: var(--visual-bg); border-color: var(--visual-border); }
+    .sense-card.audio { background: var(--audio-bg); border-color: var(--audio-border); }
+    .sense-card.smell { background: var(--smell-bg); border-color: var(--smell-border); }
+    .sense-card.taste { background: var(--taste-bg); border-color: var(--taste-border); }
+    .sense-card.touch { background: var(--touch-bg); border-color: var(--touch-border); }
+
+    .sense-card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sense-card-desc {
+      font-size: 0.88rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* 單元三：30句典範例句圖鑑 (分段點開教學設計) */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background: white;
+      padding: 1rem 1.4rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-chip {
+      background: #f1f5f9;
+      color: #475569;
+      border: none;
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .filter-chip:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .filter-chip.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 260px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.5rem 1rem 0.5rem 2.4rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.2s;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    /* 例句卡片網格 */
+    .sentences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sentence-card {
+      background: white;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sentence-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.9rem;
+    }
+
+    .card-number {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #94a3b8;
+      background: #f8fafc;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .card-tts-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      transition: all 0.2s;
+    }
+
+    .card-tts-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      transform: scale(1.1);
+    }
+
+    .sentence-quote {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.6;
+      margin-bottom: 1.1rem;
+      position: relative;
+      padding-left: 0.65rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* 逐項揭曉結構 (本體、媒介、解析各自可點開) */
+    .flow-badge-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.9rem;
+      border: 1px solid #f1f5f9;
+    }
+
+    .step-item-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .step-item-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-label {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .interactive-slot {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .slot-placeholder {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .slot-placeholder:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .step-analysis-block {
+      background: #fdf4ff;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      border-left: 3px solid #c084fc;
+      margin-bottom: 0.9rem;
+    }
+
+    .step-analysis-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .slot-placeholder-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.22rem 0.65rem;
+      border-radius: 8px;
+      background: white;
+      border: 1px dashed #c084fc;
+      color: #9333ea;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .slot-placeholder-text:hover {
+      background: #fae8ff;
+      color: #7e22ce;
+    }
+
+    .analysis-text-content {
+      font-size: 0.92rem;
+      color: #475569;
+      line-height: 1.65;
+      margin-top: 0.55rem;
+      padding-top: 0.55rem;
+      border-top: 1px dashed #e9d5ff;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .card-bottom-pill {
+      margin-top: 0.6rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .slot-placeholder-full {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      color: #64748b;
+      padding: 0.55rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .slot-placeholder-full:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    .card-answer-revealed {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 0.55rem 0.8rem;
+      background: #f5f3ff;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .ans-badge {
+      font-size: 0.78rem;
+      color: #6d28d9;
+      background: #ede9fe;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* 單元四：互動測驗區 */
+    .quiz-container {
+      background: white;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .quiz-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .quiz-progress-track {
+      flex: 1;
+      min-width: 200px;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #ec4899);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-score-badge {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .quiz-question-box {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .quiz-question-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.6;
+      margin-bottom: 0.6rem;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      background: white;
+      border: 2px solid #e2e8f0;
+      padding: 1.1rem 1.4rem;
+      border-radius: 14px;
+      text-align: left;
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-family: inherit;
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      transform: translateX(4px);
+    }
+
+    .quiz-opt-btn.correct {
+      background: #dcfce7 !important;
+      border-color: #22c55e !important;
+      color: #15803d !important;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+      color: #b91c1c !important;
+    }
+
+    .quiz-feedback-box {
+      background: #f1f5f9;
+      border-radius: 14px;
+      padding: 1.4rem;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .quiz-feedback-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .quiz-feedback-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .quiz-feedback-desc {
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.65;
+    }
+
+    .quiz-controls {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* 測驗結果畫面 */
+    .quiz-result-view {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .result-score-ring {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 1rem 0;
+    }
+
+    .result-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e;
+      padding: 0.6rem 1.8rem;
+      border-radius: 999px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+    }
+
+    /* 單元五：五感造句魔法工坊 */
+    .workshop-container {
+      background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 4rem;
+    }
+
+    .workshop-builder {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .workshop-step-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .workshop-step-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .preset-chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .preset-chip {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover, .preset-chip.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+    }
+
+    .workshop-output-box {
+      background: white;
+      border-radius: 18px;
+      padding: 2rem;
+      border: 2px dashed #c084fc;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .output-sentence {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .output-analysis {
+      font-size: 0.95rem;
+      color: #64748b;
+    }
+
+    /* 單元六：練習神器內嵌應用區塊 */
+    .practice-container {
+      background: white;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .practice-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #f8fafc;
+      padding: 1rem 1.4rem;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .practice-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .practice-badge {
+      background: #3949ab;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    .practice-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .practice-iframe-wrap {
+      width: 100%;
+      height: 850px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      background: #f5f7fa;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .practice-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 燈箱 Lightbox Modal */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .lightbox-modal.show {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .lightbox-container {
+      position: relative;
+      max-width: 1100px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ef4444;
+      color: white;
+      border: 2px solid white;
+      font-size: 1.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    .lightbox-close-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* 頁尾 Footer */
+    footer {
+      background: #09090b;
+      color: #e2e8f0;
+      padding: 4rem 1.5rem 2.5rem;
+      border-top: 1px solid #27272a;
+      text-align: center;
+      position: relative;
+    }
+
+    .footer-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .footer-banner-img {
+      max-width: 340px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.12));
+      transition: transform 0.3s ease;
+    }
+
+    .footer-banner-img:hover {
+      transform: scale(1.03);
+    }
+
+    .footer-credit {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-notes {
+      font-size: 0.82rem;
+      color: #71717a;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 響應式優化 */
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+      .section-title {
+        font-size: 1.45rem;
+      }
+      .sentences-grid {
+        grid-template-columns: 1fr;
+      }
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .practice-iframe-wrap {
+        height: 700px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列：先呈現 學思軒印章.png ，其後緊接著 語文補給站logo.png -->
+  <header>
+    <div class="nav-container">
+      <a href="../index.html" class="brand-group" title="回到教材入口首頁">
+        <img src="icon/seal-red.png" alt="學思軒印章" class="brand-seal-img">
+        <img src="icon/logo-yuwen.png" alt="語文補給站" class="brand-logo-img" onerror="this.src='icon/logo-yuwen.png'">
+        <div class="brand-text">
+          <div class="brand-title serif">
+            移覺（通感）殿堂
+          </div>
+          <span class="brand-badge">翰林版 B03L01・核心修辭神器</span>
+        </div>
+      </a>
+      
+      <nav>
+        <ul>
+          <li><a href="../index.html"><i data-lucide="home"></i>首頁</a></li>
+          <li><a href="#diagram-sec"><i data-lucide="file-image"></i> 教材圖解</a></li>
+          <li><a href="#concept-sec"><i data-lucide="book-open"></i> 核心觀念</a></li>
+          <li><a href="#matrix-sec"><i data-lucide="compass"></i> 五感羅盤</a></li>
+          <li><a href="#sentences-sec"><i data-lucide="sparkles"></i> 30句典範圖鑑</a></li>
+          <li><a href="#quiz-sec"><i data-lucide="award"></i> 會考闖關題</a></li>
+          <li><a href="#workshop-sec"><i data-lucide="wand-2"></i> 造句工坊</a></li>
+          <li><a href="#practice-sec" style="background: linear-gradient(135deg, #ede9fe, #fdf2f8); color: var(--primary-dark); font-weight: 800;"><i data-lucide="gamepad-2"></i> 練習神器</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main>
+
+    <!-- Hero 旗艦標題區 (大氣全幅置中) -->
+    <div class="hero">
+      <div class="hero-content">
+        <h1 class="serif">打破五感界線・<span>喚醒文字感知</span></h1>
+        <p>
+          「聽得見陽光的咆哮，嘗得到月色的甘甜。」<br>
+          移覺（通感）是文學中最具魔力的修辭技法。將視覺、聽覺、嗅覺、味覺、觸覺互相溝通切換，讓文字瞬間立體生動！
+        </p>
+        <div class="hero-tags">
+          <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#10b981; width:16px;"></i> 翰林版核心修辭</div>
+          <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#10b981; width:16px;"></i> 30 個精選句型深度圖解</div>
+          <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#10b981; width:16px;"></i> 互動感官雙向標籤</div>
+          <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#10b981; width:16px;"></i> 全真人語音朗讀支援</div>
+          <div class="hero-tag"><i data-lucide="check-circle-2" style="color:#10b981; width:16px;"></i> 內嵌專屬練習神器</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 【精選教材圖解】移覺（通感）修辭概念架構大剖析 (置於單元一上方) -->
+    <section id="diagram-sec">
+      <div class="textbook-diagram-box">
+        <div class="diagram-header">
+          <div class="diagram-title serif">
+            <i data-lucide="file-image" style="color: var(--primary);"></i>
+            【精選教材圖解】移覺（通感）修辭概念架構大剖析
+          </div>
+          <button class="secondary-btn" onclick="openLightbox('yijay/yijayexplain.png', '移覺（通感）教材解說圖')">
+            <i data-lucide="maximize-2"></i> 點擊放大全螢幕
+          </button>
+        </div>
+        <div class="diagram-img-wrap" onclick="openLightbox('yijay/yijayexplain.png', '移覺（通感）教材解說圖')">
+          <img src="yijay/yijayexplain.png" alt="移覺（通感）教材解說圖" class="diagram-img">
+          <div class="diagram-hint"><i data-lucide="zoom-in" style="width:16px;"></i> 點擊放大全螢幕檢視</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元一：核心觀念導讀 -->
+    <section id="concept-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="book-open" style="color: var(--primary);"></i> 單元一：移覺（通感）核心定義與解題口訣</h2>
+          <p class="section-subtitle">打破單一摹寫侷限，掌握感官經驗的交叉互感</p>
+        </div>
+      </div>
+
+      <div class="concept-grid">
+        <!-- 觀念1 -->
+        <div class="concept-card">
+          <div class="concept-card-header">
+            <div class="concept-icon-box"><i data-lucide="lightbulb"></i></div>
+            <div class="concept-card-title serif">什麼是「移覺（通感）」？</div>
+          </div>
+          <div class="concept-body">
+            所謂的「<b>移覺</b>」（又稱<b>通感</b>），是原本感官經驗（<b>視覺、聽覺、嗅覺、味覺、觸覺</b>）的相互溝通、切換與強化。
+            <div class="highlight-box">
+              打破習以為常的客觀敘述模式，<b>將某一新的感官感受，轉移至原本固定反應的感官對象上</b>，創造出奇妙深遠的藝術效果。
+            </div>
+            在古典詩詞、現代散文與日常流行語中皆隨處可見！
+          </div>
+        </div>
+
+        <!-- 觀念2 -->
+        <div class="concept-card">
+          <div class="concept-card-header">
+            <div class="concept-icon-box" style="background:#fdf2f8; color:#db2777;"><i data-lucide="split"></i></div>
+            <div class="concept-card-title serif">移覺 vs. 一般摹寫</div>
+          </div>
+          <div class="concept-body">
+            <b>一般摹寫：</b>單一感官如實記錄（看到紅花寫紅花、聽到雷聲寫雷聲）。<br>
+            <b>移覺通感：</b>跨感官借調重組！
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.85rem; margin-top: 0.8rem; font-size: 0.9rem;">
+              ❌「看見明亮的陽光」（純視覺摹寫）<br>
+              ✅「<b>看見嘩啦嘩啦的陽光</b>」（用聽覺的水聲表視覺陽光）<br>
+              ✅「<b>嘗到一口酸澀的寂寞</b>」（用味覺表心理/視覺感受）
+            </div>
+          </div>
+        </div>
+
+        <!-- 觀念3 -->
+        <div class="concept-card">
+          <div class="concept-card-header">
+            <div class="concept-icon-box" style="background:#ecfdf5; color:#059669;"><i data-lucide="check-check"></i></div>
+            <div class="concept-card-title serif">會考破題兩步驟</div>
+          </div>
+          <div class="concept-body">
+            面對移覺判讀題，請按照「黃金兩步驟」：
+            <ol style="padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.8;">
+              <li><b>第一步【找本體】：</b>作者原本要描寫的「事物本體」是什麼感官？（如：手風琴聲 ➔ 聽覺）</li>
+              <li><b>第二步【找媒介】：</b>作者用了什麼「形容詞/動作」來修飾它？（如：長長的巷子 ➔ 視覺）</li>
+            </ol>
+            <div style="color: #059669; font-weight: 700; margin-top: 0.6rem;">
+              👉 結論：以「視覺」印象表達「聽覺」印象！
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心公式橫幅 -->
+      <div class="formula-banner">
+        <div class="formula-title serif">
+          <i data-lucide="flame"></i> 移覺公式萬能解構法
+        </div>
+        <div class="formula-equation">
+          <div class="formula-part target">
+            被描寫的對象（本體感官）
+          </div>
+          <div style="color: #fde047; font-size: 1.5rem;">⇦ 借調修飾 ⇦</div>
+          <div class="formula-part highlight">
+            用來形容的詞彙（媒介感官）
+          </div>
+          <div style="color: white; font-size: 1.3rem;">＝</div>
+          <div class="formula-part" style="background: #10b981; border-color: #34d399;">
+            以【媒介感官】表達【本體感官】
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元二：五感移覺星盤與快速導覽 -->
+    <section id="matrix-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="compass" style="color: var(--primary);"></i> 單元二：五感移覺星盤與快速導覽</h2>
+        </div>
+      </div>
+
+      <div class="matrix-container">
+        <div class="senses-grid">
+          <div class="sense-card visual" onclick="filterBySense('visual-target')">
+            <div class="sense-card-title" style="color: var(--visual);">
+              <span>👁️ 視覺（本體受體）</span>
+              <i data-lucide="arrow-right" style="width:18px;"></i>
+            </div>
+            <div class="sense-card-desc">
+              描寫對象為光影、白雲、月色、草原等。常借聽覺（嘩啦）、味覺（甜美）、觸覺（黏膩）來轉化。
+            </div>
+          </div>
+
+          <div class="sense-card audio" onclick="filterBySense('audio-target')">
+            <div class="sense-card-title" style="color: var(--audio);">
+              <span>👂 聽覺（本體受體）</span>
+              <i data-lucide="arrow-right" style="width:18px;"></i>
+            </div>
+            <div class="sense-card-desc">
+              描寫對象為琴聲、笑聲、蟬聲、鞋聲。常借視覺（長巷、銀幣、落葉）、觸覺（微風、烤火）來形容。
+            </div>
+          </div>
+
+          <div class="sense-card smell" onclick="filterBySense('smell-target')">
+            <div class="sense-card-title" style="color: var(--smell);">
+              <span>👃 嗅覺（本體受體）</span>
+              <i data-lucide="arrow-right" style="width:18px;"></i>
+            </div>
+            <div class="sense-card-desc">
+              描寫對象為髮香、氣味。常借味覺（清泉過唇）、視覺（骯髒）來轉化豐富意象。
+            </div>
+          </div>
+
+          <div class="sense-card taste" onclick="filterBySense('taste-medium')">
+            <div class="sense-card-title" style="color: var(--taste);">
+              <span>👅 味覺（媒介形容）</span>
+              <i data-lucide="arrow-right" style="width:18px;"></i>
+            </div>
+            <div class="sense-card-desc">
+              以甜美、酒意、酸酸甜甜等滋味，生動勾勒月色、笑容、投球與跳舞姿態。
+            </div>
+          </div>
+
+          <div class="sense-card touch" onclick="filterBySense('touch-medium')">
+            <div class="sense-card-title" style="color: var(--touch);">
+              <span>✋ 觸覺（媒介形容）</span>
+              <i data-lucide="arrow-right" style="width:18px;"></i>
+            </div>
+            <div class="sense-card-desc">
+              以黏膩、暖呼呼、清涼微風、陰冷寒意等肌膚觸感，描摹抽象光影與眼神。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元三：30句典範例句圖鑑 (標題保留，說明各自點擊展開) -->
+    <section id="sentences-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="sparkles" style="color: var(--primary);"></i> 單元三：30 句精選移覺典例圖鑑庫（全收錄）</h2>
+          <p class="section-subtitle">各項標題皆保留，老師可邊講解邊點開【本體】、【媒介】與【解析】引導學生思考</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="secondary-btn" id="global-toggle-btn" onclick="toggleAllAnswers()">
+            <i data-lucide="eye" style="width:16px;"></i> 一鍵揭曉全部說明
+          </button>
+        </div>
+      </div>
+
+      <!-- 篩選列 -->
+      <div class="filter-bar">
+        <div class="filter-chips">
+          <button class="filter-chip active" onclick="filterSentences('all', this)">全部 (30句)</button>
+          <button class="filter-chip" onclick="filterSentences('聽覺表視覺', this)">👂 聽覺 ➔ 👁️ 視覺</button>
+          <button class="filter-chip" onclick="filterSentences('視覺表聽覺', this)">👁️ 視覺 ➔ 👂 聽覺</button>
+          <button class="filter-chip" onclick="filterSentences('味覺表視覺', this)">👅 味覺 ➔ 👁️ 視覺</button>
+          <button class="filter-chip" onclick="filterSentences('觸覺表視覺', this)">✋ 觸覺 ➔ 👁️ 視覺</button>
+          <button class="filter-chip" onclick="filterSentences('觸覺表聽覺', this)">✋ 觸覺 ➔ 👂 聽覺</button>
+          <button class="filter-chip" onclick="filterSentences('嗅覺表視覺', this)">👃 嗅覺 ➔ 👁️ 視覺</button>
+          <button class="filter-chip" onclick="filterSentences('味覺表嗅覺', this)">👅 味覺 ➔ 👃 嗅覺</button>
+          <button class="filter-chip" onclick="filterSentences('視覺表嗅覺', this)">👁️ 視覺 ➔ 👃 嗅覺</button>
+        </div>
+
+        <div class="search-box">
+          <i data-lucide="search" class="search-icon" style="width:16px;"></i>
+          <input type="text" id="sentence-search" class="search-input" placeholder="搜尋例句關鍵字..." oninput="searchSentences()">
+        </div>
+      </div>
+
+      <!-- 例句卡片網格 -->
+      <div class="sentences-grid" id="sentences-container">
+        <!-- 動態渲染 30 句例句 -->
+      </div>
+    </section>
+
+    <!-- 單元四：會考神仙挑戰（測驗區） -->
+    <section id="quiz-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="award" style="color: var(--primary);"></i> 單元四：會考神仙挑戰賽（移覺診斷闖關）</h2>
+          <p class="section-subtitle">自我檢測！透過精選模擬題，秒懂會考試題陷阱</p>
+        </div>
+      </div>
+
+      <div class="quiz-container">
+        <!-- 進行中的測驗畫面 -->
+        <div id="quiz-active-view">
+          <div class="quiz-status-bar">
+            <div style="font-weight: 800; color: var(--primary-dark);" id="quiz-step">題目 1 / 10</div>
+            <div class="quiz-progress-track">
+              <div class="quiz-progress-fill" id="quiz-progress"></div>
+            </div>
+            <div class="quiz-score-badge" id="quiz-score-indicator">
+              <i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：0
+            </div>
+          </div>
+
+          <div class="quiz-question-box">
+            <div class="quiz-question-title serif" id="quiz-question-text">
+              載入題目中...
+            </div>
+          </div>
+
+          <div class="quiz-options" id="quiz-options-box">
+            <!-- 動態注入選項 -->
+          </div>
+
+          <div class="quiz-feedback-box" id="quiz-feedback-box">
+            <div class="quiz-feedback-title" id="quiz-fb-title"></div>
+            <div class="quiz-feedback-desc" id="quiz-fb-desc"></div>
+          </div>
+
+          <div class="quiz-controls">
+            <button class="action-btn" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;">
+              下一題 <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 結算畫面 -->
+        <div class="quiz-result-view" id="quiz-result-view">
+          <i data-lucide="trophy" style="width: 72px; height: 72px; color: #eab308; margin: 0 auto;"></i>
+          <div class="result-title serif" style="font-size: 2rem; font-weight: 900; margin-top: 1rem;">測驗挑戰完成！</div>
+          <div class="result-score-ring" id="result-final-score">100 分</div>
+          <div class="result-badge" id="result-badge-text">通感修辭國文神 🌟</div>
+          <p id="result-comment" style="color: #64748b; margin-bottom: 2rem; font-size: 1.05rem;">太神了！五感流向與會考移覺題型全部精準破譯！</p>
+          <button class="action-btn" onclick="restartQuiz()">
+            <i data-lucide="rotate-ccw"></i> 再次挑戰測驗
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元五：五感造句魔法工坊 -->
+    <section id="workshop-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="wand-2" style="color: var(--primary);"></i> 單元五：移覺魔法造句工坊（創意寫作實驗室）</h2>
+          <p class="section-subtitle">點選主體與媒介，動態生成優美移覺現代詩與散文金句！</p>
+        </div>
+      </div>
+
+      <div class="workshop-container">
+        <div class="workshop-builder">
+          <!-- 步驟一 -->
+          <div class="workshop-step-card">
+            <div class="workshop-step-title">
+              <span>1. 選擇描寫對象（本體）</span>
+            </div>
+            <div class="preset-chip-group" id="ws-target-chips">
+              <button class="preset-chip active" onclick="selectWsTarget('陽光', 'visual', this)">☀️ 陽光 (視覺)</button>
+              <button class="preset-chip" onclick="selectWsTarget('蟬聲', 'audio', this)">🦗 蟬聲 (聽覺)</button>
+              <button class="preset-chip" onclick="selectWsTarget('晚風', 'touch', this)">🍃 晚風 (觸覺)</button>
+              <button class="preset-chip" onclick="selectWsTarget('月色', 'visual', this)">🌙 月色 (視覺)</button>
+              <button class="preset-chip" onclick="selectWsTarget('笑聲', 'audio', this)">😄 笑聲 (聽覺)</button>
+              <button class="preset-chip" onclick="selectWsTarget('咖啡香', 'smell', this)">☕ 咖啡香 (嗅覺)</button>
+            </div>
+          </div>
+
+          <!-- 步驟二 -->
+          <div class="workshop-step-card">
+            <div class="workshop-step-title">
+              <span>2. 選擇借調感官（媒介）</span>
+            </div>
+            <div class="preset-chip-group" id="ws-medium-chips">
+              <button class="preset-chip active" onclick="selectWsMedium('味覺', 'taste', this)">👅 轉移到味覺 (甘甜、酸楚、苦澀)</button>
+              <button class="preset-chip" onclick="selectWsMedium('聽覺', 'audio', this)">👂 轉移到聽覺 (合唱、咆哮、輕吟)</button>
+              <button class="preset-chip" onclick="selectWsMedium('視覺', 'visual', this)">👁️ 轉移到視覺 (銀幣、蒼翠、長巷)</button>
+              <button class="preset-chip" onclick="selectWsMedium('觸覺', 'touch', this)">✋ 轉移到觸覺 (黏膩、溫熱、冰涼)</button>
+              <button class="preset-chip" onclick="selectWsMedium('嗅覺', 'smell', this)">👃 轉移到嗅覺 (焦灼、腐敗、芬芳)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="workshop-output-box">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #a855f7; margin-bottom: 0.5rem;">✦ AI 移覺造句生成成果 ✦</div>
+          <div class="output-sentence serif" id="ws-output-text">
+            「窗外的陽光灑落下來，化作一口楓糖般甜美的甘醇。」
+          </div>
+          <div class="output-analysis" id="ws-output-analysis">
+            🎯 <b>修辭解析：</b>要描寫的是「<b>陽光</b>」（視覺），以「<b>楓糖般甜美</b>」（味覺）來修飾 ➔ <b>以「味覺」印象表達「視覺」印象</b>。
+          </div>
+          <div style="margin-top: 1.2rem; display:flex; gap:0.6rem; justify-content:center; flex-wrap:wrap;">
+            <button class="secondary-btn" onclick="generateRandomWs()">
+              <i data-lucide="shuffle"></i> 隨機激發靈感
+            </button>
+            <button class="action-btn" onclick="speakText(document.getElementById('ws-output-text').innerText)">
+              <i data-lucide="volume-2"></i> 朗讀此句
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 單元六：練習神器 (內嵌 yijay/synesthesia-practice.html) -->
+    <section id="practice-sec">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title serif"><i data-lucide="gamepad-2" style="color: var(--primary);"></i> 單元六：移覺（通感）語文學習集練習神器</h2>
+          <p class="section-subtitle">全套 30 句精熟記憶卡片、錯題自動收錄診斷、翻卡闖關模式</p>
+        </div>
+        <div class="practice-actions">
+          <button class="secondary-btn" onclick="reloadPracticeIframe()" title="重新整理練習神器">
+            <i data-lucide="rotate-ccw"></i> 重新載入
+          </button>
+          <a href="yijay/synesthesia-practice.html" target="_blank" class="action-btn" title="在新分頁開啟練習神器獨立視窗">
+            <i data-lucide="external-link"></i> 新分頁獨立開啟
+          </a>
+        </div>
+      </div>
+
+      <div class="practice-container">
+        <div class="practice-toolbar">
+          <div class="practice-info">
+            <span class="practice-badge">語文學習集</span>
+            <span style="font-weight: 700; color: #334155; font-size: 0.95rem;">移覺（通感）修辭專屬閃卡測驗庫</span>
+          </div>
+          <div style="font-size: 0.85rem; color: #64748b;">
+            💡 提示：支援登入、自選模式、卡片翻轉與錯題本複習
+          </div>
+        </div>
+
+        <div class="practice-iframe-wrap">
+          <iframe id="practice-iframe" src="yijay/synesthesia-practice.html" class="practice-iframe" allow="fullscreen"></iframe>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 燈箱 Lightbox Modal -->
+  <div class="lightbox-modal" id="lightbox-modal" onclick="closeLightbox(event)">
+    <div class="lightbox-container" onclick="event.stopPropagation()">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" title="關閉 (Esc)">✕</button>
+      <img id="lightbox-img" class="lightbox-img" src="" alt="教材圖解大圖">
+      <div id="lightbox-caption" style="margin-top: 0.8rem; font-weight: 700; color: #334155;"></div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="footer-container">
+      <img src="icon/slogan-god-dark.png" alt="只要有心人人都是國文神" class="footer-banner-img">
+      
+      <div class="footer-credit serif">
+        𖤐本網頁由Gemini生成，黃于珊、王斐亭老師製作𖤐
+      </div>
+
+      <div class="footer-notes">
+        語文補給站・修辭精闢特輯系列｜翰林版國中國文第三冊第一課《田園之秋選》延伸教材<br>
+        本系統具備五感流向圖解、語音合成發聲、題庫智慧診斷及隨機創意造句實驗模組。
+      </div>
+    </div>
+  </footer>
+
+  <!-- 互動資料庫與邏輯腳本 -->
+  <script>
+    // ==========================================
+    // 1. 30 句精典移覺資料庫 (完整收錄，嚴謹無漏)
+    // ==========================================
+    const SENTENCES_DB = [
+      {
+        id: 1,
+        quote: "從窗外望出去，嘩啦嘩啦的陽光，灑在一望無際的蒼綠草原上。",
+        target: "陽光",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "嘩啦嘩啦",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是「陽光」。以「嘩啦嘩啦」（流水的聲音），來表達看到充沛明亮的「陽光」。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 2,
+        quote: "從窗外望出去，放聲嘶吼的陽光，呼嘯在一望無際的蒼綠草原上。",
+        target: "陽光",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "放聲嘶吼、呼嘯",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是「陽光」。以「放聲嘶吼、呼嘯」的狂烈聲響，來表達烈日當空的熾熱「陽光」。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 3,
+        quote: "從窗外望出去，散發焦灼味的陽光，瀰漫在一望無際的蒼綠草原上。",
+        target: "陽光",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "散發焦灼味",
+        mediumSense: "smell",
+        mediumSenseName: "嗅覺",
+        type: "嗅覺表視覺",
+        desc: "要講的是「陽光」。以「散發焦灼味」的氣味，來表達陽光曝曬大地的灼熱視覺印象。",
+        fullMapping: "以（嗅覺）印象表達（視覺）印象"
+      },
+      {
+        id: 4,
+        quote: "從窗外望出去，楓糖般甜美的陽光，澆淋在一望無際的蒼綠草原上。",
+        target: "陽光",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "楓糖漿般甜美",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是「陽光」。以「楓糖漿般甜美」的可口滋味，來表達金黃溫暖柔和的「陽光」。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 5,
+        quote: "從窗外望出去，如油煙黏膩的陽光，附著在一望無際的蒼綠草原上。",
+        target: "陽光",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "油煙般黏膩",
+        mediumSense: "touch",
+        mediumSenseName: "觸覺",
+        type: "觸覺表視覺",
+        desc: "要講的是「陽光」。以「油煙般黏膩」的肌膚觸感，來表達悶熱難受的「陽光」。",
+        fullMapping: "以（觸覺）印象表達（視覺）印象"
+      },
+      {
+        id: 6,
+        quote: "從窗外望出去，暖呼呼的白雲，在如洗的晴空中徜徉著。",
+        target: "白雲",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "暖呼呼",
+        mediumSense: "touch",
+        mediumSenseName: "觸覺",
+        type: "觸覺表視覺",
+        desc: "要講的是「白雲」。以「暖呼呼」的溫熱觸覺感受，來表達晴空中棉花糖般蓬鬆的「白雲」。",
+        fullMapping: "以（觸覺）印象表達（視覺）印象"
+      },
+      {
+        id: 7,
+        quote: "他惡毒的咒罵，彷彿急雨般落下的利箭，簡直要把我刺穿。",
+        target: "咒罵",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "急雨般落下的利箭",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是「咒罵」（聽到的話語）。以「急雨般落下的利箭」的銳利視覺影像，來表達「咒罵」傷人之深。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 8,
+        quote: "她的笑聲像散落一地的銀幣，可以一一撿起。",
+        target: "笑聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "散落一地的銀幣",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是「笑聲」。以「散落一地的銀幣」閃閃發亮、清脆具體的視覺實體，來表達清脆悅耳的「笑聲」。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 9,
+        quote: "枝上黃鶯的吟唱，彷彿夜裡清涼的微風輕輕拂過肌膚。",
+        target: "黃鶯的吟唱",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "清涼的微風輕輕拂過肌膚",
+        mediumSense: "touch",
+        mediumSenseName: "觸覺",
+        type: "觸覺表聽覺",
+        desc: "要講的是「黃鶯的吟唱」。以「微風拂過肌膚」舒適清涼的觸覺感受，來表達悅耳動聽的鳥鳴。",
+        fullMapping: "以（觸覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 10,
+        quote: "她羞澀的笑容，充滿了濃濃的甜味。",
+        target: "笑容",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "濃濃的甜味",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是看到的「笑容」。以「濃濃的甜味」之味覺甘醇，來表達少女笑容令人心醉神迷。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 11,
+        quote: "嚼口香糖的漢子／把手風琴聲拉成／一條那麼長的無人巷子。",
+        target: "手風琴聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "一條那麼長的無人巷子",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是「手風琴聲」。以長長的「無人巷子」具體視覺空間感，來表達悠長幽深的琴聲。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 12,
+        quote: "他把今年在山上／裝進錄音機的蟬聲／拿出來／讓孩子們／烤火。",
+        target: "蟬聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "烤火",
+        mediumSense: "touch",
+        mediumSenseName: "觸覺",
+        type: "觸覺表聽覺",
+        desc: "要講的是「蟬聲」。以能傳遞熱量的「烤火」觸覺暖意，來表達夏天蟬聲熾烈如火的感受。",
+        fullMapping: "以（觸覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 13,
+        quote: "走在喧囂的山林小徑，耳畔清靜，蹲下來卻能看見熱鬧鼎沸的聲音。",
+        target: "熱鬧鼎沸的聲音",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "看見",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是微觀生態的「聲音」。以眼睛「看見」的視覺動作，來表達聽覺細微震動的美妙境界。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 14,
+        quote: "這個球投得很甜，可惜打擊者沒有揮棒！",
+        target: "投出來的球",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "很甜",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是看到的「投出來的球」。以「很甜」來表達看到球路正中紅心、非常好打。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 15,
+        quote: "我為那燃燒著強烈睡欲的眼神所懾，那眼神充滿陰冷的寒意。",
+        target: "強烈睡欲的眼神",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "充滿陰冷的寒意",
+        mediumSense: "touch",
+        mediumSenseName: "觸覺",
+        type: "觸覺表視覺",
+        desc: "要講的是「眼神」。以「陰冷的寒意」之觸覺冷顫，來表達看見陰森恐怖的眼神。",
+        fullMapping: "以（觸覺）印象表達（視覺）印象"
+      },
+      {
+        id: 16,
+        quote: "塘中的月色並不均勻，但光與影有著和諧的旋律。",
+        target: "光與影",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "和諧的旋律",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是朱自清《荷塘月色》看到的「光與影」。以音樂「和諧的旋律」，來表達光影交織的和諧視覺之美。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 17,
+        quote: "他們的跳舞帶有一點淒涼的酒意，可是心裡發空，再也灌不醉自己。",
+        target: "他們的跳舞",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "酒意",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是看到的「舞姿」。以「酒意」醇烈微醺的味覺印象，來表達舞姿中的沉淪與淒涼。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 18,
+        quote: "晴天之後是飽滿得不能再飽滿的晴天，敲上去會敲出音樂來的稀金屬的晴天。",
+        target: "晴天",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "敲上去會敲出音樂",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是蔚藍澄澈的「晴天」。以「敲出音樂」的清脆聲響，來表達晴空明淨無雜質的視覺震撼。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 19,
+        quote: "三粒苦松子／沿著路標一直滾到我的腳前／伸手抓起／竟是一把鳥聲。",
+        target: "滾動的苦松子",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "一把鳥聲",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是看到的「松子」。以手中抓起的「鳥聲」，來表達松子滾動與大自然生機相通的奇妙感官轉移。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 20,
+        quote: "好一團波濤洶湧大合唱的紫色喇叭花。",
+        target: "紫色喇叭花",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "大合唱",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是盛開成片的「紫色喇叭花」。以「大合唱」的雄壯聲勢，來表達花開燦爛繁茂的壯觀景象。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 21,
+        quote: "馬蹄聲，孤獨又憂鬱的自遠至近，灑落在沉默的街上成白色的小花朵。",
+        target: "馬蹄聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "白色的小花朵",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是鄭愁予詩中的「馬蹄聲」。以「白色小花」飄落街頭的視覺畫面，來表達噠噠蹄聲的清幽孤寂。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 22,
+        quote: "骯髒的香味，我吸了太多太多。",
+        target: "香味",
+        targetSense: "smell",
+        targetSenseName: "嗅覺",
+        medium: "骯髒",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表嗅覺",
+        desc: "要講的是聞到的「香味」。以帶有視覺汙濁感的「骯髒」，來表達化學或庸俗氣味的令人反感。",
+        fullMapping: "以（視覺）印象表達（嗅覺）印象"
+      },
+      {
+        id: 23,
+        quote: "腐敗的視野，我看得太多太多。",
+        target: "視野",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "腐敗",
+        mediumSense: "smell",
+        mediumSenseName: "嗅覺",
+        type: "嗅覺表視覺",
+        desc: "要講的是眼睛所見的「視野」。以發出臭味的「腐敗」氣味，來表達環境崩壞墮落的視覺景象。",
+        fullMapping: "以（嗅覺）印象表達（視覺）印象"
+      },
+      {
+        id: 24,
+        quote: "森林綠地都已成紀錄片，聞不到綠意盎然。",
+        target: "綠意",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "聞不到",
+        mediumSense: "smell",
+        mediumSenseName: "嗅覺",
+        type: "嗅覺表視覺",
+        desc: "要講的是植物色彩的「綠意」。以鼻子「聞不到」的嗅覺動作，來表達自然生機消失的視覺蒼涼。",
+        fullMapping: "以（嗅覺）印象表達（視覺）印象"
+      },
+      {
+        id: 25,
+        quote: "巷子深處，有孤獨的鞋聲響起／蕭瑟如秋天的落葉，緩緩飄墜。",
+        target: "孤獨的鞋聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "秋天的落葉，緩緩飄墜",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是「鞋聲」。以「落葉飄墜」悠緩孤寂的視覺動態，來表達腳步聲的淒涼空曠。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      },
+      {
+        id: 26,
+        quote: "秋天的月亮像句酒話／傍晚時被二大爺隨手掛在樹上／有些酸，還有些甜。",
+        target: "秋天的月亮",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "有些酸，還有些甜",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是看到的「秋天的月亮」。以「有些酸，還有些甜」的酒味果香滋味，來表達月色的微醺與鄉土情調。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 27,
+        quote: "髮香蜿蜒而來／如清泉流過唇際。",
+        target: "髮香",
+        targetSense: "smell",
+        targetSenseName: "嗅覺",
+        medium: "如清泉流過唇際",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表嗅覺",
+        desc: "要講的是秀髮的「髮香」。以「清泉流過唇際」的甘甜清涼味覺觸感，來表達香氣的沁人心脾。",
+        fullMapping: "以（味覺）印象表達（嗅覺）印象"
+      },
+      {
+        id: 28,
+        quote: "昨夜的月色／至少有一瓣是甜的。",
+        target: "月色",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "甜的",
+        mediumSense: "taste",
+        mediumSenseName: "味覺",
+        type: "味覺表視覺",
+        desc: "要講的是夜空的「月色」。以「甜的」味覺甘美，來表達月光帶給心靈的幸福與甜蜜慰藉。",
+        fullMapping: "以（味覺）印象表達（視覺）印象"
+      },
+      {
+        id: 29,
+        quote: "有人看到／一排啞然的街燈／在風中／唱了起來。",
+        target: "街燈",
+        targetSense: "visual",
+        targetSenseName: "視覺",
+        medium: "啞然、唱了起來",
+        mediumSense: "audio",
+        mediumSenseName: "聽覺",
+        type: "聽覺表視覺",
+        desc: "要講的是靜立的「街燈」。以「啞然」與「唱了起來」的聲音動態，來表達路燈在夜風中光影閃爍搖曳的視覺動感。",
+        fullMapping: "以（聽覺）印象表達（視覺）印象"
+      },
+      {
+        id: 30,
+        quote: "那天我看見一個少婦／雕像般站在十字路口／它把笑聲斜插在髮間。",
+        target: "笑聲",
+        targetSense: "audio",
+        targetSenseName: "聽覺",
+        medium: "斜插在髮間",
+        mediumSense: "visual",
+        mediumSenseName: "視覺",
+        type: "視覺表聽覺",
+        desc: "要講的是悅耳的「笑聲」。以如花朵髮簪般「斜插在髮間」的優雅視覺姿態，來表達笑聲的俏麗迷人。",
+        fullMapping: "以（視覺）印象表達（聽覺）印象"
+      }
+    ];
+
+    // ==========================================
+    // 2. 測驗題庫資料 (精選10題會考級深度題)
+    // ==========================================
+    const QUIZ_QUESTIONS = [
+      {
+        question: "下列文句中，何者「並未使用」移覺（通感）修辭？",
+        options: [
+          "走在喧囂的山林小徑，耳畔清靜，蹲下來卻能看見熱鬧鼎沸的聲音",
+          "這個球投得很甜，可惜打擊者沒有揮棒！",
+          "大雨滂沱，雷聲隆隆，閃電撕裂了整片漆黑的夜空",
+          "馬蹄聲，孤獨又憂鬱的自遠至近，灑落在沉默的街上成白色的小花朵"
+        ],
+        correct: 2,
+        explanation: "<b>【會考解析】</b><br>C選項「大雨滂沱（視覺）、雷聲隆隆（聽覺）、閃電撕裂（視覺）」皆為單純客觀的<b>五官摹寫</b>，感官之間並沒有互相移借切換，故無移覺修辭。<br>A為以視覺表聽覺；B為以味覺表視覺；D為以視覺表聽覺。"
+      },
+      {
+        question: "「嚼口香糖的漢子／把手風琴聲拉成／一條那麼長的無人巷子。」這節詩句所運用的移覺方向為何？",
+        options: [
+          "以「聽覺」印象表達「觸覺」印象",
+          "以「視覺」印象表達「聽覺」印象",
+          "以「味覺」印象表達「嗅覺」印象",
+          "以「觸覺」印象表達「視覺」印象"
+        ],
+        correct: 1,
+        explanation: "<b>【會考解析】</b><br>本體是「<b>手風琴聲</b>」（聽覺），詩人借用「<b>一條那麼長的無人巷子</b>」（視覺空間）來形容琴聲的悠遠綿長，屬於<b>以「視覺」印象表達「聽覺」印象</b>。"
+      },
+      {
+        question: "「秋天的月亮像句酒話／傍晚時被二大爺隨手掛在樹上／有些酸，還有些甜。」句中「有些酸，還有些甜」是將哪兩種感官做了轉化？",
+        options: [
+          "以「味覺」表達「視覺」",
+          "以「聽覺」表達「觸覺」",
+          "以「嗅覺」表達「聽覺」",
+          "以「觸覺」表達「味覺」"
+        ],
+        correct: 0,
+        explanation: "<b>【會考解析】</b><br>本題要描寫的是天上的「<b>秋天月亮</b>」（視覺），詩人以品嘗酒釀時「<b>有些酸，還有些甜</b>」（味覺）來形容月色的微醺感，是<b>以「味覺」表達「視覺」</b>。"
+      },
+      {
+        question: "朱自清《荷塘月色》中寫道：「微風過處，送來縷縷清香，彷彿遠處高樓上渺茫的歌聲似的。」此句名言是將哪一種感官移借到哪一種感官？",
+        options: [
+          "以「視覺」表達「觸覺」",
+          "以「聽覺」表達「嗅覺」",
+          "以「味覺」表達「聽覺」",
+          "以「觸覺」表達「視覺」"
+        ],
+        correct: 1,
+        explanation: "<b>【會考解析】</b><br>描寫的本體是荷花的「<b>清香</b>」（嗅覺），作者用「<b>遠處高樓上渺茫的歌聲</b>」（聽覺）來形容香氣時有時無、若隱若現，是<b>以「聽覺」表達「嗅覺」</b>。"
+      },
+      {
+        question: "「他把今年在山上／裝進錄音機的蟬聲／拿出來／讓孩子們／烤火。」下列關於這首詩的分析，何者最為正確？",
+        options: [
+          "以「觸覺」的溫熱暖意，表達「聽覺」蟬聲所喚起的夏日熾烈感",
+          "以「視覺」的光線，表達「嗅覺」的芬芳",
+          "以「味覺」的甘甜，表達「聽覺」的吵雜",
+          "純粹描寫錄音機故障發熱的物理現象，無文學修辭"
+        ],
+        correct: 0,
+        explanation: "<b>【會考解析】</b><br>要描寫的是「<b>蟬聲</b>」（聽覺），詩人想像將夏天蟬聲拿出來「<b>烤火</b>」（觸覺溫度），巧妙轉移了感官，使寒冬因夏蟬之聲而溫暖起來。"
+      },
+      {
+        question: "「從窗外望出去，嘩啦嘩啦的陽光，灑在一望無際的蒼綠草原上。」句中「嘩啦嘩啦」原本屬於何種感官？在此轉移修飾何者？",
+        options: [
+          "原本屬於聽覺擬聲詞，在此轉移修飾視覺的陽光",
+          "原本屬於嗅覺氣味詞，在此轉移修飾觸覺的微風",
+          "原本屬於味覺滋味詞，在此轉移修飾心靈的感受",
+          "原本屬於視覺顏色詞，在此轉移修飾聽覺的雨聲"
+        ],
+        correct: 0,
+        explanation: "<b>【會考解析】</b><br>「嘩啦嘩啦」是大水傾瀉的<b>聽覺</b>擬聲詞，作者用來描寫陽光如瀑布般鋪天蓋地灑落的<b>視覺</b>畫面，屬於<b>以聽覺表視覺</b>。"
+      },
+      {
+        question: "下列流行歌詞或文句中，哪一項所使用的移覺「感官流向」與其他三者<b>不同</b>？",
+        options: [
+          "她羞澀的笑容，充滿了濃濃的甜味",
+          "昨夜的月色，至少有一瓣是甜的",
+          "這個球投得很甜，可惜打擊者沒有揮棒",
+          "她的笑聲像散落一地的銀幣，可以一一撿起"
+        ],
+        correct: 3,
+        explanation: "<b>【會考解析】</b><br>A、B、C 皆為<b>「以味覺（甜）表達視覺（笑容、月色、投球）」</b>；<br>D 為<b>「以視覺（銀幣散落）表達聽覺（笑聲）」</b>，感官流向明顯不同。"
+      },
+      {
+        question: "「枝上黃鶯的吟唱，彷彿夜裡清涼的微風輕輕拂過肌膚。」此句中「微風拂過肌膚」所借調的感官媒介為何？",
+        options: [
+          "視覺",
+          "觸覺",
+          "味覺",
+          "嗅覺"
+        ],
+        correct: 1,
+        explanation: "<b>【會考解析】</b><br>「清涼的微風拂過肌膚」屬於皮膚感受到的<b>觸覺</b>，用來形容黃鶯「吟唱」（聽覺）令人身心舒暢，故媒介為觸覺。"
+      },
+      {
+        question: "「那天我看見一個少婦／雕像般站在十字路口／它把笑聲斜插在髮間。」這節詩之所以動人，是因為詩人將聽覺的笑聲如何轉化？",
+        options: [
+          "化為實體如花簪般插在髮間的視覺意象",
+          "化為一碗熱騰騰的薑湯以供飲用",
+          "化為震耳欲聾的雷聲以震撼人心",
+          "化為難聞的氣味以引人注意"
+        ],
+        correct: 0,
+        explanation: "<b>【會考解析】</b><br>詩人將無形聽覺的「<b>笑聲</b>」，化為如簪花般「<b>斜插在髮間</b>」的優美視覺畫面，賦予笑聲具體的形體美。"
+      },
+      {
+        question: "在現代詩創作中，若想用「以觸覺表達視覺」的移覺手法描寫「冬日午後的夕陽」，下列何者最符合此設計？",
+        options: [
+          "夕陽如同一面巨大的金黃色銅鑼掛在西山",
+          "夕陽如一條溫熱的羊毛毯，輕輕覆蓋在旅人的肩頭",
+          "夕陽大聲咆哮著沉入漆黑的深淵",
+          "夕陽散發著糖炒栗子的濃郁甜香"
+        ],
+        correct: 1,
+        explanation: "<b>【會考解析】</b><br>A為純視覺譬喻；C為以聽覺表視覺；D為以嗅覺/味覺表視覺；<br><b>B選項以「溫熱的羊毛毯」（觸覺）來描寫「夕陽」（視覺）</b>，精準符合「以觸覺表達視覺」的移覺修辭！"
+      }
+    ];
+
+    // ==========================================
+    // 3. 例句渲染與逐項點開教學邏輯
+    // ==========================================
+    let currentFilter = 'all';
+    let allAnswersShown = false;
+
+    function renderSentences(data) {
+      const container = document.getElementById('sentences-container');
+      if (!container) return;
+
+      if (data.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
+            <i data-lucide="search-x" style="width: 48px; height: 48px; color: #94a3b8; margin: 0 auto 1rem;"></i>
+            <div style="font-size: 1.2rem; font-weight: 700; color: #475569;">找不到符合條件的例句</div>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">請嘗試更換篩選條件或輸入不同的關鍵字</p>
+          </div>
+        `;
+        refreshIcons();
+        return;
+      }
+
+      container.innerHTML = data.map(item => `
+        <div class="sentence-card">
+          <div>
+            <div class="card-top">
+              <span class="card-number">案例 #${item.id}</span>
+              <button class="card-tts-btn" onclick="speakText('${item.quote.replace(/'/g, "\'")}')" title="朗讀此句">
+                <i data-lucide="volume-2" style="width:16px;"></i>
+              </button>
+            </div>
+            
+            <div class="sentence-quote serif">
+              ${item.quote}
+            </div>
+
+            <!-- 標題皆保留，說明個別點開 -->
+            <div class="flow-badge-box">
+              <!-- 【本體對象】列 -->
+              <div class="step-item-row">
+                <span class="step-label">【本體對象】：</span>
+                <span class="interactive-slot" onclick="toggleSlot('target-${item.id}')">
+                  <span class="slot-placeholder" id="ph-target-${item.id}" style="${allAnswersShown ? 'display:none;' : 'inline-flex;'}">
+                    <i data-lucide="eye" style="width:13px;"></i> 點擊看本體
+                  </span>
+                  <span class="sense-pill ${item.targetSense}" id="content-target-${item.id}" style="${allAnswersShown ? 'inline-flex;' : 'display:none;'}" title="點擊可收起">
+                    ${getSenseIcon(item.targetSense)} ${item.target}（${item.targetSenseName}）
+                  </span>
+                </span>
+              </div>
+
+              <!-- 【媒介形容】列 -->
+              <div class="step-item-row">
+                <span class="step-label">【媒介形容】：</span>
+                <span class="interactive-slot" onclick="toggleSlot('medium-${item.id}')">
+                  <span class="slot-placeholder" id="ph-medium-${item.id}" style="${allAnswersShown ? 'display:none;' : 'inline-flex;'}">
+                    <i data-lucide="eye" style="width:13px;"></i> 點擊看媒介
+                  </span>
+                  <span class="sense-pill ${item.mediumSense}" id="content-medium-${item.id}" style="${allAnswersShown ? 'inline-flex;' : 'display:none;'}" title="點擊可收起">
+                    ${getSenseIcon(item.mediumSense)} ${item.medium}（${item.mediumSenseName}）
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <!-- 【修辭解析】區塊 -->
+            <div class="step-analysis-block">
+              <div class="step-analysis-header" onclick="toggleSlot('desc-${item.id}')">
+                <span class="step-label" style="color: #7e22ce;">【修辭解析】</span>
+                <span class="slot-placeholder-text" id="ph-desc-${item.id}" style="${allAnswersShown ? 'display:none;' : 'inline-flex;'}">
+                  <i data-lucide="eye" style="width:13px;"></i> 點擊看解析
+                </span>
+              </div>
+              <div class="analysis-text-content" id="content-desc-${item.id}" style="${allAnswersShown ? 'block;' : 'display:none;'}" onclick="toggleSlot('desc-${item.id}')" title="點擊可收起">
+                ${item.desc}
+              </div>
+            </div>
+          </div>
+
+          <!-- 底部答案列 (標題與按鈕) -->
+          <div class="card-bottom-pill">
+            <div class="interactive-slot" onclick="toggleSlot('ans-${item.id}')" style="width:100%;">
+              <button class="slot-placeholder-full" id="ph-ans-${item.id}" style="${allAnswersShown ? 'display:none;' : 'flex;'}">
+                <i data-lucide="help-circle" style="width:15px;"></i> 點擊揭曉移覺流向答案
+              </button>
+              <div class="card-answer-revealed" id="content-ans-${item.id}" style="${allAnswersShown ? 'flex;' : 'display:none;'}" title="點擊可收起">
+                <span style="color: var(--primary-dark);">🎯 ${item.fullMapping}</span>
+                <span class="ans-badge">${item.type}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      refreshIcons();
+    }
+
+    function toggleSlot(slotKey) {
+      const ph = document.getElementById(`ph-${slotKey}`);
+      const content = document.getElementById(`content-${slotKey}`);
+      if (ph && content) {
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? (slotKey.startsWith('ans-') ? 'flex' : (slotKey.startsWith('desc-') ? 'block' : 'inline-flex')) : 'none';
+        ph.style.display = isHidden ? 'none' : (slotKey.startsWith('ans-') ? 'flex' : 'inline-flex');
+      }
+      refreshIcons();
+    }
+
+    function toggleAllAnswers() {
+      allAnswersShown = !allAnswersShown;
+      const globalBtn = document.getElementById('global-toggle-btn');
+      if (globalBtn) {
+        globalBtn.innerHTML = allAnswersShown
+          ? `<i data-lucide="eye-off" style="width:16px;"></i> 一鍵隱藏全部說明（教學提問模式）`
+          : `<i data-lucide="eye" style="width:16px;"></i> 一鍵揭曉全部說明`;
+      }
+
+      SENTENCES_DB.forEach(item => {
+        ['target', 'medium', 'desc', 'ans'].forEach(type => {
+          const ph = document.getElementById(`ph-${type}-${item.id}`);
+          const content = document.getElementById(`content-${type}-${item.id}`);
+          if (ph && content) {
+            content.style.display = allAnswersShown ? (type === 'ans' ? 'flex' : (type === 'desc' ? 'block' : 'inline-flex')) : 'none';
+            ph.style.display = allAnswersShown ? 'none' : (type === 'ans' ? 'flex' : 'inline-flex');
+          }
+        });
+      });
+      refreshIcons();
+    }
+
+    function getSenseIcon(sense) {
+      switch(sense) {
+        case 'visual': return '👁️';
+        case 'audio': return '👂';
+        case 'smell': return '👃';
+        case 'taste': return '👅';
+        case 'touch': return '✋';
+        default: return '✨';
+      }
+    }
+
+    function filterSentences(type, btnEl) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      const searchVal = document.getElementById('sentence-search').value.trim().toLowerCase();
+      applyFilters(type, searchVal);
+    }
+
+    function searchSentences() {
+      const searchVal = document.getElementById('sentence-search').value.trim().toLowerCase();
+      applyFilters(currentFilter, searchVal);
+    }
+
+    function applyFilters(type, query) {
+      let result = SENTENCES_DB;
+      if (type !== 'all') {
+        result = result.filter(s => s.type === type);
+      }
+      if (query) {
+        result = result.filter(s => 
+          s.quote.toLowerCase().includes(query) ||
+          s.target.toLowerCase().includes(query) ||
+          s.medium.toLowerCase().includes(query) ||
+          s.desc.toLowerCase().includes(query) ||
+          s.type.toLowerCase().includes(query)
+        );
+      }
+      renderSentences(result);
+    }
+
+    function filterBySense(category) {
+      const targetSec = document.getElementById('sentences-sec');
+      if (targetSec) {
+        targetSec.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      let filtered = SENTENCES_DB;
+      if (category === 'visual-target') {
+        filtered = SENTENCES_DB.filter(s => s.targetSense === 'visual');
+      } else if (category === 'audio-target') {
+        filtered = SENTENCES_DB.filter(s => s.targetSense === 'audio');
+      } else if (category === 'smell-target') {
+        filtered = SENTENCES_DB.filter(s => s.targetSense === 'smell');
+      } else if (category === 'taste-medium') {
+        filtered = SENTENCES_DB.filter(s => s.mediumSense === 'taste');
+      } else if (category === 'touch-medium') {
+        filtered = SENTENCES_DB.filter(s => s.mediumSense === 'touch');
+      }
+
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      renderSentences(filtered);
+    }
+
+    // ==========================================
+    // 4. 會考測驗互動邏輯
+    // ==========================================
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let answeredCurrent = false;
+
+    function loadQuizQuestion(index) {
+      answeredCurrent = false;
+      const q = QUIZ_QUESTIONS[index];
+      if (!q) return;
+
+      const stepEl = document.getElementById('quiz-step');
+      const progressEl = document.getElementById('quiz-progress');
+      const qTextEl = document.getElementById('quiz-question-text');
+      const optionsBox = document.getElementById('quiz-options-box');
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const nextBtn = document.getElementById('quiz-next-btn');
+
+      if (stepEl) stepEl.innerText = `題目 ${index + 1} / ${QUIZ_QUESTIONS.length}`;
+      if (progressEl) progressEl.style.width = `${((index) / QUIZ_QUESTIONS.length) * 100}%`;
+      if (qTextEl) qTextEl.innerText = `${index + 1}. ${q.question}`;
+
+      if (optionsBox) {
+        optionsBox.innerHTML = q.options.map((opt, optIdx) => `
+          <button class="quiz-opt-btn" onclick="selectQuizOption(${optIdx})">
+            <span style="font-weight:800; color: var(--primary); width: 24px;">${['(A)', '(B)', '(C)', '(D)'][optIdx]}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('');
+      }
+
+      if (fbBox) {
+        fbBox.className = 'quiz-feedback-box';
+        fbBox.style.display = 'none';
+      }
+      if (nextBtn) nextBtn.style.display = 'none';
+      refreshIcons();
+    }
+
+    function selectQuizOption(optIdx) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const buttons = document.querySelectorAll('.quiz-opt-btn');
+      const isCorrect = (optIdx === q.correct);
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add('correct');
+        } else if (idx === optIdx && !isCorrect) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      const fbBox = document.getElementById('quiz-feedback-box');
+      const fbTitle = document.getElementById('quiz-fb-title');
+      const fbDesc = document.getElementById('quiz-fb-desc');
+
+      if (isCorrect) {
+        quizScore += 10;
+        if (fbTitle) {
+          fbTitle.innerHTML = "✅ 恭喜答對！太敏銳了！";
+          fbTitle.style.color = "#15803d";
+        }
+      } else {
+        if (fbTitle) {
+          fbTitle.innerHTML = "❌ 答錯囉！請看解題關鍵：";
+          fbTitle.style.color = "#b91c1c";
+        }
+      }
+
+      if (fbDesc) fbDesc.innerHTML = q.explanation;
+      if (fbBox) {
+        fbBox.classList.add('show');
+        fbBox.style.display = 'block';
+      }
+
+      const scoreInd = document.getElementById('quiz-score-indicator');
+      if (scoreInd) scoreInd.innerHTML = `<i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：${quizScore}`;
+      
+      const nextBtn = document.getElementById('quiz-next-btn');
+      if (nextBtn) nextBtn.style.display = 'inline-flex';
+      refreshIcons();
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIndex++;
+      if (currentQuizIndex < QUIZ_QUESTIONS.length) {
+        loadQuizQuestion(currentQuizIndex);
+      } else {
+        showQuizResult();
+      }
+    }
+
+    function showQuizResult() {
+      const progressEl = document.getElementById('quiz-progress');
+      if (progressEl) progressEl.style.width = '100%';
+
+      const activeView = document.getElementById('quiz-active-view');
+      if (activeView) activeView.style.display = 'none';
+
+      const resView = document.getElementById('quiz-result-view');
+      if (resView) resView.style.display = 'block';
+
+      const finalScoreEl = document.getElementById('result-final-score');
+      if (finalScoreEl) finalScoreEl.innerText = `${quizScore} 分`;
+
+      let badge = "通感修辭國文神 🌟";
+      let comment = "太神了！所有移覺五感流向與會考考點全部滿分通關！";
+
+      if (quizScore <= 40) {
+        badge = "初階五感探索者 📖";
+        comment = "別灰心！多複習單元一的「公式萬能解構法」與單元三的例句，保證實力大增！";
+      } else if (quizScore <= 80) {
+        badge = "修辭靈感秀才郎 🎓";
+        comment = "表現相當優異！已經掌握了絕大多數的移覺與跨感官判讀重點！";
+      }
+
+      const badgeEl = document.getElementById('result-badge-text');
+      const commentEl = document.getElementById('result-comment');
+      if (badgeEl) badgeEl.innerText = badge;
+      if (commentEl) commentEl.innerText = comment;
+      refreshIcons();
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      const scoreInd = document.getElementById('quiz-score-indicator');
+      if (scoreInd) scoreInd.innerHTML = `<i data-lucide="zap" style="width:16px; display:inline;"></i> 目前得分：0`;
+      
+      const resView = document.getElementById('quiz-result-view');
+      if (resView) resView.style.display = 'none';
+
+      const activeView = document.getElementById('quiz-active-view');
+      if (activeView) activeView.style.display = 'block';
+
+      loadQuizQuestion(0);
+    }
+
+    // ==========================================
+    // 5. 五感造句工坊實驗室
+    // ==========================================
+    let wsSelectedTarget = { name: '陽光', sense: 'visual' };
+    let wsSelectedMedium = { name: '味覺', sense: 'taste' };
+
+    const WORKSHOP_COMBOS = {
+      '陽光_taste': {
+        sentence: "「窗外的陽光澆淋下來，化作一口楓糖般甜美的甘醇。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>陽光</b>」（視覺），以「<b>楓糖般甜美</b>」（味覺）來修飾 ➔ <b>以味覺印象表達視覺印象</b>。"
+      },
+      '陽光_audio': {
+        sentence: "「盛夏的陽光在柏油路面上放聲咆哮，震碎了一整季的寧靜。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>陽光</b>」（視覺），以「<b>放聲咆哮</b>」（聽覺）來修飾 ➔ <b>以聽覺印象表達視覺印象</b>。"
+      },
+      '陽光_touch': {
+        sentence: "「冬日午後的陽光如一襲毛毯，暖呼呼地包裹著老榕樹的枝椏。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>陽光</b>」（視覺），以「<b>暖呼呼的毛毯</b>」（觸覺）來修飾 ➔ <b>以觸覺印象表達視覺印象</b>。"
+      },
+      '陽光_smell': {
+        sentence: "「沙漠中暴曬的陽光散發著焦灼的乾草味，瀰漫在無邊的天際。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>陽光</b>」（視覺），以「<b>焦灼味</b>」（嗅覺）來修飾 ➔ <b>以嗅覺印象表達視覺印象</b>。"
+      },
+      '蟬聲_touch': {
+        sentence: "「他把錄音機裡的蟬聲播了出來，讓整個寒冬的房間頓時烤起了熊熊暖火。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>蟬聲</b>」（聽覺），以「<b>烤火</b>」（觸覺熱度）來修飾 ➔ <b>以觸覺印象表達聽覺印象</b>。"
+      },
+      '蟬聲_visual': {
+        sentence: "「滿山遍野的蟬聲，被午後一陣驟雨洗刷成一地晶瑩剔透的綠翡翠。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>蟬聲</b>」（聽覺），以「<b>綠翡翠</b>」（視覺顏色形體）來修飾 ➔ <b>以視覺印象表達聽覺印象</b>。"
+      },
+      '蟬聲_taste': {
+        sentence: "「暮色裡樹梢傳來的蟬聲，甜得像是剛剝開的熟透荔枝。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>蟬聲</b>」（聽覺），以「<b>甜味</b>」（味覺）來修飾 ➔ <b>以味覺印象表達聽覺印象</b>。"
+      },
+      '月色_taste': {
+        sentence: "「昨夜落在湖心上的月色，嘗起來至少有一瓣是酸甜的桂花酒。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>月色</b>」（視覺），以「<b>酸甜的桂花酒</b>」（味覺）來修飾 ➔ <b>以味覺印象表達視覺印象</b>。"
+      },
+      '月色_audio': {
+        sentence: "「庭院裡鋪滿了月光，光影在微風中彈奏出和諧清脆的琶音。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>月光光影</b>」（視覺），以「<b>彈奏琶音</b>」（聽覺）來修飾 ➔ <b>以聽覺印象表達視覺印象</b>。"
+      },
+      '笑聲_visual': {
+        sentence: "「少女歡快的笑聲像散落一地的閃亮銀幣，沿著石階叮咚滾動。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>笑聲</b>」（聽覺），以「<b>散落的銀幣</b>」（視覺畫面）來修飾 ➔ <b>以視覺印象表達聽覺印象</b>。"
+      },
+      '笑聲_taste': {
+        sentence: "「孩子們奔跑穿過花叢，清脆的笑聲裡飽含著熟透草莓的甘甜。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>笑聲</b>」（聽覺），以「<b>草莓的甘甜</b>」（味覺）來修飾 ➔ <b>以味覺印象表達聽覺印象</b>。"
+      },
+      '晚風_visual': {
+        sentence: "「徐徐拂過臉龐的晚風，在夜空裡被染成了一匹深藍色的絲綢。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>晚風</b>」（觸覺），以「<b>深藍色絲綢</b>」（視覺）來修飾 ➔ <b>以視覺印象表達觸覺印象</b>。"
+      },
+      '咖啡香_visual': {
+        sentence: "「清晨廚房飄出的濃郁咖啡香，在晨光中蜿蜒成一條溫暖的金色小徑。」",
+        analysis: "🎯 <b>修辭解析：</b>要描寫的是「<b>咖啡香</b>」（嗅覺），以「<b>金色小徑</b>」（視覺）來修飾 ➔ <b>以視覺印象表達嗅覺印象</b>。"
+      }
+    };
+
+    function selectWsTarget(name, sense, el) {
+      wsSelectedTarget = { name, sense };
+      document.querySelectorAll('#ws-target-chips .preset-chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+      updateWsOutput();
+    }
+
+    function selectWsMedium(name, sense, el) {
+      wsSelectedMedium = { name, sense };
+      document.querySelectorAll('#ws-medium-chips .preset-chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+      updateWsOutput();
+    }
+
+    function updateWsOutput() {
+      const key = `${wsSelectedTarget.name}_${wsSelectedMedium.sense}`;
+      const fallbackKey = `${wsSelectedTarget.name}_visual`;
+      const item = WORKSHOP_COMBOS[key] || WORKSHOP_COMBOS[fallbackKey] || {
+        sentence: `「當那${wsSelectedTarget.name}悄悄靠近，整座世界彷彿都散發著${wsSelectedMedium.name}的奇妙波瀾。」`,
+        analysis: `🎯 <b>修辭解析：</b>描寫主體為「<b>${wsSelectedTarget.name}</b>」，借調「<b>${wsSelectedMedium.name}</b>」來進行跨感官移覺。`
+      };
+
+      const outText = document.getElementById('ws-output-text');
+      const outAnalysis = document.getElementById('ws-output-analysis');
+      if (outText) outText.innerText = item.sentence;
+      if (outAnalysis) outAnalysis.innerHTML = item.analysis;
+    }
+
+    function generateRandomWs() {
+      const targetChips = document.querySelectorAll('#ws-target-chips .preset-chip');
+      const mediumChips = document.querySelectorAll('#ws-medium-chips .preset-chip');
+
+      const randT = targetChips[Math.floor(Math.random() * targetChips.length)];
+      const randM = mediumChips[Math.floor(Math.random() * mediumChips.length)];
+
+      if (randT) randT.click();
+      if (randM) randM.click();
+    }
+
+    // ==========================================
+    // 6. 語音合成 (Web Speech API)
+    // ==========================================
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        alert("您的瀏覽器暫不支援語音朗讀功能！");
+        return;
+      }
+      window.speechSynthesis.cancel(); // 停止先前的朗讀
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-TW';
+      utterance.rate = 0.95; // 稍微放慢語速以利教學聽辨
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // ==========================================
+    // 7. 練習神器控制 (Iframe 操作)
+    // ==========================================
+    function reloadPracticeIframe() {
+      const iframe = document.getElementById('practice-iframe');
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
+    }
+
+    // ==========================================
+    // 8. 圖片燈箱 Lightbox 功能
+    // ==========================================
+    function openLightbox(src, caption) {
+      const modal = document.getElementById('lightbox-modal');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      if (modal && img) {
+        img.src = src;
+        if (cap) cap.innerText = caption || '';
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        refreshIcons();
+      }
+    }
+
+    function closeLightbox(e) {
+      const modal = document.getElementById('lightbox-modal');
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+
+    // ==========================================
+    // 9. Lucide 圖標安全刷新與頁面初始化
+    // ==========================================
+    function refreshIcons() {
+      try {
+        if (window.lucide && typeof lucide.createIcons === 'function') {
+          lucide.createIcons();
+        }
+      } catch (e) {
+        console.warn("Lucide icons init:", e);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        renderSentences(SENTENCES_DB);
+        loadQuizQuestion(0);
+        updateWsOutput();
+        refreshIcons();
+      } catch (err) {
+        console.error("Initialization error:", err);
+      }
+    });
+  </script>
+</body>
+</html>

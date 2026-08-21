@@ -1,0 +1,1311 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新無敵成語方城市 第10回 線上測驗系統 (p.91-p.98)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1e3a8a;
+  --primary-light: #eff6ff;
+  --primary-dark: #172554;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --secondary: #0d9488;
+  --secondary-light: #f0fdfa;
+  --success: #10b981;
+  --success-light: #ecfdf5;
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+  --card-bg: #ffffff;
+  --bg: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 20px 12px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.6;
+}
+
+.home-nav-btn {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10001;
+  background: rgba(255,255,255,0.95);
+  color: #1b4d3e;
+  border: 1px solid #c5cae9;
+  padding: 7px 15px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s;
+}
+.home-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  background: #ffffff;
+}
+
+.container {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+.header-roadmap-banner {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.header-roadmap-banner img {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+}
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.25);
+  margin-bottom: 10px;
+}
+h1 {
+  font-family: "Noto Serif TC", serif;
+  font-size: 28px;
+  color: var(--primary-dark);
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Top bar controls */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.user-info-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary);
+}
+.timer-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #b45309;
+  background: #fffbeb;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid #fde68a;
+}
+.btn-group-sm {
+  display: flex;
+  gap: 8px;
+}
+.icon-btn {
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.icon-btn:hover {
+  background: #e2e8f0;
+}
+
+/* Sections & Cards */
+.section-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+}
+.section-header {
+  border-bottom: 2px dashed #cbd5e1;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Questions list */
+.q-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.q-item {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.q-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-sm);
+}
+.q-item.has-answered {
+  border-color: #93c5fd;
+  border-left: 6px solid #2563eb;
+  background: #fafcff;
+}
+.q-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.q-num {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.q-page-tag {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+.q-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.q-cloze {
+  color: #b45309;
+  font-weight: 800;
+  background: #fef3c7;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border-bottom: 2px solid #f59e0b;
+}
+
+/* 4-Choice Options Grid */
+.options-4-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.opt-4-btn {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.opt-4-btn:hover {
+  background: #f1f5f9;
+  border-color: #64748b;
+  transform: translateY(-1px);
+}
+.opt-4-btn.selected {
+  background: #1e3a8a;
+  color: white;
+  border-color: #1e3a8a;
+  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.28);
+}
+.opt-4-btn.selected .opt-letter {
+  background: #3b82f6;
+  color: white;
+}
+.opt-letter {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 800;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+.opt-idiom-text {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Submit Action Bar */
+.submit-bar {
+  background: white;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.progress-status {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.progress-bar-bg {
+  width: 100%;
+  max-width: 400px;
+  height: 9px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.btn-primary-lg {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  border: none;
+  padding: 14px 48px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-primary-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+.btn-primary-lg:active {
+  transform: translateY(1px);
+}
+
+/* Result Dashboard */
+#result-container {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+.result-hero {
+  background: linear-gradient(135deg, #1e3a8a, #1e40af);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.score-circle {
+  width: 130px;
+  height: 130px;
+  background: white;
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  border: 4px solid #fbbf24;
+}
+.score-num {
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  font-family: "Noto Serif TC", serif;
+}
+.score-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.result-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.result-msg {
+  font-size: 16px;
+  opacity: 0.9;
+  max-width: 520px;
+  margin: 0 auto 20px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 650px;
+  margin: 0 auto;
+}
+.stat-box {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.stat-box-val {
+  font-size: 22px;
+  font-weight: 900;
+}
+.stat-box-lbl {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Result Action Toolbar */
+.result-toolbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.action-btn-main {
+  padding: 13px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+.btn-retest-wrong {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+.btn-retest-all {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+.action-btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Diagnostic / Wrong review section */
+.diag-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.diag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+.diag-title {
+  font-size: 19px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.diag-title.wrong-color { color: var(--danger); }
+.diag-title.all-color { color: var(--primary); }
+
+.review-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.review-item.is-wrong {
+  border-left: 5px solid var(--danger);
+  background: #fffafa;
+}
+.review-item.is-correct {
+  border-left: 5px solid var(--success);
+  background: #f0fdf4;
+}
+.review-q-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+.ans-comparison {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.ans-badge {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ans-badge.user-ans {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+.ans-badge.user-ans-correct {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+.ans-badge.correct-ans {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+.idiom-explain-box {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.6;
+}
+.tts-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--primary);
+  margin-left: 6px;
+  vertical-align: middle;
+  padding: 2px;
+}
+.tts-btn:hover {
+  transform: scale(1.15);
+}
+
+/* 頁尾 */
+.site-footer {
+  width: 100%;
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.footer-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 10px 20px;
+}
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal-box {
+  background: white;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.25s ease;
+}
+.modal-icon { font-size: 40px; margin-bottom: 12px; }
+.modal-title { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+.modal-body { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+.modal-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+.modal-btn-cancel { background: #f1f5f9; color: #475569; }
+.modal-btn-confirm { background: var(--primary); color: white; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 22px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .options-4-grid { grid-template-columns: 1fr; }
+  .btn-primary-lg { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<a href="../idiom-hub.html" class="home-nav-btn" title="返回學思軒成語首頁"><span>🏠</span> 返回成語首頁</a>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="header-roadmap-banner">
+      <img src="../icon/idiom-roadmap-h.png" alt="學思軒成語地圖">
+    </div>
+    <div class="badge-tag">翰林國中國文・新無敵成語方城市</div>
+    <h1>新無敵成語方城市 第10回 線上測驗系統</h1>
+    <div class="subtitle">
+      <span>📖 範圍：第10回 全卷大挑戰 (p.91-p.98)</span>
+      <span>📝 題型：四選一單選題 (共 73 題)</span>
+      <span>🎯 滿分：100 分</span>
+    </div>
+  </header>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="user-info-chip">
+      <span>👤 班級/座號：</span>
+      <input type="text" id="student-name" placeholder="請輸入班級/座號" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; width: 150px; font-weight: bold; color: var(--primary);">
+    </div>
+    <div class="timer-chip">
+      <span>⏱️ 計時：</span><span id="timer-display">00:00</span>
+    </div>
+    <div class="btn-group-sm">
+      <button class="icon-btn" onclick="toggleSound()" id="sound-btn">🔊 音效：開</button>
+      <button class="icon-btn" onclick="resetForm()">🔄 重新作答</button>
+    </div>
+  </div>
+
+  <!-- Quiz Form Container -->
+  <div id="quiz-container">
+    <!-- Big Section 1: 看解釋選成語 -->
+    <div class="section-card" id="card-meaning-sec">
+      <div class="section-header">
+        <div class="section-title">
+          <span>一、看解釋選成語（四選一）</span>
+          <span style="font-size: 14px; font-weight: normal; color: #64748b;" id="sec1-count-lbl">(共 37 題)</span>
+        </div>
+        <div class="section-desc">請閱讀成語釋義，從四個隨機選項中選出最符合的成語。</div>
+      </div>
+
+      <!-- Section 1 Questions List -->
+      <div class="q-list" id="q-list-sec1"></div>
+    </div>
+
+    <!-- Big Section 2: 讀例句填成語 -->
+    <div class="section-card" id="card-cloze-sec">
+      <div class="section-header">
+        <div class="section-title">
+          <span>二、讀例句填成語（四選一）</span>
+          <span style="font-size: 14px; font-weight: normal; color: #64748b;" id="sec2-count-lbl">(共 36 題)</span>
+        </div>
+        <div class="section-desc">請閱讀例句文意脈絡，從四個隨機選項中選出最合適填入空格的成語。</div>
+      </div>
+
+      <!-- Section 2 Questions List -->
+      <div class="q-list" id="q-list-sec2"></div>
+    </div>
+
+    <!-- Submit Bar -->
+    <div class="submit-bar">
+      <div class="progress-status">
+        作答進度：<span id="answered-count" style="color: var(--primary); font-size: 18px;">0</span> / <span id="total-count-lbl">73</span> 題
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <button class="btn-primary-lg" onclick="handleSubmit()">
+        <span>🚀 提交試卷・立即批改成績</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Result Dashboard Container -->
+  <div id="result-container">
+    <!-- Score Hero -->
+    <div class="result-hero">
+      <div class="score-circle">
+        <span class="score-num" id="score-display">0</span>
+        <span class="score-label">測驗得分</span>
+      </div>
+      <h2 class="result-title" id="result-title-text">測驗結算</h2>
+      <p class="result-msg" id="result-msg-text"></p>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-val" id="res-correct" style="color: #4ade80;">0</div>
+          <div class="stat-box-lbl">答對題數</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-val" id="res-wrong" style="color: #f87171;">0</div>
+          <div class="stat-box-lbl">答錯題數</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-val" id="res-rate" style="color: #38bdf8;">0%</div>
+          <div class="stat-box-lbl">正確率</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-val" id="res-time" style="color: #fbbf24;">00:00</div>
+          <div class="stat-box-lbl">作答時間</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Toolbar -->
+    <div class="result-toolbar">
+      <button class="action-btn-main btn-retest-wrong" id="btn-retest-wrong" onclick="startRetestWrong()">
+        <span>🔄 錯題專項重新特訓</span>
+      </button>
+      <button class="action-btn-main btn-retest-all" onclick="restartAll()">
+        <span>📝 重新測驗全卷</span>
+      </button>
+    </div>
+
+    <!-- Wrong Questions Section -->
+    <div class="diag-card" id="wrong-section">
+      <div class="diag-header">
+        <div class="diag-title wrong-color">
+          <span>❌ 錯題深度檢討與診斷專區</span>
+          <span id="wrong-count-badge" style="font-size: 13px; background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 999px;">0 題</span>
+        </div>
+      </div>
+      <div id="wrong-list-container"></div>
+    </div>
+
+    <!-- Full Answer & Solution Key -->
+    <div class="diag-card">
+      <div class="diag-header">
+        <div class="diag-title all-color">
+          <span>📖 全卷詳解對照表 (共 73 題)</span>
+        </div>
+        <button class="icon-btn" onclick="toggleFullSolution()" id="toggle-sol-btn">展開全卷解析 ▼</button>
+      </div>
+      <div id="full-solution-container" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 8px;">
+        <img src="../icon/slogan-god.png" alt="只要有心人人都是國文神" style="max-width: 320px; width: 85%; height: auto; display: block; opacity: 0.9;">
+      </div>
+      <div style="font-size: 12px; color: #8fa39a; margin-top: 2px;">𖤐 本系統由學思軒黃于珊、王斐亭老師規劃設計 · 版權所有 © 2026 𖤐</div>
+    </div>
+  </footer>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title">尚有題目未作答</div>
+    <div class="modal-body" id="modal-msg">您還有尚未填答的題目，確定現在就要送出批改嗎？</div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">返回繼續作答</button>
+      <button class="modal-btn modal-btn-confirm" onclick="forceSubmit()">確定交卷</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// 完整第10回 (p.91-p.98) 題庫資料庫
+// ==========================================
+const RAW_QUIZ_DATA = {"meaningQuestions": [{"id": 311, "type": "meaning", "page": 91, "idiom": "目瞪口呆", "text": "形容受到驚嚇而失神發愣的神態。", "correctIdiom": "目瞪口呆", "options": ["目瞪口呆", "石破天驚", "目空一切", "任重道遠"], "explanation": "【目瞪口呆】形容受到驚嚇而失神發愣的神態。"}, {"id": 312, "type": "meaning", "page": 91, "idiom": "石破天驚", "text": "形容事物或言論新奇驚人。", "correctIdiom": "石破天驚", "options": ["石破天驚", "目空一切", "任重道遠", "石城湯池"], "explanation": "【石破天驚】形容事物或言論新奇驚人。"}, {"id": 313, "type": "meaning", "page": 91, "idiom": "目空一切", "text": "形容人高傲自大到了極點。", "correctIdiom": "目空一切", "options": ["目空一切", "任重道遠", "石城湯池", "亦步亦趨"], "explanation": "【目空一切】形容人高傲自大到了極點。"}, {"id": 315, "type": "meaning", "page": 91, "idiom": "石城湯池", "text": "比喻堅固、牢不可破的城池。", "correctIdiom": "石城湯池", "options": ["石城湯池", "亦步亦趨", "目光如豆", "石沉大海"], "explanation": "【石城湯池】比喻堅固、牢不可破的城池。"}, {"id": 318, "type": "meaning", "page": 91, "idiom": "石沉大海", "text": "比喻從此失去音信或事情沒有下文。", "correctIdiom": "石沉大海", "options": ["石沉大海", "目無全牛", "休戚與共", "白頭偕老"], "explanation": "【石沉大海】比喻從此失去音信或事情沒有下文。"}, {"id": 319, "type": "meaning", "page": 91, "idiom": "目無全牛", "text": "比喻技藝純熟高超，到了得心應手的境地。", "correctIdiom": "目無全牛", "options": ["目無全牛", "休戚與共", "白頭偕老", "生靈塗炭"], "explanation": "【目無全牛】比喻技藝純熟高超，到了得心應手的境地。"}, {"id": 314, "type": "meaning", "page": 92, "idiom": "任重道遠", "text": "比喻責任重大，要做長期的艱苦奮鬥。", "correctIdiom": "任重道遠", "options": ["任重道遠", "石城湯池", "亦步亦趨", "目光如豆"], "explanation": "【任重道遠】比喻責任重大，要做長期的艱苦奮鬥。"}, {"id": 316, "type": "meaning", "page": 92, "idiom": "亦步亦趨", "text": "比喻自己沒主見，事事追隨或模仿別人。", "correctIdiom": "亦步亦趨", "options": ["亦步亦趨", "目光如豆", "石沉大海", "目無全牛"], "explanation": "【亦步亦趨】比喻自己沒主見，事事追隨或模仿別人。"}, {"id": 320, "type": "meaning", "page": 92, "idiom": "休戚與共", "text": "形容彼此同甘共苦，利害一致。", "correctIdiom": "休戚與共", "options": ["休戚與共", "白頭偕老", "生靈塗炭", "白髮朱顏"], "explanation": "【休戚與共】形容彼此同甘共苦，利害一致。"}, {"id": 329, "type": "meaning", "page": 92, "idiom": "仰人鼻息", "text": "比喻本身無法自立，必須依賴他人，看人家的臉色過日子。", "correctIdiom": "仰人鼻息", "options": ["仰人鼻息", "再接再厲", "同仇敵愾", "吉人天相"], "explanation": "【仰人鼻息】比喻本身無法自立，必須依賴他人，看人家的臉色過日子。"}, {"id": 321, "type": "meaning", "page": 93, "idiom": "光前裕後", "text": "形容人功業偉大。", "correctIdiom": "光前裕後", "options": ["光前裕後", "光宗耀祖", "冰肌玉骨", "仰不愧天"], "explanation": "【光前裕後】形容人功業偉大。"}, {"id": 322, "type": "meaning", "page": 93, "idiom": "光宗耀祖", "text": "形容人創業揚名，使祖先和宗族得以增光榮顯。", "correctIdiom": "光宗耀祖", "options": ["光宗耀祖", "冰肌玉骨", "仰不愧天", "光陰似箭"], "explanation": "【光宗耀祖】形容人創業揚名，使祖先和宗族得以增光榮顯。"}, {"id": 324, "type": "meaning", "page": 93, "idiom": "仰不愧天", "text": "比喻問心無愧。", "correctIdiom": "仰不愧天", "options": ["仰不愧天", "光陰似箭", "先聲奪人", "光天化日"], "explanation": "【仰不愧天】比喻問心無愧。"}, {"id": 325, "type": "meaning", "page": 93, "idiom": "光陰似箭", "text": "比喻時間消逝得迅速。", "correctIdiom": "光陰似箭", "options": ["光陰似箭", "先聲奪人", "光天化日", "全軍覆沒"], "explanation": "【光陰似箭】比喻時間消逝得迅速。"}, {"id": 327, "type": "meaning", "page": 93, "idiom": "光天化日", "text": "指大白天裡，大家都看得清清楚楚的場合。", "correctIdiom": "光天化日", "options": ["光天化日", "全軍覆沒", "仰人鼻息", "再接再厲"], "explanation": "【光天化日】指大白天裡，大家都看得清清楚楚的場合。"}, {"id": 323, "type": "meaning", "page": 94, "idiom": "冰肌玉骨", "text": "形容女子的肌膚潔白光滑。", "correctIdiom": "冰肌玉骨", "options": ["冰肌玉骨", "仰不愧天", "光陰似箭", "先聲奪人"], "explanation": "【冰肌玉骨】形容女子的肌膚潔白光滑。"}, {"id": 326, "type": "meaning", "page": 94, "idiom": "先聲奪人", "text": "比喻先壯大自己，以奪取對方的氣勢，再展開進攻。", "correctIdiom": "先聲奪人", "options": ["先聲奪人", "光天化日", "全軍覆沒", "仰人鼻息"], "explanation": "【先聲奪人】比喻先壯大自己，以奪取對方的氣勢，再展開進攻。"}, {"id": 328, "type": "meaning", "page": 94, "idiom": "全軍覆沒", "text": "比喻事情澈底失敗。", "correctIdiom": "全軍覆沒", "options": ["全軍覆沒", "仰人鼻息", "再接再厲", "同仇敵愾"], "explanation": "【全軍覆沒】比喻事情澈底失敗。"}, {"id": 330, "type": "meaning", "page": 94, "idiom": "再接再厲", "text": "比喻繼續奮勇前進，不因挫折而懈怠。", "correctIdiom": "再接再厲", "options": ["再接再厲", "同仇敵愾", "吉人天相", "同甘共苦"], "explanation": "【再接再厲】比喻繼續奮勇前進，不因挫折而懈怠。"}, {"id": 335, "type": "meaning", "page": 94, "idiom": "冰消瓦解", "text": "比喻問題獲得完全解決。", "correctIdiom": "冰消瓦解", "options": ["冰消瓦解", "各自為政", "危如累卵", "同病相憐"], "explanation": "【冰消瓦解】比喻問題獲得完全解決。"}, {"id": 331, "type": "meaning", "page": 95, "idiom": "同仇敵愾", "text": "指團結起來共同對付敵人。", "correctIdiom": "同仇敵愾", "options": ["同仇敵愾", "吉人天相", "同甘共苦", "同舟共濟"], "explanation": "【同仇敵愾】指團結起來共同對付敵人。"}, {"id": 332, "type": "meaning", "page": 95, "idiom": "吉人天相", "text": "常用以表示對他人遭遇事故或不幸的安慰。", "correctIdiom": "吉人天相", "options": ["吉人天相", "同甘共苦", "同舟共濟", "冰消瓦解"], "explanation": "【吉人天相】常用以表示對他人遭遇事故或不幸的安慰。"}, {"id": 337, "type": "meaning", "page": 95, "idiom": "危如累卵", "text": "比喻情勢十分危險。", "correctIdiom": "危如累卵", "options": ["危如累卵", "同病相憐", "刎頸之交", "各有所長"], "explanation": "【危如累卵】比喻情勢十分危險。"}, {"id": 339, "type": "meaning", "page": 95, "idiom": "刎頸之交", "text": "比喻以性命相許的至交好友。", "correctIdiom": "刎頸之交", "options": ["刎頸之交", "各有所長", "仰不愧天", "先聲奪人"], "explanation": "【刎頸之交】比喻以性命相許的至交好友。"}, {"id": 333, "type": "meaning", "page": 96, "idiom": "同甘共苦", "text": "比喻有福同享，有難同當。", "correctIdiom": "同甘共苦", "options": ["同甘共苦", "同舟共濟", "冰消瓦解", "各自為政"], "explanation": "【同甘共苦】比喻有福同享，有難同當。"}, {"id": 334, "type": "meaning", "page": 96, "idiom": "同舟共濟", "text": "比喻同心協力，共度難關。", "correctIdiom": "同舟共濟", "options": ["同舟共濟", "冰消瓦解", "各自為政", "危如累卵"], "explanation": "【同舟共濟】比喻同心協力，共度難關。"}, {"id": 338, "type": "meaning", "page": 96, "idiom": "同病相憐", "text": "指彼此的遭遇或處境相同，因而互相同情。", "correctIdiom": "同病相憐", "options": ["同病相憐", "刎頸之交", "各有所長", "仰不愧天"], "explanation": "【同病相憐】指彼此的遭遇或處境相同，因而互相同情。"}, {"id": 340, "type": "meaning", "page": 96, "idiom": "各有所長", "text": "指各有各的長處、優點。", "correctIdiom": "各有所長", "options": ["各有所長", "仰不愧天", "先聲奪人", "再接再厲"], "explanation": "【各有所長】指各有各的長處、優點。"}, {"id": 336, "type": "meaning", "page": 97, "idiom": "各自為政", "text": "比喻不顧及整體，各自行事。", "correctIdiom": "各自為政", "options": ["各自為政", "危如累卵", "同病相憐", "刎頸之交"], "explanation": "【各自為政】比喻不顧及整體，各自行事。"}, {"id": 342, "type": "meaning", "page": 97, "idiom": "名山事業", "text": "用以指著書立說，撰寫不朽的作品。", "correctIdiom": "名山事業", "options": ["名山事業", "因陋就簡", "回祿之災", "因循苟且"], "explanation": "【名山事業】用以指著書立說，撰寫不朽的作品。"}, {"id": 346, "type": "meaning", "page": 97, "idiom": "名不虛傳", "text": "指名聲與實際相符，不是空有虛名。", "correctIdiom": "名不虛傳", "options": ["名不虛傳", "名利雙收", "名聞遐邇", "回頭是岸"], "explanation": "【名不虛傳】指名聲與實際相符，不是空有虛名。"}, {"id": 347, "type": "meaning", "page": 97, "idiom": "名利雙收", "text": "指既得到名聲，又得到厚利。", "correctIdiom": "名利雙收", "options": ["名利雙收", "名聞遐邇", "回頭是岸", "名落孫山"], "explanation": "【名利雙收】指既得到名聲，又得到厚利。"}, {"id": 341, "type": "meaning", "page": 98, "idiom": "因禍得福", "text": "形容本是一件壞事，後來卻變成一樁好事。", "correctIdiom": "因禍得福", "options": ["因禍得福", "名山事業", "因陋就簡", "回祿之災"], "explanation": "【因禍得福】形容本是一件壞事，後來卻變成一樁好事。"}, {"id": 343, "type": "meaning", "page": 98, "idiom": "因陋就簡", "text": "比喻遷就簡陋的現有條件去辦事。", "correctIdiom": "因陋就簡", "options": ["因陋就簡", "回祿之災", "因循苟且", "名不虛傳"], "explanation": "【因陋就簡】比喻遷就簡陋的現有條件去辦事。"}, {"id": 345, "type": "meaning", "page": 98, "idiom": "因循苟且", "text": "形容遇事敷衍了事，得過且過，不求振作。", "correctIdiom": "因循苟且", "options": ["因循苟且", "名不虛傳", "名利雙收", "名聞遐邇"], "explanation": "【因循苟且】形容遇事敷衍了事，得過且過，不求振作。"}, {"id": 348, "type": "meaning", "page": 98, "idiom": "名聞遐邇", "text": "形容名聲很大，遠近都馳名。", "correctIdiom": "名聞遐邇", "options": ["名聞遐邇", "回頭是岸", "名落孫山", "妄自尊大"], "explanation": "【名聞遐邇】形容名聲很大，遠近都馳名。"}, {"id": 350, "type": "meaning", "page": 98, "idiom": "名落孫山", "text": "比喻考試落榜或選拔未被錄取。", "correctIdiom": "名落孫山", "options": ["名落孫山", "名山事業", "名不虛傳", "回祿之災"], "explanation": "【名落孫山】比喻考試落榜或選拔未被錄取。"}], "clozeQuestions": [{"id": 5311, "type": "cloze", "page": 91, "idiom": "目空一切", "text": "元秀這麼□□□□，我們講的話他哪聽得進去。", "correctIdiom": "目空一切", "options": ["目空一切", "丟三落四", "休戚與共", "目無全牛"], "explanation": "【目空一切】代入例句：元秀這麼【目空一切】，我們講的話他哪聽得進去。"}, {"id": 5314, "type": "cloze", "page": 91, "idiom": "目無全牛", "text": "黃土水大師的水牛群像，是□□□□、大刀闊斧的雕刻作品。", "correctIdiom": "目無全牛", "options": ["目無全牛", "任重道遠", "目中無人", "亦步亦趨"], "explanation": "【目無全牛】代入例句：黃土水大師的水牛群像，是【目無全牛】、大刀闊斧的雕刻作品。"}, {"id": 5318, "type": "cloze", "page": 91, "idiom": "石城湯池", "text": "八百壯士堅守的四行倉庫如□□□□一樣，讓日軍無法越雷池一步。", "correctIdiom": "石城湯池", "options": ["石城湯池", "目光如豆", "石沉大海", "白髮朱顏"], "explanation": "【石城湯池】代入例句：八百壯士堅守的四行倉庫如【石城湯池】一樣，讓日軍無法越雷池一步。"}, {"id": 5320, "type": "cloze", "page": 91, "idiom": "石沉大海", "text": "嫌犯自殺了，使得這件槍擊案的真相永遠□□□□。", "correctIdiom": "石沉大海", "options": ["石沉大海", "白玉無瑕", "白雲蒼狗", "目不轉睛"], "explanation": "【石沉大海】代入例句：嫌犯自殺了，使得這件槍擊案的真相永遠【石沉大海】。"}, {"id": 5312, "type": "cloze", "page": 92, "idiom": "丟三落四", "text": "小艾個性迷糊，做事總是□□□□，令人很不放心。", "correctIdiom": "丟三落四", "options": ["丟三落四", "休戚與共", "目無全牛", "任重道遠"], "explanation": "【丟三落四】代入例句：小艾個性迷糊，做事總是【丟三落四】，令人很不放心。"}, {"id": 5313, "type": "cloze", "page": 92, "idiom": "休戚與共", "text": "我和他是□□□□的朋友，只要他有困難，我一定幫忙到底。", "correctIdiom": "休戚與共", "options": ["休戚與共", "目無全牛", "任重道遠", "目中無人"], "explanation": "【休戚與共】代入例句：我和他是【休戚與共】的朋友，只要他有困難，我一定幫忙到底。"}, {"id": 5315, "type": "cloze", "page": 92, "idiom": "任重道遠", "text": "民主改革的工作□□□□，不是馬上就能立竿見影的。", "correctIdiom": "任重道遠", "options": ["任重道遠", "目中無人", "亦步亦趨", "石城湯池"], "explanation": "【任重道遠】代入例句：民主改革的工作【任重道遠】，不是馬上就能立竿見影的。"}, {"id": 5317, "type": "cloze", "page": 92, "idiom": "亦步亦趨", "text": "他創作的音樂別具一格，從不跟在別人後面□□□□。", "correctIdiom": "亦步亦趨", "options": ["亦步亦趨", "石城湯池", "目光如豆", "石沉大海"], "explanation": "【亦步亦趨】代入例句：他創作的音樂別具一格，從不跟在別人後面【亦步亦趨】。"}, {"id": 5326, "type": "cloze", "page": 92, "idiom": "任勞任怨", "text": "媽媽嫁給爸爸之後，就□□□□，為這個家犧牲奉獻。", "correctIdiom": "任勞任怨", "options": ["任勞任怨", "全軍覆沒", "光前裕後", "仰人鼻息"], "explanation": "【任勞任怨】代入例句：媽媽嫁給爸爸之後，就【任勞任怨】，為這個家犧牲奉獻。"}, {"id": 5329, "type": "cloze", "page": 92, "idiom": "仰人鼻息", "text": "你如果不想一輩子□□□□，就應該積極打拼，不要再得過且過了。", "correctIdiom": "仰人鼻息", "options": ["仰人鼻息", "先入為主", "危如累卵", "各有所長"], "explanation": "【仰人鼻息】代入例句：你如果不想一輩子【仰人鼻息】，就應該積極打拼，不要再得過且過了。"}, {"id": 5321, "type": "cloze", "page": 93, "idiom": "仰不愧天", "text": "金庸武俠小說中的喬峰，是一個□□□□的英雄好漢。", "correctIdiom": "仰不愧天", "options": ["仰不愧天", "先聲奪人", "再接再厲", "光天化日"], "explanation": "【仰不愧天】代入例句：金庸武俠小說中的喬峰，是一個【仰不愧天】的英雄好漢。"}, {"id": 5324, "type": "cloze", "page": 93, "idiom": "光天化日", "text": "唐太宗的□□□□，讓人民都能過著安居樂業的生活。", "correctIdiom": "光天化日", "options": ["光天化日", "冰肌玉骨", "任勞任怨", "全軍覆沒"], "explanation": "【光天化日】代入例句：唐太宗的【光天化日】，讓人民都能過著安居樂業的生活。"}, {"id": 5328, "type": "cloze", "page": 93, "idiom": "光前裕後", "text": "這個大家庭有上百人，竟無一人可□□□□，真是可悲！", "correctIdiom": "光前裕後", "options": ["光前裕後", "仰人鼻息", "先入為主", "危如累卵"], "explanation": "【光前裕後】代入例句：這個大家庭有上百人，竟無一人可【光前裕後】，真是可悲！"}, {"id": 5322, "type": "cloze", "page": 94, "idiom": "先聲奪人", "text": "球賽才剛剛開始，我隊就□□□□，以密集安打攻下七分。", "correctIdiom": "先聲奪人", "options": ["先聲奪人", "再接再厲", "光天化日", "冰肌玉骨"], "explanation": "【先聲奪人】代入例句：球賽才剛剛開始，我隊就【先聲奪人】，以密集安打攻下七分。"}, {"id": 5323, "type": "cloze", "page": 94, "idiom": "再接再厲", "text": "只要我們打進縣運，一定會□□□□向區運挺進。", "correctIdiom": "再接再厲", "options": ["再接再厲", "光天化日", "冰肌玉骨", "任勞任怨"], "explanation": "【再接再厲】代入例句：只要我們打進縣運，一定會【再接再厲】向區運挺進。"}, {"id": 5325, "type": "cloze", "page": 94, "idiom": "冰肌玉骨", "text": "天氣愈寒冷，愈能顯出梅花□□□□的秀麗。", "correctIdiom": "冰肌玉骨", "options": ["冰肌玉骨", "任勞任怨", "全軍覆沒", "光前裕後"], "explanation": "【冰肌玉骨】代入例句：天氣愈寒冷，愈能顯出梅花【冰肌玉骨】的秀麗。"}, {"id": 5327, "type": "cloze", "page": 94, "idiom": "全軍覆沒", "text": "我軍在出征途中遇上埋伏，差一點就□□□□。", "correctIdiom": "全軍覆沒", "options": ["全軍覆沒", "光前裕後", "仰人鼻息", "先入為主"], "explanation": "【全軍覆沒】代入例句：我軍在出征途中遇上埋伏，差一點就【全軍覆沒】。"}, {"id": 5330, "type": "cloze", "page": 94, "idiom": "先入為主", "text": "你看到他手上拿刀，便□□□□認為他殺人，其實並非如此。", "correctIdiom": "先入為主", "options": ["先入為主", "危如累卵", "各有所長", "冰消瓦解"], "explanation": "【先入為主】代入例句：你看到他手上拿刀，便【先入為主】認為他殺人，其實並非如此。"}, {"id": 5333, "type": "cloze", "page": 94, "idiom": "冰消瓦解", "text": "經小叮噹的居中調解，大雄和靜香的誤會終於□□□□了。", "correctIdiom": "冰消瓦解", "options": ["冰消瓦解", "同甘共苦", "同病相憐", "同舟共濟"], "explanation": "【冰消瓦解】代入例句：經小叮噹的居中調解，大雄和靜香的誤會終於【冰消瓦解】了。"}, {"id": 5331, "type": "cloze", "page": 95, "idiom": "危如累卵", "text": "這家公司舉債太多，情況已□□□□，隨時都可能倒閉。", "correctIdiom": "危如累卵", "options": ["危如累卵", "各有所長", "冰消瓦解", "同甘共苦"], "explanation": "【危如累卵】代入例句：這家公司舉債太多，情況已【危如累卵】，隨時都可能倒閉。"}, {"id": 5337, "type": "cloze", "page": 95, "idiom": "同心協力", "text": "拔河比賽需要全體隊員□□□□，合作無間，才能取得勝利。", "correctIdiom": "同心協力", "options": ["同心協力", "刎頸之交", "同流合汙", "吉人天相"], "explanation": "【同心協力】代入例句：拔河比賽需要全體隊員【同心協力】，合作無間，才能取得勝利。"}, {"id": 5338, "type": "cloze", "page": 95, "idiom": "刎頸之交", "text": "我的朋友雖然不多，但是每一個都是□□□□。", "correctIdiom": "刎頸之交", "options": ["刎頸之交", "同流合汙", "吉人天相", "成語選項4"], "explanation": "【刎頸之交】代入例句：我的朋友雖然不多，但是每一個都是【刎頸之交】。"}, {"id": 5340, "type": "cloze", "page": 95, "idiom": "吉人天相", "text": "水牛伯能夠及時逃出那棟倒塌的大樓，真是□□□□。", "correctIdiom": "吉人天相", "options": ["吉人天相", "光前裕後", "同心協力", "刎頸之交"], "explanation": "【吉人天相】代入例句：水牛伯能夠及時逃出那棟倒塌的大樓，真是【吉人天相】。"}, {"id": 5332, "type": "cloze", "page": 96, "idiom": "各有所長", "text": "他們兄弟倆，一個擅長鋼琴，一個擅長吉他，□□□□，難以評定高下。", "correctIdiom": "各有所長", "options": ["各有所長", "冰消瓦解", "同甘共苦", "同病相憐"], "explanation": "【各有所長】代入例句：他們兄弟倆，一個擅長鋼琴，一個擅長吉他，【各有所長】，難以評定高下。"}, {"id": 5334, "type": "cloze", "page": 96, "idiom": "同甘共苦", "text": "老王是我□□□□、情同手足的好朋友。", "correctIdiom": "同甘共苦", "options": ["同甘共苦", "同病相憐", "同舟共濟", "同心協力"], "explanation": "【同甘共苦】代入例句：老王是我【同甘共苦】、情同手足的好朋友。"}, {"id": 5335, "type": "cloze", "page": 96, "idiom": "同病相憐", "text": "沒想到你跟我一樣，都是中年失業，咱們真是□□□□呀！", "correctIdiom": "同病相憐", "options": ["同病相憐", "同舟共濟", "同心協力", "刎頸之交"], "explanation": "【同病相憐】代入例句：沒想到你跟我一樣，都是中年失業，咱們真是【同病相憐】呀！"}, {"id": 5336, "type": "cloze", "page": 96, "idiom": "同舟共濟", "text": "全世界的人都應□□□□，為解決地球暖化問題盡一份心力。", "correctIdiom": "同舟共濟", "options": ["同舟共濟", "同心協力", "刎頸之交", "同流合汙"], "explanation": "【同舟共濟】代入例句：全世界的人都應【同舟共濟】，為解決地球暖化問題盡一份心力。"}, {"id": 5339, "type": "cloze", "page": 96, "idiom": "同流合汙", "text": "社會就像個大染缸，意志不堅定的人，很容易和壞人□□□□。", "correctIdiom": "同流合汙", "options": ["同流合汙", "同甘共苦", "同心協力", "同舟共濟"], "explanation": "【同流合汙】代入例句：社會就像個大染缸，意志不堅定的人，很容易和壞人【同流合汙】。"}, {"id": 5343, "type": "cloze", "page": 97, "idiom": "名副其實", "text": "他連生病都捨不得花錢看醫生，真是□□□□的守財奴。", "correctIdiom": "名副其實", "options": ["名副其實", "回祿之災", "回頭是岸", "名落孫山"], "explanation": "【名副其實】代入例句：他連生病都捨不得花錢看醫生，真是【名副其實】的守財奴。"}, {"id": 5348, "type": "cloze", "page": 97, "idiom": "名利雙收", "text": "哈利波特一書，讓英國小說家羅琳□□□□。", "correctIdiom": "名利雙收", "options": ["名利雙收", "因禍得福", "名山事業", "妄自菲薄"], "explanation": "【名利雙收】代入例句：哈利波特一書，讓英國小說家羅琳【名利雙收】。"}, {"id": 5350, "type": "cloze", "page": 97, "idiom": "名山事業", "text": "曹雪芹專心於他的□□□□，終於寫出膾炙人口的紅樓夢。", "correctIdiom": "名山事業", "options": ["名山事業", "妄自菲薄", "好事多磨", "好大喜功"], "explanation": "【名山事業】代入例句：曹雪芹專心於他的【名山事業】，終於寫出膾炙人口的紅樓夢。"}, {"id": 5341, "type": "cloze", "page": 98, "idiom": "因循苟且", "text": "工人如果□□□□，施工效率就會低落，工程品質也會粗糙。", "correctIdiom": "因循苟且", "options": ["因循苟且", "因小失大", "名副其實", "回祿之災"], "explanation": "【因循苟且】代入例句：工人如果【因循苟且】，施工效率就會低落，工程品質也會粗糙。"}, {"id": 5342, "type": "cloze", "page": 98, "idiom": "因小失大", "text": "跟金光黨打交道的人，往往會□□□□，得不償失。", "correctIdiom": "因小失大", "options": ["因小失大", "名副其實", "回祿之災", "回頭是岸"], "explanation": "【因小失大】代入例句：跟金光黨打交道的人，往往會【因小失大】，得不償失。"}, {"id": 5346, "type": "cloze", "page": 98, "idiom": "名落孫山", "text": "這一次的考試如果再□□□□，我就決定去當學徒，不再升學了。", "correctIdiom": "名落孫山", "options": ["名落孫山", "因陋就簡", "名利雙收", "因禍得福"], "explanation": "【名落孫山】代入例句：這一次的考試如果再【名落孫山】，我就決定去當學徒，不再升學了。"}, {"id": 5347, "type": "cloze", "page": 98, "idiom": "因陋就簡", "text": "如果一味□□□□，不設法改善設備，行政效率怎能提高呢？", "correctIdiom": "因陋就簡", "options": ["因陋就簡", "名利雙收", "因禍得福", "名山事業"], "explanation": "【因陋就簡】代入例句：如果一味【因陋就簡】，不設法改善設備，行政效率怎能提高呢？"}, {"id": 5349, "type": "cloze", "page": 98, "idiom": "因禍得福", "text": "他被公司炒魷魚後，馬上被另一家公司高薪聘請，真可謂是□□□□。", "correctIdiom": "因禍得福", "options": ["因禍得福", "名山事業", "妄自菲薄", "好事多磨"], "explanation": "【因禍得福】代入例句：他被公司炒魷魚後，馬上被另一家公司高薪聘請，真可謂是【因禍得福】。"}]};
+
+// ==========================================
+// 系統狀態
+// ==========================================
+let activeQuestionsMeaning = [];
+let activeQuestionsCloze = [];
+let userAnswers = {};
+let startTime = null;
+let timerInterval = null;
+let elapsedSeconds = 0;
+let soundEnabled = true;
+let isRetestMode = false;
+let retestQuestionIds = [];
+
+const LETTERS = ["A", "B", "C", "D"];
+
+// Fisher-Yates 隨機洗牌演算法
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// 載入全卷完整題目
+function loadFullQuestions() {
+  activeQuestionsMeaning = RAW_QUIZ_DATA.meaningQuestions.map(q => ({
+    ...q,
+    shuffledOptions: shuffleArray(q.options)
+  }));
+
+  activeQuestionsCloze = RAW_QUIZ_DATA.clozeQuestions.map(q => ({
+    ...q,
+    shuffledOptions: shuffleArray(q.options)
+  }));
+}
+
+// ==========================================
+// 音效系統 (Web Audio API)
+// ==========================================
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new AudioContext();
+}
+
+function playTone(freq, duration, type = "sine") {
+  if (!soundEnabled) return;
+  try {
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function playSelectSound() { playTone(587.33, 0.08, "sine"); }
+function playFinishSound() {
+  playTone(440, 0.12, "sine");
+  setTimeout(() => playTone(554.37, 0.12, "sine"), 100);
+  setTimeout(() => playTone(659.25, 0.15, "sine"), 200);
+  setTimeout(() => playTone(880, 0.35, "triangle"), 300);
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById("sound-btn");
+  btn.innerText = soundEnabled ? "🔊 音效：開" : "🔇 音效：關";
+}
+
+// ==========================================
+// 語音朗讀 (Web Speech API)
+// ==========================================
+function speakText(text) {
+  if (!('speechSynthesis' in window)) {
+    alert("您的瀏覽器不支援語音朗讀功能");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const clean = text.replace(/<[^>]+>/g, '').replace(/[（）()□]/g, '空格');
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.lang = 'zh-TW';
+  utterance.rate = 0.95;
+  window.speechSynthesis.speak(utterance);
+}
+
+// ==========================================
+// 初始化與渲染
+// ==========================================
+function init() {
+  loadFullQuestions();
+  renderAllQuizSections();
+  startTimer();
+  updateProgress();
+}
+
+function renderAllQuizSections() {
+  const total = activeQuestionsMeaning.length + activeQuestionsCloze.length;
+  document.getElementById("total-count-lbl").innerText = total;
+  document.getElementById("sec1-count-lbl").innerText = `(共 ${activeQuestionsMeaning.length} 題)`;
+  document.getElementById("sec2-count-lbl").innerText = `(共 ${activeQuestionsCloze.length} 題)`;
+
+  renderQuestions("q-list-sec1", activeQuestionsMeaning, 1);
+  renderQuestions("q-list-sec2", activeQuestionsCloze, activeQuestionsMeaning.length + 1);
+}
+
+function renderQuestions(containerId, questions, startDisplayNum) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = questions.map((q, idx) => {
+    const displayNum = startDisplayNum + idx;
+    const opts = q.shuffledOptions;
+    return `
+      <div class="q-item" id="q-card-${q.id}">
+        <div class="q-header">
+          <span class="q-num">第 ${displayNum} 題</span>
+          <span class="q-page-tag">p.${q.page}</span>
+          <div class="q-text">
+            ${q.text.replace(/□□□□/g, "<span class='q-cloze'>（　）</span>")}
+            <button class="tts-btn" title="朗讀題目" onclick="speakText('${q.text.replace(/'/g, "\\")}')">🔊</button>
+          </div>
+        </div>
+        <div class="options-4-grid">
+          ${opts.map((opt, optIdx) => `
+            <button class="opt-4-btn" id="btn-q${q.id}-${optIdx}" onclick="selectAnswer(${q.id}, '${opt}', '${LETTERS[optIdx]}', ${optIdx})">
+              <span class="opt-letter">${LETTERS[optIdx]}</span>
+              <span class="opt-idiom-text">${opt}</span>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function selectAnswer(qid, idiom, letter, optIdx) {
+  playSelectSound();
+  userAnswers[qid] = { idiom: idiom, letter: letter };
+
+  const card = document.getElementById(`q-card-${qid}`);
+  if (card) {
+    const buttons = card.querySelectorAll(".opt-4-btn");
+    buttons.forEach(btn => btn.classList.remove("selected"));
+
+    const targetBtn = document.getElementById(`btn-q${qid}-${optIdx}`);
+    if (targetBtn) targetBtn.classList.add("selected");
+
+    card.classList.add("has-answered");
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const activeList = getActiveQuestions();
+  const total = isRetestMode ? retestQuestionIds.length : activeList.length;
+  const answered = isRetestMode 
+    ? retestQuestionIds.filter(id => userAnswers[id]).length
+    : Object.keys(userAnswers).length;
+    
+  document.getElementById("answered-count").innerText = answered;
+  const pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+  document.getElementById("progress-fill").style.width = pct + "%";
+}
+
+// ==========================================
+// 計時器
+// ==========================================
+function startTimer() {
+  startTime = Date.now();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+    const secs = String(elapsedSeconds % 60).padStart(2, '0');
+    document.getElementById("timer-display").innerText = `${mins}:${secs}`;
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+// ==========================================
+// 提交與計分
+// ==========================================
+function handleSubmit() {
+  const activeList = getActiveQuestions();
+  const total = isRetestMode ? retestQuestionIds.length : activeList.length;
+  const answered = isRetestMode 
+    ? retestQuestionIds.filter(id => userAnswers[id]).length
+    : Object.keys(userAnswers).length;
+
+  if (answered < total) {
+    const unans = total - answered;
+    document.getElementById("modal-msg").innerText = `您還有 ${unans} 題尚未作答，確定要現在交卷批改嗎？`;
+    document.getElementById("confirm-modal").style.display = "flex";
+  } else {
+    gradeQuiz();
+  }
+}
+
+function closeModal() {
+  document.getElementById("confirm-modal").style.display = "none";
+}
+
+function forceSubmit() {
+  closeModal();
+  gradeQuiz();
+}
+
+function getActiveQuestions() {
+  return [...activeQuestionsMeaning, ...activeQuestionsCloze];
+}
+
+function gradeQuiz() {
+  stopTimer();
+  playFinishSound();
+
+  const allQuestions = getActiveQuestions();
+  const testList = isRetestMode 
+    ? allQuestions.filter(q => retestQuestionIds.includes(q.id))
+    : allQuestions;
+
+  let correctCount = 0;
+  let wrongList = [];
+
+  testList.forEach((q, idx) => {
+    const uAns = userAnswers[q.id];
+    const userIdiom = uAns ? uAns.idiom : null;
+    const userLetter = uAns ? uAns.letter : null;
+
+    const opts = q.shuffledOptions;
+    const correctIdx = opts.indexOf(q.correctIdiom);
+    const correctLetter = correctIdx >= 0 ? LETTERS[correctIdx] : "A";
+
+    if (userIdiom === q.correctIdiom) {
+      correctCount++;
+    } else {
+      wrongList.push({
+        question: q,
+        displayNum: idx + 1,
+        userAnsText: userIdiom ? `(${userLetter}) ${userIdiom}` : "未作答",
+        correctAnsText: `(${correctLetter}) ${q.correctIdiom}`
+      });
+    }
+  });
+
+  const total = testList.length;
+  const score = Math.round((correctCount / total) * 100);
+  const wrongCount = total - correctCount;
+  const accuracy = Math.round((correctCount / total) * 100);
+
+  // 顯示成績結果畫面
+  document.getElementById("quiz-container").style.display = "none";
+  document.getElementById("result-container").style.display = "block";
+
+  document.getElementById("score-display").innerText = score;
+  document.getElementById("res-correct").innerText = correctCount;
+  document.getElementById("res-wrong").innerText = wrongCount;
+  document.getElementById("res-rate").innerText = accuracy + "%";
+  
+  const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+  const secs = String(elapsedSeconds % 60).padStart(2, '0');
+  document.getElementById("res-time").innerText = `${mins}:${secs}`;
+
+  const studentName = document.getElementById("student-name").value.trim() || "同學";
+
+  const titleEl = document.getElementById("result-title-text");
+  const msgEl = document.getElementById("result-msg-text");
+  const retestBtn = document.getElementById("btn-retest-wrong");
+
+  if (score === 100) {
+    titleEl.innerText = `🎉 太棒了！${studentName} 榮獲 100 分滿分！`;
+    msgEl.innerText = `全部 ${total} 題成語四選一全數答對，成語實力登峰造極！`;
+    retestBtn.style.display = "none";
+  } else if (score >= 80) {
+    titleEl.innerText = `🌟 表現優異！${studentName} 成績斐然！`;
+    msgEl.innerText = `答對了 ${correctCount} 題，快點擊「錯題重新特訓」挑戰滿分！`;
+    retestBtn.style.display = "inline-flex";
+  } else if (score >= 60) {
+    titleEl.innerText = `👍 及格過關！${studentName} 繼續加油！`;
+    msgEl.innerText = "已掌握多數成語，點擊下方「錯題特訓」加深記憶！";
+    retestBtn.style.display = "inline-flex";
+  } else {
+    titleEl.innerText = `💪 需要多加練習！${studentName} 加油！`;
+    msgEl.innerText = "請仔細閱讀下方錯題成語精解，重新進行錯題特訓！";
+    retestBtn.style.display = "inline-flex";
+  }
+
+  // 渲染錯題專區
+  renderWrongSection(wrongList);
+  // 渲染全卷詳解
+  renderFullSolution(allQuestions);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderWrongSection(wrongList) {
+  const container = document.getElementById("wrong-list-container");
+  const badge = document.getElementById("wrong-count-badge");
+
+  badge.innerText = `${wrongList.length} 題`;
+
+  if (wrongList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 30px; color: var(--success); font-weight: 700; font-size: 16px;">
+        ✨ 太棒了！本次測驗零錯題，全部正確！
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = wrongList.map((item) => {
+    const q = item.question;
+    return `
+      <div class="review-item is-wrong">
+        <div class="review-q-text">
+          <span style="color: var(--danger); font-weight: 800;">第 ${item.displayNum} 題：</span>
+          <span class="q-page-tag">p.${q.page}</span>
+          ${q.text.replace(/□□□□/g, "（　）")}
+          <button class="tts-btn" title="朗讀" onclick="speakText('${q.text.replace(/'/g, "\\")}')">🔊</button>
+        </div>
+        <div class="ans-comparison">
+          <span class="ans-badge user-ans">❌ 你的作答：${item.userAnsText}</span>
+          <span class="ans-badge correct-ans">✅ 正確解答：${item.correctAnsText}</span>
+        </div>
+        <div class="idiom-explain-box">
+          <b>💡 成語精解：</b>${q.explanation}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderFullSolution(allQuestions) {
+  const container = document.getElementById("full-solution-container");
+  container.innerHTML = allQuestions.map((q, idx) => {
+    const uAns = userAnswers[q.id];
+    const userIdiom = uAns ? uAns.idiom : null;
+    const userLetter = uAns ? uAns.letter : null;
+
+    const opts = q.shuffledOptions;
+    const correctIdx = opts.indexOf(q.correctIdiom);
+    const correctLetter = correctIdx >= 0 ? LETTERS[correctIdx] : "A";
+    const isCorrect = userIdiom === q.correctIdiom;
+
+    return `
+      <div class="review-item ${isCorrect ? 'is-correct' : 'is-wrong'}">
+        <div class="review-q-text">
+          <span style="font-weight: 800;">第 ${idx + 1} 題：</span>
+          <span class="q-page-tag">p.${q.page}</span>
+          ${q.text.replace(/□□□□/g, "（　）")}
+          <button class="tts-btn" title="朗讀" onclick="speakText('${q.text.replace(/'/g, "\\")}')">🔊</button>
+        </div>
+        <div class="ans-comparison">
+          <span class="ans-badge ${isCorrect ? 'user-ans-correct' : 'user-ans'}">
+            ${isCorrect ? '✅ 你的作答' : '❌ 你的作答'}：${userIdiom ? `(${userLetter}) ${userIdiom}` : '未作答'}
+          </span>
+          <span class="ans-badge correct-ans">
+            ⭐ 正確解答：(${correctLetter}) ${q.correctIdiom}
+          </span>
+        </div>
+        <div class="idiom-explain-box">
+          <b>💡 釋義精解：</b>${q.explanation}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function toggleFullSolution() {
+  const container = document.getElementById("full-solution-container");
+  const btn = document.getElementById("toggle-sol-btn");
+  if (container.style.display === "none") {
+    container.style.display = "block";
+    btn.innerText = "收合全卷解析 ▲";
+  } else {
+    container.style.display = "none";
+    btn.innerText = "展開全卷解析 ▼";
+  }
+}
+
+// ==========================================
+// 錯題特訓與重測機制
+// ==========================================
+function startRetestWrong() {
+  const allQuestions = getActiveQuestions();
+  retestQuestionIds = allQuestions
+    .filter(q => !userAnswers[q.id] || userAnswers[q.id].idiom !== q.correctIdiom)
+    .map(q => q.id);
+
+  if (retestQuestionIds.length === 0) {
+    alert("太棒了！您已經沒有任何錯題！");
+    return;
+  }
+
+  isRetestMode = true;
+  userAnswers = {};
+
+  allQuestions.forEach(q => {
+    if (retestQuestionIds.includes(q.id)) {
+      q.shuffledOptions = shuffleArray(q.options);
+    }
+  });
+
+  renderAllQuizSections();
+
+  allQuestions.forEach(q => {
+    const card = document.getElementById(`q-card-${q.id}`);
+    if (card) {
+      if (retestQuestionIds.includes(q.id)) {
+        card.style.display = "flex";
+        card.classList.remove("has-answered");
+      } else {
+        card.style.display = "none";
+      }
+    }
+  });
+
+  document.getElementById("result-container").style.display = "none";
+  document.getElementById("quiz-container").style.display = "block";
+
+  startTimer();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function restartAll() {
+  isRetestMode = false;
+  retestQuestionIds = [];
+  userAnswers = {};
+
+  loadFullQuestions();
+  renderAllQuizSections();
+
+  document.getElementById("result-container").style.display = "none";
+  document.getElementById("quiz-container").style.display = "block";
+
+  startTimer();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function resetForm() {
+  if (confirm("確定要重新洗牌並重設所有作答紀錄嗎？")) {
+    restartAll();
+  }
+}
+
+// 頁面載入啟動
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
+
