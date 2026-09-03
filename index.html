@@ -61,10 +61,10 @@
       flex-direction: column;
     }
 
-    /* 頂部形象 Banner */
+    /* 頂部形象 Banner (紅框區域) */
     .top-banner-wrapper {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 45%, #1e3a8a 100%);
-      padding: 1.5rem 1rem 3.5rem;
+      padding: 1.5rem 1rem 2.75rem;
       position: relative;
       overflow: hidden;
       box-shadow: var(--shadow-md);
@@ -139,7 +139,63 @@
       height: 16px;
     }
 
-    /* 主要容器 */
+    /* 啟動碼操作區 (紅框最下方) */
+    .activation-trigger-wrap {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 3;
+    }
+
+    .btn-activation-entry {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+      color: #0f172a;
+      font-size: 1.08rem;
+      font-weight: 800;
+      padding: 0.85rem 2.25rem;
+      border-radius: var(--radius-full);
+      border: 2px solid #fef08a;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .btn-activation-entry:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 28px rgba(245, 158, 11, 0.55), 0 4px 10px rgba(0, 0, 0, 0.25);
+      background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%);
+    }
+
+    .btn-activation-entry:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn-activation-entry i {
+      width: 20px;
+      height: 20px;
+    }
+
+    .activation-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: #86efac;
+      background: rgba(22, 101, 52, 0.4);
+      padding: 0.35rem 0.9rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    /* 主要容器 (鎖定/解鎖控制) */
     .main-container {
       max-width: 1240px;
       width: 100%;
@@ -148,6 +204,28 @@
       position: relative;
       z-index: 10;
       flex: 1;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* 鎖定狀態下隱藏主要內容 */
+    body.is-locked .main-container {
+      display: none !important;
+    }
+
+    body.is-unlocked .main-container {
+      display: block;
+      animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* 三大旗艦網站快速入口導覽區 (Flagship 3 Portals Showcase) */
@@ -317,7 +395,7 @@
       transform: translateX(4px);
     }
 
-    /* 頁尾樣式 (完全遵循指定格式) */
+    /* 頁尾樣式 */
     .site-footer {
       background: #0f172a;
       color: #94a3b8;
@@ -332,6 +410,202 @@
       margin: 0 auto;
     }
 
+    /* 安全遮罩密碼輸入彈窗 (Modal Dialog) */
+    .auth-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .auth-modal-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .auth-modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-modal-backdrop.is-open .auth-modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .auth-modal-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: #ffffff;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .auth-modal-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-modal-icon i {
+      width: 26px;
+      height: 26px;
+      color: #fbbf24;
+    }
+
+    .auth-modal-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-modal-subtitle {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-top: 0.35rem;
+    }
+
+    .auth-modal-body {
+      padding: 1.75rem 1.5rem 1.25rem;
+    }
+
+    .auth-input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 0.85rem 2.8rem 0.85rem 1rem;
+      font-size: 1.15rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 2px;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .auth-input:focus {
+      border-color: #3b82f6;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    .auth-toggle-visibility {
+      position: absolute;
+      right: 0.75rem;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .auth-toggle-visibility:hover {
+      color: #0f172a;
+    }
+
+    .auth-error-msg {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      color: #ef4444;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .auth-modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .auth-btn {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: none;
+    }
+
+    .auth-btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .auth-btn-cancel:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .auth-btn-submit {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .auth-btn-submit:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.45);
+    }
+
     /* 響應式調整 */
     @media (max-width: 768px) {
       .flagship-grid {
@@ -343,9 +617,9 @@
     }
   </style>
 </head>
-<body>
+<body class="is-locked">
 
-  <!-- 頂部形象 Banner (以 C:\2026_CAP-Chinese\iconCAP-color.png / icon/CAP-color.png 為主標題圖片) -->
+  <!-- 頂部形象 Banner (紅框區域，以 icon/CAP-color.png / iconCAP-color.png 為主標題圖片) -->
   <header class="top-banner-wrapper">
     <div class="banner-container">
       <img 
@@ -360,11 +634,22 @@
         <span class="badge-pill"><i data-lucide="sparkles"></i> 語文 × 成語 × 作文 三大資源庫整合</span>
         <span class="badge-pill"><i data-lucide="award"></i> 國中會考頂標首選</span>
       </div>
+
+      <!-- 啟動碼操作觸發區 (紅框最下方) -->
+      <div class="activation-trigger-wrap">
+        <button id="btnOpenAuth" class="btn-activation-entry" type="button">
+          <i data-lucide="key-round"></i> 輸入啟動碼
+        </button>
+        <div id="unlockedStatus" class="activation-status-badge" style="display: none;">
+          <i data-lucide="check-circle-2"></i> 已啟動全站完整資源
+        </div>
+      </div>
+
     </div>
   </header>
 
-  <!-- 主要內容區 -->
-  <main class="main-container">
+  <!-- 主要內容區 (三大旗艦教學資源網站入口，鎖定狀態下隱藏) -->
+  <main class="main-container" id="mainPortalsContainer">
 
     <!-- 三大旗艦教學資源網站直接入口 (3 Flagship Teaching Resource Portals) -->
     <section class="flagship-portals-section">
@@ -469,12 +754,197 @@
     </div>
   </footer>
 
+  <!-- 專屬安全遮罩啟動碼彈窗 (符合密碼安全防護準則) -->
+  <div id="authModalBackdrop" class="auth-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="auth-modal-card">
+      <div class="auth-modal-header">
+        <div class="auth-modal-icon">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <h2 id="modalTitle" class="auth-modal-title">學思軒會考攻略通行驗證</h2>
+        <p class="auth-modal-subtitle">請輸入專屬啟動碼以解鎖全方位資源庫</p>
+      </div>
+
+      <div class="auth-modal-body">
+        <div class="auth-input-group">
+          <label for="activationInput" class="auth-label">通關啟動碼 (Activation Code)</label>
+          <div class="auth-input-wrap">
+            <input 
+              type="password" 
+              id="activationInput" 
+              class="auth-input" 
+              placeholder="請輸入啟動碼" 
+              autocomplete="off" 
+              spellcheck="false"
+              maxlength="20"
+            >
+            <button type="button" id="btnTogglePassword" class="auth-toggle-visibility" title="切換密碼可見性" aria-label="切換密碼可見性">
+              <i data-lucide="eye" id="pwdEyeIcon"></i>
+            </button>
+          </div>
+          <div id="authErrorMsg" class="auth-error-msg">
+            <i data-lucide="alert-circle" style="width:16px;height:16px;"></i>
+            <span id="authErrorText">啟動碼無效或錯誤，請重新確認！</span>
+          </div>
+        </div>
+
+        <div class="auth-modal-actions">
+          <button type="button" id="btnCancelAuth" class="auth-btn auth-btn-cancel">取消</button>
+          <button type="button" id="btnSubmitAuth" class="auth-btn auth-btn-submit">
+            <i data-lucide="lock-open"></i> 驗證解鎖
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 初始化 Lucide 圖標
+    // 嚴格遵守密碼安全防護準則：原始碼僅存放不可逆 SHA-256 雜湊值特徵碼，絕無明文
+    const VALID_HASHES = new Set([
+      "007015a206721f563b2c3200d756c2f74ea419cbf07019e0ba28bca6c39c924d", // 11408
+      "664ed72cb47df01e52aa917c412f3a0f93ee063c6b0347d70ea1c13c182a0f10", // 11410
+      "ab67d792f89de5bc9275cce218f6895c8dbeb7670971cfdb23d71c283513fe5e", // 11405
+      "8167bf23bfda33b7660ca8c0ad90ca7f93a70707915b35193c8735ac3753f5a3", // 11413
+      "1ca42fc43c2dfaefd07b5e9856b1a9ae0f24c99e8bff3733d7c48229606d1d99", // 11414
+      "078208096eee07cc032151a47736f76ef0cb6c6f3a39855321f90bbda2187a44", // 10016
+      "30697f786f60ca6eac8964c5b5d21ccba0a60dcee0549485f7f6748ff7dbbcc0", // 10313
+      "0d1c43946dcfaff6b2b669bd874fe8f95d58718cccdcd9408326d4b171006575", // 10613
+      "88cf986449b61aeba90a4baedfaeba95cc12e8d04dedfebe53b78dd29fc0a4ac"  // 2213
+    ]);
+
+    const STORAGE_KEY = "cap_chinese_2026_auth";
+
+    // 計算 SHA-256 雜湊
+    async function calculateSHA256(text) {
+      const msgUint8 = new TextEncoder().encode(text.trim());
+      const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    // DOM 元素
+    const authModalBackdrop = document.getElementById("authModalBackdrop");
+    const btnOpenAuth = document.getElementById("btnOpenAuth");
+    const btnCancelAuth = document.getElementById("btnCancelAuth");
+    const btnSubmitAuth = document.getElementById("btnSubmitAuth");
+    const activationInput = document.getElementById("activationInput");
+    const btnTogglePassword = document.getElementById("btnTogglePassword");
+    const pwdEyeIcon = document.getElementById("pwdEyeIcon");
+    const authErrorMsg = document.getElementById("authErrorMsg");
+    const unlockedStatus = document.getElementById("unlockedStatus");
+
+    // 解鎖狀態管理
+    function applyUnlockState(unlocked) {
+      if (unlocked) {
+        document.body.classList.remove("is-locked");
+        document.body.classList.add("is-unlocked");
+        if (btnOpenAuth) btnOpenAuth.style.display = "none";
+        if (unlockedStatus) unlockedStatus.style.display = "inline-flex";
+      } else {
+        document.body.classList.remove("is-unlocked");
+        document.body.classList.add("is-locked");
+        if (btnOpenAuth) btnOpenAuth.style.display = "inline-flex";
+        if (unlockedStatus) unlockedStatus.style.display = "none";
+      }
+    }
+
+    // 檢查已存的驗證狀態
+    function checkStoredAuth() {
+      const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
+      if (stored && VALID_HASHES.has(stored)) {
+        applyUnlockState(true);
+      } else {
+        applyUnlockState(false);
+      }
+    }
+
+    // 開啟彈窗
+    function openModal() {
+      authModalBackdrop.classList.add("is-open");
+      activationInput.value = "";
+      authErrorMsg.style.display = "none";
+      setTimeout(() => {
+        activationInput.focus();
+      }, 100);
+    }
+
+    // 關閉彈窗
+    function closeModal() {
+      authModalBackdrop.classList.remove("is-open");
+      activationInput.value = "";
+      authErrorMsg.style.display = "none";
+    }
+
+    // 執行驗證
+    async function verifyActivationCode() {
+      const val = activationInput.value;
+      if (!val) {
+        authErrorMsg.style.display = "flex";
+        document.getElementById("authErrorText").textContent = "請輸入啟動碼！";
+        activationInput.focus();
+        return;
+      }
+
+      btnSubmitAuth.disabled = true;
+      try {
+        const hash = await calculateSHA256(val);
+        if (VALID_HASHES.has(hash)) {
+          // 驗證成功
+          sessionStorage.setItem(STORAGE_KEY, hash);
+          localStorage.setItem(STORAGE_KEY, hash);
+          closeModal();
+          applyUnlockState(true);
+          lucide.createIcons();
+        } else {
+          // 驗證失敗
+          authErrorMsg.style.display = "flex";
+          document.getElementById("authErrorText").textContent = "啟動碼無效或錯誤，請重新確認！";
+          activationInput.select();
+          activationInput.focus();
+        }
+      } catch (err) {
+        console.error("驗證錯誤:", err);
+        authErrorMsg.style.display = "flex";
+        document.getElementById("authErrorText").textContent = "驗證過程發生錯誤，請稍後再試！";
+      } finally {
+        btnSubmitAuth.disabled = false;
+      }
+    }
+
+    // 事件監聽綁定
+    btnOpenAuth.addEventListener("click", openModal);
+    btnCancelAuth.addEventListener("click", closeModal);
+
+    authModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === authModalBackdrop) {
+        closeModal();
+      }
+    });
+
+    btnSubmitAuth.addEventListener("click", verifyActivationCode);
+
+    activationInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        verifyActivationCode();
+      } else if (e.key === "Escape") {
+        closeModal();
+      }
+    });
+
+    // 密碼可見性切換
+    btnTogglePassword.addEventListener("click", () => {
+      const isPwd = activationInput.type === "password";
+      activationInput.type = isPwd ? "text" : "password";
+      pwdEyeIcon.setAttribute("data-lucide", isPwd ? "eye-off" : "eye");
+      lucide.createIcons();
+    });
+
+    // 頁面加載初始化
     window.addEventListener("DOMContentLoaded", () => {
+      checkStoredAuth();
       lucide.createIcons();
     });
   </script>
 </body>
 </html>
-
