@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -370,11 +370,22 @@
                             <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
                                 <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
                                 <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
+                                <option value="custom">🔑 自訂 Gemini API Key (個人專屬直連)</option>
                             </select>
                         </div>
-                        <div>
+                        <div id="worker-url-group">
                             <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
                             <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
+                        </div>
+                        <div id="custom-key-group" class="hidden md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="sm:col-span-2">
+                                <label class="block font-bold text-xs text-gray-700 mb-1">自訂 Gemini API Key (安全遮罩保護)：</label>
+                                <input id="custom-api-key" type="password" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary font-mono" placeholder="請輸入 AIzaSy... 金鑰 (僅安全保存在本機瀏覽器)">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-xs text-gray-700 mb-1">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary font-mono" placeholder="預設 gemini-2.5-flash">
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-gray-500 gap-2">
@@ -863,6 +874,10 @@
             const configPanel = document.getElementById('config-panel');
             const channelMode = document.getElementById('channel-mode');
             const workerUrlInput = document.getElementById('worker-url-input');
+            const workerUrlGroup = document.getElementById('worker-url-group');
+            const customKeyGroup = document.getElementById('custom-key-group');
+            const customApiKeyInput = document.getElementById('custom-api-key');
+            const customModelInput = document.getElementById('custom-model-input');
             const channelBadge = document.getElementById('channel-badge');
             const statusText = document.getElementById('status-text');
             const btnSaveConfig = document.getElementById('btn-save-config');
@@ -874,11 +889,18 @@
             
             let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
             let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || '';
+            let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
 
             function updateConfigUI() {
                 channelMode.value = currentMode;
                 workerUrlInput.value = currentWorkerUrl;
+                customApiKeyInput.value = currentCustomKey;
+                customModelInput.value = currentCustomModel;
+
                 if (currentMode === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
                     if (currentWorkerUrl) {
                         channelBadge.innerHTML = '⚡ Cloudflare 串流 (極速)';
                         channelBadge.className = 'bg-blue-100 text-primary px-2 py-0.5 rounded text-[11px] font-bold';
@@ -888,13 +910,40 @@
                         channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
                         statusText.textContent = '提示：尚未填寫 Worker 網址，送出時將自動備援轉為 GAS';
                     }
+                } else if (currentMode === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                    if (currentCustomKey) {
+                        channelBadge.innerHTML = '🔑 自訂 API Key (直連)';
+                        channelBadge.className = 'bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
+                    } else {
+                        channelBadge.innerHTML = '🔑 自訂 API Key (尚未填寫)';
+                        channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後儲存';
+                    }
                 } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
                     channelBadge.innerHTML = '🛡️ GAS 安全通道';
                     channelBadge.className = 'bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-bold';
                     statusText.textContent = '通道就緒：使用 Google Apps Script 安全備援通道';
                 }
             }
             updateConfigUI();
+
+            channelMode.addEventListener('change', () => {
+                if (channelMode.value === 'worker') {
+                    workerUrlGroup.classList.remove('hidden');
+                    customKeyGroup.classList.add('hidden');
+                } else if (channelMode.value === 'custom') {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.remove('hidden');
+                } else {
+                    workerUrlGroup.classList.add('hidden');
+                    customKeyGroup.classList.add('hidden');
+                }
+            });
 
             btnToggleConfig.addEventListener('click', () => {
                 configPanel.classList.toggle('hidden');
@@ -903,8 +952,12 @@
             btnSaveConfig.addEventListener('click', () => {
                 currentMode = channelMode.value;
                 currentWorkerUrl = workerUrlInput.value.trim();
+                currentCustomKey = customApiKeyInput.value.trim();
+                currentCustomModel = customModelInput.value.trim() || 'gemini-2.5-flash';
                 localStorage.setItem('ai_coach_channel', currentMode);
                 localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
                 updateConfigUI();
                 configPanel.classList.add('hidden');
                 alert('✅ 代理通道設定已成功儲存！');
@@ -913,8 +966,12 @@
             btnResetConfig.addEventListener('click', () => {
                 currentMode = 'worker';
                 currentWorkerUrl = DEFAULT_WORKER_URL;
+                currentCustomKey = '';
+                currentCustomModel = 'gemini-2.5-flash';
                 localStorage.setItem('ai_coach_channel', currentMode);
                 localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
+                localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('ai_coach_custom_model', currentCustomModel);
                 updateConfigUI();
                 alert('已還原為專屬 Cloudflare 預設設定！');
             });
@@ -1213,6 +1270,71 @@
                 return accumulatedText;
             }
 
+
+            // 自訂 Gemini API Key 原廠直連 SSE 串流讀取函式
+            async function streamFromDirectGemini(apiKey, targetModel, payload, originalDraft) {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    let errMsg = errText;
+                    try {
+                        const parsed = JSON.parse(errText);
+                        errMsg = parsed.error?.message || errText;
+                    } catch(e) {}
+                    throw new Error(`Google 原廠直連異常 (${response.status})：${errMsg}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                let accumulatedText = '';
+
+                // 重設並啟動即時串流打字介面
+                streamBadge.classList.remove('hidden');
+                aiLoading.classList.add('hidden');
+                aiOutputContainer.classList.remove('hidden');
+                aiStreamBox.classList.remove('hidden');
+                coachReviewCard.classList.add('hidden');
+                beforeAfterContainer.classList.add('hidden');
+
+                aiOutput.innerHTML = '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        const trimmed = line.trim();
+                        if (trimmed.startsWith('data:')) {
+                            const jsonStr = trimmed.slice(5).trim();
+                            if (jsonStr) {
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const chunkText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                                    if (chunkText) {
+                                        accumulatedText += chunkText;
+                                        aiOutput.innerHTML = formatAiText(accumulatedText) + '<span class="inline-block w-2.5 h-4.5 bg-primary align-middle animate-pulse ml-1 rounded-xs"></span>';
+                                    }
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                }
+
+                streamBadge.classList.add('hidden');
+                renderBeforeAfterCards(originalDraft, accumulatedText);
+                return accumulatedText;
+            }
+
             // GAS 備援請求函式
             const delay = ms => new Promise(res => setTimeout(res, ms));
             async function fetchWithRetry(url, payload, retries = 3) {
@@ -1273,10 +1395,25 @@
                 };
 
                 try {
-                    // 優先使用 Cloudflare Worker 串流模式
-                    if (currentMode === 'worker' && currentWorkerUrl) {
+                    // 1. 自訂 Gemini API Key 個人直連串流模式
+                    if (currentMode === 'custom') {
+                        if (!currentCustomKey) {
+                            configPanel.classList.remove('hidden');
+                            throw new Error('您已選擇「自訂 API Key」模式，但尚未填寫金鑰。請在上方輸入您的 Gemini API Key 後點擊「儲存設定」。');
+                        }
+                        const targetModel = currentCustomModel || 'gemini-2.5-flash';
+                        const directPayload = {
+                            contents: [{ role: "user", parts: [{ text: text }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        };
+                        await streamFromDirectGemini(currentCustomKey, targetModel, directPayload, text);
+                    } 
+                    // 2. Cloudflare Worker 邊緣多金鑰池串流模式
+                    else if (currentMode === 'worker' && currentWorkerUrl) {
                         await streamFromWorker(currentWorkerUrl, payload, text);
-                    } else {
+                    } 
+                    // 3. GAS 安全備援模式
+                    else {
                         // 使用 GAS 安全備援模式
                         const result = await fetchWithRetry(DEFAULT_GAS_URL, payload);
                         const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -1295,7 +1432,7 @@
                     aiLoading.classList.add('hidden');
                     streamBadge.classList.add('hidden');
                     aiError.classList.remove('hidden');
-                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查 Worker 網址或切換至 GAS 備援通道。`;
+                    aiErrorText.innerHTML = `抱歉，教練目前遇到連線問題：<br><strong class="text-sm">` + error.message + `</strong><br>👉 您可點擊上方「⚙️ 代理通道設定」檢查設定、切換至 GAS 備援或輸入自訂 API Key。`;
                 } finally {
                     btnAskAI.disabled = false;
                     btnAskAI.classList.remove('opacity-50', 'cursor-not-allowed');

@@ -69,11 +69,16 @@ export default {
             try {
                 const body = await request.json();
                 
-                // 智慧嘗試模型序列：先試使用者指定或 gemini-2.5-flash，再嘗試 gemini-2.0-flash / gemini-1.5-flash
-                const requestedModel = body.model;
+                // 智慧模型處理：自動將 Google 已棄用/下架的舊模型映射為最新可用模型
+                let requestedModel = body.model;
+                if (requestedModel && (requestedModel.includes('2.0-flash') || requestedModel.includes('1.0-pro'))) {
+                    requestedModel = 'gemini-2.5-flash';
+                }
+
+                // 智慧嘗試模型序列：優先嘗試 gemini-2.5-flash，備援 gemini-2.5-flash-lite / gemini-1.5-flash
                 const candidateModels = requestedModel 
-                    ? [requestedModel, 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
-                    : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+                    ? Array.from(new Set([requestedModel, 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-1.5-flash']))
+                    : ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-1.5-flash'];
                 
                 const isStream = body.stream !== false;
                 const { model: _, stream: __, ...geminiPayload } = body;
