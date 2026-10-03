@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -10,12 +10,16 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
+                                        colors: {
                         paper: '#FAF9F6',
                         ink: '#2D3748',
-                        azalea: '#D97777',
-                        hydrangea: '#7993A3',
-                        ecology: '#728965',
+                        primary: '#D97777',    /* 杜鵑花紅 (主色調・請教練指導按鈕) */
+                        secondary: '#7993A3',  /* 繡球花藍 */
+                        tertiary: '#728965',   /* 生態綠 */
+                        danger: '#E53E3E',     /* 警示紅 */
+                        azalea: '#D97777',     /* 杜鵑花紅 (相容既有標籤) */
+                        hydrangea: '#7993A3',  /* 繡球花藍 (相容既有標籤) */
+                        ecology: '#728965',    /* 生態綠 (相容既有標籤) */
                         highlight: '#FEF08A'
                     },
                     fontFamily: {
@@ -366,25 +370,35 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                         <div>
-                            <label class="block font-bold text-xs text-gray-700 mb-1">連線通道模式：</label>
+                            <label class="block font-bold text-xs text-gray-700 mb-1">通道選擇：</label>
                             <select id="channel-mode" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary">
                                 <option value="worker">⚡ Cloudflare Worker 邊緣串流 (推薦・極速打字機)</option>
                                 <option value="gas">🛡️ Google Apps Script (原版安全中繼)</option>
-                                <option value="custom">🔑 自訂 Gemini API Key (個人專屬直連)</option>
+                                <option value="custom">🔑 自備 Gemini API Key（直連 Google）</option>
                             </select>
                         </div>
                         <div id="worker-url-group">
                             <label class="block font-bold text-xs text-gray-700 mb-1">Cloudflare Worker 網址：</label>
                             <input id="worker-url-input" type="url" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary" placeholder="請貼上你的 Worker 網址，例如 https://gemini-stream-coach.xxx.workers.dev">
                         </div>
-                        <div id="custom-key-group" class="hidden md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div class="sm:col-span-2">
-                                <label class="block font-bold text-xs text-gray-700 mb-1">自訂 Gemini API Key (安全遮罩保護)：</label>
-                                <input id="custom-api-key" type="password" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary font-mono" placeholder="請輸入 AIzaSy... 金鑰 (僅安全保存在本機瀏覽器)">
+                                                <!-- 自備 Key 輸入區塊 -->
+                        <div id="custom-key-group" class="hidden md:col-span-2 p-3 bg-blue-50/70 rounded-lg border border-blue-200 space-y-2">
+                            <div class="flex flex-wrap justify-between items-center gap-1 text-xs">
+                                <span class="font-bold text-blue-900">自備 Google Gemini API Key（安全存放於本機 LocalStorage）</span>
+                                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline text-[11px] hover:text-blue-800 font-medium">前往 Google AI Studio 免費領取</a>
                             </div>
-                            <div>
-                                <label class="block font-bold text-xs text-gray-700 mb-1">自訂模型代號 (選填)：</label>
-                                <input id="custom-model-input" type="text" class="w-full bg-white border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary font-mono" placeholder="預設 gemini-2.5-flash">
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <input type="password" id="custom-api-key" placeholder="貼上 AI Studio 取得的 API Key (AIzaSy...)" class="w-full text-xs font-mono border border-gray-300 rounded-lg px-3 py-2 pr-8 bg-white focus:ring-2 focus:ring-primary">
+                                    <button type="button" id="toggle-key-visibility" class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-xs" title="顯示/隱藏金鑰">👁️</button>
+                                </div>
+                                <button type="button" id="btn-save-custom-key" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-3.5 py-1.5 rounded-lg transition shrink-0 cursor-pointer shadow-xs">
+                                    保存金鑰
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 pt-0.5">
+                                <label class="text-[11px] text-gray-600 font-medium shrink-0">自訂模型代號 (選填)：</label>
+                                <input id="custom-model-input" type="text" class="bg-white border border-gray-300 rounded px-2 py-0.5 text-xs font-mono w-40 focus:ring-1 focus:ring-primary" placeholder="預設 gemini-2.5-flash">
                             </div>
                         </div>
                     </div>
@@ -395,10 +409,10 @@
                         </div>
                         <div class="flex gap-2">
                             <button id="btn-reset-config" class="text-gray-500 hover:text-gray-700 px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 transition">
-                                還原預設
+                                恢復預設值
                             </button>
                             <button id="btn-save-config" class="bg-primary text-white font-bold px-4 py-1.5 rounded hover:opacity-90 transition shadow-xs">
-                                儲存設定
+                                儲存並測試
                             </button>
                         </div>
                     </div>
@@ -859,6 +873,8 @@
             const statusText = document.getElementById('status-text');
             const btnSaveConfig = document.getElementById('btn-save-config');
             const btnResetConfig = document.getElementById('btn-reset-config');
+            const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+            const btnSaveCustomKey = document.getElementById('btn-save-custom-key');
 
             // 預設端點設定 (預設已包含您的 Worker 專屬網址)
             const DEFAULT_WORKER_URL = "https://gemini-stream-coach.oaoadna.workers.dev";
@@ -866,7 +882,7 @@
             
             let currentMode = localStorage.getItem('ai_coach_channel') || 'worker';
             let currentWorkerUrl = localStorage.getItem('ai_coach_worker_url') || DEFAULT_WORKER_URL;
-            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || '';
+            let currentCustomKey = localStorage.getItem('ai_coach_custom_key') || localStorage.getItem('gemini_zuowen_key') || '';
             let currentCustomModel = localStorage.getItem('ai_coach_custom_model') || 'gemini-2.5-flash';
 
             function updateConfigUI() {
@@ -891,13 +907,13 @@
                     workerUrlGroup.classList.add('hidden');
                     customKeyGroup.classList.remove('hidden');
                     if (currentCustomKey) {
-                        channelBadge.innerHTML = '🔑 自訂 API Key (直連)';
-                        channelBadge.className = 'bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[11px] font-bold';
+                        channelBadge.innerHTML = '自備 Gemini Key';
+                        channelBadge.className = 'bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[11px] font-bold';
                         statusText.textContent = `通道就緒：使用個人 API Key 直連原廠 (${currentCustomModel || 'gemini-2.5-flash'})`;
                     } else {
-                        channelBadge.innerHTML = '🔑 自訂 API Key (尚未填寫)';
+                        channelBadge.innerHTML = '🔑 自備 Key (未填寫)';
                         channelBadge.className = 'bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-bold';
-                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後儲存';
+                        statusText.textContent = '提示：請輸入您的 Gemini API Key 後點擊「保存金鑰」';
                     }
                 } else {
                     workerUrlGroup.classList.add('hidden');
@@ -926,6 +942,30 @@
                 configPanel.classList.toggle('hidden');
             });
 
+            if (toggleKeyVisibility && customApiKeyInput) {
+                toggleKeyVisibility.addEventListener('click', () => {
+                    const isPass = customApiKeyInput.type === 'password';
+                    customApiKeyInput.type = isPass ? 'text' : 'password';
+                    toggleKeyVisibility.textContent = isPass ? '🔒' : '👁️';
+                });
+            }
+
+            if (btnSaveCustomKey && customApiKeyInput) {
+                btnSaveCustomKey.addEventListener('click', () => {
+                    const keyVal = customApiKeyInput.value.trim();
+                    currentCustomKey = keyVal;
+                    localStorage.setItem('ai_coach_custom_key', keyVal);
+                    localStorage.setItem('gemini_zuowen_key', keyVal);
+                    updateConfigUI();
+                    if (keyVal) {
+                        statusText.textContent = '🔑 自備 Gemini Key 已安全儲存於本機！';
+                        alert('已成功保存 Gemini API Key！可直接進行點評。');
+                    } else {
+                        statusText.textContent = '⚠️ 已清除自備金鑰';
+                    }
+                });
+            }
+
             btnSaveConfig.addEventListener('click', () => {
                 currentMode = channelMode.value;
                 currentWorkerUrl = workerUrlInput.value.trim();
@@ -934,6 +974,7 @@
                 localStorage.setItem('ai_coach_channel', currentMode);
                 localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
                 localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
                 localStorage.setItem('ai_coach_custom_model', currentCustomModel);
                 updateConfigUI();
                 configPanel.classList.add('hidden');
@@ -948,6 +989,7 @@
                 localStorage.setItem('ai_coach_channel', currentMode);
                 localStorage.setItem('ai_coach_worker_url', currentWorkerUrl);
                 localStorage.setItem('ai_coach_custom_key', currentCustomKey);
+                localStorage.setItem('gemini_zuowen_key', currentCustomKey);
                 localStorage.setItem('ai_coach_custom_model', currentCustomModel);
                 updateConfigUI();
                 alert('已還原為專屬 Cloudflare 預設設定！');
